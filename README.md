@@ -2,16 +2,17 @@
 
 ## Start project
 
-Starts :
-_ database
-_ pgAdmin
-_ backend
-_ flutter app
-
 ```
 npm i
+```
 
+Server terminal
+```
 npm run server
+```
+
+Client terminal
+```
 npm run client
 ```
 
