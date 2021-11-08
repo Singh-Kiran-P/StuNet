@@ -1,8 +1,7 @@
 {
     "scripts": {
-        "server": "dotnet run --project server",
         "client": "cd client && flutter run && cd ..",
-        "dev": "concurrently \"docker-compose up\" \"npm run client\" \"npm run server\""
+        "server": "concurrently \"docker-compose up\" \"dotnet run --project server\""
     },
     "dependencies": {
         "concurrently": "^6.3.0"
