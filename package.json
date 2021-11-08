@@ -1,9 +1,9 @@
 {
-  "scripts": {
-    "server": "concurrently \"docker-compose up\" dotnet run --project server",
-    "client": "cd client && flutter run && cd .."
-  },
-  "dependencies": {
-    "concurrently": "^6.3.0"
-  }
+    "scripts": {
+        "client": "cd client && flutter run && cd ..",
+        "server": "concurrently \"docker-compose up\" \"dotnet run --project server\""
+    },
+    "dependencies": {
+        "concurrently": "^6.3.0"
+    }
 }
