@@ -1,4 +1,4 @@
-# project-cheaplabor
+# StuNet
 
 ## Start project
 
