@@ -1,0 +1,60 @@
+# @author Kiran Singh
+version: "3.7"
+
+services:
+  postgres:
+    container_name: postgres
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stunet
+    ports:
+      - '5432:5432'
+    volumes:
+      - stunet-db:/var/lib/postgresql/data
+    networks:
+      - mynet
+
+  pgAdmin:
+    container_name: pgAdmin
+    restart: always
+    image: dpage/pgadmin4
+    environment:
+        PGADMIN_DEFAULT_EMAIL: admin@stunet.be
+        PGADMIN_DEFAULT_PASSWORD: admin
+        PGADMIN_LISTEN_PORT: 80
+    ports:
+        - '8080:80'
+    volumes:
+        - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+        - postgres
+    links:
+        - postgres
+    networks:
+        - mynet
+
+  portainer-dockerManager:
+    container_name: portainer-dockerManager
+    image: portainer/portainer-ce
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+      - 8000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+    stunet-db:
+    portainer_data:
+    pgadmin-data:
+
+networks:
+  mynet:
+    driver: bridge
+    ipam:
+      driver: default
