@@ -1,4 +1,4 @@
-# project-cheaplabor
+# StuNet
 
 ## Start project
 
@@ -9,7 +9,10 @@ _ backend
 _ flutter app
 
 ```
-npm run dev
+npm i
+
+npm run server
+npm run client
 ```
 
 ## PgAdmin
