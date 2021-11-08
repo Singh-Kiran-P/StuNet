@@ -1,7 +1,7 @@
 {
     "scripts": {
         "server": "dotnet run --project server",
-        "client": "cd client && flutter run && cd ..",
+        "client": "cd client && flutter run --release && cd ..",
         "dev": "npm run server && npm run client"
     }
 }
