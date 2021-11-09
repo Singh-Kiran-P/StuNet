@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-namespace ServerApi
+namespace Server.Api
 {
     public class Startup
     {
@@ -26,11 +26,12 @@ namespace ServerApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //TODO: Add singleton for db
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ServerApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server.Api", Version = "v1" });
             });
         }
 
@@ -41,7 +42,7 @@ namespace ServerApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ServerApi v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Server.Api v1"));
             }
 
             app.UseHttpsRedirection();

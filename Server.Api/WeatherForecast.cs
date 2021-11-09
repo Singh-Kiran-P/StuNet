@@ -1,6 +1,6 @@
 using System;
 
-namespace ServerApi
+namespace Server.Api
 {
     public class WeatherForecast
     {
