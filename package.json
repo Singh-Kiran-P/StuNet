@@ -1,7 +1,9 @@
 {
     "scripts": {
-        "client": "cd client && flutter run && cd ..",
-        "server": "concurrently \"docker-compose up\" \"dotnet run --project server\""
+        "i": "cd client && npm i && cd ../server && npm i && cd .. && npm i",
+        "client": "cd client && concurrently \"npx react-native start\" \"npx react-native run-android\"",
+        "server": "concurrently \"docker-compose up\" \"dotnet run --project server\"",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
     },
     "dependencies": {
         "concurrently": "^6.3.0"

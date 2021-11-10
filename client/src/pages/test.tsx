@@ -6,7 +6,7 @@ import {
 
 const Test = () => {
     return (
-        <Text>Test 3</Text>
+        <Text>TEXT!</Text>
     );
 };
 
