@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Provider, DefaultTheme } from 'react-native-paper';
+import { Provider } from 'react-native-paper';
 import Login from 'pages/login';
 
 class App extends Component {
