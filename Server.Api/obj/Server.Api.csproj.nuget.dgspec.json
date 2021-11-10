@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/Server.Api.csproj": {}
+    "C:\\Users\\sennr\\Documents\\Gitkraken\\project-cheaplabor\\Server.Api\\Server.Api.csproj": {}
   },
   "projects": {
-    "/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/Server.Api.csproj": {
+    "C:\\Users\\sennr\\Documents\\Gitkraken\\project-cheaplabor\\Server.Api\\Server.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/Server.Api.csproj",
+        "projectUniqueName": "C:\\Users\\sennr\\Documents\\Gitkraken\\project-cheaplabor\\Server.Api\\Server.Api.csproj",
         "projectName": "Server.Api",
-        "projectPath": "/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/Server.Api.csproj",
-        "packagesPath": "/home/singh/.nuget/packages/",
-        "outputPath": "/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/obj/",
+        "projectPath": "C:\\Users\\sennr\\Documents\\Gitkraken\\project-cheaplabor\\Server.Api\\Server.Api.csproj",
+        "packagesPath": "C:\\Users\\sennr\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\sennr\\Documents\\Gitkraken\\project-cheaplabor\\Server.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/singh/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\sennr\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -42,7 +42,7 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.3, )"
+              "version": "[3.1.3, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
@@ -63,12 +63,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[5.0.0, 5.0.0]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -77,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.205/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
