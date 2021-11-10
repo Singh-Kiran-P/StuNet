@@ -32,9 +32,9 @@ namespace Server.Api
             //Setup database
             services.AddDbContext<DataContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IDataContext>(provider => provider.GetService<DataContext>());
-            //Setup database tables
+            
+            //Setup database table repositories: frqmework creates sql queries from functions
             services.AddScoped<IUserRepository, PgUserRepository>();
-
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
