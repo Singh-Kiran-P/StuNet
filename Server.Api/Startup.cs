@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Server.Api.DataBase;
+using Server.Api.Repositories;
 
 namespace Server.Api
 {
@@ -31,7 +32,9 @@ namespace Server.Api
             //Setup database
             services.AddDbContext<DataContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IDataContext>(provider => provider.GetService<DataContext>());
-            
+            //Setup database tables
+            services.AddScoped<IUserRepository, PgUserRepository>();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

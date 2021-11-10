@@ -9,7 +9,7 @@ namespace Server.Api.Repositories
          Task<T> getAsync(int id);
          Task<IEnumerable<T>> getAllAsync();
          Task createAsync(T item);
-         Task updateAsynct(T item);
+         Task updateAsync(T item);
          Task deleteAsync(int id);
     }
 }

@@ -7,10 +7,10 @@ namespace Server.Api.Repositories
 {
     public interface IUserRepository
     {
-         Task<User> getAsync(int id);
          Task<IEnumerable<User>> getAllAsync();
+         Task<User> getAsync(int id);
          Task createAsync(User user);
-         Task updateAsynct(User user);
+         Task updateAsync(User user);
          Task deleteAsync(int userId);
     }
 }

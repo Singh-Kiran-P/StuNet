@@ -9,12 +9,10 @@ namespace Server.Api.DataBase
 {
     public class DataContext : DbContext, IDataContext
     {
-
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
              
         }
-
         public DbSet<User> Users { get; set; }
     }
 }
