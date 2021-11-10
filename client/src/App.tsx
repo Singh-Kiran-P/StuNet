@@ -1,9 +1,12 @@
-import React from 'react';
-import Test from '@pages/test';
+import React, { Component } from 'react';
+import { Provider, DefaultTheme } from 'react-native-paper';
+import Login from 'pages/login';
 
-const App = () => {
-    return (
-        <Test />
+class App extends Component {
+    render = () => (
+        <Provider>
+            <Login />
+        </Provider>
     );
 };
 
