@@ -1,0 +1,7 @@
+/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/obj/Debug/net5.0/Server.Api.csprojAssemblyReference.cache
+/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/obj/Debug/net5.0/Server.Api.GeneratedMSBuildEditorConfig.editorconfig
+/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/obj/Debug/net5.0/Server.Api.AssemblyInfoInputs.cache
+/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/obj/Debug/net5.0/Server.Api.AssemblyInfo.cs
+/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/obj/Debug/net5.0/Server.Api.csproj.CoreCompileInputs.cache
+/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/obj/Debug/net5.0/Server.Api.MvcApplicationPartsAssemblyInfo.cs
+/run/media/singh/SSD/ICT/UHASSELT/BAC3/SOFEN/project-cheaplabor/Server.Api/obj/Debug/net5.0/Server.Api.MvcApplicationPartsAssemblyInfo.cache

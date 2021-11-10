@@ -1,4 +1,4 @@
-
+using System;
 namespace Server.Api.Models
 {
     public class User
