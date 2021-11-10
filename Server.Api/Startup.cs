@@ -29,10 +29,15 @@ namespace Server.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("PolicyName", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
+
             //Setup database
             services.AddDbContext<DataContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IDataContext>(provider => provider.GetService<DataContext>());
-            
+
             //Setup database table repositories: frqmework creates sql queries from functions
             services.AddScoped<IUserRepository, PgUserRepository>();
 
@@ -54,6 +59,12 @@ namespace Server.Api
             }
 
             app.UseHttpsRedirection();
+            //ENABLE CORS
+            app.UseCors(x => x
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .SetIsOriginAllowed(origin => true) // allow any origin  
+               .AllowCredentials());               // allow credentials 
 
             app.UseRouting();
 

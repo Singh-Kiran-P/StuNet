@@ -9,7 +9,7 @@ using Server.Api.DataBase;
 namespace Server.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211110084518_InitialMigration")]
+    [Migration("20211110125545_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
