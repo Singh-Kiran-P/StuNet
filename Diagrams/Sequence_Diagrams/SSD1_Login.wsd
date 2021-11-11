@@ -1,0 +1,11 @@
+@startuml Login
+actor user
+participant backend
+database dataStore
+
+user -> backend: Send Http/Https request to get info
+backend -> dataStore: Check in Db
+dataStore -> backend: Success Response
+backend -> user: Give back user data
+
+@enduml
