@@ -22,7 +22,9 @@ Diagrams | • UML <br>• SSD
 ## Discussion Items
 Item | Who | Notes |
 ---- | ---- | ---- |
-item | who | notes |
+React code base uitleggen | Jochem | / |
+Database not working [Docker] on windows
+Post not working Curl [werkt enkel in swagger] | Jochem
 
 
 ## Action Items
