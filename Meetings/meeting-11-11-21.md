@@ -1,15 +1,16 @@
 # Meeting Minutes
 ## Meeting Information
-**Meeting Date/Time:** 11/11/2021, 14:00  
-**Meeting Purpose:** Briefing
-**Meeting Location:** Online  
-**Note Taker:** note_taker  
+**Meeting Date/Time:** 11/11/2021, 14:00 TO 15:30\
+**Meeting Purpose:** Briefing\
+**Meeting Location:** Online\
+**Note Taker:** Tijl
 
 ## Attendees
 People who attended:
-- Person A
-- Person B
-- Person C
+- Kiran
+- Melih
+- Tijl
+- Lander
 
 ## Agenda Items
 
@@ -23,14 +24,18 @@ Diagrams | • UML <br>• SSD
 Item | Who | Notes |
 ---- | ---- | ---- |
 React code base uitleggen | Jochem | / |
-Database not working [Docker] on windows
+Database not working [Docker] on windows | Lander
 Post not working Curl [werkt enkel in swagger] | Jochem
+PlantUML for making diagrams in vsCode | Kiran 
+Planning Sprint 1
 
 
 ## Action Items
 | Done? | Item | Responsible | Due Date |
 | ---- | ---- | ---- | ---- |
-| | item | who | due_date |
+| / |Post not working Curl  | Kiran | 12-11-21 |
+|/  |Migrations uitzoeken   |       |          |
+|/| Sprint 1 | All | 18-11-21
 
 ## Other Notes & Information
 N/A
