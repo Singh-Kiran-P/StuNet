@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import {
-    TouchableRipple,
     TextInput,
     Button
 } from 'react-native-paper';
@@ -38,21 +37,19 @@ class Test extends Component {
                 secureTextEntry={!this.state.passwordVisible} 
                 right={<TextInput.Icon name={this.state.passwordVisible ? "eye" : "eye-off"} 
                     onPress={() => this.togglePasswordVisible() }/>}/>
-            <TouchableRipple style={s.button}>
-                <Button mode="contained" disabled={this.state.email == '' || this.state.password == ''} onPress={() => this.submit()}>Login</Button>
-            </TouchableRipple>
+            <Button style={s.button} mode="contained" disabled={this.state.email == '' || this.state.password == ''} onPress={() => this.submit()}>Login</Button>
         </View>
     );
 };
 
-const padding = 10;
+const padding = 20;
 const s = StyleSheet.create({
     view: {
         padding: padding,
     },
 
     input: {
-        marginBottom: padding
+        marginBottom: padding / 2
     },
 
     button: {
