@@ -41,7 +41,7 @@ alt Valid user
 	deactivate DataAccessObject
 	Course --> Question: Course
 	deactivate Course
-	Question -> DataAccessObject: storeQuestion(User, title, body, Course)
+	Question -> DataAccessObject: saveQuestion(User, title, body, Course)
 	activate DataAccessObject
 	DataAccessObject -> DataStore: save()
 	activate DataStore
