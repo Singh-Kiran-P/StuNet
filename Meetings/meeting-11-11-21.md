@@ -63,9 +63,8 @@ Best een mail uitsturen naar het onderwijs team om feedbackmeetings te organiser
 - Jochem: Post werkt niet met curl, en dus ook niet in de app, enkel met Swagger -> moet gefixt worden
 
 
-
-== Wie doet wat/wanneer?
-Interactiediagrammen: Systeemsequentiediagrammen? # Lijkt op BPMN-model van Beleidsinformatica.
+## Wie doet wat/wanneer?
+Interactiediagrammen: Systeemsequentiediagrammen? Lijkt op BPMN-model van Beleidsinformatica.
 Moeten we vragen aan het onderwijsteam wat dit precies is.
 Navragen wat HI BIN is
 
