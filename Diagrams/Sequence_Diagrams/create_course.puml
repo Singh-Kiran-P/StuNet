@@ -1,0 +1,44 @@
+'https://forum.plantuml.net/1353/is-it-possible-to-comment-out-lines-of-diagram-syntax
+
+@startuml create course sequention diagram
+participant Prof
+
+activate Prof
+    Prof -> Course: createCourse(name, number, email)
+    activate Course
+    deactivate Course
+
+    loop add items
+        opt add channel
+            'channel op hoogte van pijl normaal gezien
+            Prof -> Course: addChannel(name)
+            activate Course
+                Course -> Channel: create(name)
+                activate Channel
+                    '
+                deactivate Channel
+            deactivate Course
+        end
+
+        opt add topic
+            ' activate Course
+            Prof -> Course: addTopic(name)
+            activate Course
+                Course -> Topic: create(name)
+                activate Topic
+                deactivate Topic
+            deactivate Course
+        end
+
+        opt add assistant
+            Prof -> Course: addAssistent(email)
+            activate Course
+                Course -> Assistent: create(email)
+                activate Assistent
+                deactivate Assistent
+            deactivate Course
+        end
+    end
+deactivate Prof
+
+@enduml
