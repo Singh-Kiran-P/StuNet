@@ -58,7 +58,7 @@ namespace Server.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Server.Api v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             //ENABLE CORS
             app.UseCors(x => x
                .AllowAnyMethod()
