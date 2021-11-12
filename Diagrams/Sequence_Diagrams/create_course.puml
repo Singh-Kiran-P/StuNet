@@ -4,14 +4,14 @@
 participant Prof
 
 activate Prof
-    Prof -> Course: createCourse(name, number, email)
+    Prof -> Course: course:= createCourse(name, number, email)
     activate Course
     deactivate Course
 
     loop add items
         opt add channel
             'channel op hoogte van pijl normaal gezien
-            Prof -> Course: addChannel(name)
+            Prof -> Course: addChannelToCourse(course, name)
             activate Course
                 Course -> Channel: create(name)
                 activate Channel
@@ -22,7 +22,7 @@ activate Prof
 
         opt add topic
             ' activate Course
-            Prof -> Course: addTopic(name)
+            Prof -> Course: addTopicToCourse(course, name)
             activate Course
                 Course -> Topic: create(name)
                 activate Topic
@@ -31,7 +31,7 @@ activate Prof
         end
 
         opt add assistant
-            Prof -> Course: addAssistent(email)
+            Prof -> Course: addAssistentToCourse(course, email)
             activate Course
                 Course -> Assistent: create(email)
                 activate Assistent
