@@ -59,6 +59,7 @@ namespace Server.Api
             }
 
             // app.UseHttpsRedirection();
+            
             //ENABLE CORS
             app.UseCors(x => x
                .AllowAnyMethod()
