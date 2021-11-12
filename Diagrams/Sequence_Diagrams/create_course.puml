@@ -2,10 +2,22 @@
 
 @startuml create course sequention diagram
 participant Prof
+participant Course
+participant Channel
+participant Topic
+participant Assistent
+participant "Data Access Object"
 
 activate Prof
-    Prof -> Course: course:= createCourse(name, number, email)
+    Prof -> Course: createCourse(name, number, email)
     activate Course
+    opt
+        Course -> "Data Access Object": saveChanges()
+        activate "Data Access Object"
+
+        deactivate "Data Access Object"
+    end
+    Course --> Prof: course
     deactivate Course
 
     loop add items
@@ -13,10 +25,17 @@ activate Prof
             'channel op hoogte van pijl normaal gezien
             Prof -> Course: addChannelToCourse(course, name)
             activate Course
-                Course -> Channel: create(name)
+                Course -> Channel: createChannel(name)
                 activate Channel
-                    '
+                    opt
+                        Channel -> "Data Access Object": saveChanges()
+                        activate "Data Access Object"
+
+                        deactivate "Data Access Object"
+                    end
+                    Channel --> Course: void
                 deactivate Channel
+                Course --> Prof: void
             deactivate Course
         end
 
@@ -24,18 +43,34 @@ activate Prof
             ' activate Course
             Prof -> Course: addTopicToCourse(course, name)
             activate Course
-                Course -> Topic: create(name)
+                Course -> Topic: createTopic(name)
                 activate Topic
+                    opt
+                        Topic -> "Data Access Object": saveChanges()
+                        activate "Data Access Object"
+
+                        deactivate "Data Access Object"
+                    end
+                    Topic --> Course: void
                 deactivate Topic
+                Course --> Prof: void
             deactivate Course
         end
 
         opt add assistant
             Prof -> Course: addAssistentToCourse(course, email)
             activate Course
-                Course -> Assistent: create(email)
+                Course -> Assistent: createAssistant(email)
                 activate Assistent
+                    opt
+                        Assistent -> "Data Access Object": saveChanges()
+                        activate "Data Access Object"
+
+                        deactivate "Data Access Object"
+                    end
+                    Assistent --> Course: void
                 deactivate Assistent
+                Course --> Prof: void
             deactivate Course
         end
     end
