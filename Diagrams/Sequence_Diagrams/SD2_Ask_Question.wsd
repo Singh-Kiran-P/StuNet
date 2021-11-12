@@ -1,0 +1,55 @@
+@startuml Ask Question
+participant backend
+database datastore
+' hide footbox
+' title Footer removed
+
+datastore-[hidden]->datastore
+
+title Reference: Contract SubmitQuestion()
+
+activate backend
+-> backend: handleQuestionAsked(userID, title, body, files, topics)
+activate backend
+backend -> datastore: validateUser(userID)
+activate datastore
+datastore -> datastore: query()
+backend <-- datastore: validated: bool
+deactivate datastore
+alt Valid userID
+    backend -> datastore: storeQuestion(userID, title, body)
+	activate datastore
+	datastore -> datastore: query()
+    backend <-- datastore: questionID: uuid
+	deactivate datastore
+	alt Link topics
+		loop Link topic
+			backend -> datastore: linkTopic(questionID, topic)
+	        activate datastore
+			datastore -> datastore: query()
+			backend <-- datastore: void
+	        deactivate datastore
+		end
+	end
+	alt Link files
+		loop Link file
+            backend -> datastore: storeFile(file)
+	        activate datastore
+			datastore -> datastore: query()
+            backend <-- datastore: fileName: string
+	        deactivate datastore
+			backend -> datastore: linkFile(questionID, fileName)
+	        activate datastore
+			datastore -> datastore: query()
+			backend <-- datastore: void
+	        deactivate datastore
+		end
+	end
+    <-- backend: questionID: uuid
+else Invalid userID
+    <-- backend: Exception
+    deactivate backend
+end
+deactivate backend
+
+@enduml
