@@ -1,55 +1,98 @@
 @startuml Ask Question
-participant backend
-database datastore
-' hide footbox
-' title Footer removed
+participant Question
+participant User
+participant Course
+participant Topic
+participant File
+participant FileSystem
+participant DataAccessObject
+database DataStore
 
-datastore-[hidden]->datastore
+DataAccessObject-[hidden]->DataAccessObject
 
 title Reference: Contract SubmitQuestion()
 
-activate backend
--> backend: handleQuestionAsked(userID, title, body, files, topics)
-activate backend
-backend -> datastore: validateUser(userID)
-activate datastore
-datastore -> datastore: query()
-backend <-- datastore: validated: bool
-deactivate datastore
-alt Valid userID
-    backend -> datastore: storeQuestion(userID, title, body)
-	activate datastore
-	datastore -> datastore: query()
-    backend <-- datastore: questionID: uuid
-	deactivate datastore
-	alt Link topics
+-> Question: askQuestion(userID, title, body, files, courseID, topicIDs)
+activate Question
+Question -> User: validateUser(userID)
+activate User
+User -> DataAccessObject: getUser(userID)
+activate DataAccessObject
+DataAccessObject -> DataStore: load()
+activate DataStore
+DataStore -> DataStore: query()
+DataStore --> DataAccessObject: User
+deactivate DataStore
+User <-- DataAccessObject: User | null
+deactivate DataAccessObject
+Question <-- User: User | null
+deactivate User
+alt Valid user
+	Question -> Course: getCourse(courseID)
+	activate Course
+	Course -> DataAccessObject: getCourse(courseID)
+	activate DataAccessObject
+	DataAccessObject -> DataStore: load()
+	activate DataStore
+	DataStore -> DataStore: query()
+	DataStore --> DataAccessObject: Course
+	deactivate DataStore
+	DataAccessObject --> Course: Course
+	deactivate DataAccessObject
+	Course --> Question: Course
+	deactivate Course
+	Question -> DataAccessObject: storeQuestion(User, title, body, Course)
+	activate DataAccessObject
+	DataAccessObject -> DataStore: save()
+	activate DataStore
+	DataStore -> DataStore: query()
+	DataStore --> DataAccessObject: Question
+	deactivate DataStore
+	DataAccessObject --> Question: Question
+	deactivate DataAccessObject
+	opt Link topics
 		loop Link topic
-			backend -> datastore: linkTopic(questionID, topic)
-	        activate datastore
-			datastore -> datastore: query()
-			backend <-- datastore: void
-	        deactivate datastore
+			Question -> Topic: linkTopic(Question, topicID)
+			activate Topic
+			Topic -> DataAccessObject: linkTopic(Question, topicID)
+			activate DataAccessObject
+			DataAccessObject -> DataStore: save()
+			activate DataStore
+			DataStore -> DataStore: query()
+			DataStore --> DataAccessObject: Topic
+			deactivate DataStore
+			DataAccessObject --> Topic: Topic
+			deactivate DataAccessObject
+			Topic --> Question: Topic
+			deactivate Topic
 		end
 	end
-	alt Link files
+	opt Link files
 		loop Link file
-            backend -> datastore: storeFile(file)
-	        activate datastore
-			datastore -> datastore: query()
-            backend <-- datastore: fileName: string
-	        deactivate datastore
-			backend -> datastore: linkFile(questionID, fileName)
-	        activate datastore
-			datastore -> datastore: query()
-			backend <-- datastore: void
-	        deactivate datastore
+			Question -> File: linkFile(Question, file)
+			activate File
+			File -> FileSystem: saveFile(file)
+			activate FileSystem
+			FileSystem -> FileSystem: save()
+			File <-- FileSystem: fileName
+			deactivate FileSystem
+			File -> DataAccessObject: linkFile(Question, fileName)
+			activate DataAccessObject
+			DataAccessObject -> DataStore: save()
+			activate DataStore
+			DataStore -> DataStore: query()
+			DataStore --> DataAccessObject: File
+			deactivate DataStore
+			DataAccessObject --> File: File
+			deactivate DataAccessObject
+			File --> Question: File
+			deactivate File
 		end
 	end
-    <-- backend: questionID: uuid
-else Invalid userID
-    <-- backend: Exception
-    deactivate backend
+	<-- Question: Question
+	deactivate Question
+else Invalid user
+	<-- Question: null
 end
-deactivate backend
 
 @enduml
