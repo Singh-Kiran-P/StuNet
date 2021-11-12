@@ -7,16 +7,21 @@ participant Channel
 participant Topic
 participant Assistent
 participant "Data Access Object"
+database DataStore
 
 activate Prof
     Prof -> Course: createCourse(name, number, email)
     activate Course
-    opt
+
         Course -> "Data Access Object": saveChanges()
         activate "Data Access Object"
-
+            "Data Access Object" -> DataStore: save()
+            activate DataStore
+                DataStore -> DataStore: query()
+                DataStore --> "Data Access Object": void | RunTimeException
+            deactivate DataStore
+            "Data Access Object" --> Course: void | RunTimeException
         deactivate "Data Access Object"
-    end
     Course --> Prof: course
     deactivate Course
 
@@ -30,7 +35,12 @@ activate Prof
                     opt
                         Channel -> "Data Access Object": saveChanges()
                         activate "Data Access Object"
-
+                            "Data Access Object" -> DataStore: save()
+                            activate DataStore
+                                DataStore -> DataStore: query()
+                                DataStore --> "Data Access Object": void | RunTimeException
+                            deactivate DataStore
+                            "Data Access Object" --> Channel: void | RunTimeException
                         deactivate "Data Access Object"
                     end
                     Channel --> Course: void
@@ -48,7 +58,12 @@ activate Prof
                     opt
                         Topic -> "Data Access Object": saveChanges()
                         activate "Data Access Object"
-
+                            "Data Access Object" -> DataStore: save()
+                            activate DataStore
+                                DataStore -> DataStore: query()
+                                DataStore --> "Data Access Object": void | RunTimeException
+                            deactivate DataStore
+                            "Data Access Object" --> Topic: void | RunTimeException
                         deactivate "Data Access Object"
                     end
                     Topic --> Course: void
@@ -65,7 +80,12 @@ activate Prof
                     opt
                         Assistent -> "Data Access Object": saveChanges()
                         activate "Data Access Object"
-
+                            "Data Access Object" -> DataStore: save()
+                            activate DataStore
+                                DataStore -> DataStore: query()
+                                DataStore --> "Data Access Object": void | RunTimeException
+                            deactivate DataStore
+                            "Data Access Object" --> Assistent: void | RunTimeException
                         deactivate "Data Access Object"
                     end
                     Assistent --> Course: void
