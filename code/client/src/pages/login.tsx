@@ -24,10 +24,18 @@ class Test extends Component {
     }
 
     submit() { // For testing purposes
-        Alert.alert(
-            "Submit received",
-            "email: " + this.state.email + "\n" +
-            "password: " + this.state.password);
+        fetch('http://10.0.2.2:5000/User', {
+            method: 'POST',
+            headers: {
+                Accept: '*/*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: this.state.email,
+                password: this.state.password
+            })
+        }).then(() => Alert.alert("Succes"))
+        .catch((response) => Alert.alert("Error", response))
     }
 
     render = () => (
