@@ -10,7 +10,7 @@ participant "Data Access Object"
 database DataStore
 
 activate Prof
-    Prof -> Course: createCourse(name, number, email)
+    Prof -> Course **: createCourse(name, number, email)
     activate Course
 
         Course -> "Data Access Object": saveChanges()
@@ -30,7 +30,7 @@ activate Prof
             'channel op hoogte van pijl normaal gezien
             Prof -> Course: addChannelToCourse(course, name)
             activate Course
-                Course -> Channel: createChannel(name)
+                Course -> Channel **: createChannel(name)
                 activate Channel
                     opt
                         Channel -> "Data Access Object": saveChanges()
@@ -53,7 +53,7 @@ activate Prof
             ' activate Course
             Prof -> Course: addTopicToCourse(course, name)
             activate Course
-                Course -> Topic: createTopic(name)
+                Course -> Topic **: createTopic(name)
                 activate Topic
                     opt
                         Topic -> "Data Access Object": saveChanges()
@@ -75,7 +75,7 @@ activate Prof
         opt add assistant
             Prof -> Course: addAssistentToCourse(course, email)
             activate Course
-                Course -> Assistent: createAssistant(email)
+                Course -> Assistent **: createAssistant(email)
                 activate Assistent
                     opt
                         Assistent -> "Data Access Object": saveChanges()
