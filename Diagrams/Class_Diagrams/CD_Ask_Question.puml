@@ -5,7 +5,7 @@ class DataStore
 
 class DataAccessObject {
     - DataStore dataStore
-    + get()
+    + load()
     + save()
 }
 
