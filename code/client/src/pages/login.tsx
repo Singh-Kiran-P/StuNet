@@ -5,7 +5,6 @@ import {
     Button
 } from 'react-native-paper';
 
-
 import {
     StyleSheet,
     View,
