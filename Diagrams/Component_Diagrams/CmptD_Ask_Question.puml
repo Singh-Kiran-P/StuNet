@@ -1,0 +1,55 @@
+@startuml Ask Question
+
+interface saveFile
+interface AskQuestion
+interface query
+
+frame backend {
+	component [DataAccessObject]
+	component [Question]
+	component [Course]
+	component [Topic]
+	component [File]
+	component [User]
+
+	interface load
+	interface save
+}
+
+frame storage {
+	port " " as stPort
+	component FileSystem {
+		port " " as fsPort
+	}
+	stPort - fsPort
+	saveFile - stPort
+}
+
+frame docker {
+	port " " as pstgrsPort
+	component postgres {
+		port " " as pgPort
+	}
+	pstgrsPort - pgPort
+	query - pstgrsPort
+}
+
+DataAccessObject - load
+DataAccessObject - save
+load -( query
+save -( query
+DataAccessObject - pstgrsPort
+
+AskQuestion -0)-# Question
+File #-0)-# Question : linkFile
+Topic #-0)-# Question : linkTopic
+User #-0)-# Question: validateUser
+
+User #-( load
+Course #-( load
+Question #-( save
+Topic #-( save
+File #-( save
+File #-( saveFile
+
+@enduml

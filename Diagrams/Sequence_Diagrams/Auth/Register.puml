@@ -1,0 +1,45 @@
+@startuml Login
+participant Student
+participant Prof
+participant DataAccessObject
+database DataStore
+
+alt Request as student
+-> Student: register(email, password, study)
+activate Student
+    Student -> DataAccessObject: createAccount(email, password, study)
+    activate DataAccessObject
+        DataAccessObject -> DataStore: save()
+            activate DataStore
+                DataStore -> DataStore: query()
+                DataStore --> DataAccessObject: user | null
+            deactivate DataStore
+        DataAccessObject --> Student: user | null
+    deactivate DataAccessObject
+    <-- Student  : accessToken(JWT)
+else Invalid credentials
+	<-- Student: null
+deactivate Student
+end
+
+alt Request as Prof
+-> Prof: register(email, password)
+activate Prof
+
+    Prof -> DataAccessObject: createAccount(email, password)
+    activate DataAccessObject
+        DataAccessObject -> DataStore: save()
+            activate DataStore
+                DataStore -> DataStore: query()
+                DataStore --> DataAccessObject: user | null
+            deactivate DataStore
+        DataAccessObject --> Prof: user | null
+    deactivate DataAccessObject
+else Invalid credentials
+	<-- Prof: null
+deactivate Prof
+
+end
+
+
+@enduml

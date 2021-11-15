@@ -3,17 +3,8 @@
 ## Start project
 
 ```
-npm i
-```
-
-Server terminal
-```
-npm run server
-```
-
-Client terminal
-```
-npm run client
+npm run i
+npm run dev
 ```
 
 ## PgAdmin
