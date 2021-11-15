@@ -37,31 +37,30 @@ namespace Server.Api.Controllers
         }
     
         [HttpPost]
-        public async Task<ActionResult> CreateFieldOfStudy(string fullNamsdfe ,string fullNdsame, string? fullName = null)
+        public async Task<ActionResult> CreateFieldOfStudy(FieldOfStudyDto createFieldOfStudyDto)
         {
             string _fullname = "";
 
+            if (createFieldOfStudyDto.fullName != null) {
+                _fullname = createFieldOfStudyDto.fullName;
+            }
+            else{
+                if(createFieldOfStudyDto.isBachelor){
+                    _fullname = createFieldOfStudyDto.name+"-"+"BACH"+"-"+createFieldOfStudyDto.year;
+                } else {
+                    _fullname = createFieldOfStudyDto.name+"-"+"MASTER"+"-"+createFieldOfStudyDto.year;
+                }
+            }
 
-            // if (createFieldOfStudyDto.fullName != null) {
-            //     _fullname = createFieldOfStudyDto.fullName;
-            // }
-            // else{
-            //     if(createFieldOfStudyDto.isBachelor){
-            //         _fullname = createFieldOfStudyDto.name+"-"+"BACH"+"-"+createFieldOfStudyDto.year;
-            //     } else {
-            //         _fullname = createFieldOfStudyDto.name+"-"+"MASTER"+"-"+createFieldOfStudyDto.year;
-            //     }
-            // }
+            FieldOfStudy fieldOfStudy = new()
+                {
+                    fullName = _fullname,
+                    name = createFieldOfStudyDto.name,
+                    isBachelor = createFieldOfStudyDto.isBachelor,
+                    year = createFieldOfStudyDto.year,
+                };            
 
-            // FieldOfStudy fieldOfStudy = new()
-            //     {
-            //         fullName = _fullname,
-            //         name = createFieldOfStudyDto.name,
-            //         isBachelor = createFieldOfStudyDto.isBachelor,
-            //         year = createFieldOfStudyDto.year,
-            //     };            
-    
-            // await _fieldOfStudyRepository.createAsync(fieldOfStudy);
+            await _fieldOfStudyRepository.createAsync(fieldOfStudy);
             return Ok();
         }
     

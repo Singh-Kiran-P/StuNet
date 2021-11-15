@@ -14,6 +14,8 @@ namespace Server.Api.DataBase
              
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Student> Students { get; set;}
+        public DbSet<Professor> Professors { get; set;}
         public DbSet<FieldOfStudy> FieldOfStudies { get; set; }
 
     }

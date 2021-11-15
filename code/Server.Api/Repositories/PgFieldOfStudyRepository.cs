@@ -48,5 +48,10 @@ namespace Server.Api.Repositories
             fieldOfStudyToUpdate.year = fieldOfStudy.year;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<FieldOfStudy> getByFullNameAsync(string fullName)
+        {
+            return await _context.FieldOfStudies.SingleOrDefaultAsync(fos => fos.fullName == fullName);
+        }
     }
 }

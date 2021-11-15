@@ -13,8 +13,8 @@ namespace Server.Api.Migrations
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    fullName = table.Column<string>(nullable: true),
-                    name = table.Column<string>(nullable: true),
+                    fullName = table.Column<string>(nullable: false),
+                    name = table.Column<string>(nullable: false),
                     isBachelor = table.Column<bool>(nullable: false),
                     year = table.Column<int>(nullable: false)
                 },
@@ -30,21 +30,34 @@ namespace Server.Api.Migrations
                     id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     email = table.Column<string>(nullable: true),
-                    password = table.Column<string>(nullable: true)
+                    password = table.Column<string>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
+                    fieldOfStudyid = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Users_FieldOfStudies_fieldOfStudyid",
+                        column: x => x.fieldOfStudyid,
+                        principalTable: "FieldOfStudies",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_fieldOfStudyid",
+                table: "Users",
+                column: "fieldOfStudyid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FieldOfStudies");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "FieldOfStudies");
         }
     }
 }
