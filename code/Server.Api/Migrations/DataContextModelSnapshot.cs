@@ -18,6 +18,30 @@ namespace Server.Api.Migrations
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            modelBuilder.Entity("Server.Api.Models.FieldOfStudy", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("fullName")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("isBachelor")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("year")
+                        .HasColumnType("integer");
+
+                    b.HasKey("id");
+
+                    b.ToTable("FieldOfStudies");
+                });
+
             modelBuilder.Entity("Server.Api.Models.User", b =>
                 {
                     b.Property<int>("id")

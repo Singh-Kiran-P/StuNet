@@ -1,11 +1,10 @@
 using System;
 
-namespace Server.Api.Models
+namespace Server.Api.Dtos
 {
-    public class FieldOfStudy
+    public record FieldOfStudyDto
     {
-        public int id { get; set; }
-        public string fullName { get; set; }
+        public string fullName { get; set; } = null;
         public string name { get; set; }
         public bool isBachelor { get; set; }
         public int year { get; set; }

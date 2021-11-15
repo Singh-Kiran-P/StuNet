@@ -1,6 +1,6 @@
 using System;
 
-namespace Server.Api.Controllers
+namespace Server.Api.Dtos
 {
     public record UserDto
     {

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using Server.Api.Dtos;
 
 namespace Server.Api.Controllers
 {
