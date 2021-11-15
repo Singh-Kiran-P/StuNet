@@ -29,7 +29,7 @@ To install the migration tool, run
 dotnet tool install --global dotnet-ef
 ```
 
-The following commands will delete the migrations folder, clear the database and refill the database.
+Run the following commands in the [Server.Api folder](/code/Server.Api). These commands will delete the migrations folder, clear the database and refill the database.
 ```
 dotnet ef database update 0
 dotnet ef migrations remove
