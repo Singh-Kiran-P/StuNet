@@ -38,7 +38,9 @@ dotnet ef migrations add Initial
 dotnet ef database update
 ```
 
-Follow the instructions at [Microsoft's help page](https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio#ssl-linux) to enforce https on your machine.
+Optionally, follow the instructions at [Microsoft's help page](https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio#ssl-linux) to enforce https on your browser.
+
+Finally, run the backend with the following commands.
 
 ```
 dotnet build
@@ -46,15 +48,13 @@ dotnet run
 ```
 
 ## PgAdmin
-Once docker is running, you can access pgAdmin on [localhost:8080](http://localhost:8080).
+Once docker is running, you can access pgAdmin on [localhost:8080](http://localhost:8080). On the website, login with the following credentials.
 ```
-Web login:
 Email = admin@stunet.be
 password = admin
 ```
 
 ### Connect to database in pgAdmin
-
 ```
 host = postgres
 port = 5433
