@@ -8,6 +8,7 @@ namespace Server.Api.DataBase
     public interface IDataContext
     {
         DbSet<User> Users { get; set;}
+        DbSet<Question> Questions { get; set;}
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

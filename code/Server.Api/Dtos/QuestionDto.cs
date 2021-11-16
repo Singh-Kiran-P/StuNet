@@ -1,10 +1,9 @@
 using System;
 
-namespace Server.Api.Models
+namespace Server.Api.Controllers
 {
-	public class Question
-	{
-		public int id { get; set; }
+    public record QuestionDto
+    {
 		// public User user { get; set; }
 		// public Course course { get; set; }
 	    public string title { get; set; }
