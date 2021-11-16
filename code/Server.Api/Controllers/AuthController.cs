@@ -41,7 +41,7 @@ namespace Server.Api.Controllers
         public async Task<ActionResult> RegisterJWTUser([FromBody] RegisterUserDto dto)
         {
             var hash = PasswordHelper.generateHashAndSalt(dto.Password).Item1;
-            User user = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString() };
+            User user = new() {UserName = dto.Email, Email = dto.Email, PasswordHash  =hash.ToString()  };
 
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -50,14 +50,10 @@ namespace Server.Api.Controllers
                 return BadRequest(result.Errors);
             }
 
+            await _userManager.AddToRoleAsync(user, RolesEnum.student_NORM);
             if (dto.role == "prof")
             {
                 await _userManager.AddToRoleAsync(user, RolesEnum.prof_NORM);
-            }
-            else
-            {
-
-                await _userManager.AddToRoleAsync(user, RolesEnum.student_NORM);
             }
             return StatusCode(201);
         }

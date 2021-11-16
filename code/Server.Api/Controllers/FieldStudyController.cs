@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Dtos;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -19,6 +19,7 @@ namespace Server.Api.Controllers
             _fieldOfStudyRepository = fieldOfStudyRepository;
         }
     
+        [Authorize(Roles = "prof")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FieldOfStudy>>> GetFieldOfStudies()
         {
