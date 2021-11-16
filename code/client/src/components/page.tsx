@@ -12,22 +12,19 @@ import {
 } from 'react-native-paper';
 
 type Props = {
-    title?: string;
+    title?: string,
+    children?: React.ReactNode
 }
 
-class Page extends Component<Props> {
-    constructor(props: Props) {
-        super(props);
-    }
-
-    render = () => (
+export default function Page(props: Props) {
+    return (
         <View>
             <Appbar.Header>
                 <Appbar.BackAction onPress={() => {}} />
-                <Appbar.Content title={this.props.title || ''} />
+                <Appbar.Content title={props.title || ''} />
             </Appbar.Header>
             <ScrollView style={s.view}>
-                {this.props.children}
+                {props.children}
             </ScrollView>
         </View>
     )
@@ -35,8 +32,7 @@ class Page extends Component<Props> {
 
 const s = StyleSheet.create({
     view: {
-        padding: Theme.padding
+        padding: Theme.padding,
+        flexGrow: 1
     }
 });
-
-export default Page;
