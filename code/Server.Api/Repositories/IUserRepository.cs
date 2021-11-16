@@ -7,6 +7,7 @@ namespace Server.Api.Repositories
 {
     public interface IUserRepository: IInterfaceRepository<User>
     {
+        public Task<User> getByEmailAsync(string email);
         //  Task<IEnumerable<User>> getAllAsync();
         //  Task<User> getAsync(int id);
         //  Task createAsync(User user);

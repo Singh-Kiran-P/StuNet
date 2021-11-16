@@ -10,7 +10,7 @@ using Server.Api.DataBase;
 namespace Server.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211115140613_Initial")]
+    [Migration("20211116164305_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,9 @@ namespace Server.Api.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("salt")
                         .HasColumnType("text");
 
                     b.HasKey("id");

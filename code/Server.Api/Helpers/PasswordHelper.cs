@@ -6,7 +6,7 @@ namespace Server.Api.Helpers
 {    
     public class PasswordHelper
     {
-        public static string CreateSalt(int size)
+        private static string CreateSalt(int size)
         {
             //Generate a cryptographic random number.
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
@@ -15,7 +15,7 @@ namespace Server.Api.Helpers
             return Convert.ToBase64String(buff);
         }
 
-        public static string GenerateHash(string input, string salt)
+        private static string GenerateHash(string input, string salt)
         { 
             byte[] bytes = Encoding.UTF8.GetBytes(input + salt);
             SHA256Managed sHA256ManagedString = new SHA256Managed();

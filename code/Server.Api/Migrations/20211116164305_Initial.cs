@@ -31,6 +31,7 @@ namespace Server.Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     email = table.Column<string>(nullable: true),
                     password = table.Column<string>(nullable: true),
+                    salt = table.Column<string>(nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
                     fieldOfStudyid = table.Column<int>(nullable: true)
                 },

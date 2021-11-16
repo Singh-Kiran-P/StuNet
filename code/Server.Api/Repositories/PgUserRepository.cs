@@ -46,5 +46,10 @@ namespace Server.Api.Repositories
             userToUpdate.password = user.password;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<User> getByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(user => user.email == email);
+        }
     }
 }

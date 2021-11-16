@@ -62,6 +62,9 @@ namespace Server.Api.Migrations
                     b.Property<string>("password")
                         .HasColumnType("text");
 
+                    b.Property<string>("salt")
+                        .HasColumnType("text");
+
                     b.HasKey("id");
 
                     b.ToTable("Users");

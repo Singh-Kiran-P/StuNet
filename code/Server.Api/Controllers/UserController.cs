@@ -36,7 +36,7 @@ namespace Server.Api.Controllers
         }
     
         [HttpPost]
-        public async Task<ActionResult> CreateUser(UserDto createUserDto)
+        public async Task<ActionResult> CreateUser(LoginUserDto createUserDto)
         {
             User user = new()
             {
@@ -56,7 +56,7 @@ namespace Server.Api.Controllers
         }
     
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateUser(int id, UserDto updateUserDto)
+        public async Task<ActionResult> UpdateUser(int id, LoginUserDto updateUserDto)
         {
             User user = new()
             {
