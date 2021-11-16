@@ -12,7 +12,7 @@ class App extends Component {
         <Provider>
             <AskQuestion/>
         </Provider>
-    );
-};
+    )
+}
 
 export default App;

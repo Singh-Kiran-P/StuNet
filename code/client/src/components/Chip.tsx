@@ -9,7 +9,7 @@ import {
     Chip
 } from 'react-native-paper';
 
-export default class CheckboxRow extends Component {
+class CheckboxRow extends Component {
     state = {
         selected: false
     }
@@ -32,3 +32,5 @@ const s = StyleSheet.create({
         alignContent: 'center'
     }
 });
+
+export default CheckboxRow;

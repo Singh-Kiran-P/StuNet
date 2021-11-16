@@ -8,7 +8,7 @@ type Props = {
 	label: string;
 }
 
-export default class CheckboxItem extends Component<Props> {
+class CheckboxItem extends Component<Props> {
     state = {
         checked: false,
     }
@@ -26,3 +26,5 @@ export default class CheckboxItem extends Component<Props> {
 		</Checkbox.Item>
     )
 }
+
+export default CheckboxItem;

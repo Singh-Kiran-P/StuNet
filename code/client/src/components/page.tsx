@@ -15,7 +15,7 @@ type Props = {
     title?: string;
 }
 
-export default class Page extends Component<Props> {
+class Page extends Component<Props> {
     constructor(props: Props) {
         super(props);
     }
@@ -38,3 +38,5 @@ const s = StyleSheet.create({
         padding: Theme.padding
     }
 });
+
+export default Page;
