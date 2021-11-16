@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 
-import {
-    TextInput,
-    Button
-} from 'react-native-paper';
+import { Theme } from '@css';
 
 import {
-    StyleSheet,
     View,
-    Alert
+    Alert,
+    StyleSheet
 } from 'react-native';
+
+import {
+    Button,
+    TextInput
+} from 'react-native-paper';
 
 class Test extends Component {
     state = {
@@ -33,30 +35,33 @@ class Test extends Component {
                 email: this.state.email,
                 password: this.state.password
             })
-        }).then(() => Alert.alert("Succes"))
-        .catch((response) => Alert.alert("Error", response))
+        }).then(() => Alert.alert('Succes'))
+        .catch(err => Alert.alert('Error', err))
     }
 
     render = () => (
-        <View style={[s.view]}>
-            <TextInput style={[s.input]} label="E-mail" mode="outlined" onChangeText={s => this.setState({email: s})}/>
-            <TextInput style={[s.input]} label="Password" mode="outlined" onChangeText={s => this.setState({password: s})}
-                secureTextEntry={!this.state.passwordVisible} 
-                right={<TextInput.Icon name={this.state.passwordVisible ? "eye" : "eye-off"} 
-                    onPress={() => this.togglePasswordVisible() }/>}/>
-            <Button style={s.button} mode="contained" disabled={this.state.email == '' || this.state.password == ''} onPress={() => this.submit()}>Login</Button>
+        <View style={s.view}>
+            <TextInput style={s.input} label='E-mail' mode='outlined' onChangeText={s => this.setState({email: s})}/>
+            <TextInput style={s.input} label='Password' mode='outlined'
+                onChangeText={s => this.setState({password: s})}
+                secureTextEntry={!this.state.passwordVisible}
+                right={<TextInput.Icon
+                    name={this.state.passwordVisible ? 'eye' : 'eye-off'}
+                    onPress={() => this.togglePasswordVisible()}
+                />}
+            />
+            <Button style={s.button} mode='contained' disabled={!this.state.email || !this.state.password} onPress={() => this.submit()}>Login</Button>
         </View>
-    );
-};
+    )
+}
 
-const padding = 20;
 const s = StyleSheet.create({
     view: {
-        padding: padding,
+        padding: Theme.padding,
     },
 
     input: {
-        marginBottom: padding / 2
+        marginBottom: Theme.padding / 2
     },
 
     button: {

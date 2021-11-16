@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Theme } from 'css';
 
 import {
-    Appbar
-} from 'react-native-paper';
+    View,
+    ScrollView,
+    StyleSheet
+} from 'react-native';
 
 import {
-    View,
-    StyleSheet,
-    ScrollView
-} from 'react-native';
+    Appbar
+} from 'react-native-paper';
 
 type Props = {
     title?: string;
@@ -17,7 +17,7 @@ type Props = {
 
 export default class Page extends Component<Props> {
     constructor(props: Props) {
-        super(props)
+        super(props);
     }
 
     render = () => (

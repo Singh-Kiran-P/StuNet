@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import Page from '@components/page';
-import { text, Theme } from '@css';
+
 import CheckboxItem from '@components/CheckboxItem';
-import Chip from '@components/Chip';
+import Page from '@components/page';
+import { text } from '@css';
+
+import {
+    LayoutAnimation,
+    Text
+} from 'react-native';
 
 import {
     Button,
     List,
     TextInput,
 } from 'react-native-paper';
-
-import {
-    LayoutAnimation,
-    Text
-} from 'react-native';
 
 class AskQuestion extends Component {
     topics = [
@@ -29,6 +28,7 @@ class AskQuestion extends Component {
             <Text style={[text.header]}>Course, Subject</Text>
             <TextInput mode='outlined' label='Title' />
             <TextInput mode='outlined' label='Content' multiline numberOfLines={5} />
+
             {/* Option 1: Accordion*/}
             <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }}>
                 {this.topics.map((item, index) => {
@@ -44,6 +44,7 @@ class AskQuestion extends Component {
                     </Chip>
                 })}
             </View> */}
+
             <Text>TODO TOPICS FILES, MORE?</Text>
             <Button mode='contained' onPress={() => {}}>Ask</Button>
         </Page>
