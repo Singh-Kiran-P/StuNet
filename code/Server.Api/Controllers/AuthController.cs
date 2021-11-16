@@ -7,60 +7,118 @@ using Server.Api.Repositories;
 using Server.Api.Dtos;
 using System.Text.RegularExpressions;
 using Server.Api.Helpers;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using VmsApi.Services;
+using Server.Api.Enum;
 
 namespace Server.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController: ControllerBase
+    public class AuthController : ControllerBase
     {
+
+        private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
+        private readonly ITokenGenerator _tokenGenerator;
+
         private readonly IUserRepository _userRepository;
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
-        public AuthController(IUserRepository userRepository, IFieldOfStudyRepository fieldOfStudyRepository)
+        public AuthController(IUserRepository userRepository, IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenGenerator tokenGenerator)
         {
             _userRepository = userRepository;
             _fieldOfStudyRepository = fieldOfStudyRepository;
+
+            _mapper = mapper;
+            _userManager = userManager;
+            _tokenGenerator = tokenGenerator;
+
+
         }
-    
+
+        [HttpPost("registerJWT")]
+        public async Task<ActionResult> RegisterJWTUser([FromBody] RegisterUserDto dto)
+        {
+            var hash = PasswordHelper.generateHashAndSalt(dto.Password).Item1;
+            User user = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString() };
+
+
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            if (dto.role == "prof")
+            {
+                await _userManager.AddToRoleAsync(user, RolesEnum.prof_NORM);
+            }
+            else
+            {
+
+                await _userManager.AddToRoleAsync(user, RolesEnum.student_NORM);
+            }
+            return StatusCode(201);
+        }
+
+        [HttpPost("loginJWT")]
+        public async Task<IActionResult> LoginJWT(LoginUserDto dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
+            {
+                var token = await _tokenGenerator.GetTokenAsync(user);
+
+                return Ok(token);
+            }
+
+            return Unauthorized("Invalid Authentication");
+        }
+
+
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser(RegisterUserDto dto)
         {
-            User _user = null;
+            // User _user = null;
 
-            //password check
-            if(dto.password1 != dto.password2) {return BadRequest("Passwords do not match");}
+            // //password check
+            // if (dto.password1 != dto.password2) { return BadRequest("Passwords do not match"); }
 
-            //Generate password salt and hash
-            (string hashedPass, string salt) = PasswordHelper.generateHashAndSalt(dto.password1);
+            // //Generate password salt and hash
+            // (string hashedPass, string salt) = PasswordHelper.generateHashAndSalt(dto.password1);
 
-            //email check en aanmaken account
-            Regex regStudent = new Regex(@"\w+@student.uhasselt.be");
-            Regex regProf = new Regex(@"\w+@uhasselt.be");
-            if (regStudent.IsMatch(dto.email)) {
-                //fieldOfStudy processing
-                FieldOfStudy fos = await _fieldOfStudyRepository.getByFullNameAsync(dto.fieldOfStudy);
-                if(fos == null) {return BadRequest("Field Of Study does not exist");}
-                Student newStudent = new() { email = dto.email, password = hashedPass, salt = salt, fieldOfStudy = fos};
-                _user = newStudent;
-            }
-            else if (regProf.IsMatch(dto.email)) {
-                Professor prof = new(){email = dto.email, password = hashedPass, salt = salt};
-                _user = prof;
-            }
-            else{return Unauthorized("Please use an uhasselt e-mail to create an account");}
-    
-            await _userRepository.createAsync(_user);
+            // //email check en aanmaken account
+            // Regex regStudent = new Regex(@"\w+@student.uhasselt.be");
+            // Regex regProf = new Regex(@"\w+@uhasselt.be");
+            // if (regStudent.IsMatch(dto.email))
+            // {
+            //     //fieldOfStudy processing
+            //     FieldOfStudy fos = await _fieldOfStudyRepository.getByFullNameAsync(dto.fieldOfStudy);
+            //     if (fos == null) { return BadRequest("Field Of Study does not exist"); }
+            //     Student newStudent = new() { email = dto.email, password = hashedPass, salt = salt, fieldOfStudy = fos };
+            //     _user = newStudent;
+            // }
+            // else if (regProf.IsMatch(dto.email))
+            // {
+            //     Professor prof = new() { email = dto.email, password = hashedPass, salt = salt };
+            //     _user = prof;
+            // }
+            // else { return Unauthorized("Please use an uhasselt e-mail to create an account"); }
+
+            // await _userRepository.createAsync(_user);
             return Ok();
         }
-        
+
         //Checkt voorlopig alleen of user een juist passwoord ingeeft. TODO: JWT token?
         [HttpPost("login")]
         public async Task<ActionResult> LoginUser(LoginUserDto dto)
         {
-            User user = await _userRepository.getByEmailAsync(dto.email);
-            if(user != null){
-                if(PasswordHelper.AreEqual(dto.password, user.password, user.salt)) {return Ok("Logged in");}
-            }
+            // User user = await _userRepository.getByEmailAsync(dto.Email);
+            // if (user != null)
+            // {
+            //     if (PasswordHelper.AreEqual(dto.Password, user.password, user.salt)) { return Ok("Logged in"); }
+            // }
             return Unauthorized("Login failed");
         }
     }

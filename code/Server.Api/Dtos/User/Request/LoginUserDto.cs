@@ -1,10 +1,14 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Server.Api.Dtos
 {
     public record LoginUserDto
     {
-        public string email { get; set; }
-        public string password { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+        [Required]
+        public string Password { get; set; }
     }
 }
