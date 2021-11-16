@@ -6,18 +6,16 @@ import {
 
 type Props = {
 	label: string;
+    checked: () => boolean;
+    oncheck: (checked: boolean) => {};
 }
 
 class CheckboxItem extends Component<Props> {
     state = {
-        checked: false,
+        checked: this.props.checked()
     }
 
-    constructor(props: Props) {
-        super(props);
-    }
-
-    toggle = () => this.setState({ checked: !this.state.checked });
+    toggle = () => (this.props.oncheck(!this.state.checked), this.setState({ checked: !this.state.checked }));
     status = () => this.state.checked ? 'checked' : 'unchecked';
 
     render = () => (

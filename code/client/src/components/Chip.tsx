@@ -27,8 +27,8 @@ class CheckboxRow extends Component {
 
 const s = StyleSheet.create({
     chip: {
-        flexWrap: 'wrap',
         margin: 2,
+        flexWrap: 'wrap',
         alignContent: 'center'
     }
 });
