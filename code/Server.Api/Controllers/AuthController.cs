@@ -6,6 +6,7 @@ using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Dtos;
 using System.Text.RegularExpressions;
+using Server.Api.Helpers;
 
 namespace Server.Api.Controllers
 {
@@ -28,6 +29,9 @@ namespace Server.Api.Controllers
             //password check
             if(dto.password1 != dto.password2) {return BadRequest("Passwords do not match");}
 
+            //Generate password salt and hash
+            (string hashedPass, string salt) = PasswordHelper.generateHashAndSalt(dto.password1);
+
             //email check
             Regex regStudent = new Regex(@"\w+@student.uhasselt.be");
             Regex regProf = new Regex(@"\w+@uhasselt.be");
@@ -37,7 +41,8 @@ namespace Server.Api.Controllers
                 if(fos == null) {return BadRequest("Field Of Study does not exist");}
                 Student newStudent = new() {
                     email = dto.email,
-                    password = dto.password1,
+                    password = hashedPass,
+                    salt = salt,
                     fieldOfStudy = fos
                 };
                 _user = newStudent;
@@ -45,14 +50,12 @@ namespace Server.Api.Controllers
             else if (regProf.IsMatch(dto.email)) {
                 Professor prof = new(){
                     email = dto.email,
-                    password = dto.password1,                
+                    password = hashedPass,
+                    salt = salt,               
                 };
                 _user = prof;
             }
-            else{
-                return Unauthorized();
-                
-            }
+            else{ return Unauthorized();}
     
             await _userRepository.createAsync(_user);
             return Ok();
