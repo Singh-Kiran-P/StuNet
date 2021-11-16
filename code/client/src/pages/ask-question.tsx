@@ -17,31 +17,29 @@ import {
 
 type Form = {
     title: string,
-    body: string,
-    topics: string[],
-    checks: boolean[],
+    body: string
 };
 
 export default function AskQuestion() {
     const [loading, setLoading] = useState(true);
+    const [topics, setTopics] = useState<string[]>([]);
+    const [checks, setChecks] = useState<boolean[]>([]);
     
     let form: Form = {
         title: "",
-        body: "",
-        topics: [],
-        checks: []
+        body: ""
     };
 
-    useEffect(() => { //test loading; doesn't work for some reason
+    useEffect(() => {
         setLoading(true)
         setTimeout(() => {
-            form.topics = [
+            setTopics([
                 'Topic 1',
                 'Topic 2',
                 'Topic 3',
                 'Topic 4'
-            ];
-            form.checks = form.topics.map(() => false);
+            ]);
+            setChecks(topics.map(() => false));
             setLoading(false);
         }, 1000);
     }, []);
@@ -49,7 +47,7 @@ export default function AskQuestion() {
     const submit = () => {
         console.log(form.title);
         console.log(form.body);
-        console.log(form.checks.map((checked, i) => checked ? form.topics[i] : null).filter(x => x !== null));
+        console.log(checks.map((checked, i) => checked ? topics[i] : null).filter(x => x !== null));
     };
 
     return loading ?
@@ -60,8 +58,8 @@ export default function AskQuestion() {
             <TextInput mode='outlined' label='Title' onChangeText={s => form.title = s} />
             <TextInput mode='outlined' label='Content' multiline numberOfLines={5} onChangeText={s => form.body = s} />
             <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }}>
-                {form.topics.map((item, i) => {
-                    return <CheckboxItem key={i} label={item} checked={() => form.checks[i]} oncheck={checked => form.checks[i] = checked} />
+                {topics.map((item, i) => {
+                    return <CheckboxItem key={i} label={item} checked={() => checks[i]} oncheck={checked => checks[i] = checked} />
                 })}
             </List.Accordion>
             <Button mode='contained' onPress={submit}>Ask</Button>
