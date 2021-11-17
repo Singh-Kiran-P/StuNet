@@ -19,7 +19,6 @@ namespace Server.Api.Controllers
             _fieldOfStudyRepository = fieldOfStudyRepository;
         }
     
-        [Authorize(Roles = "prof")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FieldOfStudy>>> GetFieldOfStudies()
         {

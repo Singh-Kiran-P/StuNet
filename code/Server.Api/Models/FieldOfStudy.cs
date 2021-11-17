@@ -5,7 +5,7 @@ namespace Server.Api.Models
 {
     public class FieldOfStudy
     {
-        [Required()]
+        [Key]
         public int id { get; set; }
         [Required()]
         public string fullName { get; set; }

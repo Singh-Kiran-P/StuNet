@@ -5,6 +5,6 @@ namespace Server.Api.Models
     public class Student: User
     {
         //Todo: add field of study, maybe enum?
-        public FieldOfStudy fieldOfStudy { get; set; }
+        public int FieldOfStudyId { get; set; }
     }
 }

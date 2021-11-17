@@ -41,14 +41,14 @@ namespace Server.Api.Migrations
                         new
                         {
                             Id = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3",
-                            ConcurrencyStamp = "6ade8cef-e51e-4210-b96e-8a8b282e1672",
+                            ConcurrencyStamp = "0fdc5d51-bd76-4095-811d-806803b2ae6e",
                             Name = "prof",
                             NormalizedName = "PROF"
                         },
                         new
                         {
                             Id = "36c604a2-1f4e-4552-8741-74140540679b",
-                            ConcurrencyStamp = "376e4829-0da4-436c-9758-453a6e753612",
+                            ConcurrencyStamp = "c4bdecb1-9f7a-4b99-99e4-9cb0c53e077c",
                             Name = "student",
                             NormalizedName = "STUDENT"
                         });
@@ -181,10 +181,10 @@ namespace Server.Api.Migrations
                 {
                     b.HasBaseType("Server.Api.Models.User");
 
-                    b.Property<int?>("fieldOfStudyid")
+                    b.Property<int>("fieldOfStudyId")
                         .HasColumnType("integer");
 
-                    b.HasIndex("fieldOfStudyid");
+                    b.HasIndex("fieldOfStudyId");
 
                     b.HasDiscriminator().HasValue("Student");
                 });
@@ -193,7 +193,9 @@ namespace Server.Api.Migrations
                 {
                     b.HasOne("Server.Api.Models.FieldOfStudy", "fieldOfStudy")
                         .WithMany()
-                        .HasForeignKey("fieldOfStudyid");
+                        .HasForeignKey("fieldOfStudyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
