@@ -41,14 +41,14 @@ namespace Server.Api.Migrations
                         new
                         {
                             Id = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3",
-                            ConcurrencyStamp = "d413a71c-a0da-455c-adae-7b889809944e",
+                            ConcurrencyStamp = "6ade8cef-e51e-4210-b96e-8a8b282e1672",
                             Name = "prof",
                             NormalizedName = "PROF"
                         },
                         new
                         {
                             Id = "36c604a2-1f4e-4552-8741-74140540679b",
-                            ConcurrencyStamp = "ae3f377a-43de-48e1-9f6d-87bdc0765f1c",
+                            ConcurrencyStamp = "376e4829-0da4-436c-9758-453a6e753612",
                             Name = "student",
                             NormalizedName = "STUDENT"
                         });

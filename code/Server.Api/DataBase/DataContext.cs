@@ -11,16 +11,16 @@ namespace Server.Api.DataBase
     public class DataContext : DbContext, IDataContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<IdentityUserRole<string>> Roles { get; set;}
-        public DbSet<Student> Students { get; set;}
-        public DbSet<Professor> Professors { get; set;}
+        public DbSet<IdentityUserRole<string>> Roles { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Professor> Professors { get; set; }
         public DbSet<FieldOfStudy> FieldOfStudies { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-             
+
         }
-                protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
             base.OnConfiguring(optionsBuilder);
@@ -34,7 +34,7 @@ namespace Server.Api.DataBase
 
             var defaultUser = new User()
             {
-       
+
                 Email = "xxxx@example.com",
                 NormalizedEmail = "XXXX@EXAMPLE.COM",
                 UserName = "Owner",
@@ -51,8 +51,8 @@ namespace Server.Api.DataBase
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>().HasData(
                 defaultUser
-             );            
-  
+             );
+
         }
     }
 }

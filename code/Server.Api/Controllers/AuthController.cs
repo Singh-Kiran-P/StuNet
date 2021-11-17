@@ -40,21 +40,44 @@ namespace Server.Api.Controllers
         [HttpPost("registerJWT")]
         public async Task<ActionResult> RegisterJWTUser([FromBody] RegisterUserDto dto)
         {
+            User _user = null;
+            string role = "";
             var hash = PasswordHelper.generateHashAndSalt(dto.Password).Item1;
-            User user = new() {UserName = dto.Email, Email = dto.Email, PasswordHash  =hash.ToString()  };
+            // User user = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString() };
+
+            //Generate password salt and hash
+            // (string hashedPass, string salt) = PasswordHelper.generateHashAndSalt(dto.Password);
+
+            //email check en aanmaken account
+            Regex regStudent = new Regex(@"\w+@student.uhasselt.be");
+            Regex regProf = new Regex(@"\w+@uhasselt.be");
+            if (regStudent.IsMatch(dto.Email))
+            {
+                //fieldOfStudy processing
+                FieldOfStudy fos = await _fieldOfStudyRepository.getByFullNameAsync(dto.fieldOfStudy);
+                if (fos == null) { return BadRequest("Field Of Study does not exist"); }
+                Student newStudent = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString(), fieldOfStudy = fos };
+
+                _user = newStudent;
+                role = RolesEnum.student_NORM;
+
+            }
+            else if (regProf.IsMatch(dto.Email))
+            {
+                Professor prof = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString() };
+                _user = prof;
+                role = RolesEnum.prof_NORM;
+            }
 
 
-            var result = await _userManager.CreateAsync(user, dto.Password);
+            var result = await _userManager.CreateAsync(_user, dto.Password);
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
 
-            await _userManager.AddToRoleAsync(user, RolesEnum.student_NORM);
-            if (dto.role == "prof")
-            {
-                await _userManager.AddToRoleAsync(user, RolesEnum.prof_NORM);
-            }
+            await _userManager.AddToRoleAsync(_user, role);
+
             return StatusCode(201);
         }
 
