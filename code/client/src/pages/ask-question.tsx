@@ -15,20 +15,13 @@ import {
     TextInput,
 } from 'react-native-paper';
 
-type Form = {
-    title: string,
-    body: string
-};
-
 export default function AskQuestion() {
     const [loading, setLoading] = useState(true);
+    
+    const [title, setTitle] = useState('')
+    const [body, setBody] = useState('')
     const [topics, setTopics] = useState<string[]>([]);
     const [checks, setChecks] = useState<boolean[]>([]);
-    
-    let form: Form = {
-        title: "",
-        body: ""
-    };
 
     useEffect(() => {
         setLoading(true)
@@ -45,8 +38,8 @@ export default function AskQuestion() {
     }, []);
 
     const submit = () => {
-        console.log(form.title);
-        console.log(form.body);
+        console.log(title);
+        console.log(body);
         console.log(checks.map((checked, i) => checked ? topics[i] : null).filter(x => x !== null));
     };
 
@@ -55,13 +48,13 @@ export default function AskQuestion() {
         :
         <Page title='Ask Question'>
             <Text style={[text.header]}>Course, Subject</Text>
-            <TextInput mode='outlined' label='Title' onChangeText={s => form.title = s} />
-            <TextInput mode='outlined' label='Content' multiline numberOfLines={5} onChangeText={s => form.body = s} />
+            <TextInput mode='outlined' label='Title' onChangeText={setTitle} />
+            <TextInput mode='outlined' label='Content' multiline numberOfLines={5} onChangeText={setBody} />
             <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }}>
                 {topics.map((item, i) => {
                     return <CheckboxItem key={i} label={item} checked={() => checks[i]} oncheck={checked => checks[i] = checked} />
                 })}
             </List.Accordion>
-            <Button mode='contained' onPress={submit}>Ask</Button>
+            <Button mode='contained' onPress={submit} disabled={title === '' || body === ''}>Ask</Button>
         </Page>
 }
