@@ -5,9 +5,9 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-    public interface IUserRepository: IInterfaceRepository<User>
+    public interface IFieldOfStudyRepository: IInterfaceRepository<FieldOfStudy>
     {
-        public Task<User> getByEmailAsync(string email);
+        Task<FieldOfStudy> getByFullNameAsync(string fullName);
         //  Task<IEnumerable<User>> getAllAsync();
         //  Task<User> getAsync(int id);
         //  Task createAsync(User user);
