@@ -1,0 +1,90 @@
+@startuml Ask Question
+skinparam classAttributeIconSize 0
+
+class DataStore
+
+class DataAccessObject {
+    - DataStore dataStore
+    + load()
+    + save()
+}
+
+DataAccessObject "1" --* "1" DataStore
+
+
+
+class FileSystem {
+    + save()
+}
+
+class File {
+	- DataStore dataStore
+    - FileSystem fileSystem
+	+ saveFile(file)
+    + linkFile(File, fileName)
+}
+
+File "0..*" --* "1" FileSystem
+
+
+
+class Question {
+	- DataStore dataStore
+    - User user
+    - Course course
+	- String title
+	- String body
+	- Topic[] topics
+	- File[] files
+    + askQuestion(userID, title, body, files, courseID, topicIDs): Question
+}
+
+Question "1" --* "1" User
+Question "1" --* "1" Course
+Question "1" --o "0..*" Topic
+Question "1" --o "0..*" File
+
+
+
+class User {
+	- DataStore dataStore
+    - UUID id
+    - String name
+    - String password
+    + validateUser(userID)
+    + getUser(userID)
+}
+
+
+
+class Course {
+	- DataStore dataStore
+    - UUID id
+    - String name
+	- User professor
+    - User[] assistants
+	+ getCourse(courseID)
+}
+
+Course "1" --* "1..*" User
+
+
+
+class Topic {
+	- DataStore dataStore
+    - UUID id
+    - Course course
+    - String name
+    + linkTopic(Topic, topicID)
+}
+
+Topic "0..*" --* "1" Course
+
+Question "0..*" --* "1" DataAccessObject
+File "0..*" --* "1" DataAccessObject
+User "0..*" --* "1" DataAccessObject
+Course "0..*" --* "1" DataAccessObject
+Topic "0..*" --* "1" DataAccessObject
+
+
+@enduml
