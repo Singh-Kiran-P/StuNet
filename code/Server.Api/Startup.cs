@@ -40,6 +40,7 @@ namespace Server.Api
 
             //Setup database table repositories: frqmework creates sql queries from functions
             services.AddScoped<IUserRepository, PgUserRepository>();
+            services.AddScoped<ICourseRepository, PgCourseRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
