@@ -50,7 +50,12 @@ namespace Server.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(int id)
         {
-            await _userRepository.deleteAsync(id);
+            try {
+                await _userRepository.deleteAsync(id);
+            }
+            catch (System.Exception) {
+                return NotFound();
+            }
             return Ok();
         }
     
