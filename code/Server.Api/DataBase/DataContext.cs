@@ -14,6 +14,7 @@ namespace Server.Api.DataBase
              
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Topic> Topics { get; set; }
         public DbSet<Question> Questions { get; set; }
     }
 }

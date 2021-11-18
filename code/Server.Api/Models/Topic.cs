@@ -4,6 +4,7 @@ namespace Server.Api.Models
 {
     public class Topic
     {
-        public string name { get; set; }
+        public int id { get; set; }
+		public string name { get; set; }
     }
 }
