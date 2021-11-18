@@ -15,32 +15,33 @@ import {
     TextInput,
 } from 'react-native-paper';
 
+type Topic = {
+    id: number,
+    name: string
+}
+
 export default function AskQuestion() {
     const [loading, setLoading] = useState(true);
     
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
-    const [topics, setTopics] = useState<string[]>([]);
+    const [topics, setTopics] = useState<Topic[]>([]);
     const [checks, setChecks] = useState<boolean[]>([]);
 
     useEffect(() => {
         setLoading(true)
-        setTimeout(() => {
-            setTopics([
-                'Topic 1',
-                'Topic 2',
-                'Topic 3',
-                'Topic 4'
-            ]);
-            setChecks(topics.map(() => false));
-            setLoading(false);
-        }, 1000);
+        fetch('http://10.0.2.2:5000/Topic', {
+            method: 'GET'
+        }).then(res => res.json())
+            .then(json => setTopics(json));
+        setChecks(topics.map(() => false));
+        setLoading(false);
     }, []);
 
     const submit = () => {
         console.log(title);
         console.log(body);
-        console.log(checks.map((checked, i) => checked ? topics[i] : null).filter(x => x !== null));
+        console.log(checks.map((checked, i) => checked ? topics[i].id : null).filter(x => x !== null));
     };
 
     return loading ?
@@ -51,8 +52,8 @@ export default function AskQuestion() {
             <TextInput mode='outlined' label='Title' onChangeText={setTitle} />
             <TextInput mode='outlined' label='Content' multiline numberOfLines={5} onChangeText={setBody} />
             <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }}>
-                {topics.map((item, i) => {
-                    return <CheckboxItem key={i} label={item} checked={() => checks[i]} oncheck={checked => checks[i] = checked} />
+                {topics.map(({id, name}, i) => {
+                    return <CheckboxItem key={id} label={name} checked={() => checks[i]} oncheck={checked => checks[i] = checked} />
                 })}
             </List.Accordion>
             <Button mode='contained' onPress={submit} disabled={title === '' || body === ''}>Ask</Button>

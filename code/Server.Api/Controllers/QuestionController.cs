@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using System.Linq;
 
 namespace Server.Api.Controllers
 {
@@ -12,10 +13,12 @@ namespace Server.Api.Controllers
     public class QuestionController: ControllerBase
     {
         private readonly IQuestionRepository _questionRepository;
-        public QuestionController(IQuestionRepository questionRepository)
+        private readonly ITopicRepository _topicRepository;
+        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository)
         {
             _questionRepository = questionRepository;
-        }
+			_topicRepository = topicRepository;
+		}
     
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
@@ -37,18 +40,20 @@ namespace Server.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateQuestion(QuestionDto createQuestionDto)
         {
-            Question question = new()
-            {
-                title = createQuestionDto.title,
-                // user = createQuestionDto.user,
-                // course = createQuestionDto.course,
-                body = createQuestionDto.body,
-                // files = createQuestionDto.files
-                // topics = createQuestionDto.topics
-                dateTime = DateTime.Now
+			Question question = new()
+			{
+				title = createQuestionDto.title,
+				// user = createQuestionDto.user,
+				// course = createQuestionDto.course,
+				body = createQuestionDto.body,
+				// files = createQuestionDto.files
+				topics = createQuestionDto.topics.Select(id => _topicRepository.getAsync(id))
+												.Select(task => task.Result)
+												.ToList(),
+			    dateTime = DateTime.Now
             };
-    
-            await _questionRepository.createAsync(question);
+
+			await _questionRepository.createAsync(question);
             return Ok();
         }
     
@@ -71,7 +76,7 @@ namespace Server.Api.Controllers
                 body = updateQuestionDto.body,
                 // files = updateQuestionDto.files
                 // topics = updateQuestionDto.topics
-                dateTime = updateQuestionDto.dateTime
+                dateTime = DateTime.Now
             };
     
             await _questionRepository.updateAsync(question);
