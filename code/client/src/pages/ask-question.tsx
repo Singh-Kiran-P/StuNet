@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import CheckboxItem from '@components/CheckboxItem';
 import Page from '@components/page';
 import { text } from '@css';
@@ -30,10 +31,10 @@ export default function AskQuestion() {
 
     useEffect(() => {
         setLoading(true)
-        fetch('http://10.0.2.2:5000/Topic', {
-            method: 'GET'
-        }).then(res => res.json())
-            .then(json => setTopics(json));
+        axios.get('/Topic')
+            .then(res => setTopics(res.data))
+            .catch(res => console.log(res)) //Should return to previous page maybe?
+        
         setChecks(topics.map(() => false));
         setLoading(false);
     }, []);
@@ -51,7 +52,7 @@ export default function AskQuestion() {
             <Text style={[text.header]}>Course, Subject</Text>
             <TextInput mode='outlined' label='Title' onChangeText={setTitle} />
             <TextInput mode='outlined' label='Content' multiline numberOfLines={5} onChangeText={setBody} />
-            <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }}>
+            <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }} >
                 {topics.map(({id, name}, i) => {
                     return <CheckboxItem key={id} label={name} checked={() => checks[i]} oncheck={checked => checks[i] = checked} />
                 })}
