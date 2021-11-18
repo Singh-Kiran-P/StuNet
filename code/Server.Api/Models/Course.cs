@@ -4,7 +4,8 @@ namespace Server.Api.Models
 {
     public class Course
     {
-        public string name { get; set; }
-        public int number { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Number { get; set; }
     }
 }
