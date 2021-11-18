@@ -39,12 +39,17 @@ namespace Server.Api.Repositories
 
         public async Task updateAsync(User user)
         {
-            var userToUpdate = await _context.Users.FindAsync(user.id);
-            if (userToUpdate == null)
-                throw new NullReferenceException();
-            userToUpdate.email = user.email;
-            userToUpdate.password = user.password;
-            await _context.SaveChangesAsync();
+            // var userToUpdate = await _context.Users.FindAsync(user.id);
+            // if (userToUpdate == null)
+            //     throw new NullReferenceException();
+            // userToUpdate.email = user.email;
+            // userToUpdate.password = user.password;
+            // await _context.SaveChangesAsync();
+        }
+
+        public async Task<User> getByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
         }
     }
 }

@@ -1,0 +1,99 @@
+@startuml create course class diagram
+skinparam classAttributeIconSize 0
+
+' abstract class User
+' abstract class AbstractList
+' abstract AbstractCollection
+' interface List
+' interface Collection
+
+User <|-- Professor
+User <|-- Assistant
+Course "1" o-- "0..*" Channel
+Course "1" o-- "0..*" Topic
+'Een gebruiker is een assistent is een course
+Course "1" o-- "0..*" Assistant
+Course "0..*" -- "0..*" Professor
+
+DataAccessObject "0..*" -- "0..*" Channel
+DataAccessObject "0..*" -- "0..*" Topic
+DataAccessObject "0..*" -- "0..*" Assistant
+DataAccessObject "0..*" -- "0..*" Course
+
+class User {
+    - string email
+    ' - ...
+}
+
+class Professor {
+    - ...
+    + createCourse(string name): Course
+    + addChannelToCourse(Course course, string name)
+    + addTopicToCourse(Course course, string name)
+    + addAssistentToCourse(Course course, string email)
+}
+
+class Course {
+    - string name
+    - string number
+    - string emails
+    - Channel[] channels
+    - Topic[] topics
+    - Assistant[] assistant
+
+    + createChannel(string name)
+    + createTopic(string name)
+    + createAssistant(string email)
+}
+
+class Channel {
+    - string name
+}
+
+class Topic {
+    - string name
+}
+
+class Assistant {
+    'Assistant will have functions, but not in this use case.
+    ' + ...()
+}
+
+class DataAccessObject {}
+
+' enum TopicEnum {
+'   DAYS
+'   HOURS
+'   MINUTES
+' }
+
+@enduml
+
+/' annotation SuppressWarnings
+
+' annotation Annotation {
+'   annotation with members
+'   String foo()
+'   String bar()
+' }
+
+' annotation Annotation {
+'   annotation with members
+'   String foo()
+'   String bar()
+' }
+
+
+' annotation Annotationa {
+'   annotation with members
+'   String foo()
+'   String bar()
+' }
+
+
+' annotation Annotatioan {
+'   annotation with members
+'   String foo()
+'   String bar()
+' }
+'/

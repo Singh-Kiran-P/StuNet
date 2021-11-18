@@ -1,13 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Server.Api.Models
+namespace Server.Api.Dtos
 {
-    public class FieldOfStudy
+    public record FieldOfStudyDto
     {
-        [Key]
-        public int id { get; set; }
-        [Required()]
         public string fullName { get; set; }
         [Required()]
         public string name { get; set; }
