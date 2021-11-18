@@ -23,3 +23,6 @@
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
 node_modules
+
+# Ignore Server.Api Debug
+Server.Api/obj/Debug/net5.0/
