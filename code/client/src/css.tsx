@@ -7,7 +7,8 @@ export const Theme = {
     medium: 16,
     small: 12,
 
-    padding: 10
+    padding: 10,
+    marginBottom: 20,
 }
 
 export const text = StyleSheet.create({
