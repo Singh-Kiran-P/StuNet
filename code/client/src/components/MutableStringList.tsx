@@ -3,10 +3,10 @@ import {View} from 'react-native';
 import {Text} from 'react-native';
 // import {accessibilityProps} from 'react-native-paper/lib/typescript/components/MaterialCommunityIcon';
 import {
-    // ActivityIndicator,
-    Button,
-    // List,
-    TextInput,
+  // ActivityIndicator,
+  Button,
+  // List,
+  TextInput,
 } from 'react-native-paper';
 
 type Props = {
@@ -44,12 +44,21 @@ export default function MutuableStringList(props: Props) {
       {elements.map((item, i) => {
         return <Text key={i}>{item}</Text>;
       })}
-      <Button mode="contained" onPress={add} disabled={element === ''}>
-        Add
-      </Button>
-      <Button mode="contained" onPress={remove}>
-        Remove
-      </Button>
+      <View style={{flexDirection: 'row'}}>
+        <Button
+          mode="contained"
+          style={{width: '50%'}}
+          onPress={add}
+          disabled={element === ''}>
+          Add
+        </Button>
+        <Button
+          mode="contained"
+          style={{width: '50%'}}
+          onPress={remove}>
+          Remove
+        </Button>
+      </View>
     </View>
   );
 }
