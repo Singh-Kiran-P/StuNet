@@ -2,13 +2,17 @@ import React, {useEffect, useState} from 'react';
 // import CheckboxItem from '@components/CheckboxItem';
 import Page from '@components/page';
 import MutuableStringList from 'components/MutableStringList';
-//import { text } from '@css';
+import {
+    // text,
+    Theme,
+} from '@css';
 
-// import {
+import {
     // LayoutAnimation,
     // Text,
     // View,
-// } from 'react-native';
+    StyleSheet,
+} from 'react-native';
 
 // import {
     // ActivityIndicator,
@@ -16,6 +20,13 @@ import MutuableStringList from 'components/MutableStringList';
     // List,
     // TextInput,
 // } from 'react-native-paper';
+
+
+const stylesheet = StyleSheet.create({
+    stringList: {
+        marginBottom: Theme.marginBottom,
+    },
+});
 
 export default function CreateCourse() {
   //const [loading, setLoading] = useState(true);
@@ -47,9 +58,9 @@ export default function CreateCourse() {
     // <ActivityIndicator size='large' style={{ flex: 1 }}/>
     // :
     <Page title="Create Course">
-      <MutuableStringList title="Channels" />
-      <MutuableStringList title="Topics" />
-      <MutuableStringList title="Assistents" />
+      <MutuableStringList style={stylesheet.stringList} title="Channels" />
+      <MutuableStringList style={stylesheet.stringList} title="Topics" />
+      <MutuableStringList style={stylesheet.stringList} title="Assistents" />
       {/* <TextInput mode='outlined' label='Name' onChangeText={setName} />
             <TextInput mode='outlined' label='Number' onChangeText={setNumber} />
             <TextInput mode='outlined' label='Description' multiline numberOfLines={5} onChangeText={setDescription} />
@@ -65,3 +76,4 @@ export default function CreateCourse() {
     </Page>
   );
 }
+
