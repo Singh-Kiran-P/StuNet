@@ -39,7 +39,7 @@ namespace Server.Api.Repositories
 
         public async Task updateAsync(Question question)
         {
-            var questionToUpdate = await _context.Questions.FindAsync(question.id);
+            var questionToUpdate = await _context.Questions.FindAsync(question.QuestionId);
             if (questionToUpdate == null)
                 throw new NullReferenceException();
             questionToUpdate.title = question.title;
