@@ -3,29 +3,28 @@ import React, {useEffect, useState} from 'react';
 import Page from '@components/page';
 import MutuableStringList from 'components/MutableStringList';
 import {
-    // text,
-    Theme,
+  // text,
+  Theme,
 } from '@css';
 
 import {
-    // LayoutAnimation,
-    // Text,
-    // View,
-    StyleSheet,
+  // LayoutAnimation,
+  // Text,
+  // View,
+  StyleSheet,
 } from 'react-native';
 
-// import {
-    // ActivityIndicator,
-    // Button,
-    // List,
-    // TextInput,
-// } from 'react-native-paper';
-
+import {
+  // ActivityIndicator,
+  // Button,
+  // List,
+  TextInput,
+} from 'react-native-paper';
 
 const stylesheet = StyleSheet.create({
-    stringList: {
-        marginBottom: Theme.marginBottom,
-    },
+  stringList: {
+    // marginBottom: Theme.marginBottom,
+  },
 });
 
 export default function CreateCourse() {
@@ -55,25 +54,21 @@ export default function CreateCourse() {
   };
 
   return (
-    // <ActivityIndicator size='large' style={{ flex: 1 }}/>
+    // <ActivityIndicator size="large" style={{ flex: 1 }}/>
     // :
     <Page title="Create Course">
+      <TextInput mode="outlined" label="Name" onChangeText={setName} />
+      <TextInput mode="outlined" label="Number" onChangeText={setNumber} />
       <MutuableStringList style={stylesheet.stringList} title="Channels" />
       <MutuableStringList style={stylesheet.stringList} title="Topics" />
       <MutuableStringList style={stylesheet.stringList} title="Assistents" />
-      {/* <TextInput mode='outlined' label='Name' onChangeText={setName} />
-            <TextInput mode='outlined' label='Number' onChangeText={setNumber} />
-            <TextInput mode='outlined' label='Description' multiline numberOfLines={5} onChangeText={setDescription} />
-            <TextInput mode='outlined' label='Staff e-mail:' onChangeText={setStaff} />
-            <Button mode='contained' onPress={submit} disabled={ staff === ''}>Add Staff</Button>
-            <MutuableStringList /> */}
-      {/* <Text style={[text.header]}>Course, Subject</Text>
-            <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }}>
-                {topics.map((item, i) => {
-                    return <CheckboxItem key={i} label={item} checked={() => checks[i]} oncheck={checked => checks[i] = checked} />
-                })}
-            </List.Accordion> */}
+      <TextInput
+        mode="outlined"
+        label="Description"
+        multiline
+        numberOfLines={5}
+        onChangeText={setDescription}
+      />
     </Page>
   );
 }
-
