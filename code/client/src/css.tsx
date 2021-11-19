@@ -8,12 +8,12 @@ export const Theme = {
     small: 12,
 
     padding: 10,
-    marginBottom: 20,
-}
+    marginBottom: 10,
+};
 
 export const text = StyleSheet.create({
     header: {
         fontSize: Theme.large,
-        fontWeight: 'bold'
-    }
+        fontWeight: 'bold',
+    },
 });
