@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import CheckboxItem from '@components/CheckboxItem';
 import Page from '@components/page';
 import { text } from '@css';
@@ -15,32 +16,33 @@ import {
     TextInput,
 } from 'react-native-paper';
 
+type Topic = {
+    id: number,
+    name: string
+}
+
 export default function AskQuestion() {
     const [loading, setLoading] = useState(true);
     
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
-    const [topics, setTopics] = useState<string[]>([]);
+    const [topics, setTopics] = useState<Topic[]>([]);
     const [checks, setChecks] = useState<boolean[]>([]);
 
     useEffect(() => {
         setLoading(true)
-        setTimeout(() => {
-            setTopics([
-                'Topic 1',
-                'Topic 2',
-                'Topic 3',
-                'Topic 4'
-            ]);
-            setChecks(topics.map(() => false));
-            setLoading(false);
-        }, 1000);
+        axios.get('/Topic')
+            .then(res => setTopics(res.data))
+            .catch(res => console.log(res)) //Should return to previous page maybe?
+        
+        setChecks(topics.map(() => false));
+        setLoading(false);
     }, []);
 
     const submit = () => {
         console.log(title);
         console.log(body);
-        console.log(checks.map((checked, i) => checked ? topics[i] : null).filter(x => x !== null));
+        console.log(checks.map((checked, i) => checked ? topics[i].id : null).filter(x => x !== null));
     };
 
     return loading ?
@@ -50,9 +52,9 @@ export default function AskQuestion() {
             <Text style={[text.header]}>Course, Subject</Text>
             <TextInput mode='outlined' label='Title' onChangeText={setTitle} />
             <TextInput mode='outlined' label='Content' multiline numberOfLines={5} onChangeText={setBody} />
-            <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }}>
-                {topics.map((item, i) => {
-                    return <CheckboxItem key={i} label={item} checked={() => checks[i]} oncheck={checked => checks[i] = checked} />
+            <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }} >
+                {topics.map(({id, name}, i) => {
+                    return <CheckboxItem key={id} label={name} checked={() => checks[i]} oncheck={checked => checks[i] = checked} />
                 })}
             </List.Accordion>
             <Button mode='contained' onPress={submit} disabled={title === '' || body === ''}>Ask</Button>

@@ -1,4 +1,6 @@
 using System;
+using Server.Api.Models;
+using System.Collections.Generic;
 
 namespace Server.Api.Controllers
 {
@@ -10,7 +12,6 @@ namespace Server.Api.Controllers
         public string body { get; set; }
 
         // public File[] files { get; set; }
-        // public Topic[] topics { get; set; }
-		public DateTime dateTime { get; set; }
+        public ICollection<int> topics { get; set; }
     }
 }

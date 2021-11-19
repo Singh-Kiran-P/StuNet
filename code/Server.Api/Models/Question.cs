@@ -1,4 +1,6 @@
 using System;
+using Server.Api.Models;
+using System.Collections.Generic;
 
 namespace Server.Api.Models
 {
@@ -11,7 +13,7 @@ namespace Server.Api.Models
         public string body { get; set; }
 
         // public File[] files { get; set; }
-        // public Topic[] topics { get; set; }
+        public ICollection<Topic> topics { get; set; }
 		public DateTime dateTime { get; set; }
     }
 }
