@@ -11,6 +11,7 @@ import {
 
 type Props = {
   title: string;
+  style?: object;
 };
 
 export default function MutuableStringList(props: Props) {
@@ -35,7 +36,7 @@ export default function MutuableStringList(props: Props) {
   };
 
   return (
-    <View>
+    <View style={props.style}>
       <TextInput
         mode="outlined"
         label={props.title}
@@ -52,10 +53,7 @@ export default function MutuableStringList(props: Props) {
           disabled={element === ''}>
           Add
         </Button>
-        <Button
-          mode="contained"
-          style={{width: '50%'}}
-          onPress={remove}>
+        <Button mode="contained" style={{width: '50%'}} onPress={remove}>
           Remove
         </Button>
       </View>
