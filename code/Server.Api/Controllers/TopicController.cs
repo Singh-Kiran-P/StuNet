@@ -58,7 +58,7 @@ namespace Server.Api.Controllers
         {
             Topic topic = new()
             {
-                TopicId = id,
+                id = id,
                 name = updateTopicDto.name
             };
     

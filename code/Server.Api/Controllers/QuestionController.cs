@@ -47,7 +47,7 @@ namespace Server.Api.Controllers
 				// course = createQuestionDto.course,
 				body = createQuestionDto.body,
 				// files = createQuestionDto.files
-				Topics = createQuestionDto.topics.Select(id => _topicRepository.getAsync(id))
+				topics = createQuestionDto.topics.Select(id => _topicRepository.getAsync(id))
 												.Select(task => task.Result)
 												.ToList(),
 			    dateTime = DateTime.Now
@@ -69,7 +69,7 @@ namespace Server.Api.Controllers
         {
             Question question = new()
             {
-                QuestionId = id,
+                id = id,
                 title = updateQuestionDto.title,
                 // user = updateQuestionDto.user,
                 // course = updateQuestionDto.course,

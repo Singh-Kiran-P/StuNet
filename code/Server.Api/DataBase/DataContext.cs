@@ -36,7 +36,7 @@ namespace Server.Api.DataBase
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(p => new { p.UserId, p.RoleId });
 
             modelBuilder.Entity<Topic>()
-            .HasMany(topic => topic.Questions).WithMany(question => question.Topics);
+            .HasMany(topic => topic.questions).WithMany(question => question.topics);
         
             var defaultUser = new User()
             {
