@@ -99,7 +99,7 @@ namespace Server.Api
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped<ITokenGenerator, JwtBearerTokenGenerator>();
             services.AddScoped<IDataContext>(provider => provider.GetService<DataContext>());
-            services.AddScoped<IUserRepository, PgUserRepository>();
+            // services.AddScoped<IUserRepository, PgUserRepository>(); VERVANGEN DOOR GEBRUIK VAN ASP.NET UserManager
             services.AddScoped<ITopicRepository, PgTopicRepository>();
             services.AddScoped<IQuestionRepository, PgQuestionRepository>();
             services.AddScoped<IFieldOfStudyRepository, PgFieldOfStudyRepository>();
