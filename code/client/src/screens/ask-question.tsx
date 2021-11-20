@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import CheckboxItem from '@components/CheckboxItem';
-import Page from '@components/page';
-import Chip from '@components/Chip';
-import { text } from '@css';
+import CheckboxItem from '@/components/CheckboxItem';
+import Page from '@/components/page';
+import Chip from '@/components/Chip';
+import { text } from '@/css';
 
 import {
     View,
@@ -30,12 +30,12 @@ class AskQuestion extends Component {
     render = () => (
         <Page title='Ask Question'>
             <Text style={[text.header]}>Course, Subject</Text>
-            <TextInput mode='outlined' label='Title' />
-            <TextInput mode='outlined' label='Content' multiline numberOfLines={5} />
+            <TextInput mode='outlined' label='Title'/>
+            <TextInput mode='outlined' label='Content' multiline numberOfLines={5}/>
 
             <List.Accordion title='Topics' onPress={() => { LayoutAnimation.easeInEaseOut() }}>
                 {this.topics.map((item, i) => {
-                    return <CheckboxItem key={i} label={item} checked={() => this.checks[i]} oncheck={checked => this.checks[i] = checked} />
+                    return <CheckboxItem key={i} label={item} checked={() => this.checks[i]} oncheck={checked => this.checks[i] = checked}/>
                 })}
             </List.Accordion>
 

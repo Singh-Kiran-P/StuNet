@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Theme } from 'css';
+import { Theme } from '@/css';
 
 import {
     View,
@@ -23,8 +23,8 @@ class Page extends Component<Props> {
     render = () => (
         <View>
             <Appbar.Header>
-                <Appbar.BackAction onPress={() => {}} />
-                <Appbar.Content title={this.props.title || ''} />
+                <Appbar.BackAction onPress={() => {}}/>
+                <Appbar.Content title={this.props.title || ''}/>
             </Appbar.Header>
             <ScrollView style={s.view}>
                 {this.props.children}

@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
 import { DefaultTheme } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 
 export const Theme = {
     ...DefaultTheme,
@@ -15,4 +15,4 @@ export const text = StyleSheet.create({
         fontSize: Theme.large,
         fontWeight: 'bold'
     }
-});
+})

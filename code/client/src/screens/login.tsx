@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Theme } from '@css';
+import { Theme } from '@/css';
 
 import {
     View,
