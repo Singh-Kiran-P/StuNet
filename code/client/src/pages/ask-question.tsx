@@ -41,6 +41,7 @@ export default function AskQuestion() {
 
     const submit = () => {
         axios.post('/Question', {
+            courseId: 0, // receive courseId from navigation
             title: title,
             body: body,
             topics: topics.filter((topic, i) => checks[i]).map((topic) => topic.id)
