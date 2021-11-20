@@ -40,9 +40,12 @@ export default function AskQuestion() {
     }, []);
 
     const submit = () => {
-        console.log(title);
-        console.log(body);
-        console.log(checks.map((checked, i) => checked ? topics[i].id : null).filter(x => x !== null));
+        axios.post('/Question', {
+            courseId: 0, // receive courseId from navigation
+            title: title,
+            body: body,
+            topics: topics.filter((topic, i) => checks[i]).map((topic) => topic.id)
+        });
     };
 
     return loading ?

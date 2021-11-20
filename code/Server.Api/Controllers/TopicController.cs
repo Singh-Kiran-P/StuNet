@@ -12,9 +12,11 @@ namespace Server.Api.Controllers
     public class TopicController: ControllerBase
     {
         private readonly ITopicRepository _topicRepository;
-        public TopicController(ITopicRepository topicRepository)
+        private readonly ICourseRepository _courseRepository;
+        public TopicController(ITopicRepository topicRepository, ICourseRepository courseRepository)
         {
             _topicRepository = topicRepository;
+            _courseRepository = courseRepository;
         }
     
         [HttpGet]
@@ -35,11 +37,12 @@ namespace Server.Api.Controllers
         }
     
         [HttpPost]
-        public async Task<ActionResult> CreateTopic(TopicDto createTopicDto)
+        public async Task<ActionResult> CreateTopic(createTopicDto dto)
         {
             Topic topic = new()
             {
-                name = createTopicDto.name
+                name = dto.name,
+                course = _courseRepository.getAsync(dto.courseId).Result
             };
     
             await _topicRepository.createAsync(topic);
@@ -54,12 +57,13 @@ namespace Server.Api.Controllers
         }
     
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateTopic(int id, TopicDto updateTopicDto)
+        public async Task<ActionResult> UpdateTopic(int id, createTopicDto dto)
         {
             Topic topic = new()
             {
                 id = id,
-                name = updateTopicDto.name
+                name = dto.name,
+                course = _courseRepository.getAsync(dto.courseId).Result
             };
     
             await _topicRepository.updateAsync(topic);

@@ -18,24 +18,24 @@ type Props = {
 
 export default function Page(props: Props) {
     return (
-        <View>
+        <View style={s.page}>
             <Appbar.Header>
                 <Appbar.BackAction onPress={() => {}} />
                 <Appbar.Content title={props.title || ''} />
             </Appbar.Header>
-            <ScrollView>
-                <View style={s.view}>
-                    {/* https://stackoverflow.com/a/59312970 */}
-                    {props.children}
-                </View>
+            <ScrollView contentContainerStyle={s.view}>
+                {props.children}
             </ScrollView>
         </View>
     )
 }
 
 const s = StyleSheet.create({
-    view: {
-        padding: Theme.padding,
-        flexGrow: 1,
+    page: {
+        flex: 1,
     },
+
+    view: {
+        padding: Theme.padding
+    }
 });

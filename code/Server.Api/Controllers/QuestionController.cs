@@ -14,10 +14,12 @@ namespace Server.Api.Controllers
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly ITopicRepository _topicRepository;
-        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository)
+        private readonly ICourseRepository _courseRepository;
+        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository)
         {
             _questionRepository = questionRepository;
 			_topicRepository = topicRepository;
+			_courseRepository = courseRepository;
 		}
     
         [HttpGet]
@@ -38,16 +40,16 @@ namespace Server.Api.Controllers
         }
     
         [HttpPost]
-        public async Task<ActionResult> CreateQuestion(QuestionDto createQuestionDto)
+        public async Task<ActionResult> CreateQuestion(createQuestionDto dto)
         {
 			Question question = new()
 			{
-				title = createQuestionDto.title,
+				title = dto.title,
 				// user = createQuestionDto.user,
-				// course = createQuestionDto.course,
-				body = createQuestionDto.body,
+				course = _courseRepository.getAsync(dto.courseId).Result,
+				body = dto.body,
 				// files = createQuestionDto.files
-				topics = createQuestionDto.topics.Select(id => _topicRepository.getAsync(id))
+				topics = dto.topicIds.Select(id => _topicRepository.getAsync(id))
 												.Select(task => task.Result)
 												.ToList(),
 			    dateTime = DateTime.Now
@@ -65,17 +67,19 @@ namespace Server.Api.Controllers
         }
     
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateQuestion(int id, QuestionDto updateQuestionDto)
+        public async Task<ActionResult> UpdateQuestion(int id, createQuestionDto dto)
         {
             Question question = new()
             {
                 id = id,
-                title = updateQuestionDto.title,
+                title = dto.title,
                 // user = updateQuestionDto.user,
-                // course = updateQuestionDto.course,
-                body = updateQuestionDto.body,
+                course = _courseRepository.getAsync(dto.courseId).Result,
+                body = dto.body,
                 // files = updateQuestionDto.files
-                // Topics = updateQuestionDto.Topics
+                topics = dto.topicIds.Select(id => _topicRepository.getAsync(id))
+												.Select(task => task.Result)
+												.ToList(),
                 dateTime = DateTime.Now
             };
     
