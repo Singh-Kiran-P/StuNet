@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Api.DataBase;
 using Server.Api.Models;
+using System.Linq;
 
 namespace Server.Api.Repositories
 {
@@ -16,7 +17,18 @@ namespace Server.Api.Repositories
         }
         public async Task<IEnumerable<Question>> getAllAsync()
         {
-            return await _context.Questions.ToListAsync();
+            return await _context.Questions
+                    .Select(question => new Question{
+                        id = question.id,
+                        title = question.title,
+                        body = question.body,
+                        dateTime = question.dateTime,
+                        topics = question.topics
+                            .Select(topic => new Topic{
+                                id = topic.id,
+                                name = topic.name
+                            }).ToList()
+                    }).ToListAsync();
         }
         public async Task createAsync(Question question)
         {
