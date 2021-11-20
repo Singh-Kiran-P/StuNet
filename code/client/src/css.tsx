@@ -7,12 +7,13 @@ export const Theme = {
     medium: 16,
     small: 12,
 
-    padding: 10
-}
+    padding: 10,
+    marginBottom: 10,
+};
 
 export const text = StyleSheet.create({
     header: {
         fontSize: Theme.large,
-        fontWeight: 'bold'
-    }
+        fontWeight: 'bold',
+    },
 });

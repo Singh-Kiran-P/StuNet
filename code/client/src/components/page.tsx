@@ -13,7 +13,7 @@ import {
 
 type Props = {
     title?: string,
-    children?: React.ReactNode
+    children?: React.ReactNode,
 }
 
 export default function Page(props: Props) {
@@ -23,8 +23,16 @@ export default function Page(props: Props) {
                 <Appbar.BackAction onPress={() => {}} />
                 <Appbar.Content title={props.title || ''} />
             </Appbar.Header>
+<<<<<<< HEAD
             <ScrollView contentContainerStyle={s.view}>
                 {props.children}
+=======
+            <ScrollView>
+                <View style={s.view}>
+                    {/* https://stackoverflow.com/a/59312970 */}
+                    {props.children}
+                </View>
+>>>>>>> main
             </ScrollView>
         </View>
     )
@@ -36,6 +44,12 @@ const s = StyleSheet.create({
     },
 
     view: {
+<<<<<<< HEAD
         padding: Theme.padding
     }
+=======
+        padding: Theme.padding,
+        flexGrow: 1,
+    },
+>>>>>>> main
 });
