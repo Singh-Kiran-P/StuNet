@@ -2,6 +2,9 @@ name: .NET
 
 on:
   push:
+    paths:
+      - 'code/Server.Api'
+      - 'code/Server.UnitTests'
   workflow_dispatch:
 
 jobs:
