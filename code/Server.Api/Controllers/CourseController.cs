@@ -12,10 +12,12 @@ namespace Server.Api.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseRepository _courseRepository;
+        private readonly ITopicRepository _topicRepository;
 
-        public CourseController(ICourseRepository repository)
+        public CourseController(ICourseRepository repository, ITopicRepository topicRepository)
         {
             _courseRepository = repository;
+            _topicRepository = topicRepository;
         }
 
         [HttpGet]
@@ -36,15 +38,38 @@ namespace Server.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> createCourse(CourseDto dto)
+        public async Task<ActionResult> createCourse(createCourseDto dto)
         {
             Course course = new()
             {
                 Name = dto.Name,
                 Number = dto.Number,
+                topics = new List<Topic>(),
+                // Channels = dto.channels.Select(name => _channelRepository.createAsync(name))
+				// 								.Select(task => task.Result)
+				// 								.ToList(),
+                // topics = dto.topicNames.Select(name => _topicRepository.createAsync(
+                //     new Topic(
+                //     {
+                //         name = name
+                //     })))
+				// 	.Select(task => task.Result
+            	// 	.ToList(),
             };
-
+            
             await _courseRepository.createAsync(course);
+            course = _courseRepository.getAsync(course.Id).Result;
+            
+            foreach(var topicName in dto.topicNames){
+                Topic topic = new(){
+                    name = topicName,
+                    course = course
+                };
+                course.topics.Add(topic);
+                await _topicRepository.createAsync(topic);
+            }
+            await _courseRepository.updateAsync(course);
+            Console.WriteLine("CREATE COURSE FINISHED");
             return Ok();
         }
     
