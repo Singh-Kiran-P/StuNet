@@ -57,5 +57,28 @@ namespace Server.UnitTests
 			course.topics.Should().HaveCount(count);
 			// course.dateTime.Should().BeCloseTo(DateTime.Now, new TimeSpan(0, 0, 0, 0, 500)); // 500ms
         }
+
+        [Fact]
+        public async Task getCourse_WithValidId_CourseDto()
+        {
+        //Given
+            Course course = new()
+            {
+                Name = "random" + random.Next().ToString(),
+                Number = random.Next().ToString(),
+                topics = new List<Topic>{new Topic(){ name = randomName(), id = randomInt() }}
+            };
+            _courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+                .ReturnsAsync(course);
+            var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object);
+        //When
+            GetCourseDto dto = ((await controller.GetCourse(randomInt())).Result as OkObjectResult).Value as GetCourseDto;
+        //Then
+			dto.Should().BeEquivalentTo(
+				course,
+				options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
+			);
+            dto.Topics.Should().NotBeNullOrEmpty();
+        }
     }
 }
