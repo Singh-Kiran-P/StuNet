@@ -40,7 +40,7 @@ namespace Server.Api.Controllers
         }
     
         [HttpPost]
-        public async Task<ActionResult> CreateQuestion(createQuestionDto dto)
+        public async Task<ActionResult<Question>> CreateQuestion(createQuestionDto dto)
         {
 			Question question = new()
 			{
@@ -56,22 +56,32 @@ namespace Server.Api.Controllers
             };
 
 			await _questionRepository.createAsync(question);
-            return Ok();
+            return Ok(question);
         }
     
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteQuestion(int id)
         {
+			var existingQuestion = await _questionRepository.getAsync(id);
+            if (existingQuestion is null) {
+				return NotFound();
+			}
+
             await _questionRepository.deleteAsync(id);
-            return Ok();
+            return NoContent();
         }
     
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateQuestion(int id, createQuestionDto dto)
         {
-            Question question = new()
+
+			var existingQuestion = await _questionRepository.getAsync(id);
+            if (existingQuestion is null) {
+				return NotFound();
+			}
+
+			Question updatedQuestion = new()
             {
-                id = id,
                 title = dto.title,
                 // user = updateQuestionDto.user,
                 course = _courseRepository.getAsync(dto.courseId).Result,
@@ -83,8 +93,8 @@ namespace Server.Api.Controllers
                 dateTime = DateTime.Now
             };
     
-            await _questionRepository.updateAsync(question);
-            return Ok();
+            await _questionRepository.updateAsync(updatedQuestion);
+            return NoContent();
         }
     }
 }

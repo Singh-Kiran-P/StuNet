@@ -3,7 +3,7 @@ name: .NET
 on:
   push:
     paths:
-      - './code/Server.*/'
+      - '**/Server.*/**'
   workflow_dispatch:
 
 jobs:
