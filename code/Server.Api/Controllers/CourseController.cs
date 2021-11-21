@@ -22,10 +22,22 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Course>>> getCourses()
+        public async Task<ActionResult<IEnumerable<GetCourseDto>>> getCourses()
         {
-            var courses = await _courseRepository.getAllAsync();
-            return Ok(courses);
+            IEnumerable<Course> courses = await _courseRepository.getAllAsync();
+            IEnumerable<GetCourseDto> getDtos = courses.Select(course =>
+                new GetCourseDto()
+                {
+                    Name = course.Name,
+                    Number = course.Number,
+                    Topics = new List<getOnlyTopicDto>(){}
+                    /* this should have worked: */
+                    // course.topics.Select(topic =>
+                    //     new getOnlyTopicDto(){ name = topic.name, id = topic.id }
+                    // ).ToList(),
+                }
+            );
+            return Ok(getDtos);
         }
     
         [HttpGet("{id}")]
