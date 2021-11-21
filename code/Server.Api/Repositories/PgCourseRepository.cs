@@ -35,6 +35,7 @@ namespace Server.Api.Repositories
                 throw new NullReferenceException();
             courseToUpdate.Name = course.Name;
             courseToUpdate.Number = course.Number;
+            courseToUpdate.topics = course.topics;
             await _context.SaveChangesAsync();
         }
 
