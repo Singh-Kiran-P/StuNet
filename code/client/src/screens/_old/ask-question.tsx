@@ -1,8 +1,8 @@
 import React, { Component, useEffect, useState } from 'react';
 
-import CheckboxItem from '@/components/CheckboxItem';
+import CheckboxItem from '@/components/_old/CheckboxItem';
 import Page from '@/components/page';
-import Chip from '@/components/Chip';
+import Chip from '@/components/_old/Chip';
 import { text } from '@/css';
 import axios from 'axios';
 

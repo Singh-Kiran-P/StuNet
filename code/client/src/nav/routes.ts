@@ -2,56 +2,62 @@ import { screens, tabs } from '@/nav/types';
 import { Theme } from '@/css';
 
 export const s = screens({
-    test1: {
-        title: 'Test 1',
-        param1: 1,
-        args: {} as {
-            name: string
-        }
+
+    Home: {
+        title: 'Home'
     },
-    test2: {
-        title: 'Test 2',
-        tabs: true,
-        param2: 2
+
+
+
+    Courses: {
+        title: 'Search For Courses'
     },
-    test3: {
-        title: 'Test 3',
-        tabs: true,
-        param3: 3
+
+
+
+    Notifications: {
+        title: 'Your Notifications'
     },
-    test4: {
-        title: 'Test 4',
-        param4: 4
+
+
+
+    Profile: {
+        title: 'Your Profile'
     },
-    test5: {
-        title: 'Test 5',
-        param5: 5
+    EditProfile: {
+        title: 'Edit Your Profile'
     }
+
 })
 
 export const t = tabs(s, {
-    home: {
-        screen: 'test1',
+
+    HomeTab: {
+        screen: 'Home',
         title: 'Home',
         icon: 'home',
         colors: Theme.colors.home
     },
-    courses: {
-        screen: 'test2',
+
+    CoursesTab: {
+        screen: 'Courses',
         title: 'Courses',
         icon: 'book',
         colors: Theme.colors.courses
     },
-    notifications: {
-        screen: 'test3',
+
+    NotificationsTab: {
+        screen: 'Notifications',
         title: 'Notifications',
         icon: 'bell',
         colors: Theme.colors.notifications
     },
-    profile: {
-        screen: 'test4',
+
+    ProfileTab: {
+        screen: 'Profile',
         title: 'Profile',
         icon: 'face',
         colors: Theme.colors.profile
     }
+
 })

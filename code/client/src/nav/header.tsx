@@ -1,10 +1,10 @@
-import React, { component } from '@/.';
+import React, { Component } from '@/.';
 
 import {
     Appbar
 } from 'react-native-paper';
 
-export default component(({ params: { title }, nav }) => {
+export default Component(({ params: { title }, nav }) => {
     return (
         <Appbar.Header>
             {!nav.getState().index || <Appbar.BackAction onPress={() => nav.goBack()}/>}

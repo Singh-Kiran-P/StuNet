@@ -1,11 +1,11 @@
-import React, { component, Children, Theme, Style } from '@/.';
+import React, { Component, Children, Theme, Style } from '@/.';
 
 import {
     View,
     ScrollView
 } from 'react-native';
 
-export default component<Children>(({ children, params: { scroll = true, padding = true } }) => {
+export default Component<Children>(({ children, params: { scroll = true, padding = true } }) => {
     if (padding === true) padding = Theme.padding;
     const Container = scroll ? ScrollView : View;
     const style = Style.create({

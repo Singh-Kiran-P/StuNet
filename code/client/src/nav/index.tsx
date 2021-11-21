@@ -3,22 +3,23 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 
-import { Theme, useAnimate } from '@/css';
-import { component } from '@/nav/types';
 import * as options from '@/nav/routes';
+import { Component } from '@/nav/types';
+import { useAnimate } from '@/util';
 import header from '@/nav/header';
 import Screen from '@/nav/screen';
 import screens from '@/screens';
+import { Theme } from '@/css';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const Components = screens.map(screen => {
     let name = Object.keys(screen)[0] as keyof typeof options.s;
-    return [name, component(({ params: { tabs }, nav }, props: any) => {
+    return [name, Component(({ params: { tabs }, nav }, props: any) => {
         useFocusEffect(() => hide(nav.getState().index && !tabs));
         return Screen({ children: screen[name](props), ...props });
-    })] as [typeof name, ReturnType<typeof component>];
+    })] as [typeof name, ReturnType<typeof Component>];
 });
 
 const Screens = Object.keys(options.t).map(() => Components.map(([name, screen], i) => {

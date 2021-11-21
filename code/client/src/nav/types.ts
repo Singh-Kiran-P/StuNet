@@ -55,7 +55,7 @@ type Nav<T extends Name> = CompositeNavigationProp<
     }>>
 >
 
-export const screen = <T extends Name>(t: T, s:
+export const Screen = <T extends Name>(t: T, s:
     (args: { params: Route<T>['params'], nav: Nav<T> },
     props: { route: Route<Name>, navigation: Nav<Name> }) => JSX.Element) => {
     return { [t]: (props: { route: Route<T>, navigation: Nav<T> }) => s({
@@ -65,7 +65,7 @@ export const screen = <T extends Name>(t: T, s:
 }
 
 type Used = 'params' | 'nav' | 'route' | 'navigation';
-export const component = <T extends {} = {}, U extends Name = Name>(c:
+export const Component = <T extends {} = {}, U extends Name = Name>(c:
     (args: { params: Route<U>['params'], nav: Nav<U> } & Omit<T, Used>,
     props: { route: Route<Name>, navigation: Nav<Name> }) => JSX.Element) => {
     return (props: { route: Route<U>, navigation: Nav<U> } & Omit<T, Used>) => c(
@@ -76,5 +76,5 @@ export const component = <T extends {} = {}, U extends Name = Name>(c:
     )
 }
 
-export const useParam = <T extends Name = Name>() => useRoute<Route<T>>().params!;
+export const useParams = <T extends Name = Name>() => useRoute<Route<T>>().params!;
 export const useNav = <T extends Name = Name>() => useNavigation<Nav<T>>();
