@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
+using Server.Api.Dtos;
 using Server.Api.Repositories;
 using System.Linq;
 
@@ -21,26 +22,43 @@ namespace Server.Api.Controllers
 			_topicRepository = topicRepository;
 			_courseRepository = courseRepository;
 		}
+
+        private static questionDto toDto(Question question) {
+			return new questionDto
+			{
+				id = question.id,
+				user = question.user,
+				course = question.course,
+				title = question.title,
+				body = question.body,
+				topics = question.topics.Select(topic => new getOnlyTopicDto
+				{
+					id = topic.id,
+					name = topic.name
+				}).ToList(),
+				time = question.dateTime
+			};
+		}
     
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
+        public async Task<ActionResult<IEnumerable<questionDto>>> GetQuestions()
         {
             var questions = await _questionRepository.getAllAsync();
-            return Ok(questions);
+			return Ok(questions.Select(question => toDto(question)));
         }
     
         [HttpGet("{id}")]
-        public async Task<ActionResult<Question>> GetQuestion(int id)
+        public async Task<ActionResult<questionDto>> GetQuestion(int id)
         {
             var question = await _questionRepository.getAsync(id);
             if(question == null)
                 return NotFound();
     
-            return Ok(question);
+            return Ok(toDto(question));
         }
     
         [HttpPost]
-        public async Task<ActionResult<Question>> CreateQuestion(createQuestionDto dto)
+        public async Task<ActionResult<questionDto>> CreateQuestion(createQuestionDto dto)
         {
 			Question question = new()
 			{

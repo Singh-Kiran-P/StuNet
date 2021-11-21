@@ -2,7 +2,7 @@ using System;
 using Server.Api.Models;
 using System.Collections.Generic;
 
-namespace Server.Api.Controllers
+namespace Server.Api.Dtos
 {
     public record createQuestionDto {
 		public int courseId { get; set; }
@@ -12,8 +12,10 @@ namespace Server.Api.Controllers
     }
 
     public record onlyQuestionDto {
-        public String title { get; set; }
+        public int id { get; set; }
+		public String title { get; set; }
         public String body { get; set; }
+        public DateTime time { get; set; }
     }
 
     public record questionDto {
@@ -23,6 +25,7 @@ namespace Server.Api.Controllers
 		public string title { get; set; }
         public string body { get; set; }
         public ICollection<getOnlyTopicDto> topics { get; set; }
+        public DateTime time { get; set; }
 	}
 
     public record questionAnonymousDto {
@@ -31,5 +34,6 @@ namespace Server.Api.Controllers
 		public string title { get; set; }
         public string body { get; set; }
         public ICollection<getOnlyTopicDto> topics { get; set; }
+        public DateTime time { get; set; }
     }
 }

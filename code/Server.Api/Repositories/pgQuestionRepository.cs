@@ -17,19 +17,20 @@ namespace Server.Api.Repositories
         }
         public async Task<IEnumerable<Question>> getAllAsync()
         {
-            return await _context.Questions
-                    .Select(question => new Question{
-                        id = question.id,
-                        title = question.title,
-                        body = question.body,
-                        dateTime = question.dateTime,
-                        topics = question.topics
-                            .Select(topic => new Topic{
-                                id = topic.id,
-                                name = topic.name
-                            }).ToList()
-                    }).ToListAsync();
-        }
+			return await _context.Questions
+            .Include(q => q.topics)
+            .Include(q => q.user)          
+            .Include(q => q.course)          
+            .ToListAsync();
+		}
+        public async Task<Question> getAsync(int id)
+        {
+			return await _context.Questions
+            .Include(q => q.topics)
+            .Include(q => q.user)          
+            .Include(q => q.course)
+            .Where(q => q.id == id).FirstOrDefaultAsync();
+		}
         public async Task createAsync(Question question)
         {
             _context.Questions.Add(question);
@@ -44,10 +45,6 @@ namespace Server.Api.Repositories
             _context.Questions.Remove(questionToRemove);
             await _context.SaveChangesAsync();
         }
-        public async Task<Question> getAsync(int id)
-        {
-            return await _context.Questions.FindAsync(id);
-        }
 
         public async Task updateAsync(Question question)
         {
@@ -56,7 +53,8 @@ namespace Server.Api.Repositories
                 throw new NullReferenceException();
             questionToUpdate.title = question.title;
             questionToUpdate.body = question.body;
-            questionToUpdate.dateTime = DateTime.Now;
+			questionToUpdate.topics = question.topics;
+			questionToUpdate.dateTime = DateTime.Now;
             await _context.SaveChangesAsync();
         }
     }

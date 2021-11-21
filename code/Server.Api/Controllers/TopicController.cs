@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
+using Server.Api.Dtos;
 using Server.Api.Repositories;
+using System.Linq;
 
 namespace Server.Api.Controllers
 {
@@ -13,6 +15,22 @@ namespace Server.Api.Controllers
     {
         private readonly ITopicRepository _topicRepository;
         private readonly ICourseRepository _courseRepository;
+
+        private static getTopicDto toDto(Topic topic) {
+			return new getTopicDto
+			{
+				id = topic.id,
+				name = topic.name,
+				course = topic.course,
+				questions = topic.questions.Select(question => new onlyQuestionDto
+				{
+					id = question.id,
+					title = question.title,
+					body = question.body,
+					time = question.dateTime
+				}).ToList()
+			};
+		}
         public TopicController(ITopicRepository topicRepository, ICourseRepository courseRepository)
         {
             _topicRepository = topicRepository;
@@ -20,40 +38,41 @@ namespace Server.Api.Controllers
         }
     
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Topic>>> GetTopics()
+        public async Task<ActionResult<IEnumerable<getTopicDto>>> GetTopics()
         {
             var topics = await _topicRepository.getAllAsync();
-            return Ok(topics);
+            return Ok(topics.Select(topic => toDto(topic)));
         }
     
         [HttpGet("{id}")]
-        public async Task<ActionResult<Topic>> GetTopic(int id)
+        public async Task<ActionResult<getTopicDto>> GetTopic(int id)
         {
             var topic = await _topicRepository.getAsync(id);
             if(topic == null)
                 return NotFound();
-    
-            return Ok(topic);
-        }
+
+			return Ok(toDto(topic));
+		}
     
         [HttpPost]
-        public async Task<ActionResult> CreateTopic(createTopicDto dto)
+        public async Task<ActionResult<Topic>> CreateTopic(createTopicDto dto)
         {
             Topic topic = new()
             {
                 name = dto.name,
-                course = _courseRepository.getAsync(dto.courseId).Result
+                course = await _courseRepository.getAsync(dto.courseId),
+                questions = new List<Question>()
             };
     
             await _topicRepository.createAsync(topic);
-            return Ok();
+            return Ok(topic);
         }
     
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTopic(int id)
         {
             await _topicRepository.deleteAsync(id);
-            return Ok();
+            return NoContent();
         }
     
         [HttpPut("{id}")]
@@ -63,11 +82,11 @@ namespace Server.Api.Controllers
             {
                 id = id,
                 name = dto.name,
-                course = _courseRepository.getAsync(dto.courseId).Result
+                course = await _courseRepository.getAsync(dto.courseId)
             };
     
             await _topicRepository.updateAsync(topic);
-            return Ok();
+            return NoContent();
         }
     }
 }

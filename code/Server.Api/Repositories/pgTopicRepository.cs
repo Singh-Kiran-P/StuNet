@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Api.DataBase;
 using Server.Api.Models;
+using System.Linq;
 
 namespace Server.Api.Repositories
 {
@@ -16,7 +17,10 @@ namespace Server.Api.Repositories
         }
         public async Task<IEnumerable<Topic>> getAllAsync()
         {
-            return await _context.Topics.ToListAsync();
+            return await _context.Topics
+            .Include(t => t.questions)
+            .Include(t => t.course)
+            .ToListAsync();
         }
         public async Task createAsync(Topic topic)
         {
@@ -34,8 +38,12 @@ namespace Server.Api.Repositories
         }
         public async Task<Topic> getAsync(int id)
         {
-            return await _context.Topics.FindAsync(id);
-        }
+			return await _context.Topics
+			.Include(t => t.questions)
+			.Include(t => t.course)
+			.Where(t => t.id == id).FirstOrDefaultAsync();
+
+		}
 
         public async Task updateAsync(Topic topic)
         {

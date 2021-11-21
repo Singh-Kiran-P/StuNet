@@ -34,7 +34,10 @@ namespace Server.UnitTests {
 				},
 				title = rand.Next().ToString(),
 				body = rand.Next().ToString(),
-				topics = null,
+				topics = Enumerable.Range(1, 10).Select(_ => new Topic {
+					id = rand.Next(),
+					name = rand.Next().ToString()
+				}).ToList(),
 				dateTime = start.AddDays(rand.Next(range))
 			};
 		}
@@ -70,7 +73,8 @@ namespace Server.UnitTests {
 			var result = await controller.GetQuestion(rand.Next());
 
 			// Assert
-			((result.Result as OkObjectResult).Value as Question).Should().BeEquivalentTo(question);
+			((result.Result as OkObjectResult).Value as questionDto).Should()
+			.BeEquivalentTo(question, options => options.ComparingByMembers<questionDto>().ExcludingMissingMembers());
 		}
 
 		[Fact]
@@ -88,7 +92,7 @@ namespace Server.UnitTests {
 				courseId = rand.Next(),
 				title = rand.Next().ToString(),
 				body = rand.Next().ToString(),
-				topicIds = Enumerable.Range(1, 10).OrderBy(_ => rand.Next()).ToList<int>()
+				topicIds = Enumerable.Range(1, 10).Select(_ => rand.Next()).ToList<int>()
 			};
 
 			_topicRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
