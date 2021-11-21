@@ -1,28 +1,20 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import {
     Checkbox
 } from 'react-native-paper';
 
 type Props = {
-	label: string;
+    label: string;
     checked: () => boolean;
     oncheck: (checked: boolean) => {};
 }
 
-class CheckboxItem extends Component<Props> {
-    state = {
-        checked: this.props.checked()
-    }
+export default function CheckboxItem(props: Props) {
+    const [checked, setChecked] = useState(() => props.checked());
 
-    toggle = () => (this.props.oncheck(!this.state.checked), this.setState({ checked: !this.state.checked }));
-    status = () => this.state.checked ? 'checked' : 'unchecked';
+    const toggle = () => (props.oncheck(!checked), setChecked(!checked));
+    const status = () => checked ? 'checked' : 'unchecked';
 
-    render = () => (
-		<Checkbox.Item mode='ios' label={this.props.label} status={this.status()} onPress={this.toggle}>
-			{this.props.children}
-		</Checkbox.Item>
-    )
+    return <Checkbox.Item mode='ios' label={props.label} status={status()} onPress={toggle} />
 }
-
-export default CheckboxItem;

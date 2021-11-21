@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using System.Linq;
 
 namespace Server.Api.Controllers
 {
@@ -12,10 +13,14 @@ namespace Server.Api.Controllers
     public class QuestionController: ControllerBase
     {
         private readonly IQuestionRepository _questionRepository;
-        public QuestionController(IQuestionRepository questionRepository)
+        private readonly ITopicRepository _topicRepository;
+        private readonly ICourseRepository _courseRepository;
+        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository)
         {
             _questionRepository = questionRepository;
-        }
+			_topicRepository = topicRepository;
+			_courseRepository = courseRepository;
+		}
     
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
@@ -35,20 +40,22 @@ namespace Server.Api.Controllers
         }
     
         [HttpPost]
-        public async Task<ActionResult> CreateQuestion(QuestionDto createQuestionDto)
+        public async Task<ActionResult> CreateQuestion(createQuestionDto dto)
         {
-            Question question = new()
-            {
-                title = createQuestionDto.title,
-                // user = createQuestionDto.user,
-                // course = createQuestionDto.course,
-                body = createQuestionDto.body,
-                // files = createQuestionDto.files
-                // topics = createQuestionDto.topics
-                dateTime = DateTime.Now
+			Question question = new()
+			{
+				title = dto.title,
+				// user = createQuestionDto.user,
+				course = _courseRepository.getAsync(dto.courseId).Result,
+				body = dto.body,
+				// files = createQuestionDto.files
+				topics = dto.topicIds.Select(id => _topicRepository.getAsync(id))
+												.Select(task => task.Result)
+												.ToList(),
+			    dateTime = DateTime.Now
             };
-    
-            await _questionRepository.createAsync(question);
+
+			await _questionRepository.createAsync(question);
             return Ok();
         }
     
@@ -60,18 +67,20 @@ namespace Server.Api.Controllers
         }
     
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateQuestion(int id, QuestionDto updateQuestionDto)
+        public async Task<ActionResult> UpdateQuestion(int id, createQuestionDto dto)
         {
             Question question = new()
             {
                 id = id,
-                title = updateQuestionDto.title,
+                title = dto.title,
                 // user = updateQuestionDto.user,
-                // course = updateQuestionDto.course,
-                body = updateQuestionDto.body,
+                course = _courseRepository.getAsync(dto.courseId).Result,
+                body = dto.body,
                 // files = updateQuestionDto.files
-                // topics = updateQuestionDto.topics
-                dateTime = updateQuestionDto.dateTime
+                topics = dto.topicIds.Select(id => _topicRepository.getAsync(id))
+												.Select(task => task.Result)
+												.ToList(),
+                dateTime = DateTime.Now
             };
     
             await _questionRepository.updateAsync(question);
