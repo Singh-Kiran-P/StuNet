@@ -1,6 +1,6 @@
-using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
 using Server.Api.Repositories;
@@ -45,32 +45,14 @@ namespace Server.Api.Controllers
             {
                 Name = dto.Name,
                 Number = dto.Number,
-                topics = new List<Topic>(),
-                // Channels = dto.channels.Select(name => _channelRepository.createAsync(name))
-				// 								.Select(task => task.Result)
-				// 								.ToList(),
-                // topics = dto.topicNames.Select(name => _topicRepository.createAsync(
-                //     new Topic(
-                //     {
-                //         name = name
-                //     })))
-				// 	.Select(task => task.Result
-            	// 	.ToList(),
+                topics = dto.topicNames.Select(name => new Topic(){ name = name }).ToList(),
             };
-            
             await _courseRepository.createAsync(course);
-            course = _courseRepository.getAsync(course.Id).Result;
-            
-            foreach(var topicName in dto.topicNames){
-                Topic topic = new(){
-                    name = topicName,
-                    course = course
-                };
-                course.topics.Add(topic);
-                await _topicRepository.createAsync(topic);
+
+            foreach (var topic in course.topics) {
+                topic.course = course;
+                await _topicRepository.updateAsync(topic);
             }
-            await _courseRepository.updateAsync(course);
-            Console.WriteLine("CREATE COURSE FINISHED");
             return Ok(course);
         }
     
