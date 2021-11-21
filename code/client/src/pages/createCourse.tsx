@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // import CheckboxItem from '@components/CheckboxItem';
 import Page from '@components/page';
+import axios from 'axios';
 import MutuableStringList from 'components/MutableStringList';
 import {
   // text,
@@ -15,11 +16,13 @@ import {
 } from 'react-native';
 
 import {
+  Button,
   // ActivityIndicator,
   // Button,
   // List,
   TextInput,
 } from 'react-native-paper';
+import { assertExpressionStatement } from '@babel/types';
 
 const stylesheet = StyleSheet.create({
   stringList: {
@@ -47,9 +50,15 @@ export default function CreateCourse() {
   }, []);
 
   const submit = () => {
-    console.log(name);
-    console.log(number);
-    console.log(staff);
+    console.log("POSTING COURSE");
+    axios.post("/Course", {
+      name: name,
+      number: number,
+      //topics: topics.filter((topic, i) => checks[i]).map((topic) => topic.id)
+  });
+    // console.log(name);
+    // console.log(number);
+    // console.log(staff);
     //console.log(checks.map((checked, i) => checked ? topics[i] : null).filter(x => x !== null));
   };
 
@@ -69,6 +78,12 @@ export default function CreateCourse() {
         numberOfLines={5}
         onChangeText={setDescription}
       />
+      <Button
+          mode="contained"
+          style={{width: '50%'}}
+          onPress={submit}>
+          Submit
+        </Button>
     </Page>
   );
 }
