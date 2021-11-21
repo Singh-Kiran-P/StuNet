@@ -106,8 +106,9 @@ namespace Server.UnitTests {
 			);
 
 			createdQuestion.id.Should().NotBe(null);
-			createdQuestion.topics.Should().ContainEquivalentOf(randomTopic);
-			createdQuestion.dateTime.Should().BeCloseTo(DateTime.Now, new TimeSpan(0, 0, 0, 1)); //1 second
+			createdQuestion.topics.Should().NotBeNullOrEmpty();
+			createdQuestion.topics.Should().OnlyContain(t => t == randomTopic);
+			createdQuestion.dateTime.Should().BeCloseTo(DateTime.Now, new TimeSpan(0, 0, 0, 0, 500)); // 500ms
 		}
 
 		[Fact]
