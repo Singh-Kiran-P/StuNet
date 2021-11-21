@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using System.Linq;

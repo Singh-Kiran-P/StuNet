@@ -2,7 +2,7 @@ using System;
 using Server.Api.Models;
 using System.Collections.Generic;
 
-namespace Server.Api.Controllers
+namespace Server.Api.Dtos
 {
     public record createQuestionDto {
 		public int courseId { get; set; }
