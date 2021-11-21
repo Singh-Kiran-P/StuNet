@@ -29,13 +29,22 @@ namespace Server.Api.Controllers
         }
     
         [HttpGet("{id}")]
-        public async Task<ActionResult<Course>> GetCourse(int id)
+        public async Task<ActionResult<GetCourseDto>> GetCourse(int id)
         {
             Course course = await _courseRepository.getAsync(id);
             if (course == null)
                 return NotFound();
-            else
-                return Ok(course);
+
+            GetCourseDto getDto = new()
+            {
+                Name = course.Name,
+                Number = course.Number,
+                Topics = course.topics.Select(topic =>
+                    new getOnlyTopicDto(){ name = topic.name, id = topic.id }
+                ).ToList(),
+            };
+    
+            return Ok(getDto);
         }
 
         [HttpPost]
