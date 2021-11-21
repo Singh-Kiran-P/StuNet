@@ -1,29 +1,35 @@
+import { MaterialBottomTabNavigationProp } from '@react-navigation/material-bottom-tabs';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useRoute, useNavigation } from '@react-navigation/core';
+import { s as screens, t as tabs } from '@/nav/routes';
+
 type BaseScreens = {
     [name: string]: {
         args?: object;
-        title: string | ((a: any) => string);
+        title?: string; // TODO insert other params in title
         padding?: boolean | number;
         scroll?: boolean;
-        // TODO color? ...?
+        tabs?: boolean;
     }
 }
 
-type BaseTabs = {
+type BaseTabs<T extends BaseScreens> = {
     [name: string]: {
+        screen: keyof T;
         title: string;
         icon: string;
-        // TODO color? ...?
+        colors: {
+            primary: string;
+            accent: string;
+        }
     }
 }
 
-const t = <T extends BaseTabs>(v: T) => v;
-const s = <T extends BaseScreens>(v: T) => v;
+const s = <T extends BaseScreens>(v: T): Base<BaseScreens, T> => v;
+const t = <T extends BaseScreens, U extends BaseTabs<T>>(_: T, v: U): Base<BaseTabs<T>, U> => v;
+type Base<T extends { [key: string]: any }, U extends T> = { [V in keyof U]: U[V] & T[string] };
 export { s as screens, t as tabs };
-
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MaterialBottomTabNavigationProp } from '@react-navigation/material-bottom-tabs';
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
-import { s as screens, t as tabs } from '@/nav/routes';
 
 // NavigatorScreenParams from '@react-navigation/native';
 type NavigatorScreenParams<T> = { screen?: never; params?: never; initial?: never; } | {
@@ -32,38 +38,43 @@ type NavigatorScreenParams<T> = { screen?: never; params?: never; initial?: neve
     : { screen: U; params: T[U]; initial?: boolean; }
 }[keyof T]
 
-export type Name = keyof typeof screens;
-type Screens = typeof screens & { '': BaseScreens[string] };
-type Route<T extends Name | ''> = RouteProp<Screens, T>;
+type Screens = typeof screens;
+type Name = keyof typeof screens;
+type Route<T extends Name> = RouteProp<Screens, T>;
 type Params = { [T in Name]: Screens[T] extends { args: {} }
     ? Partial<Omit<Screens[T], keyof Screens[T]['args'] | 'args'>> & Screens[T]['args']
     : Partial<Screens[T]> | undefined
 }
 
-type Nav<T extends Name | ''> = CompositeNavigationProp<
-    NativeStackNavigationProp<Params, T extends '' ? Name : T>, // TODO '' ? Name
+type Nav<T extends Name> = CompositeNavigationProp<
+    NativeStackNavigationProp<Params, T>,
     MaterialBottomTabNavigationProp<
     Partial<{ [T in keyof typeof tabs]:
         NavigatorScreenParams<Params> &
-        Partial<(typeof tabs)[T]>
+        Omit<Partial<(typeof tabs)[T]>, 'screen'>
     }>>
 >
 
-export const screen = <T extends Name>(t: T,
-    s: (props: { params: Route<T>['params'], nav: Nav<T> }) => JSX.Element) => {
+export const screen = <T extends Name>(t: T, s:
+    (args: { params: Route<T>['params'], nav: Nav<T> },
+    props: { route: Route<Name>, navigation: Nav<Name> }) => JSX.Element) => {
     return { [t]: (props: { route: Route<T>, navigation: Nav<T> }) => s({
         params: props.route.params,
         nav: props.navigation
-    })}
+    }, props as any)}
 }
 
 type Used = 'params' | 'nav' | 'route' | 'navigation';
-export const component = <T extends {} = {}, U extends Name | '' = ''>(
-    c: (props: { params: Route<U>['params'], nav: Nav<U> } & Omit<T, Used>) => JSX.Element) => {
+export const component = <T extends {} = {}, U extends Name = Name>(c:
+    (args: { params: Route<U>['params'], nav: Nav<U> } & Omit<T, Used>,
+    props: { route: Route<Name>, navigation: Nav<Name> }) => JSX.Element) => {
     return (props: { route: Route<U>, navigation: Nav<U> } & Omit<T, Used>) => c(
         (({ route, navigation, ...o }) => ({ ...o,
             params: props.route.params,
             nav: props.navigation
-        }))(props) as any
+        }))(props) as any, props as any
     )
 }
+
+export const useParam = <T extends Name = Name>() => useRoute<Route<T>>().params!;
+export const useNav = <T extends Name = Name>() => useNavigation<Nav<T>>();

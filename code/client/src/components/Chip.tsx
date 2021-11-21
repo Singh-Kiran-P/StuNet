@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Style } from 'react';
 
 import {
-    StyleSheet,
     View
 } from 'react-native';
 
@@ -25,7 +24,7 @@ class CheckboxRow extends Component {
     )
 }
 
-const s = StyleSheet.create({
+const s = Style.create({
     chip: {
         margin: 2,
         flexWrap: 'wrap',

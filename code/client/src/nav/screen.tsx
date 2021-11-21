@@ -1,17 +1,20 @@
-import React, { component, Children, Theme } from '@/.';
+import React, { component, Children, Theme, Style } from '@/.';
 
 import {
     View,
-    ScrollView,
-    StyleSheet
+    ScrollView
 } from 'react-native';
 
-export default component<Children>(({ children, params: { scroll, padding } }) => {
-    const Container = scroll ? ScrollView : View;
+export default component<Children>(({ children, params: { scroll = true, padding = true } }) => {
     if (padding === true) padding = Theme.padding;
-    const style = StyleSheet.create({
+    const Container = scroll ? ScrollView : View;
+    const style = Style.create({
         screen: {
-            padding: padding || undefined
+            width: '100%',
+            height: '100%',
+            padding: padding || undefined,
+            backgroundColor: Theme.colors.background,
+            color: Theme.colors.onSurface,
         }
     })
 

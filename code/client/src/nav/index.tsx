@@ -1,56 +1,61 @@
-import React from 'react';
-
-import screens from '@/screens';
-import * as options from '@/nav/routes';
-
-const tabs = {
-    // TODO
-}
-
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-const Tab = createMaterialBottomTabNavigator();
+import { useFocusEffect } from '@react-navigation/native';
+import React from 'react';
+
+import { Theme, useAnimate } from '@/css';
+import { component } from '@/nav/types';
+import * as options from '@/nav/routes';
+import header from '@/nav/header';
+import Screen from '@/nav/screen';
+import screens from '@/screens';
+
 const Stack = createNativeStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
-const Screens = undefined;
-
-const Stacks = undefined;
-
-const Tabs = undefined;
-
-export default () => <Tab.Navigator children={Tabs}/>;
-
-/* 
-let screens = Object.assign({}, ...elements.map(el => {
-    let name = Object.keys(el)[0] as Name;
-    let element = el[name];
-    return { [name]: {
-        el: element,
-        options: options[name]
-    }}
-}));
-
-const stacks = Object.assign({}, ...Object.entries(routes).map(([route, tab]) => ({
-    [route]: () => {
-        console.log('b:   ' + Math.random());
-        return (
-            <Stack.Navigator>
-                {tab.screens.map(s => [s, screens[s]]).map(([s, screen], i) => {
-                    console.log('c:         ' + Math.random());
-                    return <Stack.Screen key={i} name={s} component={screen.el}/>
-                })}
-            </Stack.Navigator>
-        )
-    }
-})));
-
-const tabs = Object.entries(routes).map(([route, tab], i) => {
-    console.log('a:' + Math.random());
-    return (
-        <Tab.Screen key={i} name={route} options={{
-            tabBarLabel: tab.title,
-            tabBarIcon: tab.icon
-        }} component={stacks[route]}/>
-    )
+const Components = screens.map(screen => {
+    let name = Object.keys(screen)[0] as keyof typeof options.s;
+    return [name, component(({ params: { tabs }, nav }, props: any) => {
+        useFocusEffect(() => hide(nav.getState().index && !tabs));
+        return Screen({ children: screen[name](props), ...props });
+    })] as [typeof name, ReturnType<typeof component>];
 });
-*/
+
+const Screens = Object.keys(options.t).map(() => Components.map(([name, screen], i) => {
+    return (
+        <Stack.Screen key={i} name={name}
+        initialParams={options.s[name]}
+        component={screen}/>
+    )
+}))
+
+const Stacks = Object.values(options.t).map((tab, i) => () => {
+    Theme.colors.primary = tab.colors.primary;
+    Theme.colors.accent = tab.colors.accent;
+    return (
+        <Stack.Navigator initialRouteName={tab.screen} screenOptions={{
+            header: header as any,
+            animation: 'fade_from_bottom',
+            animationTypeForReplace: 'push'
+        }} children={Screens[i]}/>
+    )
+})
+
+const Tabs = Object.entries(options.t).map(([name, tab], i) => {
+    return (
+        <Tab.Screen key={i} name={name}  options={{
+            tabBarLabel: tab.title,
+            tabBarIcon: tab.icon,
+            tabBarColor: tab.colors.primary
+        }} component={Stacks[i]}/>
+    )
+})
+
+let hide: (hide: any) => void;
+export default () => {
+    let [hidden, setHidden] = useAnimate(false);
+    hide = hide => setHidden(!!hide);
+    return <Tab.Navigator barStyle={{
+        height: hidden ? 0 : undefined
+    }} backBehavior='history' children={Tabs}/>;
+}

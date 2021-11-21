@@ -4,11 +4,11 @@ import {
     Appbar
 } from 'react-native-paper';
 
-export default component(({ params, params: { title }, nav }) => {
+export default component(({ params: { title }, nav }) => {
     return (
         <Appbar.Header>
-            {nav.canGoBack() && <Appbar.BackAction onPress={() => nav.goBack()}/>}
-            <Appbar.Content title={typeof title === 'function' ? title(params) : title}/>
+            {!nav.getState().index || <Appbar.BackAction onPress={() => nav.goBack()}/>}
+            <Appbar.Content title={title}/>
         </Appbar.Header>
     )
 })

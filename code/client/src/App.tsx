@@ -1,19 +1,17 @@
+import { Provider as ThemeProvider } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
+import { Platform, UIManager } from 'react-native';
 import React from 'react';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { Provider as ThemeProvider } from 'react-native-paper';
-import { Platform, UIManager } from 'react-native';
 import Navigator from '@/nav';
+import { Theme } from '@/css';
 
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental)
-    UIManager.setLayoutAnimationEnabledExperimental(true);
+if (Platform.OS === 'android') (UIManager.setLayoutAnimationEnabledExperimental || (() => {}))(true);
 
-const App = () => (
+export default () => (
     <NavigationContainer>
-        <ThemeProvider>
+        <ThemeProvider theme={Theme}>
             <Navigator/>
         </ThemeProvider>
     </NavigationContainer>
 )
-
-export default App;

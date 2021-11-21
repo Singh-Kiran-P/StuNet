@@ -1,4 +1,5 @@
 import { screens, tabs } from '@/nav/types';
+import { Theme } from '@/css';
 
 export const s = screens({
     test1: {
@@ -10,10 +11,12 @@ export const s = screens({
     },
     test2: {
         title: 'Test 2',
+        tabs: true,
         param2: 2
     },
     test3: {
         title: 'Test 3',
+        tabs: true,
         param3: 3
     },
     test4: {
@@ -26,21 +29,29 @@ export const s = screens({
     }
 })
 
-export const t = tabs({
+export const t = tabs(s, {
     home: {
+        screen: 'test1',
         title: 'Home',
-        icon: 'home'
+        icon: 'home',
+        colors: Theme.colors.home
     },
     courses: {
+        screen: 'test2',
         title: 'Courses',
-        icon: 'book'
+        icon: 'book',
+        colors: Theme.colors.courses
     },
     notifications: {
+        screen: 'test3',
         title: 'Notifications',
-        icon: 'bell'
+        icon: 'bell',
+        colors: Theme.colors.notifications
     },
     profile: {
+        screen: 'test4',
         title: 'Profile',
-        icon: 'face'
+        icon: 'face',
+        colors: Theme.colors.profile
     }
 })
