@@ -2,7 +2,7 @@ using System;
 using Server.Api.Models;
 using System.Collections.Generic;
 
-namespace Server.Api.Controllers // controllers?
+namespace Server.Api.Dtos // controllers?
 {
     public record CourseDto
     {
