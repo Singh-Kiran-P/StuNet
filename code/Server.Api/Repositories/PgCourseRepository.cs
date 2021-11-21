@@ -1,6 +1,5 @@
-
-
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -20,21 +19,26 @@ namespace Server.Api.Repositories
 
         public async Task<IEnumerable<Course>> getAllAsync()
         {
-            return await _context.Courses.ToListAsync();
+            return await _context.Courses
+            .Include(c => c.topics)
+            .ToListAsync();
         }
 
         public async Task<Course> getAsync(int id)
         {
-            return await _context.Courses.FindAsync(id);
-        }
+			return await _context.Courses
+			.Include(c => c.topics)
+			.Where(c => c.id == id).FirstOrDefaultAsync();
+		}
 
         public async Task updateAsync(Course course)
         {
-            Course courseToUpdate = await _context.Courses.FindAsync(course.Id);
+            Course courseToUpdate = await _context.Courses.FindAsync(course.id);
             if (courseToUpdate == null)
                 throw new NullReferenceException();
-            courseToUpdate.Name = course.Name;
-            courseToUpdate.Number = course.Number;
+            courseToUpdate.name = course.name;
+            courseToUpdate.number = course.number;
+            courseToUpdate.topics = course.topics;
             await _context.SaveChangesAsync();
         }
 

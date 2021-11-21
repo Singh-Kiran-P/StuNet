@@ -28,9 +28,9 @@ namespace Server.UnitTests {
 				user = null,
 				course = new Course
 				{
-					Id = rand.Next(),
-					Name = rand.Next().ToString(),
-					Number = rand.Next().ToString()
+					id = rand.Next(),
+					name = rand.Next().ToString(),
+					number = rand.Next().ToString()
 				},
 				title = rand.Next().ToString(),
 				body = rand.Next().ToString(),

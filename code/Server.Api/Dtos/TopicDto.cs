@@ -10,14 +10,14 @@ namespace Server.Api.Dtos
 	}
 
 	public record getOnlyTopicDto {
-		public int id { get; set; }
+        public int id { get; set; }
 		public String name { get; set; }
 	}
 
 	public record getTopicDto {
 		public int id { get; set; }
 		public String name { get; set; }
-		public Course course { get; set; }
+		public getOnlyCourseDto course { get; set; }
 		public ICollection<onlyQuestionDto> questions { get; set; }
 	}
 }

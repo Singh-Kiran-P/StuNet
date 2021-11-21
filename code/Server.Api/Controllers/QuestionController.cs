@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Server.Api.Models;
 using Server.Api.Dtos;
+using Server.Api.Models;
 using Server.Api.Repositories;
 using System.Linq;
 
@@ -28,7 +28,11 @@ namespace Server.Api.Controllers
 			{
 				id = question.id,
 				user = question.user,
-				course = question.course,
+				course = new getOnlyCourseDto {
+                    id = question.course.id,
+                    name = question.course.name,
+                    number = question.course.number,
+                },
 				title = question.title,
 				body = question.body,
 				topics = question.topics.Select(topic => new getOnlyTopicDto

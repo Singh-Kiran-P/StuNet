@@ -1,9 +1,10 @@
-using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using Server.Api.Dtos;
 
 namespace Server.Api.Controllers
 {
@@ -12,40 +13,68 @@ namespace Server.Api.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseRepository _courseRepository;
+        private readonly ITopicRepository _topicRepository;
 
-        public CourseController(ICourseRepository repository)
+        public CourseController(ICourseRepository repository, ITopicRepository topicRepository)
         {
             _courseRepository = repository;
+            _topicRepository = topicRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Course>>> getCourses()
+        public async Task<ActionResult<IEnumerable<GetCourseDto>>> getCourses()
         {
-            var courses = await _courseRepository.getAllAsync();
-            return Ok(courses);
+            IEnumerable<Course> courses = await _courseRepository.getAllAsync();
+            IEnumerable<GetCourseDto> getDtos = courses.Select(course =>
+                new GetCourseDto()
+                {
+                    name = course.name,
+                    number = course.number,
+                    topics = new List<getOnlyTopicDto>(){}
+                    /* this should have worked: */
+                    // course.topics.Select(topic =>
+                    //     new getOnlyTopicDto(){ name = topic.name, id = topic.id }
+                    // ).ToList(),
+                }
+            );
+            return Ok(getDtos);
         }
     
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetCourse(int id)
+        public async Task<ActionResult<GetCourseDto>> GetCourse(int id)
         {
             Course course = await _courseRepository.getAsync(id);
             if (course == null)
                 return NotFound();
+
+            GetCourseDto getDto = new()
+            {
+                name = course.name,
+                number = course.number,
+                topics = course.topics.Select(topic =>
+                    new getOnlyTopicDto(){ name = topic.name, id = topic.id }
+                ).ToList(),
+            };
     
-            return Ok(course);
+            return Ok(getDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult> createCourse(CourseDto dto)
+        public async Task<ActionResult<Course>> createCourse(createCourseDto dto)
         {
             Course course = new()
             {
-                Name = dto.Name,
-                Number = dto.Number,
+                name = dto.name,
+                number = dto.number,
+                topics = dto.topicNames.Select(name => new Topic(){ name = name }).ToList(),
             };
-
             await _courseRepository.createAsync(course);
-            return Ok();
+
+            foreach (var topic in course.topics) {
+                topic.course = course;
+                await _topicRepository.updateAsync(topic);
+            }
+            return Ok(course);
         }
     
         [HttpDelete("{id}")]
@@ -57,7 +86,7 @@ namespace Server.Api.Controllers
             catch (System.Exception) {
                 return NotFound();
             }
-            return Ok();
+            return NoContent();
         }
     
         [HttpPut("{id}")]
@@ -65,13 +94,13 @@ namespace Server.Api.Controllers
         {
             Course course = new()
             {
-                Id = id,
-                Name = courseDto.Name,
-                Number = courseDto.Number                
+                id = id,
+                name = courseDto.name,
+                number = courseDto.number                
             };
     
             await _courseRepository.updateAsync(course);
-            return Ok();
+            return NoContent();
         }
     }
 }

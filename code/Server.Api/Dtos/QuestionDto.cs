@@ -21,7 +21,7 @@ namespace Server.Api.Dtos
     public record questionDto {
         public int id { get; set; }
         public User user { get; set; }
-        public Course course { get; set; }
+        public getOnlyCourseDto course { get; set; }
 		public string title { get; set; }
         public string body { get; set; }
         public ICollection<getOnlyTopicDto> topics { get; set; }
