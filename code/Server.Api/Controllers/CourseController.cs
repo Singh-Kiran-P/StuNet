@@ -29,17 +29,17 @@ namespace Server.Api.Controllers
         }
     
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetCourse(int id)
+        public async Task<ActionResult<Course>> GetCourse(int id)
         {
             Course course = await _courseRepository.getAsync(id);
             if (course == null)
                 return NotFound();
-    
-            return Ok(course);
+            else
+                return Ok(course);
         }
 
         [HttpPost]
-        public async Task<ActionResult> createCourse(createCourseDto dto)
+        public async Task<ActionResult<Course>> createCourse(createCourseDto dto)
         {
             Course course = new()
             {
@@ -71,7 +71,7 @@ namespace Server.Api.Controllers
             }
             await _courseRepository.updateAsync(course);
             Console.WriteLine("CREATE COURSE FINISHED");
-            return Ok();
+            return Ok(course);
         }
     
         [HttpDelete("{id}")]
@@ -83,7 +83,7 @@ namespace Server.Api.Controllers
             catch (System.Exception) {
                 return NotFound();
             }
-            return Ok();
+            return NoContent();
         }
     
         [HttpPut("{id}")]
@@ -97,7 +97,7 @@ namespace Server.Api.Controllers
             };
     
             await _courseRepository.updateAsync(course);
-            return Ok();
+            return NoContent();
         }
     }
 }
