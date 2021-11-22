@@ -30,11 +30,9 @@ namespace Server.Api.Controllers
                 {
                     name = course.name,
                     number = course.number,
-                    topics = new List<getOnlyTopicDto>(){}
-                    /* this should have worked: */
-                    // course.topics.Select(topic =>
-                    //     new getOnlyTopicDto(){ name = topic.name, id = topic.id }
-                    // ).ToList(),
+                    topics = course.topics.Select(topic =>
+                        new getOnlyTopicDto(){ name = topic.name, id = topic.id }
+                    ).ToList(),
                 }
             );
             return Ok(getDtos);

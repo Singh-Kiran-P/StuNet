@@ -20,15 +20,16 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Course>> getAllAsync()
         {
             return await _context.Courses
-            .Include(c => c.topics)
-            .ToListAsync();
+                .Include(c => c.topics)
+                .ToListAsync();
         }
 
         public async Task<Course> getAsync(int id)
         {
 			return await _context.Courses
-			.Include(c => c.topics)
-			.Where(c => c.id == id).FirstOrDefaultAsync();
+                .Include(c => c.topics)
+                .Where(c => c.id == id)
+                .FirstOrDefaultAsync();
 		}
 
         public async Task updateAsync(Course course)
