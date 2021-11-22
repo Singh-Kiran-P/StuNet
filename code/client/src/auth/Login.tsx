@@ -1,6 +1,12 @@
+export default {}; // TODO
+
+// old login:
+
+/*
+
 import React, { Component } from 'react';
 
-import { Theme } from '@css';
+import { Theme } from '@/css';
 
 import {
     View,
@@ -27,10 +33,6 @@ class Test extends Component {
     submit() { // For testing purposes
         fetch('http://10.0.2.2:5000/User', {
             method: 'POST',
-            headers: {
-                Accept: '*/*',
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify({
                 email: this.state.email,
                 password: this.state.password
@@ -71,3 +73,5 @@ const s = StyleSheet.create({
 });
 
 export default Test;
+
+*/

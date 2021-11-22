@@ -1,3 +1,42 @@
+import React, { Screen, useState, axios } from '@/.';
+
+import {
+    View,
+    Button,
+    TextInput
+} from '@/components';
+
+export default Screen('CreateCourse', ({ params, nav }) => {
+    // TODO load
+
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
+    const [description, setDescription] = useState('');
+
+    const submit = () => {
+        axios.post('/Course', {
+            name: name,
+            number: number
+        })
+    }
+
+    return (
+        <View>
+            <TextInput label='Name' onChangeText={setName}/>
+            <TextInput label='Number' onChangeText={setNumber}/>
+            {/* <MutuableStringList title='Channels'/>
+            <MutuableStringList title='Topics'/>
+            <MutuableStringList title='Assistents'/> */}
+            <TextInput label='Description' multiline onChangeText={setDescription}/>
+            <Button children='Create' disabled={!name || !number || !description} onPress={submit}/>
+        </View>
+    )
+})
+
+// TODO MutableStringList:
+
+/*
+
 import React, {Component, useState} from 'react';
 
 import {
@@ -99,3 +138,6 @@ export default function MutuableStringList(props: Props) {
     </View>
   );
 }
+
+*/
+

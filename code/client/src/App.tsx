@@ -1,22 +1,20 @@
-import React from 'react';
-import axios from 'axios'
+import { Provider as ThemeProvider } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
 import { Platform, UIManager } from 'react-native';
-import { Provider } from 'react-native-paper';
+import axios from 'axios';
+import React from 'react';
 
-axios.defaults.baseURL = 'http://10.0.2.2:5000'
+import Navigator from '@/nav';
+import { Theme } from '@/css';
 
-import Login from '@pages/login';
-import AskQuestion from '@pages/ask-question';
+if (Platform.OS === 'android') (UIManager.setLayoutAnimationEnabledExperimental || (() => {}))(true);
 
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental)
-    UIManager.setLayoutAnimationEnabledExperimental(true);
+axios.defaults.baseURL = 'http://10.0.2.2:5000';
 
-function App() {
-    return (
-        <Provider>
-            <AskQuestion />
-        </Provider>
-    )
-}
-
-export default App;
+export default () => (
+    <NavigationContainer>
+        <ThemeProvider theme={Theme}>
+            <Navigator/>
+        </ThemeProvider>
+    </NavigationContainer>
+)
