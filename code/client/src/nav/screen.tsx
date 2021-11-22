@@ -7,20 +7,17 @@ import {
 
 export default Component<Children>(({ children, params: { scroll = true, padding = true } }) => {
     if (padding === true) padding = Theme.padding;
-    const Container = scroll ? ScrollView : View;
-    const style = Style.create({
-        screen: {
-            width: '100%',
-            height: '100%',
-            padding: padding || undefined,
-            backgroundColor: Theme.colors.background,
-            color: Theme.colors.onSurface,
-        }
-    })
+    let pad = { padding: padding || undefined };
 
-    return (
-        <Container style={style.screen}>
-            {children}
-        </Container>
-    )
+    if (!scroll) return <View style={[style.screen, pad]} children={children}/>
+    return <ScrollView style={style.screen} contentContainerStyle={pad} children={children}/>
+})
+
+const style = Style.create({
+    screen: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: Theme.colors.background,
+        color: Theme.colors.onSurface,
+    }
 })

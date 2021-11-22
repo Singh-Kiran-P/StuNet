@@ -1,12 +1,9 @@
 import React, { Screen } from '@/.';
 
 import {
-    View
-} from 'react-native';
-
-import {
-
-} from 'react-native-paper';
+    View,
+    Button
+} from '@/components';
 
 export default Screen('Profile', ({ params, nav }) => {
 
@@ -14,7 +11,7 @@ export default Screen('Profile', ({ params, nav }) => {
 
     return (
         <View>
-            
+            <Button onPress={() => nav.push('EditProfile')} children='EditProfile'/>
         </View>
     )
 })

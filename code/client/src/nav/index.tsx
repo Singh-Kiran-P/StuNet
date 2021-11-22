@@ -31,13 +31,13 @@ const Screens = Object.keys(options.t).map(() => Components.map(([name, screen],
 }))
 
 const Stacks = Object.values(options.t).map((tab, i) => () => {
-    Theme.colors.primary = tab.colors.primary;
+    Theme.colors.primary = tab.colors.primary; // TODO
     Theme.colors.accent = tab.colors.accent;
     return (
         <Stack.Navigator initialRouteName={tab.screen} screenOptions={{
             header: header as any,
-            animation: 'fade_from_bottom',
-            animationTypeForReplace: 'push'
+            animationTypeForReplace: 'push',
+            animation: 'fade_from_bottom'
         }} children={Screens[i]}/>
     )
 })
@@ -53,10 +53,16 @@ const Tabs = Object.entries(options.t).map(([name, tab], i) => {
 })
 
 let hide: (hide: any) => void;
-export default () => {
-    let [hidden, setHidden] = useAnimate(false);
+const main = () => {
+    const [hidden, setHidden] = useAnimate(false);
     hide = hide => setHidden(!!hide);
     return <Tab.Navigator barStyle={{
         height: hidden ? 0 : undefined
-    }} backBehavior='history' children={Tabs}/>;
+    }} backBehavior='history' children={Tabs}/>
 }
+
+const auth = () => {
+    // TODO
+}
+
+export default main; // TODO

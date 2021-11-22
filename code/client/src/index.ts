@@ -1,6 +1,8 @@
 export { default } from 'react';
 export { useState, useEffect } from 'react';
 
+export { default as axios } from 'axios';
+
 export * from './util';
 
 export { Theme } from '@/css';

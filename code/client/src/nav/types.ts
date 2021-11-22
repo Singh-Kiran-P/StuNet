@@ -7,7 +7,7 @@ import { s as screens, t as tabs } from '@/nav/routes';
 type BaseScreens = {
     [name: string]: {
         args?: object;
-        title?: string; // TODO insert other params in title
+        title?: string;
         padding?: boolean | number;
         scroll?: boolean;
         tabs?: boolean;
@@ -28,7 +28,8 @@ type BaseTabs<T extends BaseScreens> = {
 
 const s = <T extends BaseScreens>(v: T): Base<BaseScreens, T> => v;
 const t = <T extends BaseScreens, U extends BaseTabs<T>>(_: T, v: U): Base<BaseTabs<T>, U> => v;
-type Base<T extends { [key: string]: any }, U extends T> = { [V in keyof U]: U[V] & T[string] };
+type Generic<T, U extends { [key: string]: any }> = { [V in keyof U]: U[V] extends T ? T : U[V] };
+type Base<T extends { [key: string]: any }, U extends T> = { [V in keyof U]: Generic<boolean, U[V]> & T[string] };
 export { s as screens, t as tabs };
 
 // NavigatorScreenParams from '@react-navigation/native';
@@ -40,9 +41,10 @@ type NavigatorScreenParams<T> = { screen?: never; params?: never; initial?: neve
 
 type Screens = typeof screens;
 type Name = keyof typeof screens;
-type Route<T extends Name> = RouteProp<Screens, T>;
+type Flat<T extends Name> = Omit<Screens[T], keyof Screens[T]['args'] | 'args'>;
+type Route<T extends Name> = RouteProp<{ [T in Name]: Flat<T> & Screens[T]['args'] }, T>;
 type Params = { [T in Name]: Screens[T] extends { args: {} }
-    ? Partial<Omit<Screens[T], keyof Screens[T]['args'] | 'args'>> & Screens[T]['args']
+    ? Partial<Flat<T>> & Screens[T]['args']
     : Partial<Screens[T]> | undefined
 }
 
