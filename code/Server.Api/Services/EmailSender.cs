@@ -16,28 +16,31 @@ namespace Server.Api.Services
 
         private string _ApiKey { get; } //set only via Secret Manager
 
-        public Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string message)
         {
-            return Execute(_ApiKey, subject, message, email);
+            await Execute(_ApiKey, subject, message, email);
         }
 
-        public Task Execute(string apiKey, string subject, string message, string email)
+        public async Task<Response> Execute(string apiKey, string subject, string message, string email)
         {
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("stunetUH@gmail.com", "Password Recovery"),
+                From = new EmailAddress("stunetUH@gmail.com", "StuNet"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
             };
             msg.AddTo(new EmailAddress(email));
-
-            // Disable click tracking.
-            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
+ 
+            // disable tracking settings
+            // ref.: https://sendgrid.com/docs/User_Guide/Settings/tracking.html
             msg.SetClickTracking(false, false);
-
-            return client.SendEmailAsync(msg);
+            msg.SetOpenTracking(false);
+            msg.SetGoogleAnalytics(false);
+            msg.SetSubscriptionTracking(false);
+ 
+            return await client.SendEmailAsync(msg);
         }
     }
 }

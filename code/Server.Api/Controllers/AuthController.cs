@@ -11,6 +11,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Server.Api.Enum;
 using Server.Api.Services;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace Server.Api.Controllers
 {
@@ -75,7 +77,7 @@ namespace Server.Api.Controllers
 
             //send email confirmation link
             try {sendConfirmationEmail(_user);}
-            catch (System.Exception){return BadRequest("Error sending confirmation email");}
+            catch (Exception){return BadRequest("Error sending confirmation email");}
 
             return StatusCode(201);
         }
@@ -94,7 +96,7 @@ namespace Server.Api.Controllers
             return Unauthorized("Invalid Authentication");
         }
 
-        [HttpGet]
+        [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
