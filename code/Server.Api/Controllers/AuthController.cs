@@ -9,8 +9,8 @@ using System.Text.RegularExpressions;
 using Server.Api.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using VmsApi.Services;
 using Server.Api.Enum;
+using Server.Api.Services;
 
 namespace Server.Api.Controllers
 {
@@ -23,13 +23,12 @@ namespace Server.Api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ITokenGenerator _tokenGenerator;
 
-        private readonly IUserRepository _userRepository;
+        //private readonly IUserRepository _userRepository;
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
-        public AuthController(IUserRepository userRepository, IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenGenerator tokenGenerator)
+        public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenGenerator tokenGenerator)
         {
-            _userRepository = userRepository;
+            //_userRepository = userRepository;
             _fieldOfStudyRepository = fieldOfStudyRepository;
-
             _mapper = mapper;
             _userManager = userManager;
             _tokenGenerator = tokenGenerator;
@@ -74,6 +73,10 @@ namespace Server.Api.Controllers
 
             await _userManager.AddToRoleAsync(_user, role);
 
+            //send email confirmation link
+            try {sendConfirmationEmail(_user);}
+            catch (System.Exception){return BadRequest("Error sending confirmation email");}
+
             return StatusCode(201);
         }
 
@@ -83,12 +86,33 @@ namespace Server.Api.Controllers
             var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
             {
+                if (!user.EmailConfirmed) { return Unauthorized("Please confirm your email before proceeding"); }
                 var token = await _tokenGenerator.GetTokenAsync(user);
-
                 return Ok(token);
             }
 
             return Unauthorized("Invalid Authentication");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return base.Content("<div><p>This user does not exist</p></div>", "text/html");
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded){
+                return base.Content("<div><p>Thank you for confirming your email.</p></div>", "text/html");
+            } else {
+                return base.Content("<div><p>Email confirmation failed please contact stunet@gmail.com</p></div>", "text/html");
+            }
+        }
+
+        private async void sendConfirmationEmail(User user) {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action("ConfirmEmail", "Auth", new { token, email = user.Email }, Request.Scheme);
+            EmailSender emailHelper = new EmailSender();
+            await emailHelper.SendEmailAsync(user.Email, "Confirmation Email", confirmationLink);
         }
     }
 }

@@ -17,10 +17,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Server.Api.DataBase;
 using Server.Api.Models;
 using Server.Api.Repositories;
-using VmsApi.Services;
+using Server.Api.Services;
 
 namespace Server.Api
 {
@@ -49,16 +50,23 @@ namespace Server.Api
             // services.AddTransient<DataContext>();
 
             // Setup Identity Service 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<DataContext>()
-                .AddDefaultTokenProviders();
-            services.Configure<IdentityOptions>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
-            });
+            })
+                // .AddDefaultUI()
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
+            // services.Configure<IdentityOptions>(options =>
+            // {
+            //     options.Password.RequireDigit = false;
+            //     options.Password.RequireNonAlphanumeric = false;
+            //     options.Password.RequireUppercase = false;
+            //     options.Password.RequiredLength = 6;
+            // });
 
             // Auto Mapper Configurations
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -104,6 +112,11 @@ namespace Server.Api
             services.AddScoped<IQuestionRepository, PgQuestionRepository>();
             services.AddScoped<IFieldOfStudyRepository, PgFieldOfStudyRepository>();
             services.AddScoped<ICourseRepository, PgCourseRepository>();
+
+            // requires
+            // using Microsoft.AspNetCore.Identity.UI.Services;
+            // using WebPWrecover.Services;
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddSwaggerGen(c =>
             {
