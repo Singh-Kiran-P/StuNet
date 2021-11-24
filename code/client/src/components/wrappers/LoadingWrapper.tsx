@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from '@/.';
 import { Theme } from '@/css';
-import { View, ActivityIndicator, Platform } from 'react-native';
-// import { ActivityIndicator } from 'react-native-paper';
+import { View, ActivityIndicator } from 'react-native';
 
 type Props = {
 	func: () => Promise<any>,

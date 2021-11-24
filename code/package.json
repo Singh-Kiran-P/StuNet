@@ -1,10 +1,12 @@
 {
     "scripts": {
-        "i": "cd client && npm i && cd .. && npm i",
-        "migrations": "cd Server.Api && dotnet ef database update 0 && dotnet ef migrations remove && dotnet ef database drop -f -v && dotnet ef migrations add Initial && dotnet ef database update && cd ..",
+        "i": "cd client && npm i && cd .. && npm i && dotnet tool install --global dotnet-ef",
         "client": "cd client && concurrently \"npx react-native start\" \"npx react-native run-android\"",
-        "server": "concurrently \"docker-compose up\" \"dotnet run --project Server.Api\"",
-        "dev": "concurrently \"npm run server\" \"npm run client\""
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+
+        "server": "docker-compose up -d && dotnet run --project Server.Api",
+        "migrations": "cd Server.Api && dotnet ef database update 0 && dotnet ef migrations remove && dotnet ef database drop -f && dotnet ef migrations add Initial && dotnet ef database update && cd ..",
+        "restore": "cd Server.Api && dotnet restore && cd .. && cd Server.UnitTests && dotnet restore"
     },
     "dependencies": {
         "concurrently": "^6.3.0"

@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "app": "concurrently \"npx react-native start\" \"npx react-native run-android\""
   },
   "dependencies": {
     "@react-navigation/material-bottom-tabs": "^6.0.9",
