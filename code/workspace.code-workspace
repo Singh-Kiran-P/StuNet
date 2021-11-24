@@ -1,13 +1,13 @@
 {
 	"folders": [
 		{
+			"path": "Server.UnitTests"
+		},
+		{
 			"path": "Server.Api"
 		},
 		{
 			"path": "client"
-		},
-		{
-			"path": "Server.UnitTests"
 		}
 	],
 	"settings": {
@@ -32,6 +32,7 @@
 			"obj": true,
 			"Properties": true,
 			"package.json": true,
+			"package-lock.json": true,
 			"tsconfig.json": true,
 			"appsettings.json": true,
 			"appsettings.Development.json": true,
@@ -57,6 +58,7 @@
 			"obj": true,
 			"Properties": true,
 			"package.json": true,
+			"package-lock.json": true,
 			"tsconfig.json": true,
 			"appsettings.json": true,
 			"appsettings.Development.json": true,
