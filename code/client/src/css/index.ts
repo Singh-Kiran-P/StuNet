@@ -2,6 +2,7 @@ import { DefaultTheme } from 'react-native-paper';
 
 export const Theme = {
     ...DefaultTheme,
+    huge: 48,
     large: 24,
     medium: 16,
     small: 12,

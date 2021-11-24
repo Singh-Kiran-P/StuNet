@@ -29,7 +29,7 @@ export default Screen('AskQuestion', ({ params, nav }) => {
         return axios.get('/Course/' + params.courseId)
             .then(res => {
                 setHeader(res.data.name);
-                setTopics(res.data.topics.map(t => [{ id: t.id, name: t.name }, false]));
+                setTopics(res.data.topics.map((t: { id: number; name: string; }) => [{ id: t.id, name: t.name }, false]));
             })
             .catch(err => {})
     }

@@ -7,7 +7,7 @@ import React from 'react';
 import Navigator from '@/nav';
 import { Theme } from '@/css';
 
-if (Platform.OS === 'android') (UIManager.setLayoutAnimationEnabledExperimental || (() => {}))(true);
+if (Platform.OS === 'android') UIManager.setLayoutAnimationEnabledExperimental(true);
 
 axios.defaults.baseURL = 'http://10.0.2.2:5000';
 

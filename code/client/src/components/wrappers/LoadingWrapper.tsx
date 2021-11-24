@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from '@/.';
-import { View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import { Theme } from '@/css';
+import { View, ActivityIndicator, Platform } from 'react-native';
+// import { ActivityIndicator } from 'react-native-paper';
 
 type Props = {
 	func: () => Promise<any>,
@@ -17,7 +18,8 @@ export default (props: Props) => {
 	}, [])
 
 	return (
-		loading ? <ActivityIndicator size='large' animating={loading} hidesWhenStopped/> :
+		loading?
+			<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={Theme.huge} color={Theme.colors.primary}/> :
 			<View>
 				{props.children}
 			</View>
