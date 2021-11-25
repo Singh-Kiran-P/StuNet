@@ -37,20 +37,19 @@ namespace Server.Api.Controllers
         }
     
         [HttpPost]
-        public async Task<ActionResult> CreateFieldOfStudy(FieldOfStudyDto createFieldOfStudyDto)
+        public async Task<ActionResult> CreateFieldOfStudy(createFieldOfStudyDto createFieldOfStudyDto)
         {
             string _fullname = "";
-
-            if (createFieldOfStudyDto.fullName != null) {
-                _fullname = createFieldOfStudyDto.fullName;
+            // if (createFieldOfStudyDto.fullName != null) {
+            //     _fullname = createFieldOfStudyDto.fullName;
+            // }
+            // else{
+            if(createFieldOfStudyDto.isBachelor){
+                _fullname = createFieldOfStudyDto.name+"-"+"BACH"+"-"+createFieldOfStudyDto.year;
+            } else {
+                _fullname = createFieldOfStudyDto.name+"-"+"MASTER"+"-"+createFieldOfStudyDto.year;
             }
-            else{
-                if(createFieldOfStudyDto.isBachelor){
-                    _fullname = createFieldOfStudyDto.name+"-"+"BACH"+"-"+createFieldOfStudyDto.year;
-                } else {
-                    _fullname = createFieldOfStudyDto.name+"-"+"MASTER"+"-"+createFieldOfStudyDto.year;
-                }
-            }
+            // }
 
             FieldOfStudy fieldOfStudy = new()
                 {
