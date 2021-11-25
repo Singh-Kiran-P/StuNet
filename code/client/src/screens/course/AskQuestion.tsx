@@ -1,16 +1,15 @@
 import React, { Screen, useState, axios, animate } from '@/.';
 
 import {
-    View,
     Text,
     Button,
-    TextInput
+    TextInput,
+    LoadingWrapper
 } from '@/components';
 
 import {
     List,
     Checkbox,
-    ActivityIndicator // TODO
 } from 'react-native-paper';
 
 type Topic = {
@@ -18,28 +17,35 @@ type Topic = {
     name: string
 }
 
-export default Screen('AskQuestion', ({ params, nav }) => { // TODO load data
-    let temp = () => [...Array(8).keys()].map(i => ([{ id: i++, name: 'Topic ' + i }, false]) as [Topic, boolean]);
-
-    const [topics, setTopics] = useState<[Topic, boolean][]>(temp);
+export default Screen('AskQuestion', ({ params, nav }) => {
+    const [header, setHeader] = useState('');
+    const [topics, setTopics] = useState<[Topic, boolean][]>([]);
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
 
 
+    // On error: navigate to seperate error page? return to previous page and show error in snackbar?
+    const fetch = async () => {
+        return axios.get('/Course/' + params.courseId)
+            .then(res => {
+                setHeader(res.data.name);
+                setTopics(res.data.topics.map((t: { id: number; name: string; }) => [{ id: t.id, name: t.name }, false]));
+            })
+            .catch(err => {})
+    }
+
     const submit = () => {
         axios.post('/Question', {
-            body: body,
-            title: title,
             courseId: params.courseId,
-            topics: topics.filter(topic => topic[1]).map(topic => topic[0].id),
-        }).then(res => nav.navigate('Question', { id: res.data.id })).catch(err => { // TODO data.id?
-            // TODO handle error
-        })
+            title: title,
+            body: body,
+            topicIds: topics.filter(topic => topic[1]).map(topic => topic[0].id),
+        }).then(res => nav.navigate('Question', { id: res.data.id })).catch(err => {});
     }
 
     return (
-        <View>
-            <Text mode='header'>Course, Subject</Text>
+        <LoadingWrapper func={fetch}>
+            <Text mode='header'>{header}</Text>
             <TextInput label='Title' onChangeText={setTitle}/>
             <TextInput label='Body' multiline onChangeText={setBody}/>
             <List.Accordion title='Topics' onPress={animate}>
@@ -50,6 +56,6 @@ export default Screen('AskQuestion', ({ params, nav }) => { // TODO load data
                 )}
             </List.Accordion>
             <Button children='Ask' disabled={!title || !body} onPress={submit}/>
-        </View>
+        </LoadingWrapper>
     )
 })

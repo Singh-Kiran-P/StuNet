@@ -1,4 +1,5 @@
 export * from './base';
+export * from './wrappers';
 
 export {
     View

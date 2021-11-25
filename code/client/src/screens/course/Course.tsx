@@ -12,7 +12,7 @@ export default Screen('Course', ({ params, nav }) => {
     return (
         <View>
             <Button onPress={() => nav.push('Question', { id: 0 })} children='Question'/>
-            <Button onPress={() => nav.push('AskQuestion', { courseId: 0 })} children='AskQuestion'/>
+            <Button onPress={() => nav.push('AskQuestion', { courseId: 1 })} children='AskQuestion'/>
         </View>
     )
 })
