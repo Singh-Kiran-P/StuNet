@@ -9,7 +9,7 @@ export default Screen('Courses', ({ params, nav }) => {
 
     return (
         <View>
-            <Button onPress={() => nav.push('Course', { id: 0 })} children='Course'/>
+            <Button onPress={() => nav.push('Course', { id: 1 })} children='Course'/>
             <Button onPress={() => nav.push('CreateCourse')} children='CreateCourse'/>
         </View>
     )
