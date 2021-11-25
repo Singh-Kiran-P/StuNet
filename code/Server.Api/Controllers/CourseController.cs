@@ -28,6 +28,7 @@ namespace Server.Api.Controllers
             IEnumerable<GetCourseDto> getDtos = courses.Select(course =>
                 new GetCourseDto()
                 {
+                    id = course.id,
                     name = course.name,
                     number = course.number,
                     topics = course.topics.Select(topic =>
