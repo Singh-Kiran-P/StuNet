@@ -10,6 +10,14 @@ namespace Server.Api.Dtos // controllers?
         public string number { get; set; }
     }
 
+    public record GetAllCourseDto
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string number { get; set; }
+        public ICollection<getOnlyTopicDto> topics;
+    }
+
     public record GetCourseDto
     {
         public int id { get; set; }

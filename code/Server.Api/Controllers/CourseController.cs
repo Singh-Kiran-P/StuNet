@@ -22,11 +22,11 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetCourseDto>>> getCourses()
+        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getCourses()
         {
             IEnumerable<Course> courses = await _courseRepository.getAllAsync();
-            IEnumerable<GetCourseDto> getDtos = courses.Select(course =>
-                new GetCourseDto()
+            IEnumerable<GetAllCourseDto> getDtos = courses.Select(course =>
+                new GetAllCourseDto()
                 {
                     name = course.name,
                     number = course.number,
