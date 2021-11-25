@@ -54,7 +54,7 @@ namespace Server.Api.Repositories
             Course course = await _context.Courses.FindAsync(id);
             if (course == null)
                 throw new NullReferenceException();
-            
+
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
         }
