@@ -46,9 +46,9 @@ namespace Server.Api
 
             // Setup database
             services.AddDbContext<DataContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-            // services.AddTransient<DataContext>();
+            services.AddTransient<DataContext>();
 
-            // Setup Identity Service 
+            // Setup Identity Service
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
@@ -95,7 +95,7 @@ namespace Server.Api
             );
 
 
-            // Custom 
+            // Custom
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped<ITokenGenerator, JwtBearerTokenGenerator>();
             services.AddScoped<IDataContext>(provider => provider.GetService<DataContext>());
@@ -130,8 +130,8 @@ namespace Server.Api
             app.UseCors(x => x
                .AllowAnyMethod()
                .AllowAnyHeader()
-               .SetIsOriginAllowed(origin => true) // allow any origin  
-               .AllowCredentials());               // allow credentials 
+               .SetIsOriginAllowed(origin => true) // allow any origin
+               .AllowCredentials());               // allow credentials
 
             app.UseRouting();
 
