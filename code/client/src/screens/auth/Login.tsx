@@ -14,7 +14,7 @@ export default Screen('Login', ({ params, nav }) => {
             password: password
         })
         .then(res => nav.navigate('TabHome'))
-        .catch(err => { setErrMessage(err) });
+        .catch(err => { setErrMessage(err.response.data) });
     }
 
     return (

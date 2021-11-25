@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Server.Api.Dtos
 {
-    public record FieldOfStudyDto
+    public record createFieldOfStudyDto
     {
         [Required()]
         public string name { get; set; }

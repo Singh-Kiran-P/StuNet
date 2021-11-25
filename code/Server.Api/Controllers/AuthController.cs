@@ -23,11 +23,11 @@ namespace Server.Api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ITokenGenerator _tokenGenerator;
 
-        private readonly IUserRepository _userRepository;
+        //private readonly IUserRepository _userRepository;
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
-        public AuthController(IUserRepository userRepository, IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenGenerator tokenGenerator)
+        public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenGenerator tokenGenerator)
         {
-            _userRepository = userRepository;
+            //_userRepository = userRepository;
             _fieldOfStudyRepository = fieldOfStudyRepository;
 
             _mapper = mapper;
@@ -38,77 +38,93 @@ namespace Server.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> RegisterJWTUser(RegisterUserDto dto)
         {
-            User _user = null;
-            string role = "";
-            var hash = PasswordHelper.generateHashAndSalt(dto.Password).Item1;
-
-            //email check en aanmaken account
-            Regex regStudent = new Regex(@"\w+@student.uhasselt.be");
-            Regex regProf = new Regex(@"\w+@uhasselt.be");
-            if (regStudent.IsMatch(dto.Email))
+            try
             {
-                //fieldOfStudy processing
-                FieldOfStudy fos = await _fieldOfStudyRepository.getByFullNameAsync(dto.fieldOfStudy);
-                if (fos == null) { return BadRequest("Field Of Study does not exist"); }
-                Student newStudent = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString(), FieldOfStudyId = fos.id};
+                User _user = null;
+                string role = "";
 
-                _user = newStudent;
-                role = RolesEnum.student_NORM;
+                if(dto.Password.Length < 6 || dto.ConfirmPassword.Length < 6) {return BadRequest("Password length should be at least 6");}
 
+                var hash = PasswordHelper.generateHashAndSalt(dto.Password).Item1;
+
+                //email check en aanmaken account
+                Regex regStudent = new Regex(@"\w+@student.uhasselt.be");
+                Regex regProf = new Regex(@"\w+@uhasselt.be");
+                if (regStudent.IsMatch(dto.Email))
+                {
+                    //fieldOfStudy processing
+                    FieldOfStudy fos = await _fieldOfStudyRepository.getByFullNameAsync(dto.fieldOfStudy);
+                    if (fos == null) { return BadRequest("Field Of Study does not exist"); }
+                    Student newStudent = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString(), FieldOfStudyId = fos.id};
+
+                    _user = newStudent;
+                    role = RolesEnum.student_NORM;
+
+                }
+                else if (regProf.IsMatch(dto.Email))
+                {
+                    Professor prof = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString() };
+                    _user = prof;
+                    role = RolesEnum.prof_NORM;
+                } else {
+                    return BadRequest("Please use an Uhasselt email");
+                }
+
+
+                var result = await _userManager.CreateAsync(_user, dto.Password);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result.Errors);
+                }
+
+                await _userManager.AddToRoleAsync(_user, role);
+
+                return StatusCode(201);
             }
-            else if (regProf.IsMatch(dto.Email))
+            catch (System.Exception)
             {
-                Professor prof = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString() };
-                _user = prof;
-                role = RolesEnum.prof_NORM;
-            } else {
-                return BadRequest("Please use an Uhasselt email");
+                return BadRequest("Error while creating account contact support");
             }
-
-
-            var result = await _userManager.CreateAsync(_user, dto.Password);
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            await _userManager.AddToRoleAsync(_user, role);
-
-            return StatusCode(201);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginJWT(LoginUserDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(dto.Email);
-            if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
-            {
-                var token = await _tokenGenerator.GetTokenAsync(user);
+            try {
+                var user = await _userManager.FindByEmailAsync(dto.Email);
+                if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
+                {
+                    var token = await _tokenGenerator.GetTokenAsync(user);
 
-                return Ok(token);
-            }
+                    return Ok(token);
+                }
 
-            return Unauthorized("Invalid Authentication");
+                return Unauthorized("Invalid Authentication");
+
+            } catch (System.Exception) {
+				return Unauthorized("Invalid Authentication");
+			}
         }
 
         [HttpPost("refreshToken")]
         public async Task<IActionResult> Refresh(string token, string refreshToken)
-        {                   
-            // var principal = GetPrincipalFromExpiredToken(token);
-            // var username = principal.Identity.Name;
-            // var savedRefreshToken = GetRefreshToken(username); //retrieve the refresh token from a data store
-            // if (savedRefreshToken != refreshToken)
-            //     throw new SecurityTokenException("Invalid refresh token");
+        {
+			// var principal = GetPrincipalFromExpiredToken(token);
+			// var username = principal.Identity.Name;
+			// var savedRefreshToken = GetRefreshToken(username); //retrieve the refresh token from a data store
+			// if (savedRefreshToken != refreshToken)
+			//     throw new SecurityTokenException("Invalid refresh token");
 
-            // var newJwtToken = GenerateToken(principal.Claims);
-            // var newRefreshToken = GenerateRefreshToken();
-            // DeleteRefreshToken(username, refreshToken);
-            // SaveRefreshToken(username, newRefreshToken);
+			// var newJwtToken = GenerateToken(principal.Claims);
+			// var newRefreshToken = GenerateRefreshToken();
+			// DeleteRefreshToken(username, refreshToken);
+			// SaveRefreshToken(username, newRefreshToken);
 
-            // return new ObjectResult(new {
-            //     token = newJwtToken,
-            //     refreshToken = newRefreshToken
-            // });
-        }
+			// return new ObjectResult(new {
+			//     token = newJwtToken,
+			//     refreshToken = newRefreshToken
+			// });
+			return Ok();
+		}
     }
 }

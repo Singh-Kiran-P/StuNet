@@ -32,6 +32,7 @@ export default Screen('Register', ({ params, nav }) => {
     const [passwordConfirm, setpasswordConfirm] = useState('');
 	const [fields, setFields] = useState<Fields>({});
  	const [FODSelection, setFODSelection] = useState<FODSelection>({name: '', degree: '', year: ''});
+	const [errMessage, setErrMessage] = useState('');
 
 	const studentRegex = new RegExp(/\w+@student.uhasselt.be/);
 	const profRegex = new RegExp(/\w+@uhasselt.be/);
@@ -71,6 +72,21 @@ export default Screen('Register', ({ params, nav }) => {
 		}
 	}
 
+	const register = () => {
+
+		var degree = FODSelection.degree == 'Bachelor' ? 'BACH' : 'MASTER';
+
+        axios.post('/Auth/register', {
+            Email: mail,
+            Password: password,
+			ConfirmPassword: passwordConfirm,
+			FieldOfStudy: FODSelection.name + '-' + degree + '-' + FODSelection.year //ex. Informatica-BACH-3
+        })
+        .then(res => nav.replace('Login'))
+        .catch(err => { setErrMessage(err.response.data) });
+    }
+
+
 	return (
 		<LoadingWrapper func={getFODs}>
 			<TextInput label='E-mail' onChangeText={validate}/>
@@ -100,8 +116,10 @@ export default Screen('Register', ({ params, nav }) => {
 						}) : <></>}
 					</Picker>
 				</View>
-			 : <></>}
-			<Button onPress={() => {}} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => e === '')}>Register</Button>
+				: <></>}
+			
+            <HelperText type='error' visible={errMessage !== ''}>{errMessage}</HelperText>
+			<Button onPress={register} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => e === '')}>Register</Button>
 		</LoadingWrapper>
 	)
 })
