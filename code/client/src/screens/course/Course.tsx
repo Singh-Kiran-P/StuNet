@@ -22,16 +22,21 @@ type Topic = {
 
 type Course = {
     id: number;
-    topics: Array<Topic>,
-
+    name: string;
+    number: string;
+    topics: Array<Topic>;
 }
 
 export default Screen('Course', ({ params, nav }) => {
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
     const [topics, setTopics] = useState<Array<Topic>>([]);
 
-
     const init = (result: {data: Course}) => {
+        setName(result.data.name);
+        setNumber(result.data.number);
         setTopics(result.data.topics);
+        console.log(result.data);
     };
 
 
@@ -61,8 +66,11 @@ export default Screen('Course', ({ params, nav }) => {
         );
     };
 
+    //TODO: edit title when screen is being called and name has been fetched
     return (
         <LoadingWrapper func={fetch}>
+            {/* Text gives weird errors */}
+            <Text>{name} ({number})</Text>
             { renderTopicList() }
         </LoadingWrapper>
     );
