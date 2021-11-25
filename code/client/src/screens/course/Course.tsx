@@ -72,6 +72,7 @@ export default Screen('Course', ({ params, nav }) => {
             {/* Text gives weird errors */}
             <Text>{name} ({number})</Text>
             { renderTopicList() }
+            <Button onPress={() => nav.push('AskQuestion', { courseId: params.id })} children='Ask a question' />
         </LoadingWrapper>
     );
 });
