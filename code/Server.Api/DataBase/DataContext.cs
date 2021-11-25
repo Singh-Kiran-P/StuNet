@@ -36,7 +36,7 @@ namespace Server.Api.DataBase
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             createUsers(modelBuilder);
-
+            createCourse(modelBuilder);
         }
 
 
@@ -73,7 +73,7 @@ namespace Server.Api.DataBase
             modelBuilder.Entity<Topic>()
                  .HasOne(t => t.course)
                  .WithMany(c => c.topics)
-                 .HasForeignKey(c => c.CourseForeignKey);
+                 .HasForeignKey(c => c.courseId);
 
             var course1 = new Course()
             {
@@ -85,7 +85,7 @@ namespace Server.Api.DataBase
             {
                 id = 41,
                 name = "testTopic",
-                CourseForeignKey = course1.id,
+                courseId = course1.id,
             };
 
             modelBuilder.Entity<Course>().HasData(course1);
