@@ -77,13 +77,13 @@ namespace Server.Api.DataBase
 
             var course1 = new Course()
             {
-                id = 3,
+                id = 1,
                 name = "testCourse",
                 number = "testCourse",
             };
             var topic1 = new Topic
             {
-                id = 41,
+                id = 1,
                 name = "testTopic",
                 courseId = course1.id,
             };
