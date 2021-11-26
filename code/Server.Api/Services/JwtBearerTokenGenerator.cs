@@ -1,8 +1,10 @@
-﻿using System;
+﻿// https://youtu.be/7JP7V59X1sk?t=1368
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -19,19 +21,34 @@ namespace VmsApi.Services
         private readonly UserManager<User> _userManager;
         private readonly IConfigurationSection _jwtSettings;
 
+        public IDictionary<string, string> UsersRefreshTokens => throw new NotImplementedException();
+
         public JwtBearerTokenGenerator(UserManager<User> userManager, IConfiguration jwtSettings)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings.GetSection("JwtSettings");
         }
 
+        // autenticate using claims [principles]
+        public async Task<LoginJwtDto> GetTokenAsync(Claim[] claims)
+        {
+
+        }
+
+
+        // authenticate user
         public async Task<LoginJwtDto> GetTokenAsync(User user)
         {
             var signingCredentials = GetSigningCredentials();
             var claims = GetClaims(user);
             var tokenOptions = GenerateTokenOptions(signingCredentials, await claims);
             var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return new LoginJwtDto(token);
+            var refreshToken = GenerateRefreshToken();
+
+            // Temporary save in dictionary [local]
+            UsersRefreshTokens.Add(user.Email, token);
+
+            return new LoginJwtDto(token, refreshToken);
         }
 
         private SigningCredentials GetSigningCredentials()
@@ -67,13 +84,23 @@ namespace VmsApi.Services
             {
                 System.Diagnostics.Debug.Write($"[{role}]");
             }
-        
-        
+
+
             foreach (var role in roles)
             {
                 claims.Add(new Claim("roles", role));
             }
             return claims;
+        }
+
+        public string GenerateRefreshToken()
+        {
+            var randomNum = new byte[32];
+            using (var randomNumberGenerator = RandomNumberGenerator.Create())
+            {
+                randomNumberGenerator.GetBytes(randomNum);
+                return Convert.ToBase64String(randomNum);
+            }
         }
     }
 }

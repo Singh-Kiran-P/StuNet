@@ -94,9 +94,9 @@ namespace Server.Api.Controllers
                 var user = await _userManager.FindByEmailAsync(dto.Email);
                 if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
                 {
-                    var token = await _tokenGenerator.GetTokenAsync(user);
+                    var loginJWTDto = await _tokenGenerator.GetTokenAsync(user);
 
-                    return Ok(token);
+                    return Ok(loginJWTDto);
                 }
 
                 return Unauthorized("Invalid Authentication");
@@ -107,9 +107,8 @@ namespace Server.Api.Controllers
         }
 
         [HttpPost("refreshToken")]
-        public async Task<IActionResult> Refresh(string token, string refreshToken)
+        public async Task<IActionResult> Refresh(RefreshCred refreshCred)
         {
-			// var principal = GetPrincipalFromExpiredToken(token);
 			// var username = principal.Identity.Name;
 			// var savedRefreshToken = GetRefreshToken(username); //retrieve the refresh token from a data store
 			// if (savedRefreshToken != refreshToken)
