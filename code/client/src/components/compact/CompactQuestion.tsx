@@ -76,11 +76,32 @@ export function CompactQuestion(props: Props): JSX.Element
         return calculateNowDifference(datetime) < time;
     }
 
+    /**
+     * Converts this.datetime to a jsx element.
+     *
+     * @returns the jsx element.
+     */
+    function renderDateTime(): JSX.Element
+    {
+        let output: string = datetime.toISOString();
+        if (isWithinTimeAgo(HOUR)) {
+            const passedTime: number = Math.floor(calculateNowDifference(datetime) / MINUTE);
+            output = `${passedTime} minute${(passedTime > 1) ? 's' : ''} ago`;
+        }
+        else if (isWithinTimeAgo(DAY)) {
+            const passedTime: number = Math.floor(calculateNowDifference(datetime) / HOUR);
+            output = `${passedTime} hour${(passedTime > 1) ? 's' : ''} ago`;
+        }
+        return (
+            <Text>{ output }</Text>
+        );
+    }
+
     return (
         <View>
             <Text>{title}</Text>
             <Text>{body}</Text>
-            <Text>{datetime.toISOString()}</Text>
+            { renderDateTime() }
         </View>
     );
 }
