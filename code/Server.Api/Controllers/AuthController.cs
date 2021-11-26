@@ -86,6 +86,7 @@ namespace Server.Api.Controllers
         public async Task<IActionResult> LoginJWT(LoginUserDto dto)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
+            if(!user.EmailConfirmed) {return Unauthorized("Please confirm your email adres before logging in!");}
             if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
             {
                 if (!user.EmailConfirmed) { return Unauthorized("Please confirm your email before proceeding"); }
