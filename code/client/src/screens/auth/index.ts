@@ -1,8 +1,7 @@
-import Login from './Login';
 import Register from './Register';
+import Login from './Login';
 
 export default [
-    // TODO
-    Login,
-    Register
+    Register,
+    Login
 ]

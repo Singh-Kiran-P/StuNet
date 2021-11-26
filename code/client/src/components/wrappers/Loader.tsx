@@ -1,4 +1,4 @@
-import React, { Children, Theme, useEffect, useState } from '@/.';
+import React, { Children, Theme, Style, useEffect, useState } from '@/.';
 import { View, ActivityIndicator } from 'react-native';
 
 type Props = Children & {
@@ -13,5 +13,12 @@ export default ({ load, children }: Props) => {
 	}, [])
 
 	if (!loading) return <View children={children}/>
-	return <ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={Theme.huge} color={Theme.colors.primary}/>;
+	return <ActivityIndicator style={s.loading} size={Theme.huge} color={Theme.colors.primary}/>;
 }
+
+const s = Style.create({
+	loading: {
+		flex: 1,
+		justifyContent: 'center'
+	}
+})

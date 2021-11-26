@@ -116,7 +116,7 @@ export function CompactQuestion(props: Props): JSX.Element
         let output: string = datetime.toISOString();
         if (isWithinTimeAgo(HOUR)) {
             const passedTime: number = Math.floor(calculateNowDifference(datetime) / MINUTE);
-            output = `${passedTime} minute${(passedTime > 1) ? 's' : ''} ago`;
+            output = `${passedTime} minute${(passedTime !== 1) ? 's' : ''} ago`;
         }
         else if (isWithinTimeAgo(DAY)) {
             const passedTime: number = Math.floor(calculateNowDifference(datetime) / HOUR);
