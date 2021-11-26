@@ -1,27 +1,27 @@
-import React from '@/.'; // 'react-native';
+import React from '@/.';
+
 import {
     View,
-    Text,
+    Text
 } from '@/components';
 
 export type Question = {
     id: number;
     title: string;
     body: string;
-    topicIds: Array<number>;
+    topicIds: number[];
 }
 
 type Props = {
 	question: Question;
 }
 
-export function CompactQuestion(props: Props): JSX.Element { // component
+export default ({ question }: Props) => {
     return (
         <View>
-            {/* <Text>{question.id}</Text> */}
-            <Text>{props.question.title}</Text>
-            <Text>{props.question.body}</Text>
-            {/* <Text>{question.id}</Text> */}
+            <Text>{question.id}</Text>
+            <Text>{question.title}</Text>
+            <Text>{question.body}</Text>
         </View>
-    );
+    )
 }
