@@ -15,7 +15,6 @@ import {
     CompactQuestion,
     Question,
 } from '@/components';
-// import { Text } from 'react-native-paper/lib/typescript/components/Avatar/Avatar';
 
 type Topic = {
     id: number;
@@ -45,13 +44,13 @@ export default Screen('Course', ({ params, nav }) => {
     };
 
 
-    // On error: navigate to seperate error page? return to previous page and show error in snackbar?
+    // TODO: Handle error
     const fetch = async () => {
         const request: string = '/Course/' + params.id;
         return axios
             .get(request)
             .then(result => init(result))
-            .catch(error => console.log(`request ${request} failed: ${error}`))
+            .catch(error => console.error(`request ${request} failed: ${error}`))
             ;
     };
 
@@ -64,7 +63,7 @@ export default Screen('Course', ({ params, nav }) => {
                         key={i}
                         onPress={() => nav.push('Course', params)} // TODO: show search results with this topic only
                         children={topic.name}
-                        /> // {topic.name}</Button>
+                        />
                 )
             }
             </List.Accordion>
