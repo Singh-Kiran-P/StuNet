@@ -8,7 +8,8 @@ export type Question = {
     id: number;
     title: string;
     body: string;
-    topicIds: Array<number>;
+    time: string;
+    // topicIds: Array<number>;
 }
 
 type Props = {
@@ -16,12 +17,15 @@ type Props = {
 }
 
 export function CompactQuestion(props: Props): JSX.Element { // component
+    const title: string = props.question.title;
+    const body: string = props.question.body;
+    const datetime: Date = new Date(props.question.time);
+
     return (
         <View>
-            {/* <Text>{question.id}</Text> */}
-            <Text>{props.question.title}</Text>
-            <Text>{props.question.body}</Text>
-            {/* <Text>{question.id}</Text> */}
+            <Text>{title}</Text>
+            <Text>{body}</Text>
+            <Text>{datetime.toISOString()}</Text>
         </View>
     );
 }
