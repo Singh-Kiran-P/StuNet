@@ -86,17 +86,17 @@ export default Screen('Register', ({ params, nav }) => {
 			<PasswordInput label='Confirm password' onChangeText={setpasswordConfirm} showable={false}/>
 			<HelperText type='error' visible={password !== passwordConfirm}>Passwords do not match.</HelperText>
 			{userType == UserTypes.STUDENT && <View style={{ flexDirection: 'row' }}>
-				<Picker prompt='Degree' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.name} onValueChange={value => setFODSelection({ ...FODSelection, name: value })}>
+				<Picker prompt='Degree' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.name} onValueChange={value => setFODSelection({ name: value, degree: '', year: '' })}>
 					<Picker.Item label='Field' value='' enabled={false} />
 					{Object.keys(fields).map((name, i) => (
 						<Picker.Item key={i} label={name} value={name} />
 					))}
 				</Picker>
-				<Picker prompt='Field' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.degree} onValueChange={value => setFODSelection({ ...FODSelection, degree: value })} enabled={!!FODSelection.name}>
+				<Picker prompt='Field' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.degree} onValueChange={value => setFODSelection({ ...FODSelection, degree: value, year: '' })} enabled={!!FODSelection.name}>
 					<Picker.Item label='Degree' value='' enabled={false} />
-					{!FODSelection.name ? null : Object.keys(fields[FODSelection.name]).map((degrees, i) => {
+					{!FODSelection.name ? null : Object.keys(fields[FODSelection.name]).map((degrees, i) => (
 						<Picker.Item key={i} label={degrees} value={degrees} />
-					})}
+					))}
 				</Picker>
 				<Picker prompt='Year' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.year} onValueChange={value => setFODSelection({ ...FODSelection, year: value })} enabled={!!FODSelection.degree}>
 				<Picker.Item label='Year' value='' enabled={false} />
