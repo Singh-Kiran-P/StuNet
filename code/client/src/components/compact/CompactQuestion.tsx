@@ -61,6 +61,21 @@ export function CompactQuestion(props: Props): JSX.Element
         return calculateDateDifference(new Date(), date);
     }
 
+    /**
+     * Checks whether this.datetime is within the given
+     * number of hours ago.
+     *
+     * https://stackoverflow.com/a/9224799
+     *
+     * @param time The time in milliseconds.
+     * @returns true if this.datetime is whitin the given
+     *          number of hours ago.
+     */
+    function isWithinTimeAgo(time: number): boolean
+    {
+        return calculateNowDifference(datetime) < time;
+    }
+
     return (
         <View>
             <Text>{title}</Text>
