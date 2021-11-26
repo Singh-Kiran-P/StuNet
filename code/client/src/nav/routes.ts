@@ -48,7 +48,6 @@ export const s = screens({
     },
 
 
-
     Notifications: {
         title: 'Your Notifications'
     },

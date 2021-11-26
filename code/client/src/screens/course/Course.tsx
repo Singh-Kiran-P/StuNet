@@ -17,12 +17,12 @@ import {
 } from '@/components';
 // import { Text } from 'react-native-paper/lib/typescript/components/Avatar/Avatar';
 
-type Topic = {
+export type Topic = {
     id: number;
     name: string;
 }
 
-type Course = {
+export type Course = {
     id: number;
     name: string;
     number: string;
@@ -30,13 +30,14 @@ type Course = {
     questions: Array<Question>;
 }
 
+
 export default Screen('Course', ({ params, nav }) => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     const [topics, setTopics] = useState<Array<Topic>>([]);
     const [questions, setQuestions] = useState<Array<Question>>([]);
 
-    const init = (result: {data: Course}) => {
+    const init = (result: { data: Course }) => {
         setName(result.data.name);
         setNumber(result.data.number);
         setTopics(result.data.topics);
@@ -58,15 +59,15 @@ export default Screen('Course', ({ params, nav }) => {
     const renderTopicList = (): JSX.Element => {
         return (
             <List.Accordion title='Topics' onPress={animate}>
-            {
-                topics.map((topic, i) =>
-                    <Button
-                        key={i}
-                        onPress={() => nav.push('Course', params)} // TODO: show search results with this topic only
-                        children={topic.name}
+                {
+                    topics.map((topic, i) =>
+                        <Button
+                            key={i}
+                            onPress={() => nav.push('Course', params)} // TODO: show search results with this topic only
+                            children={topic.name}
                         /> // {topic.name}</Button>
-                )
-            }
+                    )
+                }
             </List.Accordion>
         );
     };
@@ -74,15 +75,15 @@ export default Screen('Course', ({ params, nav }) => {
     const renderQuestionList = (): JSX.Element => {
         return (
             <List.Accordion title='Questions' onPress={animate}>
-            {
-                questions.map((question, i) =>
-                    <CompactQuestion
-                        key={i}
-                        question={question}
+                {
+                    questions.map((question, i) =>
+                        <CompactQuestion
+                            key={i}
+                            question={question}
                         />
-                )
-            }
-            <Button onPress={() => nav.push('Question', { id: 0 })} children='Question'/>
+                    )
+                }
+                <Button onPress={() => nav.push('Question', { id: 0 })} children='Question' />
             </List.Accordion>
         );
     };
@@ -92,8 +93,8 @@ export default Screen('Course', ({ params, nav }) => {
         <LoadingWrapper func={fetch}>
             {/* Text gives weird errors */}
             <Text>{name} ({number})</Text>
-            { renderTopicList() }
-            { renderQuestionList() }
+            {renderTopicList()}
+            {renderQuestionList()}
             <Button onPress={() => nav.push('AskQuestion', { courseId: params.id })} children='Ask a question' />
         </LoadingWrapper>
     );

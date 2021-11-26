@@ -3,5 +3,5 @@ import CreateCourse from './CreateCourse';
 
 export default [
     Courses,
-    CreateCourse
+    CreateCourse,
 ]
