@@ -1,16 +1,19 @@
-import React, { Props, useState } from "@/.";
-import { TextInput } from "@/components";
+import React, { extend, useState } from '@/.';
+import TextInput from '@/components/base/TextInput';
 
-export default (props: Partial<Props<typeof TextInput>> & { showable: boolean}) => {
-	const [passwordVisible, setPasswordVisible] = useState(false);
-	const showable = props.showable;
+type Props = {
+	showable: boolean
+}
+
+export default extend<typeof TextInput, Props>(TextInput, ({ showable, ...props }) => {
+    const [visible, setVisible] = useState(false);
 
 	return <TextInput
-	secureTextEntry={!passwordVisible}
-	right={showable ? <TextInput.Icon
-		name={passwordVisible ? 'eye' : 'eye-off'}
-		onPress={() => setPasswordVisible(!passwordVisible)}
-		/> : null}
-		{...props as Props<typeof TextInput>}
-/>
-}
+		secureTextEntry={!visible}
+		right={showable && <TextInput.Icon
+			name={visible ? 'eye' : 'eye-off'}
+			onPress={() => setVisible(!visible)}
+		/>}
+		{...props}
+	/>
+})

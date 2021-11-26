@@ -1,19 +1,12 @@
-import React, {
-    Screen,
-    axios,
-    useState,
-    animate,
-} from '@/.';
-import {
-    List,
-    // Checkbox,
-} from 'react-native-paper';
+import React, { Screen, axios, useState } from '@/.';
+
 import {
     Text,
-    LoadingWrapper,
     Button,
-    CompactQuestion,
+    Loader,
     Question,
+    Collapse,
+    CompactQuestion
 } from '@/components';
 
 type Topic = {
@@ -25,75 +18,49 @@ type Course = {
     id: number;
     name: string;
     number: string;
-    topics: Array<Topic>;
-    questions: Array<Question>;
+    topics: Topic[];
+    questions: Question[];
 }
 
 export default Screen('Course', ({ params, nav }) => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
-    const [topics, setTopics] = useState<Array<Topic>>([]);
-    const [questions, setQuestions] = useState<Array<Question>>([]);
+    const [topics, setTopics] = useState<Topic[]>([]);
+    const [questions, setQuestions] = useState<Question[]>([]);
 
-    const init = (result: {data: Course}) => {
-        setName(result.data.name);
-        setNumber(result.data.number);
-        setTopics(result.data.topics);
-        setQuestions(result.data.questions);
-        console.log(result.data);
-    };
+    const init = (data: Course) => {
+        setName(data.name);
+        setNumber(data.number);
+        setTopics(data.topics);
+        setQuestions(data.questions);
+    }
 
-
-    // TODO: Handle error
     const fetch = async () => {
-        const request: string = '/Course/' + params.id;
-        return axios
-            .get(request)
-            .then(result => init(result))
-            .catch(error => console.error(`request ${request} failed: ${error}`))
-            ;
-    };
-
-    const renderTopicList = (): JSX.Element => {
-        return (
-            <List.Accordion title='Topics' onPress={animate}>
-            {
-                topics.map((topic, i) =>
-                    <Button
-                        key={i}
-                        onPress={() => nav.push('Course', params)} // TODO: show search results with this topic only
-                        children={topic.name}
-                        />
-                )
-            }
-            </List.Accordion>
-        );
-    };
-
-    const renderQuestionList = (): JSX.Element => {
-        return (
-            <List.Accordion title='Questions' onPress={animate}>
-            {
-                questions.map((question, i) =>
-                    <CompactQuestion
-                        key={i}
-                        question={question}
-                        />
-                )
-            }
-            <Button onPress={() => nav.push('Question', { id: 0 })} children='Question'/>
-            </List.Accordion>
-        );
-    };
+        return axios.get('/Course/' + params.id)
+            .then(res => init(res.data))
+            .catch(err => {}) // TODO handle error
+    }
 
     //TODO: edit title when screen is being called and name has been fetched
     return (
-        <LoadingWrapper func={fetch}>
+        <Loader load={fetch}>
             {/* Text gives weird errors */}
             <Text>{name} ({number})</Text>
-            { renderTopicList() }
-            { renderQuestionList() }
+            <Collapse title='Topics'>
+                {topics.map((topic, i) => ( // TODO: show search results with this topic only
+                    <Button key={i}
+                        onPress={() => nav.push('Course', params)}
+                        children={topic.name}
+                    />
+                ))}
+            </Collapse>
+            <Collapse title='Questions'>
+                {questions.map((question, i) => (
+                    <CompactQuestion key={i} question={question}/>
+                ))}
+                <Button onPress={() => nav.push('Question', { id: 0 })} children='Question'/>
+            </Collapse>
             <Button onPress={() => nav.push('AskQuestion', { courseId: params.id })} children='Ask a question' />
-        </LoadingWrapper>
+        </Loader>
     );
 });

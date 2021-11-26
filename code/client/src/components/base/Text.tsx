@@ -1,18 +1,18 @@
-import React, { Props, Style, Theme } from '@/.';
+import React, { extend, Style, Theme } from '@/.';
 import { Text } from 'react-native-paper';
 
-type Mode = {
-    mode: keyof typeof style;
+type Props = {
+    mode?: keyof typeof s;
 }
 
-export default (props: Partial<Props<typeof Text> & Mode>) => {
+export default extend<typeof Text, Props>(Text, ({ mode, style, ...props }) => {
     return <Text
-        {...props as Props<typeof Text>}
-        style={[style[props.mode || 'normal'], props.style]}
+        {...props}
+        style={[s[mode || 'normal'], style]}
     />
-}
+})
 
-const style = Style.create({
+const s = Style.create({
 
     normal: {
 
