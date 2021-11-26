@@ -47,8 +47,10 @@ const stylesheet = StyleSheet.create({
 
 export function CompactQuestion(props: Props): JSX.Element
 {
+    const MAX_BODY_LENGTH: number = 100;
+
     const title: string = props.question.title;
-    const body: string = props.question.body;
+    const body: string = props.question.body.substring(0, MAX_BODY_LENGTH) + ((props.question.body.length > 100) ? '...' : '');
     const datetime: Date = new Date(props.question.time);
 
     /**
