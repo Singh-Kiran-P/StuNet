@@ -1,3 +1,7 @@
+// https://henriquesd.medium.com/entity-framework-core-relationships-with-fluent-api-8f741c57b881
+// https://www.learnentityframeworkcore.com/configuration/one-to-many-relationship-configuration
+// https://code-maze.com/migrations-and-seed-data-efcore/
+// https://dejanstojanovic.net/aspnet/2020/july/seeding-data-with-entity-framework-core-using-migrations/
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,10 +35,17 @@ namespace Server.Api.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            createUsers(modelBuilder);
+            createCourse(modelBuilder);
+        }
+
+
+        private void createUsers(ModelBuilder modelBuilder)
+        {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(p => new { p.UserId, p.RoleId });
-        
+
             var defaultUser = new User()
             {
 
@@ -55,8 +66,30 @@ namespace Server.Api.DataBase
             modelBuilder.Entity<User>().HasData(
                 defaultUser
              );
-
         }
 
+        private void createCourse(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Topic>()
+                 .HasOne(t => t.course)
+                 .WithMany(c => c.topics)
+                 .HasForeignKey(c => c.courseId);
+
+            var course1 = new Course()
+            {
+                id = 1,
+                name = "testCourse",
+                number = "testCourse",
+            };
+            var topic1 = new Topic
+            {
+                id = 1,
+                name = "testTopic",
+                courseId = course1.id,
+            };
+
+            modelBuilder.Entity<Course>().HasData(course1);
+            modelBuilder.Entity<Topic>().HasData(topic1);
+        }
     }
 }

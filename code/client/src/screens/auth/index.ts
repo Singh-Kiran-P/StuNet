@@ -3,6 +3,6 @@ import Register from './Register';
 
 export default [
     // TODO
-    // Login,
-    // Register
+    Login,
+    Register
 ]
