@@ -48,6 +48,19 @@ export function CompactQuestion(props: Props): JSX.Element
         return b.getTime() + HOUR - a.getTime()
     }
 
+    /**
+     * Calculates the difference in milliseconds between the
+     * given date and Date.now().
+     *
+     * @param date The datetime to be compared.
+     * @returns the difference between the datetime and
+     *          Date.now
+     */
+    function calculateNowDifference(date: Date): number
+    {
+        return calculateDateDifference(new Date(), date);
+    }
+
     return (
         <View>
             <Text>{title}</Text>
