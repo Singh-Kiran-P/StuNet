@@ -1,7 +1,6 @@
 import { DefaultTheme } from 'react-native-paper';
 
 export const Theme = {
-    ...DefaultTheme,
     huge: 48,
     large: 24,
     medium: 16,
@@ -10,8 +9,6 @@ export const Theme = {
     padding: 10,
 
     colors: {
-        ...DefaultTheme.colors,
-
         home: {
             primary: 'blue',
             accent: 'green'

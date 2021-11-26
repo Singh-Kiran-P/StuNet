@@ -15,8 +15,6 @@ export default Component<Children>(({ children, params: { scroll = true, padding
 
 const style = Style.create({
     screen: {
-        flex: 1,
-        backgroundColor: Theme.colors.background,
-        color: Theme.colors.onSurface,
+        flex: 1
     }
 })
