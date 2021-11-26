@@ -4,6 +4,7 @@ import {
     View,
     Text,
 } from '@/components';
+import { FlatList, StyleSheet } from 'react-native';
 
 export type Question = {
     id: number;
@@ -16,6 +17,33 @@ export type Question = {
 type Props = {
 	question: Question;
 }
+
+/* TODO: Move to whereever necessary */
+const stylesheet = StyleSheet.create({
+    question: {
+        padding: 20,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    title: {
+        fontSize: 24,
+    },
+    body: {
+        marginVertical: 10,
+    },
+    topic: {
+        fontSize: 10, // 12,
+        marginRight: 6, // 8,
+        paddingVertical: 2, // 4,
+        paddingHorizontal: 6, // 8,
+        // marginVertical: 2,
+        backgroundColor: 'lightgrey',
+        borderRadius: 20.0,
+    },
+});
+
 
 export function CompactQuestion(props: Props): JSX.Element
 {
@@ -98,10 +126,22 @@ export function CompactQuestion(props: Props): JSX.Element
     }
 
     return (
-        <View>
-            <Text>{title}</Text>
-            <Text>{body}</Text>
-            { renderDateTime() }
+        <View style={stylesheet.question}>
+            <View style={stylesheet.header}>
+                <Text style={stylesheet.title}>{title}</Text>
+                { renderDateTime() }
+            </View>
+            <Text style={stylesheet.body}>{body}</Text>
+            <FlatList
+                // https://reactnative.dev/docs/using-a-listview
+                horizontal={true}
+                data={[ // sample data
+                    {key: 'Topic1'},
+                    {key: 'Backtracking'},
+                    {key: 'Recursie'},
+                ]}
+                renderItem={({item}) => <Text style={stylesheet.topic}>{item.key}</Text>} /* TODO: Use buttons instead(?) */
+            />
         </View>
     );
 }
