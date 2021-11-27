@@ -13,7 +13,7 @@ export interface IState {
 export default Screen('Courses', ({ params, nav }) => {
     const [query, setQuery] = useState('TEST');
     const [courses, setCourses] = useState<IState["courses"]>([]);
-    // TODO: error door dat de question leeg is
+    // TODO: error door dat de question leeg is .
     const search = async () => {
         return axios.get<IState["courses"]>('/Course/search', { params: {name : query}} )
             .then(res => {

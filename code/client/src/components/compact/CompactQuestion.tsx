@@ -7,10 +7,10 @@ import {
 import { FlatList, StyleSheet } from 'react-native';
 
 export type Question = {
-    id: number;
-    title: string;
     body: string;
+    id: number;
     time: string;
+    title: string;
     // topicIds: Array<number>;
 }
 
