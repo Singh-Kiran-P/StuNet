@@ -17,8 +17,6 @@ export const s = screens({
         }
     },
 
-
-
     Course: {
         title: 'Course ({id})',
         args: {} as {

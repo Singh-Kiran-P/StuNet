@@ -36,6 +36,7 @@ export default Screen('Course', ({ params, nav }) => {
         setQuestions(data.questions);
     }
 
+
     const fetch = async () => {
         return axios.get('/Course/' + params.id)
             .then(res => init(res.data))

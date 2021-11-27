@@ -1,15 +1,15 @@
-import React, { Screen, useState } from '@/.';
+// @Kiran
+import React, { Screen, useState, useNav } from '@/.';
 import { View } from '@/components';
 import { Course } from '@/screens/course/Course';
-import { FlatList, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-import { Button, List } from 'react-native-paper';
+import { List } from 'react-native-paper';
 
 interface IProps {
     courses: Course[],
-    nav: any
 }
-const List_: React.FC<IProps> = ({ courses, nav }) => {
 
+const List_ = ({ courses }: IProps) => {
+    let nav = useNav();
     return (
         <View>
             {courses.map((course, i) => {
@@ -17,12 +17,13 @@ const List_: React.FC<IProps> = ({ courses, nav }) => {
                     <List.Item key={i}
                         title={course.name}
                         description={course.number}
-                        // onPress={() => nav.push('CreateCourse', { i })}
+                        onPress={() => nav.push('Course', { id: course.id })}
                         left={props => <List.Icon {...props} icon="book" />}
-                        right={props => <Button
-                            key={i}
-                            onPress={() => nav.push('CreateCourse', { i })}
-                            children={"hello"} />}
+                        // right={props => <Button
+                        //     key={i}
+                        //     onPress={() => nav.push('Course', { id: course.id })}
+
+                        //     children={"->"} />}
 
                     >
                     </List.Item>

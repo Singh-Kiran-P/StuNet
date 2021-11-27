@@ -1,4 +1,6 @@
-﻿using System;
+﻿// @Kiran
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
@@ -67,8 +69,8 @@ namespace VmsApi.Services
             {
                 System.Diagnostics.Debug.Write($"[{role}]");
             }
-        
-        
+
+
             foreach (var role in roles)
             {
                 claims.Add(new Claim("roles", role));
