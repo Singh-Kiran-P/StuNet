@@ -9,10 +9,9 @@
 ## Attendees
 People who attended:
 - Jochem
-- Lander
 - Kiran
 - Senn
-- Melih
+- Melih om 9:30
 - Tijl
 
 ## Agenda Items

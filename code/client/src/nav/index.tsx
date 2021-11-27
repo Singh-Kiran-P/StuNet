@@ -11,7 +11,7 @@ import { useAnimate } from '@/util';
 import header from '@/nav/header';
 import Screen from '@/nav/screen';
 import screens from '@/screens';
-import { Theme } from '@/css';
+import { useTheme } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -34,8 +34,9 @@ const Screens = Object.keys(options.t).map(() => Components.map(([name, screen],
 }))
 
 const Stacks = Object.values(options.t).map((tab, i) => () => {
-    Theme.colors.primary = tab.colors.primary; // TODO
-    Theme.colors.accent = tab.colors.accent;
+    let theme = useTheme();
+    theme.colors.primary = tab.colors.primary; // TODO
+    theme.colors.accent = tab.colors.accent;
     return <Stack.Navigator
         screenOptions={{
             animationTypeForReplace: 'push',
