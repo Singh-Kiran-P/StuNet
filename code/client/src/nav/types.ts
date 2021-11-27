@@ -81,4 +81,4 @@ export const Component = <T extends {} = {}, U extends Name = Name>(c:
 export const useParams = <T extends Name = Name>() => useRoute<Route<T>>().params!;
 export const useNav = <T extends Name = Name>() => useNavigation<Nav<T>>();
 
-export type Auth = { navigation: NativeStackNavigationProp<any> };
+export type Navigation = { navigation: NativeStackNavigationProp<any> };

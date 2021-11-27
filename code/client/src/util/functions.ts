@@ -9,6 +9,6 @@ export const useAnimate = <S>(initialState: S | (() => S)): [S, (value: S | ((pr
     return [state[0], a => (animate(), state[1](a))];
 }
 
-export const extend = <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c: T, e: (p: Props<T> & U) => JSX.Element) => {
+export const extend = <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c: T, e: (p: Props<T> & U) => JSX.Element | null) => {
     return Object.assign(e as (p: Partial<Props<T>> & U) => JSX.Element, c);
 }

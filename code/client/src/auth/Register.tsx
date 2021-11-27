@@ -1,5 +1,5 @@
-import React, { axios, useState } from '@/.';
-import { Auth } from '@/nav/types';
+import React, { axios, useState, useToken } from '@/.';
+import { Navigation } from '@/nav/types';
 
 import {
 	View,
@@ -11,7 +11,6 @@ import {
 } from '@/components';
 
 import { Picker } from '@react-native-picker/picker';
-import { HelperText } from 'react-native-paper';
 
 type FieldApi = {
 	id: number,
@@ -35,7 +34,7 @@ const enum UserTypes {
 	PROFESSOR
 }
 
-export default ({ navigation }: Auth) => {
+export default ({ navigation }: Navigation) => {
 	const [mail, setMail] = useState('');
 	const [userType, setUserType] = useState<UserTypes>(UserTypes.UNKNOWN);
     const [password, setPassword] = useState('');
@@ -43,6 +42,7 @@ export default ({ navigation }: Auth) => {
 	const [fields, setFields] = useState<Fields>({});
  	const [FODSelection, setFODSelection] = useState<FODSelection>({ name: '', degree: '', year: '' });
 	const [errMessage, setErrMessage] = useState('');
+	let [_, setToken] = useToken();
 
 	const studentRegex = new RegExp(/\w+@student.uhasselt.be/);
 	const profRegex = new RegExp(/\w+@uhasselt.be/);
@@ -83,7 +83,10 @@ export default ({ navigation }: Auth) => {
 			ConfirmPassword: passwordConfirm,
 			FieldOfStudy: FODSelection.name + '-' + degree + '-' + FODSelection.year
         })
-        .then(res => {}) // TODO
+        .then(res => {
+			let token = 'TODO-REAL-TOKEN'; // TODO
+            setToken(token);
+		})
         .catch(err => { setErrMessage(err.response.data) });
     }
 
@@ -92,7 +95,7 @@ export default ({ navigation }: Auth) => {
 			<TextInput label='E-mail' onChangeText={validate}/>
             <PasswordInput label='Password' onChangeText={setPassword} showable={false}/>
 			<PasswordInput label='Confirm password' onChangeText={setpasswordConfirm} showable={false}/>
-			<HelperText type='error' visible={password !== passwordConfirm}>Passwords do not match.</HelperText>
+			<Text type='error' visible={password !== passwordConfirm}>Passwords do not match.</Text>
 			{userType == UserTypes.STUDENT && <View style={{ flexDirection: 'row' }}>
 				<Picker prompt='Degree' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.name} onValueChange={value => setFODSelection({ name: value, degree: '', year: '' })}>
 					<Picker.Item label='Field' value='' enabled={false} />
@@ -113,8 +116,9 @@ export default ({ navigation }: Auth) => {
 					))}
 				</Picker>
 			</View>}
-            <HelperText type='error' visible={!!errMessage}>{errMessage}</HelperText>
+            <Text type='error' visible={!!errMessage}>{errMessage}</Text>
 			<Button onPress={register} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => !e)}>Register</Button>
+			<Button onPress={() => navigation.replace('Login')}>Login</Button>
 		</Loader>
 	)
 }

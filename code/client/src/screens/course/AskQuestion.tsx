@@ -40,7 +40,7 @@ export default Screen('AskQuestion', ({ params, nav }) => {
 
     return (
         <Loader load={fetch}>
-            <Text mode='header' children={header}/>
+            <Text type='header' children={header}/>
             <TextInput label='Title' onChangeText={setTitle}/>
             <TextInput label='Body' multiline onChangeText={setBody}/>
             <Collapse title='Topics'>

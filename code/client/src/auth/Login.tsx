@@ -1,5 +1,5 @@
-import React, { useState, axios, Style } from '@/.';
-import { Auth } from '@/nav/types';
+import React, { useState, axios, useToken } from '@/.';
+import { Navigation } from '@/nav/types';
 
 import {
     View,
@@ -9,28 +9,29 @@ import {
     PasswordInput
 } from '@/components';
 
-import { HelperText } from 'react-native-paper';
-
-export default ({ navigation }: Auth) => {
+export default ({ navigation }: Navigation) => {
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
     const [errMessage, setErrMessage] = useState('');
+    const [_, setToken] = useToken();
 
     const login = () => {
         axios.post('/Auth/login', {
             email: mail,
             password: password
-        })
-        .then(res => {}) // TODO
-        .catch(err => { setErrMessage(err.response.data) });
+        }).then(res => {
+            let token = 'TODO-REAL-TOKEN';
+            setToken(token);
+        }).catch(err => { setErrMessage(err.response.data) });
     }
 
     return (
         <View>
             <TextInput label='E-mail' onChangeText={setMail} />
             <PasswordInput label='Password' onChangeText={setPassword} showable={true} />
-            <HelperText type='error' visible={errMessage !== ''}>{errMessage}</HelperText>
+            <Text type='error' visible={errMessage !== ''}>{errMessage}</Text>
             <Button onPress={login} disabled={!login || !password}>Log in</Button>
+            <Button onPress={() => navigation.replace('Register')}>Register</Button>
         </View>
     )
 }

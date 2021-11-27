@@ -1,12 +1,13 @@
-import { DefaultTheme } from 'react-native-paper';
-
 export const Theme = {
-    huge: 48,
-    large: 24,
-    medium: 16,
     small: 12,
+    medium: 16,
+    large: 24,
+    huge: 48,
 
     padding: 10,
+
+    primary: 'pink',
+    accent: 'brown',
 
     colors: {
         home: {

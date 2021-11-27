@@ -1,7 +1,8 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import React, { useEffect, useState, useContext, createContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { createContext, useState } from 'react';
+import Store from 'react-native-encrypted-storage';
 
 import { Login, Register } from '@/auth';
 import * as options from '@/nav/routes';
@@ -11,11 +12,11 @@ import { useAnimate } from '@/util';
 import header from '@/nav/header';
 import Screen from '@/nav/screen';
 import screens from '@/screens';
-import { useTheme } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
+let hide: (hide: any) => void;
 const Components = screens.map(screen => {
     let name = Object.keys(screen)[0] as keyof typeof options.s;
     return [name, Component(({ params: { tabs }, nav }, props: any) => {
@@ -33,10 +34,7 @@ const Screens = Object.keys(options.t).map(() => Components.map(([name, screen],
     />
 }))
 
-const Stacks = Object.values(options.t).map((tab, i) => () => {
-    let theme = useTheme();
-    theme.colors.primary = tab.colors.primary; // TODO
-    theme.colors.accent = tab.colors.accent;
+const Stacks = Object.values(options.t).map((tab, i) => {
     return <Stack.Navigator
         screenOptions={{
             animationTypeForReplace: 'push',
@@ -48,6 +46,14 @@ const Stacks = Object.values(options.t).map((tab, i) => () => {
     />
 })
 
+const Navigators = Stacks.map(stack => () => {
+    useFocusEffect(() => {
+        /* theme.colors.primary = tab.colors.primary; // TODO theme
+        theme.colors.accent = tab.colors.accent; */
+    })
+    return stack;
+});
+
 const Tabs = Object.entries(options.t).map(([name, tab], i) => {
     return <Tab.Screen
         options={{
@@ -55,46 +61,59 @@ const Tabs = Object.entries(options.t).map(([name, tab], i) => {
             tabBarLabel: tab.title,
             tabBarIcon: tab.icon
         }}
-        component={Stacks[i]}
+        component={Navigators[i]}
         name={name}
         key={i}
     />
 })
 
-import { View } from 'react-native';
+const key = 'token';
+type Token = [string, (token: string) => void];
+const Token = createContext<Token>(['', () => {}]);
+export const useToken = () => useContext(Token);
 
-let hide: (hide: any) => void;
 export default () => {
-    const [token, setToken] = useState<string | null>(null);
-
-    const getToken = async () => { // TODO
-        return new Promise<void>((res, rej) => {
-            setTimeout(() => res(), 1000);
-        }).then(token => setToken(''));
-    }
-
     const [hidden, setHidden] = useAnimate(false);
     hide = hide => setHidden(!!hide);
 
-    return <Loader load={getToken}>
-        <View style={{ width: '100%', height: '100%' }}>
-            {token ? (
-                <Tab.Navigator
-                    barStyle={{ height: hidden ? 0 : undefined }}
-                    backBehavior='history'
-                    children={Tabs}
-                />
-            ) : (
-                <Stack.Navigator
-                    screenOptions={{
-                        animationTypeForReplace: 'push',
-                        animation: 'fade_from_bottom',
-                        headerShown: false
-                    }}>
-                    <Stack.Screen name='Login' component={Login}/>
-                    <Stack.Screen name='Register' component={Register}/>
-                </Stack.Navigator>
-            )}
-        </View>
-    </Loader>
+    const [token, setToken] = useState('');
+    const [load, setLoad] = useState(true);
+    console.log(token);
+
+    useEffect(() => {
+        Store.getItem(key)
+            .then(token => setToken(token || ''))
+            .catch(() => setToken(''))
+            .finally(() => setLoad(false));
+    }, [])
+
+    const context: Token = [token, (token: string) => {
+        setLoad(true);
+        setToken(token);
+        Store.setItem(key, token).finally(() => setLoad(false));
+    }]
+
+    return (
+        <Token.Provider value={context}>
+            <Loader state={load}>
+                {token ? (
+                    <Tab.Navigator
+                        barStyle={{ height: hidden ? 0 : undefined }}
+                        backBehavior='history'
+                        children={Tabs}
+                    />
+                ) : (
+                    <Stack.Navigator
+                        screenOptions={{
+                            animationTypeForReplace: 'push',
+                            animation: 'fade_from_bottom',
+                            headerShown: false
+                        }}>
+                        <Stack.Screen name='Login' component={Login}/>
+                        <Stack.Screen name='Register' component={Register}/>
+                    </Stack.Navigator>
+                )}
+            </Loader>
+        </Token.Provider>
+    )
 }

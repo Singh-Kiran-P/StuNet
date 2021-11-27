@@ -2,13 +2,13 @@ import React, { extend, Style, Theme } from '@/.';
 import { Text } from 'react-native-paper';
 
 type Props = {
-    mode?: keyof typeof s;
+    type?: keyof typeof s;
+    visible?: boolean;
 }
 
-export default extend<typeof Text, Props>(Text, ({ mode, style, ...props }) => {
-    return <Text
-        {...props}
-        style={[s[mode || 'normal'], style]}
+export default extend<typeof Text, Props>(Text, ({ type, style, visible = true, ...props }) => {
+    return !visible ? null : <Text {...props}
+        style={[s[type || 'normal'], style]}
     />
 })
 
@@ -21,6 +21,10 @@ const s = Style.create({
     header: {
         fontWeight: 'bold',
         fontSize: Theme.large
+    },
+
+    error: {
+        color: 'red'
     }
 
 })
