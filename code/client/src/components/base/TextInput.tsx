@@ -1,10 +1,10 @@
+import React, { extend } from '@/.';
 import { TextInput } from 'react-native-paper';
-import React, { Props } from '@/.';
 
-export default Object.assign((props: Partial<Props<typeof TextInput>>) => {
+export default extend(TextInput, props => { // TODO labels start broken in register?
     return <TextInput
         mode='outlined'
         numberOfLines={props.multiline ? 5 : undefined}
-        {...props as Props<typeof TextInput>}
+        {...props}
     />
-}, TextInput)
+})

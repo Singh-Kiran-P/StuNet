@@ -61,13 +61,14 @@ namespace Server.UnitTests
         [Fact]
         public async Task getCourse_WithValidId_CourseDto()
         {
-        //Given
-            Course course = new()
-            {
-                name = "random" + random.Next().ToString(),
-                number = random.Next().ToString(),
-                topics = new List<Topic>{new Topic(){ name = randomName(), id = randomInt() }}
-            };
+			//Given
+			Course course = new()
+			{
+				name = "random" + random.Next().ToString(),
+				number = random.Next().ToString(),
+				topics = new List<Topic> { new Topic() { name = randomName(), id = randomInt() } },
+				questions = new List<Question>()
+		};
             _courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);
             var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object);

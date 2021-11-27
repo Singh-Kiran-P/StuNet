@@ -1,6 +1,5 @@
 import React, { Screen, useState, axios } from '@/.';
 import { Text, View, TextInput, Button, PasswordInput } from '@/components';
-import { Theme } from '@/css';
 import { HelperText } from 'react-native-paper';
 
 export default Screen('Login', ({ params, nav }) => {

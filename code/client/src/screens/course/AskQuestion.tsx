@@ -1,16 +1,13 @@
-import React, { Screen, useState, axios, animate } from '@/.';
+import React, { Screen, useState, axios } from '@/.';
 
 import {
     Text,
     Button,
-    TextInput,
-    LoadingWrapper
-} from '@/components';
-
-import {
-    List,
+    Loader,
     Checkbox,
-} from 'react-native-paper';
+    Collapse,
+    TextInput
+} from '@/components';
 
 type Topic = {
     id: number,
@@ -24,7 +21,7 @@ export default Screen('AskQuestion', ({ params, nav }) => {
     const [body, setBody] = useState('');
 
 
-    // On error: navigate to seperate error page? return to previous page and show error in snackbar?
+    // TODO on error: navigate to seperate error page? return to previous page and show error in snackbar?
     const fetch = async () => {
         return axios.get('/Course/' + params.courseId)
             .then(res => {
@@ -40,22 +37,23 @@ export default Screen('AskQuestion', ({ params, nav }) => {
             title: title,
             body: body,
             topicIds: topics.filter(topic => topic[1]).map(topic => topic[0].id),
-        }).then(res => nav.navigate('Question', { id: res.data.id })).catch(err => {});
+        }).then(res => nav.navigate('Question', { id: res.data.id }))
+        .catch(err => {}); // TODO handle error
     }
 
     return (
-        <LoadingWrapper func={fetch}>
-            <Text mode='header'>{header}</Text>
+        <Loader load={fetch}>
+            <Text mode='header' children={header}/>
             <TextInput label='Title' onChangeText={setTitle}/>
             <TextInput label='Body' multiline onChangeText={setBody}/>
-            <List.Accordion title='Topics' onPress={animate}>
+            <Collapse title='Topics'>
                 {topics.map(([{ name }, value], i) =>
                     <Checkbox.Item key={i} mode='ios' label={name} status={value ? 'checked' : 'unchecked'} onPress={() => {
                         setTopics(topics.map(([n, v], j) => i === j ? [n, !v] : [n, v]));
                     }}/>
                 )}
-            </List.Accordion>
+            </Collapse>
             <Button children='Ask' disabled={!title || !body} onPress={submit}/>
-        </LoadingWrapper>
+        </Loader>
     )
 })
