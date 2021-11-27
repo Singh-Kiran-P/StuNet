@@ -113,7 +113,7 @@ export function CompactQuestion(props: Props): JSX.Element
      */
     function renderDateTime(): JSX.Element
     {
-        let output: string = datetime.toISOString();
+        let output: string; // = datetime.toISOString();
         if (isWithinTimeAgo(HOUR)) {
             const passedTime: number = Math.floor(calculateNowDifference(datetime) / MINUTE);
             output = `${passedTime} minute${(passedTime !== 1) ? 's' : ''} ago`;
@@ -121,6 +121,9 @@ export function CompactQuestion(props: Props): JSX.Element
         else if (isWithinTimeAgo(DAY)) {
             const passedTime: number = Math.floor(calculateNowDifference(datetime) / HOUR);
             output = `${passedTime} hour${(passedTime > 1) ? 's' : ''} ago`;
+        }
+        else {
+            output = `${datetime.getDate()}/${datetime.getMonth()}/${datetime.getFullYear()}`;
         }
         return (
             <Text>{ output }</Text>
