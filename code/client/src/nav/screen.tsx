@@ -9,8 +9,8 @@ export default Component<Children>(({ children, params: { scroll = true, padding
     if (padding === true) padding = Theme.padding;
     let pad = { padding: padding || undefined };
 
-    if (!scroll) return <View style={[style.screen, pad]} children={children}/>
-    return <ScrollView contentContainerStyle={[style.screen, pad]} children={children}/>
+    if (!scroll) return <View style={[style.screen, pad]} children={children} />
+    return <ScrollView contentContainerStyle={[style.screen, pad]} children={children} />
 })
 
 const style = Style.create({

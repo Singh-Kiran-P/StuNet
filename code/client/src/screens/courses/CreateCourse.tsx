@@ -28,7 +28,8 @@ export default Screen('CreateCourse', ({ params, nav }) => {
             <MutuableStringList title='Topics'/>
             <MutuableStringList title='Assistents'/> */}
             <TextInput label='Description' multiline onChangeText={setDescription}/>
-            <Button children='Create' disabled={!name || !number || !description} onPress={submit}/>
+            <Button children='Create' disabled={!name || !number || !description} onPress={submit} />
+
         </View>
     )
 })

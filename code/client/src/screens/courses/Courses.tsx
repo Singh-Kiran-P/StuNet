@@ -1,9 +1,9 @@
 import React, { Screen, useState } from '@/.';
 
 import { View, Button, SearchBar, Text } from '@/components';
+import List_ from '@/components/base/List';
 import { Course } from '../course/Course';
-
-interface IState {
+export interface IState {
     courses: Course[];
 }
 
@@ -11,12 +11,71 @@ export default Screen('Courses', ({ params, nav }) => {
     const [query, setQuery] = useState('');
     const [courses, setCourses] = useState<IState["courses"]>([]);
     const search = () => {
-        console.log(query);
         setCourses(
             courses.concat([
                 {
                     id: 12,
-                    name: 'dsf',
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
+                    number: 'dsf',
+                    questions: [],
+                    topics: [],
+                }, {
+                    id: 12,
+                    name: query,
                     number: 'dsf',
                     questions: [],
                     topics: [],
@@ -29,17 +88,8 @@ export default Screen('Courses', ({ params, nav }) => {
         <View>
             <SearchBar placeholder="sdf" onChangeText={q => setQuery(q)} />
             <Button onPress={search}>Search</Button>
-            {courses.map((course, i) => {
-                return (
-                    <Button
-                        onPress={() => {
-                            nav.push('Course', { id: course.id });
-                        }}
-                        key={i}>
-                        {course.name}
-                    </Button>
-                );
-            })}
+
+            <List_ courses={courses} nav={nav} />
         </View>
     );
 });
