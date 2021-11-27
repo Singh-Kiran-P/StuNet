@@ -3,13 +3,6 @@ import { Theme } from '@/css';
 
 export const s = screens({
 
-    Login: {
-        title: 'Login'
-    },
-    Register: {
-        title: 'Register'
-    },
-
     Question: {
         title: 'Question ({id})',
         args: {} as {

@@ -35,11 +35,7 @@ export default Screen('Course', ({ params, nav }) => {
         setQuestions(data.questions);
     }
 
-    const fetch = async () => {
-        return axios.get('/Course/' + params.id)
-            .then(res => init(res.data))
-            .catch(err => {}) // TODO handle error
-    }
+    const fetch = async () => axios.get('/Course/' + params.id).then(res => init(res.data));
 
     //TODO: edit title when screen is being called and name has been fetched
     return (

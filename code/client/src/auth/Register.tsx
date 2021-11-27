@@ -1,5 +1,15 @@
-import React, { axios, Screen, useState } from '@/.';
-import { Button, Loader, PasswordInput, Text, TextInput, View } from '@/components';
+import React, { axios, useState } from '@/.';
+import { Auth } from '@/nav/types';
+
+import {
+	View,
+	Text,
+	Button,
+	Loader,
+	TextInput,
+	PasswordInput
+} from '@/components';
+
 import { Picker } from '@react-native-picker/picker';
 import { HelperText } from 'react-native-paper';
 
@@ -25,7 +35,7 @@ const enum UserTypes {
 	PROFESSOR
 }
 
-export default Screen('Register', ({ params, nav }) => {
+export default ({ navigation }: Auth) => {
 	const [mail, setMail] = useState('');
 	const [userType, setUserType] = useState<UserTypes>(UserTypes.UNKNOWN);
     const [password, setPassword] = useState('');
@@ -54,7 +64,6 @@ export default Screen('Register', ({ params, nav }) => {
 				});
 				setFields(ret);
 			})
-			.catch(err => {}); // TODO handle error
 	}
 
 	const validate = (s: string) => {
@@ -74,10 +83,9 @@ export default Screen('Register', ({ params, nav }) => {
 			ConfirmPassword: passwordConfirm,
 			FieldOfStudy: FODSelection.name + '-' + degree + '-' + FODSelection.year
         })
-        .then(res => nav.replace('Login'))
+        .then(res => {}) // TODO
         .catch(err => { setErrMessage(err.response.data) });
     }
-
 
 	return (
 		<Loader load={getFODs}>
@@ -109,4 +117,4 @@ export default Screen('Register', ({ params, nav }) => {
 			<Button onPress={register} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => !e)}>Register</Button>
 		</Loader>
 	)
-})
+}

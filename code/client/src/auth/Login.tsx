@@ -1,9 +1,17 @@
-import React, { Screen, useState, axios } from '@/.';
-import { Text, View, TextInput, Button, PasswordInput } from '@/components';
-import { Theme } from '@/css';
+import React, { useState, axios, Style } from '@/.';
+import { Auth } from '@/nav/types';
+
+import {
+    View,
+    Text,
+    Button,
+    TextInput,
+    PasswordInput
+} from '@/components';
+
 import { HelperText } from 'react-native-paper';
 
-export default Screen('Login', ({ params, nav }) => {
+export default ({ navigation }: Auth) => {
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
     const [errMessage, setErrMessage] = useState('');
@@ -13,7 +21,7 @@ export default Screen('Login', ({ params, nav }) => {
             email: mail,
             password: password
         })
-        .then(res => nav.navigate('TabHome'))
+        .then(res => {}) // TODO
         .catch(err => { setErrMessage(err.response.data) });
     }
 
@@ -25,4 +33,4 @@ export default Screen('Login', ({ params, nav }) => {
             <Button onPress={login} disabled={!login || !password}>Log in</Button>
         </View>
     )
-})
+}

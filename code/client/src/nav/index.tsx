@@ -1,10 +1,12 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
-import React from 'react';
+import React, { createContext, useState } from 'react';
 
+import { Login, Register } from '@/auth';
 import * as options from '@/nav/routes';
 import { Component } from '@/nav/types';
+import { Loader } from '@/components';
 import { useAnimate } from '@/util';
 import header from '@/nav/header';
 import Screen from '@/nav/screen';
@@ -23,46 +25,75 @@ const Components = screens.map(screen => {
 })
 
 const Screens = Object.keys(options.t).map(() => Components.map(([name, screen], i) => {
-    return (
-        <Stack.Screen key={i} name={name}
+    return <Stack.Screen
         initialParams={options.s[name]}
-        component={screen}/>
-    )
+        component={screen}
+        name={name}
+        key={i}
+    />
 }))
 
 const Stacks = Object.values(options.t).map((tab, i) => () => {
     Theme.colors.primary = tab.colors.primary; // TODO
     Theme.colors.accent = tab.colors.accent;
-    return (
-        <Stack.Navigator initialRouteName={tab.screen} screenOptions={{
-            header: header as any,
+    return <Stack.Navigator
+        screenOptions={{
             animationTypeForReplace: 'push',
-            animation: 'fade_from_bottom'
-        }} children={Screens[i]}/>
-    )
+            animation: 'fade_from_bottom',
+            header: header as any
+        }}
+        initialRouteName={tab.screen}
+        children={Screens[i]}
+    />
 })
 
 const Tabs = Object.entries(options.t).map(([name, tab], i) => {
-    return (
-        <Tab.Screen key={i} name={name}  options={{
+    return <Tab.Screen
+        options={{
+            tabBarColor: tab.colors.primary,
             tabBarLabel: tab.title,
-            tabBarIcon: tab.icon,
-            tabBarColor: tab.colors.primary
-        }} component={Stacks[i]}/>
-    )
+            tabBarIcon: tab.icon
+        }}
+        component={Stacks[i]}
+        name={name}
+        key={i}
+    />
 })
 
+import { View } from 'react-native';
+
 let hide: (hide: any) => void;
-const main = () => {
+export default () => {
+    const [token, setToken] = useState<string | null>(null);
+
+    const getToken = async () => { // TODO
+        return new Promise<void>((res, rej) => {
+            setTimeout(() => res(), 1000);
+        }).then(token => setToken(''));
+    }
+
     const [hidden, setHidden] = useAnimate(false);
     hide = hide => setHidden(!!hide);
-    return <Tab.Navigator barStyle={{
-        height: hidden ? 0 : undefined
-    }} backBehavior='history' children={Tabs}/>
-}
 
-const auth = () => {
-    // TODO
+    return <Loader load={getToken}>
+        <View style={{ width: '100%', height: '100%' }}>
+            {token ? (
+                <Tab.Navigator
+                    barStyle={{ height: hidden ? 0 : undefined }}
+                    backBehavior='history'
+                    children={Tabs}
+                />
+            ) : (
+                <Stack.Navigator
+                    screenOptions={{
+                        animationTypeForReplace: 'push',
+                        animation: 'fade_from_bottom',
+                        headerShown: false
+                    }}>
+                    <Stack.Screen name='Login' component={Login}/>
+                    <Stack.Screen name='Register' component={Register}/>
+                </Stack.Navigator>
+            )}
+        </View>
+    </Loader>
 }
-
-export default main; // TODO

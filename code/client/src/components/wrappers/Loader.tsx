@@ -1,4 +1,4 @@
-import React, { Children, Theme, Style, useEffect, useState } from '@/.';
+import React, { Children, Theme, Style, useEffect, useState, useNav } from '@/.';
 import { View, ActivityIndicator } from 'react-native';
 
 type Props = Children & {
@@ -7,9 +7,13 @@ type Props = Children & {
 
 export default ({ load, children }: Props) => {
 	const [loading, setLoading] = useState(true);
+	let nav = useNav();
 
 	useEffect(() => {
-		load().then(() => setLoading(false)); // TODO catch error?
+		load().then(() => setLoading(false)).catch(err => {
+			if (nav?.canGoBack()) nav.goBack();
+			// TODO system message
+		});
 	}, [])
 
 	if (!loading) return <View children={children}/>
