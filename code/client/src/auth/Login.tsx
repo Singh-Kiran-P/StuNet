@@ -7,6 +7,7 @@ import {
     TextInput,
     PasswordInput
 } from '@/components';
+import { Link } from '@react-navigation/native';
 
 export default ({ navigation }: Route) => {
     let [mail, setMail] = useState('');
@@ -41,7 +42,7 @@ export default ({ navigation }: Route) => {
         axios.post('/Auth/login', {
             email: mail,
             password: password
-        }).then(res => setToken(res.data))
+        }).then(res => setToken(res.data.jwtBearerToken))
         .catch(err => setError(err.response.data));
     }
 
@@ -55,8 +56,7 @@ export default ({ navigation }: Route) => {
     
             <Button style={s.margin} onPress={login} disabled={!login || !password}>Log in</Button>
     
-            <Text style={s.hint} type='hint'>Don't have an account yet?</Text>
-            <Button style={s.margin} onPress={() => navigation.push('Register')}>Register</Button>
+            <Text style={s.hint} type='hint'>Don't have an account yet? <Link style={s.margin} to={{screen: 'Register'}}>Register here</Link></Text>
         </View>
     )
 }
