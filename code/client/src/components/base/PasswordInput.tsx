@@ -2,10 +2,10 @@ import React, { extend, useState } from '@/.';
 import TextInput from '@/components/base/TextInput';
 
 type Props = {
-	showable: boolean
+	showable?: boolean;
 }
 
-export default extend<typeof TextInput, Props>(TextInput, ({ showable, ...props }) => {
+export default extend<typeof TextInput, Props>(TextInput, ({ showable = true, ...props }) => {
     const [visible, setVisible] = useState(false);
 
 	return <TextInput

@@ -63,28 +63,28 @@ export const t = tabs(s, {
         screen: 'Home',
         title: 'Home',
         icon: 'home',
-        colors: Theme.colors.home
+        colors: Theme.tabs.home
     },
 
     TabCourses: {
         screen: 'Courses',
         title: 'Courses',
         icon: 'book',
-        colors: Theme.colors.courses
+        colors: Theme.tabs.courses
     },
 
     TabNotifications: {
         screen: 'Notifications',
         title: 'Notifications',
         icon: 'bell',
-        colors: Theme.colors.notifications
+        colors: Theme.tabs.notifications
     },
 
     TabProfile: {
         screen: 'Profile',
         title: 'Profile',
         icon: 'face',
-        colors: Theme.colors.profile
+        colors: Theme.tabs.profile
     }
 
 })

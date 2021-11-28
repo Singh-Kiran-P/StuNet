@@ -1,6 +1,6 @@
-export * from './base';
-export * from './compact';
 export * from './wrappers';
+export * from './compact';
+export * from './base';
 
 export {
     View,

@@ -1,4 +1,4 @@
-import React, { Children, Theme, Style, useEffect, useState, useNav } from '@/.';
+import React, { Children, Style, useTheme, useEffect, useState, useNav } from '@/.';
 import { View, ActivityIndicator } from 'react-native';
 
 type Props = Children & {
@@ -7,8 +7,23 @@ type Props = Children & {
 }
 
 export default ({ load, state, children }: Props) => {
-	const [loading, setLoading] = useState(!!load);
+	let [loading, setLoading] = useState(!!load);
+	let [theme] = useTheme();
 	let nav = useNav();
+
+	const s = Style.create({
+
+		loading: {
+			flex: 1,
+			justifyContent: 'center'
+		},
+
+		loaded: {
+			width: '100%',
+			height: '100%'
+		}
+
+	})
 
 	if (load) useEffect(() => {
 		load().then(() => setLoading(false)).catch(err => {
@@ -18,19 +33,5 @@ export default ({ load, state, children }: Props) => {
 	}, [])
 
 	if (state !== true && !loading) return <View style={s.loaded} children={children}/>
-	return <ActivityIndicator style={s.loading} size={Theme.huge} color={Theme.colors.home.primary}/>
+	return <ActivityIndicator style={s.loading} size={theme.huge} color={theme.primary}/>
 }
-
-const s = Style.create({
-
-	loading: {
-		flex: 1,
-		justifyContent: 'center'
-	},
-
-	loaded: {
-		width: '100%',
-		height: '100%'
-	}
-
-})

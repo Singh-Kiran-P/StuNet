@@ -1,4 +1,4 @@
-import React, { Component, Children, Theme, Style } from '@/.';
+import React, { Component, Children, theming } from '@/.';
 
 import {
     View,
@@ -6,9 +6,16 @@ import {
 } from 'react-native';
 
 export default Component<Children>(({ children, params: { scroll = true, padding = true } }) => {
-    if (padding === true) padding = Theme.padding;
-    let pad = { padding: padding || undefined };
+    const s = theming(theme => {
+        if (padding === true) padding = theme.padding;
+        return {
+            width: '100%',
+            height: '100%',
+            padding: padding || undefined,
+            backgroundColor: theme.background
+        }
+    })
 
-    if (!scroll) return <View style={pad} children={children}/>
-    return <ScrollView contentContainerStyle={pad} children={children}/>
+    if (!scroll) return <View style={s} children={children}/>
+    return <ScrollView contentContainerStyle={s} children={children}/>
 })
