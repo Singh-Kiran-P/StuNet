@@ -54,7 +54,6 @@ export default Screen('Course', ({ params, nav }) => {
                 {questions.map((question, i) => (
                     <CompactQuestion key={i} question={question}/>
                 ))}
-                <Button onPress={() => nav.push('Question', { id: 0 })} children='Question'/>
             </Collapse>
             <Button onPress={() => nav.push('AskQuestion', { courseId: params.id })} children='Ask a question' />
         </Loader>
