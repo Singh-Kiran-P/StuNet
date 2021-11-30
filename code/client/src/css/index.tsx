@@ -10,10 +10,13 @@ export const Theme = {
     dark: Dark
 }
 
+const dark = true as boolean | undefined;
+const tab = 'auth' as keyof typeof Base.tabs;
+
 const Initial = {
-    dark: undefined as boolean | undefined,
-    primary: Base.tabs.auth.primary,
-    accent: Base.tabs.auth.accent
+    ...Base.tabs[tab],
+    dark: dark,
+    tab: tab
 }
 
 type Theme = typeof Base & typeof Initial & (typeof Light | typeof Dark);
@@ -69,14 +72,15 @@ export default ({ children }: Children) => {
     const context = useMemo<Context>(() =>
         [theme, (set: Opt<Theme>) => {
             if ('dark' in set) set = { ...(set.dark ? Dark : Light), ...set };
+            if ('tab' in set) set = { ...Base.tabs[set.tab!], ...set };
             setTheme(merge(theme, set) as any);
         }
     ], [theme])
 
     let scheme = useColorScheme();
     useEffect(() => {
-        if (scheme === theme.dark) return;
-        context[1]({ dark: scheme === 'dark' });
+        let dark = scheme === 'dark';
+        if (dark !== theme.dark) context[1]({ dark: dark });
     }, [scheme])
 
     return <Context.Provider value={context} children={children}/>

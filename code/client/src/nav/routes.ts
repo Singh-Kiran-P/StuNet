@@ -9,6 +9,12 @@ export const s = screens({
             id: number
         }
     },
+    CreateAnswer: {
+        title: 'Answer ({questionId})',
+        args: {} as {
+            questionId: number
+        }
+    },
 
 
 
@@ -63,28 +69,28 @@ export const t = tabs(s, {
         screen: 'Home',
         title: 'Home',
         icon: 'home',
-        colors: Theme.tabs.home
+        colors: 'home'
     },
 
     TabCourses: {
         screen: 'Courses',
         title: 'Courses',
         icon: 'book',
-        colors: Theme.tabs.courses
+        colors: 'courses'
     },
 
     TabNotifications: {
         screen: 'Notifications',
         title: 'Notifications',
         icon: 'bell',
-        colors: Theme.tabs.notifications
+        colors: 'notifications'
     },
 
     TabProfile: {
         screen: 'Profile',
         title: 'Profile',
         icon: 'face',
-        colors: Theme.tabs.profile
+        colors: 'profile'
     }
 
 })

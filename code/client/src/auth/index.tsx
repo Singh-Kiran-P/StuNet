@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useMemo, useContext, createContext } from 'react';
+import React, { useEffect, useState, useMemo, useContext, createContext, useLayoutEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Store from 'react-native-encrypted-storage';
 
+import { useTheme } from '@/css';
 import { Children } from '@/util';
 import { Loader } from '@/components';
 import Register from '@/auth/Register';
@@ -17,6 +18,7 @@ export const useToken = () => useContext(Context);
 export default ({ children }: Children) => {
     const [token, setToken] = useState('');
     const [load, setLoad] = useState(true);
+    let [_, setTheme] = useTheme();
 
     useEffect(() => {
         Store.getItem(key)
@@ -24,6 +26,10 @@ export default ({ children }: Children) => {
             .catch(() => setToken(''))
             .finally(() => setLoad(false));
     }, [])
+
+    useLayoutEffect(() => {
+        if (!token) setTheme({ tab: 'auth' });
+    }, [token])
 
     const context = useMemo<Context>(() =>
         [token, token => {

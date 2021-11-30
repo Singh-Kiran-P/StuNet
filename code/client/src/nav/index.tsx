@@ -3,8 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 
-import { useTheme } from '@/css';
 import { useAnimate } from '@/util';
+import { useTheme, Theme } from '@/css';
 import { Component } from '@/nav/types';
 import * as options from '@/nav/routes';
 import header from '@/nav/header';
@@ -46,13 +46,8 @@ const Stacks = Object.values(options.t).map((tab, i) => {
 
 const Navigators = Stacks.map(([tab, stack]) => () => {
     let [theme, setTheme] = useTheme();
-    let keys = ['primary', 'secondary'] as Key[];
-    type Key = keyof typeof theme & keyof typeof tab.colors;
     useFocusEffect(() => {
-        let update = keys.some(k => theme[k] !== tab.colors[k]);
-        if (update) setTheme(keys.reduce((acc, cur) => (
-            { ...acc, [cur]: tab.colors[cur] }
-        ), {}))
+        if (theme.tab !== tab.colors) setTheme({ tab: tab.colors })
     });
     return stack;
 })
@@ -60,7 +55,7 @@ const Navigators = Stacks.map(([tab, stack]) => () => {
 const Tabs = Object.entries(options.t).map(([name, tab], i) => {
     return <Tab.Screen
         options={{
-            tabBarColor: tab.colors.primary,
+            tabBarColor: Theme.tabs[tab.colors].primary,
             tabBarLabel: tab.title,
             tabBarIcon: tab.icon
         }}
