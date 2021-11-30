@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -21,6 +22,7 @@ namespace Server.Api.Controllers
             _topicRepository = topicRepository;
         }
 
+        // [Authorize(Roles = "student")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getCourses()
         {
@@ -32,13 +34,13 @@ namespace Server.Api.Controllers
                     name = course.name,
                     number = course.number,
                     topics = course.topics.Select(topic =>
-                        new getOnlyTopicDto(){ name = topic.name, id = topic.id }
+                        new getOnlyTopicDto() { name = topic.name, id = topic.id }
                     ).ToList(),
                 }
             );
             return Ok(getDtos);
         }
-    
+
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCourseDto>> GetCourse(int id)
         {
@@ -51,13 +53,13 @@ namespace Server.Api.Controllers
                 name = course.name,
                 number = course.number,
                 topics = course.topics.Select(topic =>
-                    new getOnlyTopicDto(){ id = topic.id, name = topic.name }
+                    new getOnlyTopicDto() { id = topic.id, name = topic.name }
                 ).ToList(),
                 questions = course.questions.Select(question =>
-                    new onlyQuestionDto(){ id = question.id, title = question.title, body = question.body, time = question.dateTime }
+                    new onlyQuestionDto() { id = question.id, title = question.title, body = question.body, time = question.dateTime }
                 ).ToList(),
             };
-    
+
             return Ok(getDto);
         }
 
@@ -68,29 +70,32 @@ namespace Server.Api.Controllers
             {
                 name = dto.name,
                 number = dto.number,
-                topics = dto.topicNames.Select(name => new Topic(){ name = name }).ToList(),
+                topics = dto.topicNames.Select(name => new Topic() { name = name }).ToList(),
             };
             await _courseRepository.createAsync(course);
 
-            foreach (var topic in course.topics) {
+            foreach (var topic in course.topics)
+            {
                 topic.course = course;
                 await _topicRepository.updateAsync(topic);
             }
             return Ok(course);
         }
-    
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(int id)
         {
-            try {
+            try
+            {
                 await _courseRepository.deleteAsync(id);
             }
-            catch (System.Exception) {
+            catch (System.Exception)
+            {
                 return NotFound();
             }
             return NoContent();
         }
-    
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateUser(int id, CourseDto courseDto)
         {
@@ -98,9 +103,9 @@ namespace Server.Api.Controllers
             {
                 id = id,
                 name = courseDto.name,
-                number = courseDto.number                
+                number = courseDto.number
             };
-    
+
             await _courseRepository.updateAsync(course);
             return NoContent();
         }
