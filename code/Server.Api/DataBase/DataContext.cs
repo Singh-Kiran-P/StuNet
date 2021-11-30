@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Server.Api.Models;
-using Server.Config;
+using Server.Api.Config;
 
 namespace Server.Api.DataBase
 {

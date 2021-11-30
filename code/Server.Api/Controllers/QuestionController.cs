@@ -6,6 +6,8 @@ using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Server.Api.Config;
 
 namespace Server.Api.Controllers
 {
