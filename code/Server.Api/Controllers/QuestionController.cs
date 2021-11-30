@@ -61,6 +61,7 @@ namespace Server.Api.Controllers
             return Ok(toDto(question));
         }
     
+        [Authorize(Roles = "student")]
         [HttpPost]
         public async Task<ActionResult<questionDto>> CreateQuestion(createQuestionDto dto)
         {

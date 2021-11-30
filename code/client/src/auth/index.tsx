@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo, useContext, createContext, useLayoutEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Store from 'react-native-encrypted-storage';
+import axios from 'axios';
 
 import { useTheme } from '@/css';
 import { Children } from '@/util';
@@ -20,9 +21,11 @@ export default ({ children }: Children) => {
     const [load, setLoad] = useState(true);
     let [_, setTheme] = useTheme();
 
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
     useEffect(() => {
         Store.getItem(key)
-            .then(token => setToken(token || 'TODO-EMPTY-STRING'))
+            .then(token => setToken(token || ''))
             .catch(() => setToken(''))
             .finally(() => setLoad(false));
     }, [])
