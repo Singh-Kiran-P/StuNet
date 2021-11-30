@@ -34,7 +34,9 @@ export default extend<typeof Text, Props>(Text, ({ type, style, visible = true, 
     
     })
 
-    return !visible ? null : <Text {...props}
+    if (!visible) return null;
+    return <Text
         style={[s[type || 'normal'], style]}
+        {...props}
     />
 })

@@ -1,8 +1,9 @@
-import React, { Route, useState, useToken, Style, useTheme, axios } from '@/.';
+import React, { useState, useToken, Style, useTheme, axios } from '@/.';
 
 import {
 	View,
 	Text,
+	Link,
 	Button,
 	Loader,
 	TextInput,
@@ -10,7 +11,6 @@ import {
 } from '@/components';
 
 import { Picker } from '@react-native-picker/picker';
-import { Link } from '@react-navigation/native';
 
 type FieldApi = {
 	id: number,
@@ -34,7 +34,7 @@ const enum UserTypes {
 	PROFESSOR
 }
 
-export default ({ navigation }: Route) => {
+export default () => {
 	const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
 	const [fields, setFields] = useState<Fields>({});
@@ -42,17 +42,16 @@ export default ({ navigation }: Route) => {
 	const [userType, setUserType] = useState<UserTypes>(UserTypes.UNKNOWN);
  	const [FODSelection, setFODSelection] = useState<FODSelection>({ name: '', degree: '', year: '' });
 	const [error, setError] = useState('');
-	let [theme] = useTheme();
 	let [_, setToken] = useToken();
+	let [theme] = useTheme();
 
 	const studentRegex = new RegExp(/\w+@student.uhasselt.be/);
 	const profRegex = new RegExp(/\w+@uhasselt.be/);
 
 	const s = Style.create({
 		screen: {
-			flex: 1,
 			padding: theme.padding,
-			backgroundColor: theme.background,
+			backgroundColor: theme.background
         },
 
 		header: {
@@ -111,33 +110,35 @@ export default ({ navigation }: Route) => {
 
 	return (
 		<Loader load={getFODs} style={s.screen}>
-				<TextInput style={s.margin} label='E-mail' onChangeText={validate}/>
-				<PasswordInput style={s.margin} label='Password' onChangeText={setPassword} showable={false}/>
-				<PasswordInput style={s.margin} label='Confirm password' onChangeText={setpasswordConfirm} showable={false}/>
-				<Text style={s.margin} type='error' visible={password !== passwordConfirm}>Passwords do not match.</Text>
-				{userType == UserTypes.STUDENT && <View style={[{ flexDirection: 'row' }, s.margin]}>
-					<Picker prompt='Degree' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.name} onValueChange={value => setFODSelection({ name: value, degree: '', year: '' })}>
-						<Picker.Item label='Field' value='' enabled={false} />
-						{Object.keys(fields).map((name, i) => (
-							<Picker.Item key={i} label={name} value={name} />
-						))}
-					</Picker>
-					<Picker prompt='Field' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.degree} onValueChange={value => setFODSelection({ ...FODSelection, degree: value, year: '' })} enabled={!!FODSelection.name}>
-						<Picker.Item label='Degree' value='' enabled={false} />
-						{!FODSelection.name ? null : Object.keys(fields[FODSelection.name]).map((degrees, i) => (
-							<Picker.Item key={i} label={degrees} value={degrees} />
-						))}
-					</Picker>
-					<Picker prompt='Year' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.year} onValueChange={value => setFODSelection({ ...FODSelection, year: value })} enabled={!!FODSelection.degree}>
-					<Picker.Item label='Year' value='' enabled={false} />
-						{!FODSelection.degree ? null : fields[FODSelection.name][FODSelection.degree].map((years, i) => (
-							<Picker.Item key={i} label={years.toString()} value={years} />
-						))}
-					</Picker>
-				</View>}
-				<Text style={s.margin} type='error' visible={!!error}>{error}</Text>
-				<Button style={s.margin} onPress={register} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => !e)}>Register</Button>
-				<Text style={s.hint} type='hint'>Already have an account? <Link style={s.margin} to={{screen: 'Login'}}>Login here</Link></Text>
+			<TextInput style={s.margin} label='E-mail' onChangeText={validate}/>
+			<PasswordInput style={s.margin} label='Password' onChangeText={setPassword} showable={false}/>
+			<PasswordInput style={s.margin} label='Confirm password' onChangeText={setpasswordConfirm} showable={false}/>
+			<Text style={s.margin} type='error' visible={password !== passwordConfirm}>Passwords do not match.</Text>
+			{userType == UserTypes.STUDENT && <View style={[{ flexDirection: 'row' }, s.margin]}>
+				<Picker prompt='Degree' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.name} onValueChange={value => setFODSelection({ name: value, degree: '', year: '' })}>
+					<Picker.Item label='Field' value='' enabled={false} />
+					{Object.keys(fields).map((name, i) => (
+						<Picker.Item key={i} label={name} value={name} />
+					))}
+				</Picker>
+				<Picker prompt='Field' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.degree} onValueChange={value => setFODSelection({ ...FODSelection, degree: value, year: '' })} enabled={!!FODSelection.name}>
+					<Picker.Item label='Degree' value='' enabled={false} />
+					{!FODSelection.name ? null : Object.keys(fields[FODSelection.name]).map((degrees, i) => (
+						<Picker.Item key={i} label={degrees} value={degrees} />
+					))}
+				</Picker>
+				<Picker prompt='Year' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.year} onValueChange={value => setFODSelection({ ...FODSelection, year: value })} enabled={!!FODSelection.degree}>
+				<Picker.Item label='Year' value='' enabled={false} />
+					{!FODSelection.degree ? null : fields[FODSelection.name][FODSelection.degree].map((years, i) => (
+						<Picker.Item key={i} label={years.toString()} value={years} />
+					))}
+				</Picker>
+			</View>}
+			<Text style={s.margin} type='error' visible={!!error}>{error}</Text>
+			<Button style={s.margin} onPress={register} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => !e)}>Register</Button>
+			<Text style={s.hint} type='hint'>
+				Already have an account? <Link to={{ screen: 'Login' }}>Login here</Link>
+			</Text>
 		</Loader>
 	)
 }

@@ -20,7 +20,7 @@ export default ({ children }: Children) => {
 
     useEffect(() => {
         Store.getItem(key)
-            .then(token => setToken(token || 'sxzas'))
+            .then(token => setToken(token || 'TODO-EMPTY-STRING'))
             .catch(() => setToken(''))
             .finally(() => setLoad(false));
     }, [])

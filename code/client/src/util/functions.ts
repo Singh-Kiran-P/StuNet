@@ -10,5 +10,5 @@ export const useAnimate = <S>(initialState: S | (() => S)): [S, (value: S | ((pr
 }
 
 export const extend = <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c: T, e: (p: Props<T> & U) => JSX.Element | null) => {
-    return Object.assign(e as (p: Partial<Props<T>> & U) => JSX.Element, c);
+    return Object.assign(e, c) as (p: Partial<Props<T>> & U) => JSX.Element | null;
 }

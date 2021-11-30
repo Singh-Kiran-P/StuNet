@@ -1,15 +1,15 @@
-import React, { Route, useState, useToken, useTheme, Style, axios } from '@/.';
+import React, { useState, useToken, useTheme, Style, axios } from '@/.';
 
 import {
     View,
     Text,
+    Link,
     Button,
     TextInput,
     PasswordInput
 } from '@/components';
-import { Link } from '@react-navigation/native';
 
-export default ({ navigation }: Route) => {
+export default () => {
     let [mail, setMail] = useState('');
     let [password, setPassword] = useState('');
     let [error, setError] = useState('');
@@ -21,7 +21,7 @@ export default ({ navigation }: Route) => {
             width: '100%',
             height: '100%',
             padding: theme.padding,
-            backgroundColor: theme.background,
+            backgroundColor: theme.background
         },
         
         header: {
@@ -56,7 +56,9 @@ export default ({ navigation }: Route) => {
     
             <Button style={s.margin} onPress={login} disabled={!login || !password}>Log in</Button>
     
-            <Text style={s.hint} type='hint'>Don't have an account yet? <Link style={s.margin} to={{screen: 'Register'}}>Register here</Link></Text>
+            <Text style={s.hint} type='hint'>
+                Don't have an account yet? <Link to={{ screen: 'Register' }}>Register here</Link>
+            </Text>
         </View>
     )
 }
