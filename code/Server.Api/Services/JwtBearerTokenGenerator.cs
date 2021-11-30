@@ -13,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Server.Api.Dtos;
 using Server.Api.Models;
 
-namespace VmsApi.Services
+namespace Server.Api.Services
 {
     [ExcludeFromCodeCoverage]
     public class JwtBearerTokenGenerator : ITokenGenerator

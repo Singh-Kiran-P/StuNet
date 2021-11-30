@@ -1,12 +1,13 @@
 // @Kiran @Tijl @Melih
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using FuzzySharp;
 using Microsoft.AspNetCore.Mvc;
+using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
-using Server.Api.Dtos;
-
+using Server.Api.Services;
 namespace Server.Api.Controllers
 {
     [ApiController]
@@ -22,21 +23,26 @@ namespace Server.Api.Controllers
             _topicRepository = topicRepository;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getCourses()
+        private async Task<IEnumerable<GetAllCourseDto>> _getCourseAsync()
         {
             IEnumerable<Course> courses = await _courseRepository.getAllAsync();
             IEnumerable<GetAllCourseDto> getDtos = courses.Select(course =>
-                new GetAllCourseDto()
-                {
-                    id = course.id,
-                    name = course.name,
-                    number = course.number,
-                    topics = course.topics.Select(topic =>
-                        new getOnlyTopicDto() { name = topic.name, id = topic.id }
-                    ).ToList(),
-                }
+               new GetAllCourseDto()
+               {
+                   id = course.id,
+                   name = course.name,
+                   number = course.number,
+                   topics = course.topics.Select(topic =>
+                       new getOnlyTopicDto() { name = topic.name, id = topic.id }
+                       ).ToList(),
+               }
             );
+            return getDtos;
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getCourses()
+        {
+            IEnumerable<GetAllCourseDto> getDtos = await _getCourseAsync();
             return Ok(getDtos);
         }
 
@@ -52,37 +58,25 @@ namespace Server.Api.Controllers
                 name = course.name,
                 number = course.number,
                 topics = course.topics.Select(topic =>
-                    new getOnlyTopicDto() { id = topic.id, name = topic.name }
+               new getOnlyTopicDto() { id = topic.id, name = topic.name }
                 ).ToList(),
                 questions = course.questions.Select(question =>
-                    new onlyQuestionDto() { id = question.id, title = question.title, body = question.body, time = question.dateTime }
+               new onlyQuestionDto() { id = question.id, title = question.title, body = question.body, time = question.dateTime }
                 ).ToList(),
             };
 
             return Ok(getDto);
         }
+
         [HttpGet("search/")]
         public async Task<ActionResult<GetCourseDto>> searchByName([FromQuery] string name)
         {
-            Course course = await _courseRepository.getByNameAsync(name);
-            if (course == null)
-                return NoContent();
+            IEnumerable<GetAllCourseDto> getDtos = await _getCourseAsync();
 
-            GetCourseDto getDto = new()
-            {
-                name = course.name,
-                number = course.number,
-                topics = course.topics.Select(topic =>
-                    new getOnlyTopicDto() { id = topic.id, name = topic.name }
-                ).ToList(),
-                questions = course.questions.Select(question =>
-                    new onlyQuestionDto() { id = question.id, title = question.title, body = question.body, time = question.dateTime }
-                ).ToList(),
-            };
 
-            return Ok(getDto);
+            IEnumerable<GetAllCourseDto> searchResults = StringMatcher.FuzzyMatchObject(getDtos, name);
+            return Ok(searchResults);
         }
-
 
         [HttpPost]
         public async Task<ActionResult<Course>> createCourse(createCourseDto dto)
