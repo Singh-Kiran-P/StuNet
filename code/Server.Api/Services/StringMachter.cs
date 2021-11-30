@@ -16,6 +16,10 @@ namespace Server.Api.Services
         {
             Type t = typeof(T);
             List<T> outList = new List<T>();
+
+            if (searchString == null)
+                return outList;
+
             foreach (T item in obj)
             {
                 switch (item)

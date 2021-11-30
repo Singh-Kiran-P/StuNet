@@ -19,11 +19,11 @@ const List_ = ({ courses }: IProps) => {
                         description={course.number}
                         onPress={() => nav.push('Course', { id: course.id })}
                         left={props => <List.Icon {...props} icon="book" />}
-                        // right={props => <Button
-                        //     key={i}
-                        //     onPress={() => nav.push('Course', { id: course.id })}
+                    // right={props => <Button
+                    //     key={i}
+                    //     onPress={() => nav.push('Course', { id: course.id })}
 
-                        //     children={"->"} />}
+                    //     children={"->"} />}
 
                     >
                     </List.Item>

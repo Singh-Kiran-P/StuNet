@@ -24,6 +24,7 @@ export default Screen('Courses', ({ params, nav }) => {
                     setCourses(res.data)
                 }
                 else {
+                    setCourses([])
                     showMessage({
                         message: "Could not load any courses with this name",
                         type: "info",
@@ -48,7 +49,7 @@ export default Screen('Courses', ({ params, nav }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <SearchBar placeholder="sdf" onChangeText={q => setQuery(q)} />
+            <SearchBar placeholder="Search courses" onChangeText={q => setQuery(q)} />
             <Button onPress={search}>Search</Button>
             <ScrollView>
                 <List_ courses={courses} />

@@ -75,7 +75,11 @@ namespace Server.Api.Controllers
 
 
             IEnumerable<GetAllCourseDto> searchResults = StringMatcher.FuzzyMatchObject(getDtos, name);
-            return Ok(searchResults);
+
+            if(searchResults == null || !searchResults.Any())
+                return NoContent();
+            else
+                return Ok(searchResults);
         }
 
         [HttpPost]
