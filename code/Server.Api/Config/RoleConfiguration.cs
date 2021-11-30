@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Server.Api.Enum;
 
-namespace Server.Api
+namespace Server.Config
 {
     [ExcludeFromCodeCoverage]
     public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
