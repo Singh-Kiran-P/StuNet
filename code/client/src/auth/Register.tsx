@@ -58,7 +58,7 @@ export default () => {
 			color: theme.primary,
             marginBottom: theme.padding
 		},
-		
+
 		hint: {
             marginTop: theme.margin
         },
