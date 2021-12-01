@@ -22,7 +22,7 @@ namespace Server.Api.Controllers
             _topicRepository = topicRepository;
         }
 
-        // [Authorize(Roles = "student")]
+        [Authorize(Roles = "student")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getCourses()
         {
