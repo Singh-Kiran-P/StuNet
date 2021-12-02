@@ -1,18 +1,10 @@
 /* eslint-disable curly */
-import React from '@/.'; // 'react-native';
+import React, { Question } from '@/.'; // 'react-native';
 import {
     View,
     Text,
 } from '@/components';
 import { FlatList, StyleSheet } from 'react-native';
-
-export type Question = {
-    id: number;
-    title: string;
-    body: string;
-    time: string;
-    // topicIds: Array<number>;
-}
 
 type Props = {
 	question: Question;
