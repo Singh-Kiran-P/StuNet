@@ -3,8 +3,8 @@ import React, { axios, Screen, useState } from '@/.';
 import { View, Button, SearchBar, Text, ScrollView } from '@/components';
 import List_ from '@/components/base/List';
 import { Course } from '../course/Course';
-import { showMessage, hideMessage } from "react-native-flash-message";
-import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import FlashMessage from 'react-native-flash-message';
 
 export interface IState {
     courses: Course[];
@@ -12,10 +12,10 @@ export interface IState {
 
 export default Screen('Courses', ({ params, nav }) => {
     const [query, setQuery] = useState('TEST');
-    const [courses, setCourses] = useState<IState["courses"]>([]);
+    const [courses, setCourses] = useState<IState['courses']>([]);
     // TODO: error door dat de question leeg is .
     const search = async () => {
-        return axios.get<IState["courses"]>('/Course/search', { params: {name : query}} )
+        return axios.get<IState['courses']>('/Course/search', { params: {name : query}} )
             .then(res => {
                 console.log(res.status);
 
@@ -26,9 +26,9 @@ export default Screen('Courses', ({ params, nav }) => {
                 else {
                     setCourses([])
                     showMessage({
-                        message: "Could not load any courses with this name",
-                        type: "info",
-                        position: "bottom",
+                        message: 'Could not load any courses with this name',
+                        type: 'info',
+                        position: 'bottom',
                         floating: true,
                         icon: 'info'
                     });
@@ -38,9 +38,9 @@ export default Screen('Courses', ({ params, nav }) => {
             })
             .catch(err => {
                 showMessage({
-                    message: "Problems reaching course data end-point",
-                    type: "danger",
-                    position: "bottom",
+                    message: 'Problems reaching course data end-point',
+                    type: 'danger',
+                    position: 'bottom',
                     floating: true,
                     icon: 'danger'
                 });
@@ -49,7 +49,7 @@ export default Screen('Courses', ({ params, nav }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <SearchBar placeholder="Search courses" onChangeText={q => setQuery(q)} />
+            <SearchBar placeholder='Search courses' onChangeText={q => setQuery(q)} />
             <Button onPress={search}>Search</Button>
             <ScrollView>
                 <List_ courses={courses} />
