@@ -61,10 +61,16 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Answer> getByQuestionId(int questionId)
+        public async Task<IEnumerable<Answer>> getByQuestionId(int questionId)
         {
+            return await _context.Answers
+            // .Include(q => q.userId)          
+            .Include(q => q.question)          
+            .Include(q => q.question.user)          
+            .Include(q => q.question.course)
+            .Where(q => q.question.id == questionId).ToListAsync();
             // var answers = _context.Answers.Select(x => x).Where(answer => answer.question.id == questionId);
-            return _context.Answers.ToList().Where(answer => answer.question.id == questionId);
+            // return answers.ToList();//_context.Answers.ToList().Where(answer => answer.question.id == questionId);
             // return answers.ToList();
         }
     }

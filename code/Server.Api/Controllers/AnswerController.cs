@@ -51,15 +51,15 @@ namespace Server.Api.Controllers
             catch { return BadRequest("Error finding all answers"); }
         }
 
-        [Authorize(Roles = "student,prof")]
+        //[Authorize(Roles = "student,prof")]
         [HttpGet("GetAnswersByQuestionId/{questionId}")]
         public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
             try
             {
-                IEnumerable<Answer> answers = _answerRepository.getByQuestionId(questionId);
+                IEnumerable<Answer> answers = await _answerRepository.getByQuestionId(questionId);
                 //put all users in the dto
-                IEnumerable<Task<ResponseAnswerDto>> answerTasks = answers.Select(async answer =>
+                IEnumerable<Task<ResponseAnswerDto>> answerTasks = answers.Select(async (answer) =>
                 {
                     User user = await _userManager.FindByIdAsync(answer.userId);
                     return ResponseAnswerDto.convert(answer, user);
