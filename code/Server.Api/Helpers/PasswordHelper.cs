@@ -1,9 +1,10 @@
+// @Senn
 using System.Text;
 using System.Security.Cryptography;
 using System;
 
 namespace Server.Api.Helpers
-{    
+{
     public class PasswordHelper
     {
         private static string CreateSalt(int size)
@@ -16,7 +17,7 @@ namespace Server.Api.Helpers
         }
 
         private static string GenerateHash(string input, string salt)
-        { 
+        {
             byte[] bytes = Encoding.UTF8.GetBytes(input + salt);
             SHA256Managed sHA256ManagedString = new SHA256Managed();
             byte[] hash = sHA256ManagedString.ComputeHash(bytes);
@@ -31,7 +32,7 @@ namespace Server.Api.Helpers
         public static bool AreEqual(string plainTextInput, string hashedInput, string salt)
         {
             string newHashedPin = GenerateHash(plainTextInput, salt);
-            return newHashedPin.Equals(hashedInput); 
+            return newHashedPin.Equals(hashedInput);
         }
     }
 }
