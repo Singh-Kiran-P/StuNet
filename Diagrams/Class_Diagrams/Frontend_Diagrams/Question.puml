@@ -1,0 +1,47 @@
+@startuml Question
+skinparam classAttributeIconSize 0
+
+class QuestionView {
+	-header: string
+	-topics: CompactTopicView
+	-answers: AnswerView
+	-title: string
+	-body: string
+	+fetch()
+}
+
+class AnswerView {}
+class CompactTopicView {}
+class "Button" as b2
+
+AnswerView --* QuestionView
+CompactTopicView --* QuestionView
+b2 --* QuestionView
+
+
+class TextInput {}
+class "Button" as b1
+class CheckboxCollapse {}
+class Checkbox {}
+
+class AskQuestion {
+	-header: string
+	-topics: CheckBox
+	-title: string
+	-body: string
+	+setHeader()
+	+setTopics()
+	+setTitle()
+	+setBody()
+	+fetch()
+	+submit()
+}
+
+Checkbox --* CheckboxCollapse
+TextInput --* AskQuestion
+b1 --* AskQuestion
+CheckboxCollapse --* AskQuestion
+
+b1 ..> QuestionView: <<navigate>>
+
+@enduml
