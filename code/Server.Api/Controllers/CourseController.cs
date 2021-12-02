@@ -102,7 +102,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUser(int id)
+        public async Task<ActionResult> DeleteCourse(int id)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateUser(int id, CourseDto courseDto)
+        public async Task<ActionResult> UpdateCourse(int id, CourseDto courseDto)
         {
             Course course = new()
             {
