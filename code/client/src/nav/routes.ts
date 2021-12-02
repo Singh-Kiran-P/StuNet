@@ -36,6 +36,12 @@ export const s = screens({
             id: number
         }
     },
+    EditTopics: {
+        title: 'Edit topics of course ({id})',
+        args: {} as {
+            courseId: number
+        }
+    },
 
 
 
