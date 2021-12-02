@@ -1,4 +1,6 @@
-﻿using System;
+﻿// @Kiran
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Server.Api.Dtos;
 using Server.Api.Models;
 
-namespace VmsApi.Services
+namespace Server.Api.Services
 {
     [ExcludeFromCodeCoverage]
     public class JwtTokenManager : ITokenManager
