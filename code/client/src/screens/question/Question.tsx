@@ -1,4 +1,4 @@
-import React, { axios, Screen, Style, useTheme, useState, Answer } from '@/.';
+import React, { axios, Screen, Style, useTheme, useState, Answer, dateString } from '@/.';
 import { Dimensions } from 'react-native';
 
 import {
@@ -22,9 +22,13 @@ export default Screen('Question', ({ params, nav }) => {
         },
 
         header: {
-            flex: 0,
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            alignItems: 'center',
+            flexWrap: 'wrap'
+        },
+
+        right: {
+            marginLeft: 'auto'
         },
 
         content: {
@@ -40,6 +44,13 @@ export default Screen('Question', ({ params, nav }) => {
 
         bodyContent: {
             padding: theme.padding / 2
+        },
+
+        answer: {
+            padding: theme.padding / 2,
+            backgroundColor: theme.surface,
+            borderRadius: theme.radius,
+            marginTop: theme.margin
         }
 
     })
@@ -49,15 +60,14 @@ export default Screen('Question', ({ params, nav }) => {
             let d = res?.data || {};
             setBody(d.body || '');
             setTitle(d.title || '');
-            nav.setParams({ title: d.course?.name });
-            setDate(new Date(d.time).toDateString());
+            nav.setParams({ screenTitle: d.course?.name });
+            setDate(dateString(d.time));
         })
     }
 
     const questions = async () => {
         return axios.get('/Answer/GetAnswersByQuestionId/' + params.id).then(res => {
-            console.log(res.data);
-            // setAnswers(res.data || []); // TODO
+            setAnswers(res.data || []); // TODO
         }).catch(err => console.log(err.response.data))
     }
 
@@ -67,7 +77,7 @@ export default Screen('Question', ({ params, nav }) => {
         <Loader load={fetch}>
             <View style={[s.header, s.margin]}>
                 <Text type='header' children={title}/>
-                <Text type='hint' children={date}/>
+                <Text type='hint' style={s.right} children={date}/>
             </View>
             <ScrollView style={s.content}>
                 <ScrollView style={[s.body, s.margin]} contentContainerStyle={s.bodyContent} nestedScrollEnabled>
@@ -77,10 +87,13 @@ export default Screen('Question', ({ params, nav }) => {
                 <Button onPress={() => nav.push('CreateAnswer', {
                     questionId: params.id, question: title, date: date
                 })} children='Answer'/>
-                {answers.map(answer => (
-                    <View>
-                        <Text children={answer.title}/>
-                        <Text children={answer.body}/>
+                {answers.map((answer, i) => (
+                    <View key={i} style={s.answer} onTouchEnd={() => nav.push('Answer', { ...answer, course: params.screenTitle || '' })}>
+                        <View style={s.header}>
+                            <Text type='header' size='medium' children={answer.title}/>
+                            <Text type='hint' style={s.right} children={dateString(answer.dateTime)}/>
+                        </View>
+                        <Text numberOfLines={1} ellipsizeMode='tail' children={answer.body}/>
                     </View>
                 ))}
             </ScrollView>

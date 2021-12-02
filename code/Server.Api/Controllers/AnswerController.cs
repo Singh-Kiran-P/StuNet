@@ -37,15 +37,11 @@ namespace Server.Api.Controllers
             try
             {
                 IEnumerable<Answer> answers = await _answerRepository.getAllAsync();
-
-                //put all users in the dto
-                IEnumerable<Task<ResponseAnswerDto>> answerTasks = answers.Select(async answer =>
-                {
+                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                foreach (var answer in answers) {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    return ResponseAnswerDto.convert(answer, user);
-                });
-
-                ResponseAnswerDto[] res = await Task.WhenAll(answerTasks);
+                    res.Add(ResponseAnswerDto.convert(answer, user));
+                }
                 return Ok(res);
             }
             catch { return BadRequest("Error finding all answers"); }
@@ -58,14 +54,11 @@ namespace Server.Api.Controllers
             try
             {
                 IEnumerable<Answer> answers = await _answerRepository.getByQuestionId(questionId);
-                //put all users in the dto
-                IEnumerable<Task<ResponseAnswerDto>> answerTasks = answers.Select(async (answer) =>
-                {
+                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                foreach (var answer in answers) {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    return ResponseAnswerDto.convert(answer, user);
-                });
-
-                ResponseAnswerDto[] res = await Task.WhenAll(answerTasks);
+                    res.Add(ResponseAnswerDto.convert(answer, user));
+                }
                 return Ok(res);
             }
             catch { return BadRequest("Error finding all answers"); }

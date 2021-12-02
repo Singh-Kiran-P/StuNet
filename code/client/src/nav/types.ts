@@ -8,7 +8,7 @@ import { Theme } from '@/css'
 type BaseScreens = {
     [name: string]: {
         args?: object;
-        title?: string;
+        screenTitle?: string;
         padding?: boolean | number;
         scroll?: boolean;
         tabs?: boolean;
