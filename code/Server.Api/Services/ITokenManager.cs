@@ -4,7 +4,7 @@ using Server.Api.Models;
 
 namespace VmsApi.Services
 {
-    public interface ITokenGenerator
+    public interface ITokenManager
     {
         Task<LoginJwtDto> GetTokenAsync(User user);
     }
