@@ -52,13 +52,12 @@ namespace Server.Api.Controllers
         }
 
         [Authorize(Roles = "student,prof")]
-        [HttpGet("GetAnswersByQuestionId/{id}")]
+        [HttpGet("GetAnswersByQuestionId/{questionId}")]
         public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
             try
             {
                 IEnumerable<Answer> answers = _answerRepository.getByQuestionId(questionId);
-
                 //put all users in the dto
                 IEnumerable<Task<ResponseAnswerDto>> answerTasks = answers.Select(async answer =>
                 {
@@ -99,7 +98,7 @@ namespace Server.Api.Controllers
                 if (user == null || question == null) { return BadRequest("User or Question related to answer not found"); }
                 Answer answer = new()
                 {
-                    userId = dto.userId,
+                    userId = user.Id,
                     question = question,
                     title = dto.title,
                     body = dto.body,

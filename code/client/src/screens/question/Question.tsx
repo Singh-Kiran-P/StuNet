@@ -71,7 +71,7 @@ export default Screen('Question', ({ params, nav }) => {
             </View>
             <ScrollView style={s.content}>
                 <ScrollView style={[s.body, s.margin]} contentContainerStyle={s.bodyContent} nestedScrollEnabled>
-                    <Text>{body}{'sfdklhjvsvfbdj\n\n\n\n\n\n\n\n\n\n\n\n\n\n'}{'jlsrehkjhfsdb\n\n\n\n\n\n\n\n'}{';ksierujbkjhertbg\n\n\n\n\n\n\n\n'}{'akerjnkhewtrybvgweyugvowtgre\n\n\n\n\n\n\n\n'}{'ae;rkjbwuhorefbhortgsouyvbwtergfvoguyewrtgivyotgrtgevy'}</Text>
+                    <Text>{body}</Text>
                 </ScrollView>
                 <Text style={s.margin} type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
                 <Button onPress={() => nav.push('CreateAnswer', {

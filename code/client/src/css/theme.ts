@@ -1,5 +1,5 @@
 export const Base = {
-    radius: 10,
+    radius: 5,
 
     small: 12,
     medium: 16,
