@@ -7,8 +7,6 @@ import {
 
 export default Screen('Home', ({ params, nav }) => {
 
-
-
     return (
         <View>
             <Button onPress={() => nav.push('Course', { id: 1 })} children='Course'/>

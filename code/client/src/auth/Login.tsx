@@ -1,15 +1,14 @@
-import React, { useState, useToken, useTheme, Style, axios } from '@/.';
+import React, { Route, useState, useToken, useTheme, Style, axios } from '@/.';
 
 import {
     View,
     Text,
-    Link,
     Button,
     TextInput,
     PasswordInput
 } from '@/components';
 
-export default () => {
+export default ({ navigation }: Route) => {
     let [mail, setMail] = useState('');
     let [password, setPassword] = useState('');
     let [error, setError] = useState('');
@@ -57,7 +56,7 @@ export default () => {
             <Button style={s.margin} onPress={login} disabled={!login || !password}>Log in</Button>
     
             <Text style={s.hint} type='hint'>
-                Don't have an account yet? <Link to={{ screen: 'Register' }}>Register here</Link>
+                Don't have an account yet? <Text type='link' size='' onPress={() => navigation.navigate('Register')}>Register here!</Text>
             </Text>
         </View>
     )

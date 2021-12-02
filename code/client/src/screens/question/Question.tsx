@@ -4,7 +4,6 @@ import { Dimensions } from 'react-native';
 import {
     View,
     Text,
-    Link,
     Button,
     ScrollView
 } from '@/components';
@@ -37,10 +36,10 @@ export default Screen('Question', ({ params, nav }) => {
             <ScrollView style={s.screen}>
                 <ScrollView style={s.body} nestedScrollEnabled>
                     <Text>Body start{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body end</Text>
-                    <Link to={{} /* TODO icon */}>Download 3 Attachments</Link>
+                    <Text type='link' {...{}/* TODO icon */}>Download 3 Attachments</Text>
                 </ScrollView>
-                    <Button style={s.button} onPress={() => nav.push('CreateAnswer', { questionId: params.id })} children='Answer'/>
-                    <Text>Body start{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body end</Text>
+                <Button style={s.button} onPress={() => nav.push('CreateAnswer', { questionId: params.id })} children='Answer'/>
+                <Text>Body start{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body end</Text>
             </ScrollView>
         </View>
     )

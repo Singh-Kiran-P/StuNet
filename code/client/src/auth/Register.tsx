@@ -1,9 +1,8 @@
-import React, { useState, useToken, Style, useTheme, axios } from '@/.';
+import React, { Route, useState, useToken, Style, useTheme, axios } from '@/.';
 
 import {
 	View,
 	Text,
-	Link,
 	Button,
 	Loader,
 	TextInput,
@@ -34,7 +33,7 @@ const enum UserTypes {
 	PROFESSOR
 }
 
-export default () => {
+export default ({ navigation }: Route) => {
 	const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
 	const [fields, setFields] = useState<Fields>({});
@@ -137,7 +136,7 @@ export default () => {
 			<Text style={s.margin} type='error' visible={!!error}>{error}</Text>
 			<Button style={s.margin} onPress={register} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => !e)}>Register</Button>
 			<Text style={s.hint} type='hint'>
-				Already have an account? <Link to={{ screen: 'Login' }}>Login here</Link>
+				Already have an account? <Text type='link' size='small' onPress={() => navigation.navigate('Login')}>Login here!</Text>
 			</Text>
 		</Loader>
 	)

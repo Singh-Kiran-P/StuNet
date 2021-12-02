@@ -1,7 +1,7 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useAnimate } from '@/util';
 import { useTheme, Theme } from '@/css';
@@ -18,6 +18,9 @@ let hide: (hide: any) => void;
 const Components = screens.map(screen => {
     let name = Object.keys(screen)[0] as keyof typeof options.s;
     return [name, Component(({ params: { tabs }, nav }, props: any) => {
+        useEffect(() => {
+            // TODO ALLOW UPDATE
+        }, []);
         useFocusEffect(() => hide(nav.getState().index && !tabs));
         return Screen({ children: screen[name](props), ...props });
     })] as [typeof name, ReturnType<typeof Component>];

@@ -1,8 +1,8 @@
-import { StyleSheet, ViewStyle, TextStyle, ImageStyle, useColorScheme } from 'react-native';
 import React, { useState, useMemo, useContext, createContext, useEffect } from 'react';
+import { StyleSheet, useColorScheme } from 'react-native';
 
 import { Base, Light, Dark } from '@/css/theme';
-import { Children } from '@/util';
+import { Children, Styling } from '@/util';
 
 export const Theme = {
     ...Base,
@@ -35,8 +35,7 @@ type Context = [Theme, (set: Opt<Omit<Theme, keyof typeof Base>>) => void];
 const Context = createContext<Context>([{} as any, () => {}]);
 export const useTheme = () => useContext(Context);
 
-type Style = ViewStyle | TextStyle | ImageStyle;
-export const theming = <T extends Style>(style: (theme: Theme) => T) => {
+export const theming = <T extends Styling>(style: (theme: Theme) => T) => {
     let [theme] = useTheme();
     return StyleSheet.create({
         ['']: style(theme)
