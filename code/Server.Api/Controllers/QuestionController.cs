@@ -63,25 +63,32 @@ namespace Server.Api.Controllers
             return Ok(toDto(question));
         }
     
-        [Authorize(Roles = "student")]
+        //[Authorize(Roles = "student")]
         [HttpPost]
         public async Task<ActionResult<questionDto>> CreateQuestion(createQuestionDto dto)
         {
+            Course c = _courseRepository.getAsync(dto.courseId).Result;
+
+            ICollection<Topic> topics = new List<Topic>();
+            topics = dto.topicIds.Select(id => _topicRepository.getAsync(id)) //TODO: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
+                                            .Select(task => task.Result)
+                                            .ToList();
+            
+            if (c==null) {return BadRequest("Course does not exist");}
+            if (topics.Contains(null)) {return BadRequest("One of the topics does not exist");}
 			Question question = new()
 			{
 				title = dto.title,
-				// user = createQuestionDto.user,
-				course = _courseRepository.getAsync(dto.courseId).Result,
+				// user = createQuestionDto.user, TODO
+				course = c,
 				body = dto.body,
-				// files = createQuestionDto.files
-				topics = dto.topicIds.Select(id => _topicRepository.getAsync(id))
-												.Select(task => task.Result)
-												.ToList(),
+				// files = createQuestionDto.files TODO
+				topics = topics,
 			    dateTime = DateTime.Now
             };
 
 			await _questionRepository.createAsync(question);
-            return Ok(question);
+            return Ok(toDto(question));
         }
     
         [HttpDelete("{id}")]

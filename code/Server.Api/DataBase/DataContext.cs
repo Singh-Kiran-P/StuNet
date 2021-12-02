@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Server.Api.Models;
 using Server.Api.Config;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+
+
 
 namespace Server.Api.DataBase
 {
@@ -37,6 +41,11 @@ namespace Server.Api.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // modelBuilder.Entity<Answer>() 
+            // .HasOne(a => a.user)
+            // .WithMany(u => u.answers)
+            // .HasForeignKey(a => a.userId);
+
             createUsers(modelBuilder);
             createCourse(modelBuilder);
             createFieldOfStudy(modelBuilder);
