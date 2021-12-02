@@ -27,8 +27,8 @@ export default Screen('CreateAnswer', ({ params, nav }) => {
 
     return (
         <View>
-            <Text style={s.margin}>{params.question}</Text>
-            <Text style={s.margin}>{params.date}</Text>
+            <Text style={s.margin} children={params.question}/>
+            <Text style={s.margin} children={params.date}/>
             <TextInput style={s.margin} label='Title' onChangeText={setTitle}/>
             <TextInput style={s.margin} label='Body' multiline onChangeText={setBody}/>
             <Text style={s.margin}>TODO files</Text>

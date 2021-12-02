@@ -8,7 +8,7 @@ export default Component(({ params, params: { title }, nav }) => {
     return (
         <Appbar.Header theme={paper(theme)}>
             {!nav.getState().index || <Appbar.BackAction onPress={() => nav.goBack()}/>}
-            <Appbar.Content title={replace(title, params)}/>
+            <Appbar.Content title={replace(title || '', params) || 'Loading...'}/>
         </Appbar.Header>
     )
 })

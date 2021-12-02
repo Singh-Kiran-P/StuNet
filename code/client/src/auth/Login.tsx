@@ -17,8 +17,7 @@ export default ({ navigation }: Route) => {
 
     const s = Style.create({
         screen: {
-            width: '100%',
-            height: '100%',
+            flex: 1,
             padding: theme.padding,
             backgroundColor: theme.background
         },

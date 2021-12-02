@@ -1,10 +1,8 @@
 import { screens, tabs } from '@/nav/types';
-import { Theme } from '@/css';
 
 export const s = screens({
 
     Question: {
-        title: 'Question ({id})',
         args: {} as {
             id: number;
         }
