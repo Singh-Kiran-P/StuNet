@@ -1,18 +1,17 @@
-import React, { Screen, axios, useState } from '@/.';
-
+import React, {
+    Screen,
+    axios,
+    useState,
+    Topic,
+} from '@/.';
 import {
     Text,
     Button,
     Loader,
     Question,
     Collapse,
-    CompactQuestion
+    CompactQuestion,
 } from '@/components';
-
-type Topic = {
-    id: number;
-    name: string;
-}
 
 type Course = {
     id: number;

@@ -1,3 +1,8 @@
+export type Topic = {
+    id: number;
+    name: string;
+}
+
 export type Question = {
     id: number;
     title: string;
