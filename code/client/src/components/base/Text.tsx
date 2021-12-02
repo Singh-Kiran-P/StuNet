@@ -1,4 +1,4 @@
-import React, { extend, useTheme } from '@/.';
+import React, { extend, useTheme, Style } from '@/.';
 import { Text } from 'react-native-paper';
 
 type Props = {
@@ -10,43 +10,45 @@ type Props = {
 export default extend<typeof Text, Props>(Text, ({ type, size, style, visible = true, ...props }) => {
     let [theme] = useTheme();
 
-    const s = {
+    const fontSize = (s: NonNullable<Exclude<Props['size'], ''>>) => ({
+        fontSize: size === undefined ? theme[s] : size ? theme[size] : undefined
+    })
+
+    const s = Style.create({
 
         normal: {
             color: theme.foreground,
-            fontSize: theme.medium,
-
+            ...fontSize('medium')
+            
         },
-
+        
         header: {
             color: theme.foreground,
-            fontSize: theme.large,
+            ...fontSize('large'),
             fontWeight: 'bold'
         },
 
         error: {
             color: theme.error,
-            fontSize: theme.medium
+            ...fontSize('medium')
         },
-
+        
         hint: {
             color: theme.foreground,
-            fontSize: theme.small
+            ...fontSize('small')
         },
-
+        
         link: {
             color: theme.accent,
-            fontSize: theme.medium,
+            ...fontSize('medium'),
             textDecorationLine: 'underline'
         }
 
-    }[type || 'normal'] as any;
-
-    if (size !== undefined) s.fontSize = size ? theme[size] : undefined;
+    })
 
     if (!visible) return null;
     return <Text
-        style={[s, style]}
+        style={[s[type || 'normal'], style]}
         {...props}
     />
 })
