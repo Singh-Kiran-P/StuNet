@@ -12,6 +12,7 @@ import {
     Question,
     Collapse,
     CompactQuestion,
+    ScrollView,
 } from '@/components';
 
 export default Screen('Course', ({ params, nav }) => {
@@ -32,22 +33,23 @@ export default Screen('Course', ({ params, nav }) => {
     //TODO: edit title when screen is being called and name has been fetched
     return (
         <Loader load={fetch}>
-            {/* Text gives weird errors */}
-            <Text>{name} ({number})</Text>
-            <Collapse title='Topics'>
-                {topics.map((topic, i) => ( // TODO: show search results with this topic only
-                    <Button key={i}
-                        onPress={() => nav.push('Course', params)}
-                        children={topic.name}
-                    />
-                ))}
-            </Collapse>
-            <Collapse title='Questions'>
-                {questions.map((question, i) => (
-                    <CompactQuestion key={i} question={question}/>
-                ))}
-            </Collapse>
-            <Button onPress={() => nav.push('AskQuestion', { courseId: params.id })} children='Ask a question' />
+            <ScrollView>
+                <Text>{name} ({number})</Text>
+                <Collapse title='Topics'>
+                    {topics.map((topic, i) => ( // TODO: show search results with this topic only on click
+                        <Button key={i}
+                            onPress={() => nav.push('Course', params)}
+                            children={topic.name}
+                            />
+                    ))}
+                </Collapse>
+                <Collapse title='Questions'>
+                    {questions.map((question, i) => (
+                        <CompactQuestion key={i} question={question}/>
+                    ))}
+                </Collapse>
+                <Button onPress={() => nav.push('AskQuestion', { courseId: params.id })} children='Ask a question' />
+            </ScrollView>
         </Loader>
     );
 });
