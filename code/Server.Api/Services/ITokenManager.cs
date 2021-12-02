@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿// @Kiran
+
+using System.Threading.Tasks;
 using Server.Api.Dtos;
 using Server.Api.Models;
 
-namespace VmsApi.Services
+namespace Server.Api.Services
 {
     public interface ITokenManager
     {

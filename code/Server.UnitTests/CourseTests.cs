@@ -17,8 +17,8 @@ namespace Server.UnitTests
     {
         public readonly Random random = new();
 
-		private readonly Mock<ITopicRepository> _topicRepositoryStub = new();
-		private readonly Mock<ICourseRepository> _courseRepositoryStub = new();
+        private readonly Mock<ITopicRepository> _topicRepositoryStub = new();
+        private readonly Mock<ICourseRepository> _courseRepositoryStub = new();
 
         private string randomName()
         {
@@ -33,52 +33,53 @@ namespace Server.UnitTests
         [Fact]
         public async Task createCourse_WithValidCourseDto_Ok()
         {
-        //Given
+            //Given
             int count = random.Next(1, 50);
-            createCourseDto dto = new(){
+            createCourseDto dto = new()
+            {
                 name = randomName(),
                 number = randomInt().ToString(),
                 topicNames = Enumerable.Range(1, count).Select(_ => randomName()).ToList()
             };
             var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object);
-            
-        //When
+
+            //When
             Course course = ((await controller.createCourse(dto)).Result as OkObjectResult).Value as Course;
 
-        //Then
-			dto.Should().BeEquivalentTo(
-				course,
-				options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
-			);
-			course.id.Should().NotBe(null);
+            //Then
+            dto.Should().BeEquivalentTo(
+                course,
+                options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
+            );
+            course.id.Should().NotBe(null);
             course.topics.Should().OnlyContain(topic => topic.course == course);
-			course.topics.Should().NotBeNullOrEmpty();
-			course.topics.Should().AllBeOfType<Topic>();
-			course.topics.Should().HaveCount(count);
-			// course.dateTime.Should().BeCloseTo(DateTime.Now, new TimeSpan(0, 0, 0, 0, 500)); // 500ms
+            course.topics.Should().NotBeNullOrEmpty();
+            course.topics.Should().AllBeOfType<Topic>();
+            course.topics.Should().HaveCount(count);
+            // course.dateTime.Should().BeCloseTo(DateTime.Now, new TimeSpan(0, 0, 0, 0, 500)); // 500ms
         }
 
         [Fact]
         public async Task getCourse_WithValidId_CourseDto()
         {
-			//Given
-			Course course = new()
-			{
-				name = "random" + random.Next().ToString(),
-				number = random.Next().ToString(),
-				topics = new List<Topic> { new Topic() { name = randomName(), id = randomInt() } },
-				questions = new List<Question>()
-		};
+            //Given
+            Course course = new()
+            {
+                name = "random" + random.Next().ToString(),
+                number = random.Next().ToString(),
+                topics = new List<Topic> { new Topic() { name = randomName(), id = randomInt() } },
+                questions = new List<Question>()
+            };
             _courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);
             var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object);
-        //When
+            //When
             GetCourseDto dto = ((await controller.GetCourse(randomInt())).Result as OkObjectResult).Value as GetCourseDto;
-        //Then
-			dto.Should().BeEquivalentTo(
-				course,
-				options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
-			);
+            //Then
+            dto.Should().BeEquivalentTo(
+                course,
+                options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
+            );
             dto.topics.Should().NotBeNullOrEmpty();
         }
     }

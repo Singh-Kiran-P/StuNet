@@ -16,8 +16,6 @@ export const s = screens({
         }
     },
 
-
-
     Course: {
         title: 'Course ({id})',
         args: {} as {
@@ -45,7 +43,6 @@ export const s = screens({
     CreateCourse: {
         title: 'Create Your Course'
     },
-
 
 
     Notifications: {

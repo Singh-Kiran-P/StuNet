@@ -47,7 +47,7 @@ namespace Server.Api.Controllers
             };
         }
 
-        [Authorize(Roles = "student")]
+        //[Authorize(Roles = "student")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<questionDto>>> GetQuestions()
         {
