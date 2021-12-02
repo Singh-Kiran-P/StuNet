@@ -9,18 +9,19 @@ import {
     CompactQuestion
 } from '@/components';
 
-type Topic = {
+export type Topic = {
     id: number;
     name: string;
 }
 
-type Course = {
+export type Course = {
     id: number;
     name: string;
     number: string;
     topics: Topic[];
     questions: Question[];
 }
+
 
 export default Screen('Course', ({ params, nav }) => {
     const [name, setName] = useState('');
@@ -35,7 +36,12 @@ export default Screen('Course', ({ params, nav }) => {
         setQuestions(data.questions);
     }
 
-    const fetch = async () => axios.get('/Course/' + params.id).then(res => init(res.data));
+
+    const fetch = async () => {
+        return axios.get('/Course/' + params.id)
+            .then(res => init(res.data))
+            .catch(err => {}) // TODO handle error
+    }
 
     //TODO: edit title when screen is being called and name has been fetched
     return (

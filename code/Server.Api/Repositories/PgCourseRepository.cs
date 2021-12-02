@@ -27,12 +27,12 @@ namespace Server.Api.Repositories
 
         public async Task<Course> getAsync(int id)
         {
-			return await _context.Courses
+            return await _context.Courses
                 .Include(c => c.topics)
                 .Include(c => c.questions)
                 .Where(c => c.id == id)
                 .FirstOrDefaultAsync();
-		}
+        }
 
         public async Task updateAsync(Course course)
         {
@@ -59,6 +59,15 @@ namespace Server.Api.Repositories
 
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Course> getByNameAsync(string name)
+        {
+            return await _context.Courses
+                        .Include(c => c.topics)
+                        .Include(c => c.questions)
+                        .Where(c => c.name == name)
+                        .FirstOrDefaultAsync();
         }
     }
 }

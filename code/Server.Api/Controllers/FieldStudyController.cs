@@ -1,3 +1,5 @@
+// @Kiran @Senn
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,24 +20,24 @@ namespace Server.Api.Controllers
         {
             _fieldOfStudyRepository = fieldOfStudyRepository;
         }
-    
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FieldOfStudy>>> GetFieldOfStudies()
         {
             var fieldOfStudies = await _fieldOfStudyRepository.getAllAsync();
             return Ok(fieldOfStudies);
         }
-    
+
         [HttpGet("{id}")]
         public async Task<ActionResult<FieldOfStudy>> GetFieldOfStudy(int id)
         {
             var fieldOfStudy = await _fieldOfStudyRepository.getAsync(id);
             if(fieldOfStudy == null)
                 return NotFound();
-    
+
             return Ok(fieldOfStudy);
         }
-    
+
         [HttpPost]
         public async Task<ActionResult> CreateFieldOfStudy(createFieldOfStudyDto createFieldOfStudyDto)
         {
@@ -57,19 +59,19 @@ namespace Server.Api.Controllers
                     name = createFieldOfStudyDto.name,
                     isBachelor = createFieldOfStudyDto.isBachelor,
                     year = createFieldOfStudyDto.year,
-                };            
+                };
 
             await _fieldOfStudyRepository.createAsync(fieldOfStudy);
             return Ok();
         }
-    
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFieldOfStudy(int id)
         {
             await _fieldOfStudyRepository.deleteAsync(id);
             return Ok();
         }
-    
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateFieldOfStudy(int id, FieldOfStudyDto updateFieldOfStudyDto)
         {
@@ -81,7 +83,7 @@ namespace Server.Api.Controllers
                 isBachelor = updateFieldOfStudyDto.isBachelor,
                 year = updateFieldOfStudyDto.year,
             };
-    
+
             await _fieldOfStudyRepository.updateAsync(fieldOfStudy);
             return Ok();
         }
