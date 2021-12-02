@@ -18,7 +18,7 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Answer>> getAllAsync()
         {
 			return await _context.Answers
-            .Include(q => q.userId)          
+            // .Include(q => q.userId)          
             .Include(q => q.question)          
             .Include(q => q.question.user)          
             .Include(q => q.question.course)          
@@ -27,7 +27,7 @@ namespace Server.Api.Repositories
         public async Task<Answer> getAsync(int id)
         {
 			return await _context.Answers
-            .Include(q => q.userId)          
+            // .Include(q => q.userId)          
             .Include(q => q.question)          
             .Include(q => q.question.user)          
             .Include(q => q.question.course)
