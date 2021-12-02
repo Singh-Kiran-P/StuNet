@@ -6,13 +6,15 @@ export const s = screens({
     Question: {
         title: 'Question ({id})',
         args: {} as {
-            id: number
+            id: number;
         }
     },
     CreateAnswer: {
         title: 'Answer ({questionId})',
         args: {} as {
-            questionId: number
+            date: string;
+            question: string;
+            questionId: number;
         }
     },
 
@@ -27,7 +29,7 @@ export const s = screens({
     AskQuestion: {
         title: 'Ask Question ({courseId})',
         args: {} as {
-            courseId: number
+            courseId: number;
         }
     },
 

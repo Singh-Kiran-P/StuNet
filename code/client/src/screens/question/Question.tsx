@@ -1,15 +1,22 @@
-import React, { Screen, Style, Theme } from '@/.';
+import React, { axios, Screen, Style, Theme, useState, Answer } from '@/.';
 import { Dimensions } from 'react-native';
 
 import {
-    View,
     Text,
+    View,
+    Loader,
     Button,
     ScrollView
 } from '@/components';
 
 export default Screen('Question', ({ params, nav }) => {
-
+    let [answers, setAnswers] = useState<Answer[]>([]);
+    let [course, setCourse] = useState('');
+    let [author, setAuthor] = useState('');
+    let [title, setTitle] = useState('');
+    let [body, setBody] = useState('');
+    let [date, setDate] = useState('');
+    
     const s = Style.create({
         view: {
             flex: 1
@@ -21,7 +28,7 @@ export default Screen('Question', ({ params, nav }) => {
         },
 
         body: {
-            height: Dimensions.get('window').height / 2
+            maxHeight: Dimensions.get('window').height / 2
         },
 
         button: {
@@ -29,18 +36,47 @@ export default Screen('Question', ({ params, nav }) => {
         }
     })
 
+    const info = async () => {
+        return axios.get('/Question/' + params.id).then(res => {
+            let d = res?.data || {};
+            setBody(d.body || '');
+            setTitle(d.title || '');
+            setCourse(d.course?.name || '');
+            setAuthor(d.user || 'TODO USER');
+            setDate(new Date(d.time).toDateString());
+        })
+    }
+
+    const questions = async () => {
+        return axios.get('/Answer/GetAnswersByQuestionId/' + params.id).then(res => {
+            console.log(res.data);
+            // setAnswers(res.data || []); // TODO
+        })
+    }
+
+    const fetch = () => Promise.all([info(), questions()]);
+
     return (
-        <View style={s.view}>
-            <Text type='header' children='Titel'/>
-            <Text>TODO course, autheur, tijd</Text>
+        <Loader load={fetch} style={s.view}>
+            <Text type='header' children={title}/>
+            <Text>{author}</Text>
+            <Text>{course}</Text>
+            <Text>{date}</Text>
             <ScrollView style={s.screen}>
                 <ScrollView style={s.body} nestedScrollEnabled>
-                    <Text>Body start{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body end</Text>
-                    <Text type='link' {...{}/* TODO icon */}>Download 3 Attachments</Text>
+                    <Text>{body}</Text>
                 </ScrollView>
-                <Button style={s.button} onPress={() => nav.push('CreateAnswer', { questionId: params.id })} children='Answer'/>
-                <Text>Body start{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body end</Text>
+                <Text type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
+                <Button style={s.button} onPress={() => nav.push('CreateAnswer', {
+                    questionId: params.id, question: title, date: date
+                })} children='Answer'/>
+                {answers.map(answer => (
+                    <View>
+                        <Text>{answer.title}</Text>
+                        <Text>{answer.body}</Text>
+                    </View>
+                ))}
             </ScrollView>
-        </View>
+        </Loader>
     )
 })

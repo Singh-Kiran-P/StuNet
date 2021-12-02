@@ -18,12 +18,17 @@ export default Screen('CreateAnswer', ({ params, nav }) => {
     })
 
     const submit = () => {
-        axios.post('/Answer');
+        axios.post('/Answer', {
+            questionId: params.questionId,
+            title: title,
+            body: body
+        }).then(() => nav.navigate('Question', { id: params.questionId })).catch(err => console.log(err.response.data));
     }
 
     return (
         <View>
-            <Text style={s.margin}>TODO information</Text>
+            <Text style={s.margin}>{params.question}</Text>
+            <Text style={s.margin}>{params.date}</Text>
             <TextInput style={s.margin} label='Title' onChangeText={setTitle}/>
             <TextInput style={s.margin} label='Body' multiline onChangeText={setBody}/>
             <Text style={s.margin}>TODO files</Text>

@@ -52,7 +52,7 @@ namespace Server.Api.Controllers
         }
 
         [Authorize(Roles = "student,prof")]
-        [HttpGet("GetAnswersByQuestionId")]
+        [HttpGet("GetAnswersByQuestionId/{id}")]
         public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
             try
