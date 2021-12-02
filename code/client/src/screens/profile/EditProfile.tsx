@@ -6,8 +6,6 @@ import {
 
 export default Screen('EditProfile', ({ params, nav }) => {
 
-
-
     return (
         <View>
             

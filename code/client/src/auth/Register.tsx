@@ -1,7 +1,15 @@
-import React, { axios, Screen, useState } from '@/.';
-import { Button, Loader, PasswordInput, Text, TextInput, View } from '@/components';
+import React, { Route, useState, useToken, Style, useTheme, axios } from '@/.';
+
+import {
+	View,
+	Text,
+	Button,
+	Loader,
+	TextInput,
+	PasswordInput
+} from '@/components';
+
 import { Picker } from '@react-native-picker/picker';
-import { HelperText } from 'react-native-paper';
 
 type FieldApi = {
 	id: number,
@@ -25,17 +33,39 @@ const enum UserTypes {
 	PROFESSOR
 }
 
-export default Screen('Register', ({ params, nav }) => {
+export default ({ navigation }: Route) => {
 	const [mail, setMail] = useState('');
-	const [userType, setUserType] = useState<UserTypes>(UserTypes.UNKNOWN);
     const [password, setPassword] = useState('');
-    const [passwordConfirm, setpasswordConfirm] = useState('');
 	const [fields, setFields] = useState<Fields>({});
+    const [passwordConfirm, setpasswordConfirm] = useState('');
+	const [userType, setUserType] = useState<UserTypes>(UserTypes.UNKNOWN);
  	const [FODSelection, setFODSelection] = useState<FODSelection>({ name: '', degree: '', year: '' });
-	const [errMessage, setErrMessage] = useState('');
+	const [error, setError] = useState('');
+	let [_, setToken] = useToken();
+	let [theme] = useTheme();
 
 	const studentRegex = new RegExp(/\w+@student.uhasselt.be/);
 	const profRegex = new RegExp(/\w+@uhasselt.be/);
+
+	const s = Style.create({
+		screen: {
+			padding: theme.padding,
+			backgroundColor: theme.background
+        },
+
+		header: {
+			color: theme.primary,
+            marginBottom: theme.padding
+		},
+
+		hint: {
+            marginTop: theme.margin
+        },
+
+        margin: {
+            marginBottom: theme.margin
+        }
+    })
 
 	const getFODs = async () => {
 		return axios.get('/FieldOfStudy')
@@ -54,7 +84,6 @@ export default Screen('Register', ({ params, nav }) => {
 				});
 				setFields(ret);
 			})
-			.catch(err => {}); // TODO handle error
 	}
 
 	const validate = (s: string) => {
@@ -74,18 +103,17 @@ export default Screen('Register', ({ params, nav }) => {
 			ConfirmPassword: passwordConfirm,
 			FieldOfStudy: FODSelection.name + '-' + degree + '-' + FODSelection.year
         })
-        .then(res => nav.replace('Login'))
-        .catch(err => { setErrMessage(err.response.data) });
+        .then(res => setToken(res.data))
+        .catch(err => setError(err.response.data));
     }
 
-
 	return (
-		<Loader load={getFODs}>
-			<TextInput label='E-mail' onChangeText={validate}/>
-            <PasswordInput label='Password' onChangeText={setPassword} showable={false}/>
-			<PasswordInput label='Confirm password' onChangeText={setpasswordConfirm} showable={false}/>
-			<HelperText type='error' visible={password !== passwordConfirm}>Passwords do not match.</HelperText>
-			{userType == UserTypes.STUDENT && <View style={{ flexDirection: 'row' }}>
+		<Loader load={getFODs} style={s.screen}>
+			<TextInput style={s.margin} label='E-mail' onChangeText={validate}/>
+			<PasswordInput style={s.margin} label='Password' onChangeText={setPassword} showable={false}/>
+			<PasswordInput style={s.margin} label='Confirm password' onChangeText={setpasswordConfirm} showable={false}/>
+			<Text style={s.margin} type='error' visible={password !== passwordConfirm}>Passwords do not match.</Text>
+			{userType == UserTypes.STUDENT && <View style={[{ flexDirection: 'row' }, s.margin]}>
 				<Picker prompt='Degree' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.name} onValueChange={value => setFODSelection({ name: value, degree: '', year: '' })}>
 					<Picker.Item label='Field' value='' enabled={false} />
 					{Object.keys(fields).map((name, i) => (
@@ -105,8 +133,11 @@ export default Screen('Register', ({ params, nav }) => {
 					))}
 				</Picker>
 			</View>}
-            <HelperText type='error' visible={!!errMessage}>{errMessage}</HelperText>
-			<Button onPress={register} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => !e)}>Register</Button>
+			<Text style={s.margin} type='error' visible={!!error}>{error}</Text>
+			<Button style={s.margin} onPress={register} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => !e)}>Register</Button>
+			<Text style={s.hint} type='hint'>
+				Already have an account? <Text type='link' size='small' onPress={() => navigation.navigate('Login')}>Login here!</Text>
+			</Text>
 		</Loader>
 	)
-})
+}

@@ -1,0 +1,49 @@
+@startuml Course
+skinparam classAttributeIconSize 0
+
+class TextInput {}
+class "Button" as b1
+class "Button" as b2
+class CreateCourseView {
+	-name: string
+	-number: string
+	-description: string
+	+setName()
+	+setNumber()
+	+setDescription()
+	+submit()
+}
+
+TextInput --* CreateCourseView
+b1 --* CreateCourseView
+
+class CourseView {
+	-name: string
+	-number: string
+	-topics: Button
+	-questions: string
+	+setName()
+	+setNumber()
+	+setTopics()
+	+setQuestions()
+	+fetch()
+}
+
+class Accordion <T> {
+
+}
+
+class CompactQuestion
+class CompactQuestionCollapse {}
+class ButtonCollapse {}
+
+CompactQuestionCollapse --|> Accordion
+ButtonCollapse --|> Accordion
+CompactQuestionCollapse --* CourseView
+ButtonCollapse --* CourseView
+CompactQuestion --* CompactQuestionCollapse
+b2 --* ButtonCollapse
+
+b1 ..> CourseView : <<Navigate>>
+
+@enduml

@@ -1,12 +1,10 @@
-﻿// @Kiran
-
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Server.Api.Enum;
 
-namespace Server.Api
+namespace Server.Api.Config
 {
     [ExcludeFromCodeCoverage]
     public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>

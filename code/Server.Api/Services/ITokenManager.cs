@@ -6,7 +6,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Services
 {
-    public interface ITokenGenerator
+    public interface ITokenManager
     {
         Task<LoginJwtDto> GetTokenAsync(User user);
     }

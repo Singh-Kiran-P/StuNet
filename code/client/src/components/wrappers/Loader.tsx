@@ -1,24 +1,38 @@
-import React, { Children, Theme, Style, useEffect, useState } from '@/.';
+import React, { Style, extend, useTheme, useEffect, useState, useNav } from '@/.';
 import { View, ActivityIndicator } from 'react-native';
 
-type Props = Children & {
-	load: () => Promise<any>
+type Props = {
+	load?: () => Promise<any>;
+	state?: boolean;
 }
 
-export default ({ load, children }: Props) => {
-	const [loading, setLoading] = useState(true);
+export default extend<typeof View, Props>(View, ({ load, state, style, ...props }) => {
+	let [loading, setLoading] = useState(!!load);
+	let [theme] = useTheme();
+	let nav = useNav();
 
-	useEffect(() => {
-		load().then(() => setLoading(false)); // TODO catch error?
+	const s = Style.create({
+
+		loading: {
+			flex: 1,
+			justifyContent: 'center',
+			backgroundColor: theme.background
+		},
+
+		loaded: {
+			width: '100%',
+			height: '100%'
+		}
+
+	})
+
+	if (load) useEffect(() => {
+		load().then(() => setLoading(false)).catch(err => {
+			if (nav?.canGoBack()) nav.goBack();
+			// TODO system message
+		})
 	}, [])
 
-	if (!loading) return <View children={children}/>
-	return <ActivityIndicator style={s.loading} size={Theme.huge} color={Theme.colors.primary}/>;
-}
-
-const s = Style.create({
-	loading: {
-		flex: 1,
-		justifyContent: 'center'
-	}
+	if (state !== true && !loading) return <View style={[s.loaded, style]} {...props}/>
+	return <ActivityIndicator style={s.loading} size={theme.huge} color={theme.primary}/>
 })

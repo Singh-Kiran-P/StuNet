@@ -20,15 +20,12 @@ export default Screen('AskQuestion', ({ params, nav }) => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
 
-
-    // TODO on error: navigate to seperate error page? return to previous page and show error in snackbar?
     const fetch = async () => {
         return axios.get('/Course/' + params.courseId)
             .then(res => {
                 setHeader(res.data.name);
                 setTopics(res.data.topics.map((t: { id: number; name: string; }) => [{ id: t.id, name: t.name }, false]));
             })
-            .catch(err => {})
     }
 
     const submit = () => {
@@ -43,7 +40,7 @@ export default Screen('AskQuestion', ({ params, nav }) => {
 
     return (
         <Loader load={fetch}>
-            <Text mode='header' children={header}/>
+            <Text type='header' children={header}/>
             <TextInput label='Title' onChangeText={setTitle}/>
             <TextInput label='Body' multiline onChangeText={setBody}/>
             <Collapse title='Topics'>

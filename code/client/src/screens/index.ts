@@ -4,7 +4,6 @@ import Profile from './profile';
 import Courses from './courses';
 import Course from './course';
 import Home from './home';
-import Auth from './auth';
 
 export default [
     Notifications,
@@ -12,6 +11,5 @@ export default [
     Profile,
     Courses,
     Course,
-    Home,
-    Auth
+    Home
 ].flat()

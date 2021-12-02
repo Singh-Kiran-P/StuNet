@@ -9,11 +9,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Server.Api.Models;
+using Server.Api.Config;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+
+
 
 namespace Server.Api.DataBase
 {
     public class DataContext : DbContext, IDataContext
     {
+        public DbSet<Answer> Answers { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<IdentityUserRole<string>> Roles { get; set; }
         public DbSet<Student> Students { get; set; }
@@ -35,8 +41,14 @@ namespace Server.Api.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // modelBuilder.Entity<Answer>() 
+            // .HasOne(a => a.user)
+            // .WithMany(u => u.answers)
+            // .HasForeignKey(a => a.userId);
+
             createUsers(modelBuilder);
             createCourse(modelBuilder);
+            createFieldOfStudy(modelBuilder);
         }
 
 
@@ -66,6 +78,17 @@ namespace Server.Api.DataBase
             modelBuilder.Entity<User>().HasData(
                 defaultUser
              );
+        }
+
+        private void createFieldOfStudy(ModelBuilder modelBuilder){
+            var fos1 = new FieldOfStudy() {
+                id = 1,
+                fullName = "INF-BACH-1",
+                name = "INF",
+                isBachelor = true,
+                year = 1,
+            };
+            modelBuilder.Entity<FieldOfStudy>().HasData(fos1);
         }
 
         private void createCourse(ModelBuilder modelBuilder)

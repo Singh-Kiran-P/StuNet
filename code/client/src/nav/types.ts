@@ -3,6 +3,7 @@ import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useRoute, useNavigation } from '@react-navigation/core';
 import { s as screens, t as tabs } from '@/nav/routes';
+import { Theme } from '@/css'
 
 type BaseScreens = {
     [name: string]: {
@@ -19,10 +20,7 @@ type BaseTabs<T extends BaseScreens> = {
         screen: keyof T;
         title: string;
         icon: string;
-        colors: {
-            primary: string;
-            accent: string;
-        }
+        colors: keyof typeof Theme.tabs;
     }
 }
 

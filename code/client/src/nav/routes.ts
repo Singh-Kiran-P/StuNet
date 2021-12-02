@@ -3,17 +3,18 @@ import { Theme } from '@/css';
 
 export const s = screens({
 
-    Login: {
-        title: 'Login'
-    },
-    Register: {
-        title: 'Register'
-    },
-
     Question: {
         title: 'Question ({id})',
         args: {} as {
-            id: number
+            id: number;
+        }
+    },
+    CreateAnswer: {
+        title: 'Answer ({questionId})',
+        args: {} as {
+            date: string;
+            question: string;
+            questionId: number;
         }
     },
 
@@ -26,7 +27,7 @@ export const s = screens({
     AskQuestion: {
         title: 'Ask Question ({courseId})',
         args: {} as {
-            courseId: number
+            courseId: number;
         }
     },
 
@@ -67,28 +68,28 @@ export const t = tabs(s, {
         screen: 'Home',
         title: 'Home',
         icon: 'home',
-        colors: Theme.colors.home
+        colors: 'home'
     },
 
     TabCourses: {
         screen: 'Courses',
         title: 'Courses',
         icon: 'book',
-        colors: Theme.colors.courses
+        colors: 'courses'
     },
 
     TabNotifications: {
         screen: 'Notifications',
         title: 'Notifications',
         icon: 'bell',
-        colors: Theme.colors.notifications
+        colors: 'notifications'
     },
 
     TabProfile: {
         screen: 'Profile',
         title: 'Profile',
         icon: 'face',
-        colors: Theme.colors.profile
+        colors: 'profile'
     }
 
 })

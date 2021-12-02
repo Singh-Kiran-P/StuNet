@@ -31,6 +31,14 @@ namespace Server.Api.Dtos // controllers?
         public int id { get; set; }
         public string name { get; set; }
         public string number { get; set; }
+
+        public static getOnlyCourseDto convert(Course course){
+            return new getOnlyCourseDto{
+                    id = course.id,
+                    name = course.name,
+                    number = course.number
+            };
+        }
     }
 
     public record createCourseDto

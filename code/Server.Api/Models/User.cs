@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace Server.Api.Models
@@ -10,6 +11,7 @@ namespace Server.Api.Models
         // public string password { get; set; }
 
         // public string salt { get; set; }
+        public ICollection<Answer> answers;
         
     }
 }
