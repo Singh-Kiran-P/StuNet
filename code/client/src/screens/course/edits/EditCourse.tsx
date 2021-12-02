@@ -41,7 +41,7 @@ export default Screen('EditCourse', ({ params, nav }) => {
                     editable
                     // TODO: maxLength={?}
                     defaultValue={name}
-                    onChangeText={(value_) => { setName(value_); setUpToDate(false); console.log("changing"); }}
+                    onChangeText={(value_) => { setName(value_); setUpToDate(false); }}
                     />
                 <TextInput
                     label='number'
