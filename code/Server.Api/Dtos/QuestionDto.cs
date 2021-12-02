@@ -17,6 +17,22 @@ namespace Server.Api.Dtos
         public String body { get; set; }
         public DateTime time { get; set; }
     }
+    public record onlyQuestionUserDto {
+        public int id { get; set; }
+		public String title { get; set; }
+        public User user { get; set; }
+        public String body { get; set; }
+        public DateTime dateTime { get; set; }
+        public static onlyQuestionUserDto convert(Question question) {
+            return new onlyQuestionUserDto {
+                    id = question.id,
+                    title = question.title,
+                    user = question.user,
+                    body = question.body,
+                    dateTime = question.dateTime
+                };
+        }        
+    }
 
     public record questionDto {
         public int id { get; set; }
