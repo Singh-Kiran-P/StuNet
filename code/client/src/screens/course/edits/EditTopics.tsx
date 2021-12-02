@@ -24,6 +24,7 @@ type TopicItem = {
 
 export default Screen('EditTopics', ({ params, nav }) => {
     const [topicItems, setTopics] = useState<Array<TopicItem>>([]);
+    const [globalCheck, setCheckAll] = useState<boolean>(true);
     const [editableItem, setEditableItem] = useState<TopicItem|null>(null)
 
     function init(data: Course): void
@@ -47,6 +48,12 @@ export default Screen('EditTopics', ({ params, nav }) => {
     {
         item.checked = !item.checked;
         setTopics(topicItems.slice());
+    }
+
+    function setAllTopicChecks(check: boolean): void
+    {
+        topicItems.forEach(item => (item.checked = check));
+        setCheckAll(!check);
     }
 
     function renderRow(item: TopicItem): JSX.Element
@@ -87,17 +94,20 @@ export default Screen('EditTopics', ({ params, nav }) => {
     return (
         <Loader load={fetch}>
             <ScrollView>
-            {
-                topicItems.map((item, i) =>
+                <Button onPress={() => setAllTopicChecks(globalCheck)}>{ globalCheck ? 'Check all' : 'Uncheck all' }</Button>
+                <View>
+                {
+                    topicItems.map((item, i) =>
                     <Pressable
-                        key={i}
-                        onPress={() => flipTopicChecked(item)}
-                        onLongPress={() => setEditableItem(item)}
-                        >
-                        { renderRow(item) }
-                    </Pressable>
-                )
-            }
+                    key={i}
+                    onPress={() => flipTopicChecked(item)}
+                            onLongPress={() => setEditableItem(item)}
+                            >
+                            { renderRow(item) }
+                        </Pressable>
+                    )
+                }
+                </View>
             </ScrollView>
         </Loader>
     );
