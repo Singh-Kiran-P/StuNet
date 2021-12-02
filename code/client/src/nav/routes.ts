@@ -30,6 +30,12 @@ export const s = screens({
             courseId: number;
         }
     },
+    EditCourse: {
+        title: 'Edit course ({id})',
+        args: {} as {
+            id: number
+        }
+    },
 
 
 
