@@ -30,9 +30,13 @@ export default Screen('EditCourse', ({ params, nav }) => {
 
     function update(): void
     {
-        console.log("hello update")
+        axios.put('/Course/' + params.id, {
+            name: name,
+            number: number,
+        }).then(() => setUpToDate(true))
+        .catch(error => console.error(error)); // TODO: handle error
     }
-    
+
     return (
         <Loader load={fetch}>
             <ScrollView>
