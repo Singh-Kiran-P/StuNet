@@ -1,0 +1,51 @@
+@startuml login
+skinparam classAttributeIconSize 0
+
+class Selection {
+	-name: string
+	-degree: string
+	-year: string
+}
+
+class Picker {}
+class Button {}
+class TextInput {}
+class PasswordInput {}
+class Link {}
+
+class RegisterView {
+	-mail: string
+	-password: string
+	-passwordConfirm: string
+	-selection: Selection
+	+setMail()
+	+setPassword()
+	+setPasswordConfirm()
+	+setSelection()
+	+login()
+}
+
+
+class LoginView {
+	-mail: string
+	-password: string
+	+setMail()
+	+setPassword()
+	+register()
+}
+
+TextInput --* LoginView
+Button --* LoginView
+Link --* LoginView
+PasswordInput --* LoginView
+PasswordInput --|> TextInput
+
+TextInput --* RegisterView
+PasswordInput --* RegisterView
+Link --* RegisterView
+Button --* RegisterView
+Selection --* RegisterView
+Picker --* RegisterView
+
+
+@enduml
