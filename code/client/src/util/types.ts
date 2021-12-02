@@ -1,3 +1,11 @@
+export type Course = {
+    id: number;
+    name: string;
+    number: string;
+    topics: Topic[];
+    questions: Question[];
+}
+
 export type Topic = {
     id: number;
     name: string;

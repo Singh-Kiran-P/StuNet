@@ -3,6 +3,7 @@ import React, {
     axios,
     useState,
     Topic,
+    Course,
 } from '@/.';
 import {
     Text,
@@ -12,14 +13,6 @@ import {
     Collapse,
     CompactQuestion,
 } from '@/components';
-
-type Course = {
-    id: number;
-    name: string;
-    number: string;
-    topics: Topic[];
-    questions: Question[];
-}
 
 export default Screen('Course', ({ params, nav }) => {
     const [name, setName] = useState('');
