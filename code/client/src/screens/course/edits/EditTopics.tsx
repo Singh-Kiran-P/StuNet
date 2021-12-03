@@ -116,9 +116,9 @@ export default Screen('EditTopics', ({ params, nav }) => {
                 <View>
                 {
                     topicItems.map((item, i) =>
-                    <Pressable
-                    key={i}
-                    onPress={() => flipTopicChecked(item)}
+                        <Pressable
+                            key={i}
+                            onPress={() => flipTopicChecked(item)}
                             onLongPress={() => setEditableItem(item)}
                             >
                             { renderRow(item) }
