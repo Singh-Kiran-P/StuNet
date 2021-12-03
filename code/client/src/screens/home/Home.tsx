@@ -1,11 +1,11 @@
-import React, { Screen } from '@/.';
+import React, { Screen, update } from '@/.';
 
 import {
     View,
     Button
 } from '@/components';
 
-export default Screen('Home', ({ params, nav }) => {
+export default Screen('Home', ({ nav }) => {
 
     return (
         <View>

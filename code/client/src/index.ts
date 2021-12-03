@@ -6,5 +6,6 @@ export * from '@/util';
 export { useTheme, theming, paper, Theme } from '@/css';
 export { StyleSheet as Style } from 'react-native';
 
+export { update } from '@/nav';
 export { useToken } from '@/auth';
 export { Screen, Component, useParams, useNav } from '@/nav/types';

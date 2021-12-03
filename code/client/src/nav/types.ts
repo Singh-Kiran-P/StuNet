@@ -8,7 +8,7 @@ import { Theme } from '@/css'
 type BaseScreens = {
     [name: string]: {
         args?: object;
-        screenTitle?: string;
+        screenTitle: string;
         padding?: boolean | number;
         scroll?: boolean;
         tabs?: boolean;
@@ -41,9 +41,9 @@ type Screens = typeof screens;
 type Name = keyof typeof screens;
 type Flat<T extends Name> = Omit<Screens[T], keyof Screens[T]['args'] | 'args'>;
 type Route<T extends Name> = RouteProp<{ [T in Name]: Flat<T> & Screens[T]['args'] }, T>;
-type Params = { [T in Name]: Screens[T] extends { args: {} }
+export type Params = { [T in Name]: Screens[T] extends { args: {} }
     ? Partial<Flat<T>> & Screens[T]['args']
-    : Partial<Screens[T]> | undefined
+    : Partial<Flat<T>> | undefined
 }
 
 type Nav<T extends Name> = CompositeNavigationProp<

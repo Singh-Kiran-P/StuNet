@@ -4,6 +4,8 @@ import { Answer } from '@/util/types';
 export const s = screens({
 
     Question: {
+        screenTitle: '{course}',
+        course: '',
         args: {} as {
             id: number;
         }
@@ -24,7 +26,8 @@ export const s = screens({
     },
 
     Course: {
-        screenTitle: 'Course ({id})',
+        screenTitle: '{name}',
+        name: '',
         args: {} as {
             id: number
         }

@@ -60,15 +60,15 @@ export default Screen('Question', ({ params, nav }) => {
             let d = res?.data || {};
             setBody(d.body || '');
             setTitle(d.title || '');
-            nav.setParams({ screenTitle: d.course?.name });
             setDate(dateString(d.time));
+            nav.setParams({ course: d.course?.name });
         })
     }
 
     const questions = async () => {
         return axios.get('/Answer/GetAnswersByQuestionId/' + params.id).then(res => {
-            setAnswers(res.data || []); // TODO
-        }).catch(err => console.log(err.response.data))
+            setAnswers(Array.isArray(res.data) ? res.data : []);
+        })
     }
 
     const fetch = () => Promise.all([info(), questions()]);
@@ -88,7 +88,7 @@ export default Screen('Question', ({ params, nav }) => {
                     questionId: params.id, question: title, date: date
                 })} children='Answer'/>
                 {answers.map((answer, i) => (
-                    <View key={i} style={s.answer} onTouchEnd={() => nav.push('Answer', { ...answer, course: params.screenTitle || '' })}>
+                    <View key={i} style={s.answer} onTouchEnd={() => nav.push('Answer', { ...answer, course: params.course || '' })}>
                         <View style={s.header}>
                             <Text type='header' size='medium' children={answer.title}/>
                             <Text type='hint' style={s.right} children={dateString(answer.dateTime)}/>
