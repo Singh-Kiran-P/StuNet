@@ -4,11 +4,11 @@ import {
     View
 } from '@/components';
 
-export default Screen('EditProfile', ({ params, nav }) => {
+export default Screen('EditProfile', () => {
 
     return (
         <View>
-            
+
         </View>
     )
 })

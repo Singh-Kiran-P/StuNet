@@ -1,0 +1,25 @@
+@startuml general backend
+left to right direction
+
+frame Routes {
+	interface toDto
+	interface http
+	component [Controller]
+}
+
+Controller -- toDto
+Controller -- http
+
+component [Repository]
+frame Database {
+	component [DbSet<Model>]
+	component [DataContext]
+}
+
+Repository -0)- Controller : CRUD
+
+DataContext -0)- Repository
+
+[DbSet<Model>] -0)- DataContext
+
+@enduml

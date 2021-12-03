@@ -34,7 +34,7 @@ export default Screen('AskQuestion', ({ params, nav }) => {
             title: title,
             body: body,
             topicIds: topics.filter(topic => topic[1]).map(topic => topic[0].id),
-        }).then(res => nav.navigate('Question', { id: res.data.id }))
+        }).then(res => nav.pop())
         .catch(err => {}); // TODO handle error
     }
 

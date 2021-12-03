@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useContext, createContext, useEffect } from 'react';
+import React, { useState, useMemo, useContext, createContext, useLayoutEffect } from 'react';
 import { StyleSheet, useColorScheme } from 'react-native';
 
 import { Base, Light, Dark } from '@/css/theme';
-import { Children, Styling } from '@/util';
+import { Children, Styling, Opt } from '@/util';
+import { merge } from '@/util/alg';
 
 export const Theme = {
     ...Base,
@@ -20,16 +21,6 @@ const Initial = {
 }
 
 type Theme = typeof Base & typeof Initial & (typeof Light | typeof Dark);
-
-type Obj = Object & { [k: string]: any };
-type Opt<T> = { [U in keyof T]?: Opt<T[U]> };
-const obj = (o: any) => o && typeof o === 'object' && !Array.isArray(o);
-const merge = (a: Obj, b: Obj) => Object.keys(a).reduce((c, k) => {
-    if (!b.hasOwnProperty(k)) c[k] = a[k];
-    else if (!obj(b[k])) c[k] = b[k];
-    else c[k] = merge(a[k], b[k]);
-    return c;
-}, {} as Obj);
 
 type Context = [Theme, (set: Opt<Omit<Theme, keyof typeof Base>>) => void];
 const Context = createContext<Context>([{} as any, () => {}]);
@@ -53,9 +44,9 @@ export const paper = (theme: Theme) => {
             primary: theme.primary,
             text: theme.foreground,
             disabled: theme.disabled,
+            onSurface: theme.surface,
             surface: theme.foreground,
             backdrop: theme.placeholder,
-            onSurface: theme.surface,
             background: theme.background,
             placeholder: theme.placeholder,
             notification: theme.notification
@@ -63,10 +54,12 @@ export const paper = (theme: Theme) => {
     }
 }
 
-export default ({ children }: Children) => {
+type Props = (typeof Base.tabs)[keyof typeof Base.tabs];
+export default ({ children, ...tab }: Children & Props) => {
     let [theme, setTheme] = useState({
         ...(Initial.dark ? Dark : Light),
-        ...Initial
+        ...Initial,
+        ...tab
     })
 
     const context = useMemo<Context>(() =>
@@ -78,7 +71,7 @@ export default ({ children }: Children) => {
     ], [theme])
 
     let scheme = useColorScheme();
-    useEffect(() => {
+    useLayoutEffect(() => {
         let dark = scheme === 'dark';
         if (dark !== theme.dark) context[1]({ dark: dark });
     }, [scheme])

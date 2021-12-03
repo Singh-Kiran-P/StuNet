@@ -26,6 +26,7 @@ export default Screen('Course', ({ params, nav }) => {
         setNumber(data.number);
         setTopics(data.topics);
         setQuestions(data.questions);
+        nav.setParams({ name: data.name });
     }
 
 
@@ -35,7 +36,6 @@ export default Screen('Course', ({ params, nav }) => {
             .catch(err => {}) // TODO handle error
     }
 
-    //TODO: edit title when screen is being called and name has been fetched
     return (
         <Loader load={fetch}>
             <ScrollView>

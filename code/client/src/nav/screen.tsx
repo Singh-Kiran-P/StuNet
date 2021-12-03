@@ -18,3 +18,5 @@ export default Component<Children>(({ children, params: { scroll = true, padding
     if (!scroll) return <View style={s} children={children}/>
     return <ScrollView contentContainerStyle={s} children={children}/>
 })
+
+// TODO SCROLL
