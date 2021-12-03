@@ -1,0 +1,69 @@
+/* eslint-disable jsx-quotes */
+import React, {
+    Screen,
+    axios,
+    useState,
+    // AxiosResponse, // TODO: reexport from 'axios'
+    Course,
+} from '@/.';
+import {
+    TextInput,
+    Button,
+    Loader,
+    View,
+    ScrollView,
+} from '@/components';
+
+// TODO: fix loading title, whatever that is
+export default Screen('EditCourse', ({ params, nav }) => {
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
+    const [isUpToDate, setUpToDate] = useState<boolean>(true); /* A simple check if data has been modified, regardless of undoing*/
+
+    function init(data: Course): void
+    {
+        setName(data.name);
+        setNumber(data.number);
+    }
+
+    async function fetch() //: Promise<void | AxiosResponse<any, any>>
+    {
+        return axios.get('/Course/' + params.id).then(res => init(res.data));
+    }
+
+    function update(): void
+    {
+        axios.put('/Course/' + params.id, {
+            name: name,
+            number: number,
+        }).then(() => setUpToDate(true))
+        .catch(error => console.error(error)); // TODO: handle error
+    }
+
+    return (
+        <Loader load={fetch}>
+            <ScrollView>
+                <TextInput
+                    label='name'
+                    editable
+                    // TODO: maxLength={?}
+                    defaultValue={name}
+                    onChangeText={(value_) => { setName(value_); setUpToDate(false); }}
+                    />
+                <TextInput
+                    label='number'
+                    editable
+                    // TODO: maxLength={?}
+                    defaultValue={number}
+                    onChangeText={(value_) => { setNumber(value_); setUpToDate(false); }}
+                    />
+                <View>
+                    <Button onPress={() => nav.push('EditTopics', { courseId: params.id })} children='Edit topics' />
+                    {/* <Button onPress={() => nav.push('EditTopics', { id: params.id })} children='Edit channels' /> */}
+                    {/* <Button onPress={() => nav.push('EditTopics', { id: params.id })} children='Edit assitants' /> */}
+                </View>
+                <Button onPress={update} disabled={isUpToDate}  children='Update'/>
+            </ScrollView>
+        </Loader>
+    );
+});

@@ -38,6 +38,18 @@ export const s = screens({
             courseId: number;
         }
     },
+    EditCourse: {
+        title: 'Edit course ({id})',
+        args: {} as {
+            id: number
+        }
+    },
+    EditTopics: {
+        title: 'Edit topics of course ({id})',
+        args: {} as {
+            courseId: number
+        }
+    },
 
 
 

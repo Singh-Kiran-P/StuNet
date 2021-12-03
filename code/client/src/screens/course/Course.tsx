@@ -54,6 +54,7 @@ export default Screen('Course', ({ params, nav }) => {
                     ))}
                 </Collapse>
                 <Button onPress={() => nav.push('AskQuestion', { courseId: params.id })} children='Ask a question' />
+                <Button onPress={() => nav.push('EditCourse', { id: params.id })} children='Edit course' />
             </ScrollView>
         </Loader>
     );

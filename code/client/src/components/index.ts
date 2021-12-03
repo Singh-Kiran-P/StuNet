@@ -4,7 +4,8 @@ export * from './base';
 
 export {
     View,
-    ScrollView
+    ScrollView,
+    Pressable,
 } from 'react-native';
 
 export {
