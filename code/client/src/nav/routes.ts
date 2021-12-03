@@ -39,13 +39,13 @@ export const s = screens({
         }
     },
     EditCourse: {
-        title: 'Edit course ({id})',
+        screenTitle: 'Edit course ({id})',
         args: {} as {
             id: number
         }
     },
     EditTopics: {
-        title: 'Edit topics of course ({id})',
+        screenTitle: 'Edit topics of course ({id})',
         args: {} as {
             courseId: number
         }

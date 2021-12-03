@@ -1,4 +1,4 @@
-import React, { Screen, update } from '@/.';
+import React, { Screen } from '@/.';
 
 import {
     View,
