@@ -62,6 +62,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
         axios.put('/Topic/' + topic.id, { name: topic.name })
             .then(() => setEditableItem(null)) /* Topic name will already be changed, and thus doesn't need an update */
             .catch(error => console.error(error)); // TODO: handle error
+        resetGlobalChecked();
     }
 
     /**
@@ -94,6 +95,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
     {
         item.checked = !item.checked;
         setTopics(topicItems.slice());
+        resetGlobalChecked();
     }
 
     function setAllTopicChecks(check: boolean): void
