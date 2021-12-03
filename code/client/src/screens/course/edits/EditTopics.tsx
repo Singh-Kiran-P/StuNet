@@ -60,7 +60,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
     function update(topic: Topic): void
     {
         axios.put('/Topic/' + topic.id, { name: topic.name })
-            // .then(() => ) /* Topic name will already be changed */
+            .then(() => setEditableItem(null)) /* Topic name will already be changed, and thus doesn't need an update */
             .catch(error => console.error(error)); // TODO: handle error
     }
 
