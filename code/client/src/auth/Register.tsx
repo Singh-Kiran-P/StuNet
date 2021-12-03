@@ -67,6 +67,11 @@ export default ({ navigation }: Route) => {
         }
     })
 
+	const validFOS = () : boolean => {
+		if (userType != UserTypes.STUDENT) return true;
+		else return !Object.values(FODSelection).some(e => !e);
+	}
+
 	const getFODs = async () => {
 		return axios.get('/FieldOfStudy')
 			.then(res => {
@@ -134,7 +139,7 @@ export default ({ navigation }: Route) => {
 				</Picker>
 			</View>}
 			<Text style={s.margin} type='error' visible={!!error}>{error}</Text>
-			<Button style={s.margin} onPress={register} disabled={!mail || !password || password !== passwordConfirm || Object.values(FODSelection).some(e => !e)}>Register</Button>
+			<Button style={s.margin} onPress={register} disabled={!mail || !password || password !== passwordConfirm || !validFOS()}>Register</Button>
 			<Text style={s.hint} type='hint'>
 				Already have an account? <Text type='link' size='small' onPress={() => navigation.navigate('Login')}>Login here!</Text>
 			</Text>

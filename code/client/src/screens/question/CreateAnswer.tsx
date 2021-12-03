@@ -22,7 +22,8 @@ export default Screen('CreateAnswer', ({ params, nav }) => {
             questionId: params.questionId,
             title: title,
             body: body
-        }).then(() => nav.navigate('Question', { id: params.questionId })).catch(err => console.log(err.response.data));
+        }).then(() => nav.pop())
+        .catch(err => {}); // TODO handle error
     }
 
     return (

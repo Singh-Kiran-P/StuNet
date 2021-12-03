@@ -1,11 +1,9 @@
 import AskQuestion from './AskQuestion';
 import Course from './Course';
-import EditCourse from './edits/EditCourse';
-import EditTopics from './edits/EditTopics';
+import Edits from './edits';
 
 export default [
+    AskQuestion,
     Course,
-    EditCourse,
-    EditTopics,
-    AskQuestion
+    ...Edits
 ]

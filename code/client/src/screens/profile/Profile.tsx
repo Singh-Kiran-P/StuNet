@@ -5,7 +5,7 @@ import {
     Button
 } from '@/components';
 
-export default Screen('Profile', ({ params, nav }) => {
+export default Screen('Profile', ({ nav }) => {
     let [_, setToken] = useToken();
 
     return (

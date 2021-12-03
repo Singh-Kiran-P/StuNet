@@ -19,7 +19,7 @@ namespace Server.Api.Repositories
         {
 			return await _context.Questions
             .Include(q => q.topics)
-            .Include(q => q.user)          
+            // .Include(q => q.user)          
             .Include(q => q.course)          
             .ToListAsync();
 		}
@@ -27,7 +27,7 @@ namespace Server.Api.Repositories
         {
 			return await _context.Questions
             .Include(q => q.topics)
-            .Include(q => q.user)          
+            // .Include(q => q.user)          
             .Include(q => q.course)
             .Where(q => q.id == id).FirstOrDefaultAsync();
 		}

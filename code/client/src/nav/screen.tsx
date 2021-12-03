@@ -9,9 +9,10 @@ export default Component<Children>(({ children, params: { scroll = true, padding
     const s = theming(theme => {
         if (padding === true) padding = theme.padding;
         return {
-            flex: 1,
             padding: padding || undefined,
-            backgroundColor: theme.background
+            backgroundColor: theme.background,
+            [scroll ? 'minHeight' : 'height']: '100%',
+            width: '100%',
         }
     })
 
