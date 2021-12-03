@@ -20,8 +20,7 @@ export default extend<typeof View, Props>(View, ({ load, state, style, ...props 
 		},
 
 		loaded: {
-			width: '100%',
-			height: '100%'
+			flex: 1
 		}
 
 	})

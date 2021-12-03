@@ -30,13 +30,13 @@ namespace Server.Api.Dtos
 
     public record ResponseUserDto
     {
-        public string id {get;set;}
+        //public string id {get;set;}
         public string email { get; set; }
 
         //TODO: add subscribed courses, maybe answer and question ids?
         public static ResponseUserDto convert(User user) {
             return new ResponseUserDto(){
-                id = user.Id,
+                //id = user.Id,
                 email = user.Email
             };
         }

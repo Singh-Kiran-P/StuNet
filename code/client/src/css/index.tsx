@@ -46,6 +46,7 @@ export const paper = (theme: Theme) => {
     return {
         dark: !!theme.dark,
         mode: 'exact' as 'exact',
+        roundness: theme.radius,
         colors: {
             error: theme.error,
             accent: theme.accent,
@@ -54,7 +55,7 @@ export const paper = (theme: Theme) => {
             disabled: theme.disabled,
             surface: theme.foreground,
             backdrop: theme.placeholder,
-            onSurface: theme.background,
+            onSurface: theme.surface,
             background: theme.background,
             placeholder: theme.placeholder,
             notification: theme.notification

@@ -1,4 +1,4 @@
-import React, { axios, Screen, Style, Theme, useState, Answer } from '@/.';
+import React, { axios, Screen, Style, useTheme, useState, Answer, dateString } from '@/.';
 import { Dimensions } from 'react-native';
 
 import {
@@ -11,29 +11,48 @@ import {
 
 export default Screen('Question', ({ params, nav }) => {
     let [answers, setAnswers] = useState<Answer[]>([]);
-    let [course, setCourse] = useState('');
-    let [author, setAuthor] = useState('');
     let [title, setTitle] = useState('');
     let [body, setBody] = useState('');
     let [date, setDate] = useState('');
-    
+    let [theme] = useTheme();
+
     const s = Style.create({
-        view: {
-            flex: 1
+        margin: {
+            marginBottom: theme.margin
         },
 
-        screen: {
-            height: 0,
+        header: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            flexWrap: 'wrap'
+        },
+
+        right: {
+            marginLeft: 'auto'
+        },
+
+        content: {
+            flex: 1,
             flexGrow: 1
         },
 
         body: {
-            maxHeight: Dimensions.get('window').height / 2
+            maxHeight: Dimensions.get('window').height / 2,
+            backgroundColor: theme.surface,
+            borderRadius: theme.radius
         },
 
-        button: {
-            marginTop: Theme.margin
+        bodyContent: {
+            padding: theme.padding / 2
+        },
+
+        answer: {
+            padding: theme.padding / 2,
+            backgroundColor: theme.surface,
+            borderRadius: theme.radius,
+            marginTop: theme.margin
         }
+
     })
 
     const info = async () => {
@@ -41,39 +60,40 @@ export default Screen('Question', ({ params, nav }) => {
             let d = res?.data || {};
             setBody(d.body || '');
             setTitle(d.title || '');
-            setCourse(d.course?.name || '');
-            setAuthor(d.user || 'TODO USER');
-            setDate(new Date(d.time).toDateString());
+            nav.setParams({ screenTitle: d.course?.name });
+            setDate(dateString(d.time));
         })
     }
 
     const questions = async () => {
         return axios.get('/Answer/GetAnswersByQuestionId/' + params.id).then(res => {
-            console.log(res.data);
-            // setAnswers(res.data || []); // TODO
-        })
+            setAnswers(res.data || []); // TODO
+        }).catch(err => console.log(err.response.data))
     }
 
     const fetch = () => Promise.all([info(), questions()]);
 
     return (
-        <Loader load={fetch} style={s.view}>
-            <Text type='header' children={title}/>
-            <Text>{author}</Text>
-            <Text>{course}</Text>
-            <Text>{date}</Text>
-            <ScrollView style={s.screen}>
-                <ScrollView style={s.body} nestedScrollEnabled>
+        <Loader load={fetch}>
+            <View style={[s.header, s.margin]}>
+                <Text type='header' children={title}/>
+                <Text type='hint' style={s.right} children={date}/>
+            </View>
+            <ScrollView style={s.content}>
+                <ScrollView style={[s.body, s.margin]} contentContainerStyle={s.bodyContent} nestedScrollEnabled>
                     <Text>{body}</Text>
                 </ScrollView>
-                <Text type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
-                <Button style={s.button} onPress={() => nav.push('CreateAnswer', {
+                <Text style={s.margin} type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
+                <Button onPress={() => nav.push('CreateAnswer', {
                     questionId: params.id, question: title, date: date
                 })} children='Answer'/>
-                {answers.map(answer => (
-                    <View>
-                        <Text>{answer.title}</Text>
-                        <Text>{answer.body}</Text>
+                {answers.map((answer, i) => (
+                    <View key={i} style={s.answer} onTouchEnd={() => nav.push('Answer', { ...answer, course: params.screenTitle || '' })}>
+                        <View style={s.header}>
+                            <Text type='header' size='medium' children={answer.title}/>
+                            <Text type='hint' style={s.right} children={dateString(answer.dateTime)}/>
+                        </View>
+                        <Text numberOfLines={1} ellipsizeMode='tail' children={answer.body}/>
                     </View>
                 ))}
             </ScrollView>

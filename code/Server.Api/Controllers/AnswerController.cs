@@ -37,36 +37,28 @@ namespace Server.Api.Controllers
             try
             {
                 IEnumerable<Answer> answers = await _answerRepository.getAllAsync();
-
-                //put all users in the dto
-                IEnumerable<Task<ResponseAnswerDto>> answerTasks = answers.Select(async answer =>
-                {
+                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                foreach (var answer in answers) {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    return ResponseAnswerDto.convert(answer, user);
-                });
-
-                ResponseAnswerDto[] res = await Task.WhenAll(answerTasks);
+                    res.Add(ResponseAnswerDto.convert(answer, user));
+                }
                 return Ok(res);
             }
             catch { return BadRequest("Error finding all answers"); }
         }
 
-        [Authorize(Roles = "student,prof")]
-        [HttpGet("GetAnswersByQuestionId/{id}")]
+        //[Authorize(Roles = "student,prof")]
+        [HttpGet("GetAnswersByQuestionId/{questionId}")]
         public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
             try
             {
-                IEnumerable<Answer> answers = _answerRepository.getByQuestionId(questionId);
-
-                //put all users in the dto
-                IEnumerable<Task<ResponseAnswerDto>> answerTasks = answers.Select(async answer =>
-                {
+                IEnumerable<Answer> answers = await _answerRepository.getByQuestionId(questionId);
+                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                foreach (var answer in answers) {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    return ResponseAnswerDto.convert(answer, user);
-                });
-
-                ResponseAnswerDto[] res = await Task.WhenAll(answerTasks);
+                    res.Add(ResponseAnswerDto.convert(answer, user));
+                }
                 return Ok(res);
             }
             catch { return BadRequest("Error finding all answers"); }
@@ -99,7 +91,7 @@ namespace Server.Api.Controllers
                 if (user == null || question == null) { return BadRequest("User or Question related to answer not found"); }
                 Answer answer = new()
                 {
-                    userId = dto.userId,
+                    userId = user.Id,
                     question = question,
                     title = dto.title,
                     body = dto.body,

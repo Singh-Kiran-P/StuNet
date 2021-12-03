@@ -34,7 +34,7 @@ export default extend<typeof Text, Props>(Text, ({ type, size, style, visible = 
         },
 
         hint: {
-            color: theme.foreground,
+            color: theme.placeholder,
             ...fontSize('small')
         },
 

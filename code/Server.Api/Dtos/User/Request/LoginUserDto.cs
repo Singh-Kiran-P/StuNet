@@ -3,7 +3,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Server.Api.Dtos
+namespace Server.Api.Dtos //LOOK AT USERDTO IN DTOS FOLDER
 {
     // public record LoginUserDto
     // {
