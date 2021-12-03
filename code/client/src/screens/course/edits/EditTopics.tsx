@@ -25,7 +25,7 @@ type TopicItem = {
 export default Screen('EditTopics', ({ params, nav }) => {
     const [topicItems, setTopics] = useState<Array<TopicItem>>([]);
     const [globalCheck, setCheckAll] = useState<boolean>(true);
-    const [editableItem, setEditableItem] = useState<TopicItem|null>(null)
+    const [editableItem, setEditableItem] = useState<TopicItem|null>(null);
     const [newTopicName, setNewTopicName] = useState<string>('');
 
     function init(data: Course): void
