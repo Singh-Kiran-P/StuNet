@@ -21,7 +21,7 @@ export default extend<typeof Text, Props>(Text, ({ type, size, style, visible = 
             ...fontSize('medium')
             
         },
-        
+
         header: {
             color: theme.foreground,
             ...fontSize('large'),
@@ -32,12 +32,12 @@ export default extend<typeof Text, Props>(Text, ({ type, size, style, visible = 
             color: theme.error,
             ...fontSize('medium')
         },
-        
+
         hint: {
-            color: theme.foreground,
+            color: theme.placeholder,
             ...fontSize('small')
         },
-        
+
         link: {
             color: theme.accent,
             ...fontSize('medium'),

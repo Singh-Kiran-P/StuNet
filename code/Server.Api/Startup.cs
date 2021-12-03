@@ -1,3 +1,4 @@
+// @Kiran @Senn
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ using Microsoft.OpenApi.Models;
 using Server.Api.DataBase;
 using Server.Api.Models;
 using Server.Api.Repositories;
-using VmsApi.Services;
+using Server.Api.Services;
 
 namespace Server.Api
 {
@@ -97,7 +98,7 @@ namespace Server.Api
 
             // Custom
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddScoped<ITokenGenerator, JwtBearerTokenGenerator>();
+            services.AddScoped<ITokenManager, JwtTokenManager>();
             services.AddScoped<IDataContext>(provider => provider.GetService<DataContext>());
             // services.AddScoped<IUserRepository, PgUserRepository>(); VERVANGEN DOOR GEBRUIK VAN ASP.NET UserManager
             services.AddScoped<ITopicRepository, PgTopicRepository>();

@@ -1,46 +1,102 @@
-import React, { Screen, Style, Theme } from '@/.';
+import React, { axios, Screen, Style, useTheme, useState, Answer, dateString } from '@/.';
 import { Dimensions } from 'react-native';
 
 import {
-    View,
     Text,
+    View,
+    Loader,
     Button,
     ScrollView
 } from '@/components';
 
 export default Screen('Question', ({ params, nav }) => {
+    let [answers, setAnswers] = useState<Answer[]>([]);
+    let [title, setTitle] = useState('');
+    let [body, setBody] = useState('');
+    let [date, setDate] = useState('');
+    let [theme] = useTheme();
 
     const s = Style.create({
-        view: {
-            flex: 1
+        margin: {
+            marginBottom: theme.margin
         },
 
-        screen: {
-            height: 0,
+        header: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            flexWrap: 'wrap'
+        },
+
+        right: {
+            marginLeft: 'auto'
+        },
+
+        content: {
+            flex: 1,
             flexGrow: 1
         },
 
         body: {
-            height: Dimensions.get('window').height / 2
+            maxHeight: Dimensions.get('window').height / 2,
+            backgroundColor: theme.surface,
+            borderRadius: theme.radius
         },
 
-        button: {
-            marginTop: Theme.margin
+        bodyContent: {
+            padding: theme.padding / 2
+        },
+
+        answer: {
+            padding: theme.padding / 2,
+            backgroundColor: theme.surface,
+            borderRadius: theme.radius,
+            marginTop: theme.margin
         }
+
     })
 
+    const info = async () => {
+        return axios.get('/Question/' + params.id).then(res => {
+            let d = res?.data || {};
+            setBody(d.body || '');
+            setTitle(d.title || '');
+            nav.setParams({ screenTitle: d.course?.name });
+            setDate(dateString(d.time));
+        })
+    }
+
+    const questions = async () => {
+        return axios.get('/Answer/GetAnswersByQuestionId/' + params.id).then(res => {
+            setAnswers(res.data || []); // TODO
+        }).catch(err => console.log(err.response.data))
+    }
+
+    const fetch = () => Promise.all([info(), questions()]);
+
     return (
-        <View style={s.view}>
-            <Text type='header' children='Titel'/>
-            <Text>TODO course, autheur, tijd</Text>
-            <ScrollView style={s.screen}>
-                <ScrollView style={s.body} nestedScrollEnabled>
-                    <Text>Body start{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body end</Text>
-                    <Text type='link' {...{}/* TODO icon */}>Download 3 Attachments</Text>
+        <Loader load={fetch}>
+            <View style={[s.header, s.margin]}>
+                <Text type='header' children={title}/>
+                <Text type='hint' style={s.right} children={date}/>
+            </View>
+            <ScrollView style={s.content}>
+                <ScrollView style={[s.body, s.margin]} contentContainerStyle={s.bodyContent} nestedScrollEnabled>
+                    <Text>{body}</Text>
                 </ScrollView>
-                <Button style={s.button} onPress={() => nav.push('CreateAnswer', { questionId: params.id })} children='Answer'/>
-                <Text>Body start{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body{'\n\n\n\n\n\n\n\n\n'}body end</Text>
+                <Text style={s.margin} type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
+                <Button onPress={() => nav.push('CreateAnswer', {
+                    questionId: params.id, question: title, date: date
+                })} children='Answer'/>
+                {answers.map((answer, i) => (
+                    <View key={i} style={s.answer} onTouchEnd={() => nav.push('Answer', { ...answer, course: params.screenTitle || '' })}>
+                        <View style={s.header}>
+                            <Text type='header' size='medium' children={answer.title}/>
+                            <Text type='hint' style={s.right} children={dateString(answer.dateTime)}/>
+                        </View>
+                        <Text numberOfLines={1} ellipsizeMode='tail' children={answer.body}/>
+                    </View>
+                ))}
             </ScrollView>
-        </View>
+        </Loader>
     )
 })

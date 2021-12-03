@@ -1,119 +1,124 @@
-using System.Linq;
-using System.Threading.Tasks;
+using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Server.Api.Models;
-using Server.Api.Repositories;
-using Server.Api.Dtos;
-using Server.Api.Repositories;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Server.Api.Dtos;
+using Server.Api.Models;
+using Server.Api.Repositories;
+using Server.Api.Repositories;
 
 namespace Server.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AnswerController: ControllerBase
+    public class AnswerController : ControllerBase
     {
         private readonly IAnswerRepository _answerRepository;
         private readonly UserManager<User> _userManager;
         // private readonly ITopicRepository _topicRepository;
         private readonly IQuestionRepository _questionRepository;
-        public AnswerController(IAnswerRepository answerRepository,UserManager<User> userManager, IQuestionRepository questionRepository/*, ITopicRepository topicRepository*/)
+        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository /*, ITopicRepository topicRepository*/ )
         {
             _answerRepository = answerRepository;
             _userManager = userManager;
             _questionRepository = questionRepository;
-			// _topicRepository = topicRepository;
-			// _courseRepository = courseRepository;
-		}
+            // _topicRepository = topicRepository;
+            // _courseRepository = courseRepository;
+        }
 
-        
         //[Authorize(Roles = "student")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswers()
         {
             try
             {
-                 IEnumerable<Answer> answers = await _answerRepository.getAllAsync();
-                      
-                //put all users in the dto
-                IEnumerable<Task<ResponseAnswerDto>> answerTasks = answers.Select(async answer => {
+                IEnumerable<Answer> answers = await _answerRepository.getAllAsync();
+                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                foreach (var answer in answers) {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    return ResponseAnswerDto.convert(answer, user);
-                    });
-
-                ResponseAnswerDto[] res = await Task.WhenAll(answerTasks);
+                    res.Add(ResponseAnswerDto.convert(answer, user));
+                }
                 return Ok(res);
             }
-            catch{return BadRequest("Error finding all answers");}
+            catch { return BadRequest("Error finding all answers"); }
         }
 
-        [Authorize(Roles = "student,prof")]
-        [HttpGet("GetAnswersByQuestionId")]
+        //[Authorize(Roles = "student,prof")]
+        [HttpGet("GetAnswersByQuestionId/{questionId}")]
         public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
             try
             {
-                 IEnumerable<Answer> answers = _answerRepository.getByQuestionId(questionId);
-                      
-                //put all users in the dto
-                IEnumerable<Task<ResponseAnswerDto>> answerTasks = answers.Select(async answer => {
+                IEnumerable<Answer> answers = await _answerRepository.getByQuestionId(questionId);
+                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                foreach (var answer in answers) {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    return ResponseAnswerDto.convert(answer, user);
-                    });
-
-                ResponseAnswerDto[] res = await Task.WhenAll(answerTasks);
+                    res.Add(ResponseAnswerDto.convert(answer, user));
+                }
                 return Ok(res);
             }
-            catch{return BadRequest("Error finding all answers");}
+            catch { return BadRequest("Error finding all answers"); }
         }
-    
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseAnswerDto>> GetAnswer(int id)
         {
             var answer = await _answerRepository.getAsync(id);
             User user = await _userManager.FindByIdAsync(answer.userId);
-            if(answer == null)
+            if (answer == null)
                 return NotFound();
-    
+
             return Ok(ResponseAnswerDto.convert(answer, user));
         }
-    
+
         //[Authorize(Roles = "student")]
         [HttpPost]
         public async Task<ActionResult<ResponseAnswerDto>> CreateAnswer(PostAnswerDto dto)
         {
-            string userId = dto.userId;
-            try{userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;} catch {Console.Write("userid failed");}
-            Console.Write(userId);
-            User user = await _userManager.FindByIdAsync(userId); //TODO: kunnen we dit miscchien uit de jwt van request halen?
-            Question question = await _questionRepository.getAsync(dto.questionId);
-            if(user == null || question==null){return BadRequest("User or Question related to answer not found");}
-			Answer answer = new()
-			{
-                userId = userId,
-                question = question,
-				title = dto.title,
-				body = dto.body,
-				// files = createAnswerDto.files
-			    dateTime = DateTime.Now
-            };
 
-			await _answerRepository.createAsync(answer);
-            return Ok(ResponseAnswerDto.convert(answer, user));
+            // Get user from token
+            ClaimsPrincipal currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == "username"))
+            {
+                string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+                User user = await _userManager.FindByEmailAsync(userEmail);
+
+                Question question = await _questionRepository.getAsync(dto.questionId);
+                if (user == null || question == null) { return BadRequest("User or Question related to answer not found"); }
+                Answer answer = new()
+                {
+                    userId = user.Id,
+                    question = question,
+                    title = dto.title,
+                    body = dto.body,
+                    // files = createAnswerDto.files
+                    dateTime = DateTime.Now
+                };
+
+                await _answerRepository.createAsync(answer);
+                return Ok(ResponseAnswerDto.convert(answer, user));
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+
         }
 
         [Authorize(Roles = "prof")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAnswer(int id)
         {
-			var existingAnswer = await _answerRepository.getAsync(id);
-            if (existingAnswer is null) {
-				return NotFound();
-			}
+            var existingAnswer = await _answerRepository.getAsync(id);
+            if (existingAnswer is null)
+            {
+                return NotFound();
+            }
 
             await _answerRepository.deleteAsync(id);
             return NoContent();
@@ -124,23 +129,24 @@ namespace Server.Api.Controllers
         public async Task<ActionResult> UpdateAnswer(int id, PostAnswerDto dto)
         {
 
-			Answer existingAnswer = await _answerRepository.getAsync(id);
+            Answer existingAnswer = await _answerRepository.getAsync(id);
             User user = await _userManager.FindByIdAsync(dto.userId); //TODO: kunnen we dit miscchien uit de jwt van request halen?
             Question question = await _questionRepository.getAsync(dto.questionId);
-            if (existingAnswer == null || user == null || question == null) {
-				return NotFound();
-			}
+            if (existingAnswer == null || user == null || question == null)
+            {
+                return NotFound();
+            }
 
-			Answer updatedAnswer = new()
+            Answer updatedAnswer = new()
             {
                 userId = user.Id,
                 question = question,
-				title = dto.title,
-				body = dto.body,
-				// files = createAnswerDto.files
-			    dateTime = DateTime.Now
+                title = dto.title,
+                body = dto.body,
+                // files = createAnswerDto.files
+                dateTime = DateTime.Now
             };
-    
+
             await _answerRepository.updateAsync(updatedAnswer);
             return NoContent();
         }

@@ -46,46 +46,49 @@ namespace Server.UnitTests {
         public async Task GetQuestion_InvalidId_ReturnsNotFound() {
 
             // Arrange
-			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
 			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
-			// Act
-			var result = await controller.GetQuestion(rand.Next());
+            // Act
+            var result = await controller.GetQuestion(rand.Next());
 
-			// Assert
-			result.Result.Should().BeOfType<NotFoundResult>();
-		}
+            // Assert
+            result.Result.Should().BeOfType<NotFoundResult>();
+        }
 
-		[Fact]
-		public async Task GetQuestion_validId_ReturnsQuestion() {
+        [Fact]
+        public async Task GetQuestion_validId_ReturnsQuestion()
+        {
 
-			// Arrange
-			Question question = createRandomQuestion();
+            // Arrange
+            Question question = createRandomQuestion();
 
-			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
-				.ReturnsAsync(question);
+            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+                .ReturnsAsync(question);
 
 			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
-			// Act
-			var result = await controller.GetQuestion(rand.Next());
+            // Act
+            var result = await controller.GetQuestion(rand.Next());
 
-			// Assert
-			((result.Result as OkObjectResult).Value as questionDto).Should()
-			.BeEquivalentTo(question, options => options.ComparingByMembers<questionDto>().ExcludingMissingMembers());
-		}
+            // Assert
+            ((result.Result as OkObjectResult).Value as questionDto).Should()
+            .BeEquivalentTo(question, options => options.ComparingByMembers<questionDto>().ExcludingMissingMembers());
+        }
 
-		[Fact]
-		public async Task CreateQuestion_FromCreateQuestionDto_ReturnsCreatedItem() {
+        [Fact]
+        public async Task CreateQuestion_FromCreateQuestionDto_ReturnsCreatedItem()
+        {
 
-			Topic randomTopic = new() {
-				id = rand.Next(),
-				name = rand.Next().ToString(),
-				course = null,
-				questions = null,
-			};
+            Topic randomTopic = new()
+            {
+                id = rand.Next(),
+                name = rand.Next().ToString(),
+                course = null,
+                questions = null,
+            };
 
 			Course randomCourse = new()
 			{
@@ -102,8 +105,8 @@ namespace Server.UnitTests {
 				topicIds = Enumerable.Range(1, 10).Select(_ => rand.Next()).ToList<int>()
 			};
 
-			_topicRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
-				.ReturnsAsync(randomTopic);
+            _topicRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+                .ReturnsAsync(randomTopic);
 
 			_courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
 				.ReturnsAsync(randomCourse);
@@ -111,7 +114,7 @@ namespace Server.UnitTests {
 			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
 
-			var result = await controller.CreateQuestion(questionToCreate);
+            var result = await controller.CreateQuestion(questionToCreate);
 
 
 			var createdQuestion = (result.Result as OkObjectResult).Value as questionDto;
@@ -132,63 +135,67 @@ namespace Server.UnitTests {
 			createdQuestion.time.Should().BeCloseTo(DateTime.Now, new TimeSpan(0, 0, 0, 0, 500)); // 500ms
 		}
 
-		[Fact]
-		public async Task UpdateQuestion_InvalidId_ReturnsNotFound() {
-			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+        [Fact]
+        public async Task UpdateQuestion_InvalidId_ReturnsNotFound()
+        {
+            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
-			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
+            var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
-			var result = await controller.UpdateQuestion(rand.Next(), null);
+            var result = await controller.UpdateQuestion(rand.Next(), null);
 
-			result.Should().BeOfType<NotFoundResult>();
-		}
-		
-		[Fact]
-		public async Task UpdateQuestion_WithExistingItem_ReturnsNoContent() {
+            result.Should().BeOfType<NotFoundResult>();
+        }
 
-			createQuestionDto randomQuestion = new()
-			{
-				courseId = rand.Next(),
-				title = rand.Next().ToString(),
-				body = rand.Next().ToString(),
-				topicIds = Enumerable.Range(1, 10).OrderBy(_ => rand.Next()).ToList<int>()
-			};
+        [Fact]
+        public async Task UpdateQuestion_WithExistingItem_ReturnsNoContent()
+        {
 
-			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            createQuestionDto randomQuestion = new()
+            {
+                courseId = rand.Next(),
+                title = rand.Next().ToString(),
+                body = rand.Next().ToString(),
+                topicIds = Enumerable.Range(1, 10).OrderBy(_ => rand.Next()).ToList<int>()
+            };
+
+            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)createRandomQuestion());
 
 			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
-			var result = await controller.UpdateQuestion(rand.Next(), randomQuestion);
+            var result = await controller.UpdateQuestion(rand.Next(), randomQuestion);
 
-			result.Should().BeOfType<NoContentResult>();
-		}
+            result.Should().BeOfType<NoContentResult>();
+        }
 
-		
-		[Fact]
-		public async Task DeleteQuestion_InvalidId_ReturnsNotFound() {
-			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+
+        [Fact]
+        public async Task DeleteQuestion_InvalidId_ReturnsNotFound()
+        {
+            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
-			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
+            var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
-			var result = await controller.DeleteQuestion(rand.Next());
+            var result = await controller.DeleteQuestion(rand.Next());
 
-			result.Should().BeOfType<NotFoundResult>();
-		}
-		
-		[Fact]
-		public async Task DeleteQuestion_WithExistingItem_ReturnsNoContent() {
+            result.Should().BeOfType<NotFoundResult>();
+        }
 
-			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+        [Fact]
+        public async Task DeleteQuestion_WithExistingItem_ReturnsNoContent()
+        {
+
+            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)createRandomQuestion());
 
 			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
-			var result = await controller.DeleteQuestion(rand.Next());
+            var result = await controller.DeleteQuestion(rand.Next());
 
-			result.Should().BeOfType<NoContentResult>();
-		}
+            result.Should().BeOfType<NoContentResult>();
+        }
     }
 }

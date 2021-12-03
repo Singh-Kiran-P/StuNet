@@ -13,6 +13,8 @@ export const extend = <T extends React.JSXElementConstructor<any>, U extends {} 
     return Object.assign(e, c) as (p: Partial<Props<T>> & U) => JSX.Element | null;
 }
 
+export const dateString = (date: any) => new Date(date).toLocaleString();
+
 export const getErr = (err: any): string => {
     if (typeof err === 'string') return err;
     return 'TODO';

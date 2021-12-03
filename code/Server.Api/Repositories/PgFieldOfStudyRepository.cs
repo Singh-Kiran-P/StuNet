@@ -1,3 +1,5 @@
+// @Kiran @Senn
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,7 +30,7 @@ namespace Server.Api.Repositories
             var fieldOfStudyToRemove = await _context.FieldOfStudies.FindAsync(fieldOfStudyId);
             if (fieldOfStudyToRemove == null)
                 throw new NullReferenceException();
-            
+
             _context.FieldOfStudies.Remove(fieldOfStudyToRemove);
             await _context.SaveChangesAsync();
         }

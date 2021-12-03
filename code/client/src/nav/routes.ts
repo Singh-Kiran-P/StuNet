@@ -1,64 +1,68 @@
 import { screens, tabs } from '@/nav/types';
-import { Theme } from '@/css';
+import { Answer } from '@/util/types';
 
 export const s = screens({
 
     Question: {
-        title: 'Question ({id})',
         args: {} as {
-            id: number
+            id: number;
         }
     },
     CreateAnswer: {
-        title: 'Answer ({questionId})',
+        screenTitle: 'Answer ({questionId})',
         args: {} as {
-            questionId: number
+            date: string;
+            question: string;
+            questionId: number;
+        }
+    },
+    Answer: {
+        screenTitle: '{course}',
+        args: {} as Answer & {
+            course: string
         }
     },
 
-
-
     Course: {
-        title: 'Course ({id})',
+        screenTitle: 'Course ({id})',
         args: {} as {
             id: number
         }
     },
     AskQuestion: {
-        title: 'Ask Question ({courseId})',
+        screenTitle: 'Ask Question ({courseId})',
         args: {} as {
-            courseId: number
+            courseId: number;
         }
     },
 
 
 
     Home: {
-        title: 'Home'
+        screenTitle: 'Home'
     },
 
 
 
     Courses: {
-        title: 'Search For Courses'
+        screenTitle: 'Search For Courses'
     },
     CreateCourse: {
-        title: 'Create Your Course'
+        screenTitle: 'Create Your Course'
     },
-
 
 
     Notifications: {
-        title: 'Your Notifications'
+        screenTitle: 'Your Notifications'
     },
 
 
 
     Profile: {
-        title: 'Your Profile',
+        screenTitle: 'Your Profile',
     },
     EditProfile: {
-        title: 'Edit Your Profile'
+        screenTitle: 'Edit Your Profile'
     }
 
 })

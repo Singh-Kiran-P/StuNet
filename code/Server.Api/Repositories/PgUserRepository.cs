@@ -1,3 +1,5 @@
+// @Kiran @Senn
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,7 +30,7 @@ namespace Server.Api.Repositories
         //     var userToRemove = await _context.Users.FindAsync(userId);
         //     if (userToRemove == null)
         //         throw new NullReferenceException();
-            
+
         //     _context.Users.Remove(userToRemove);
         //     await _context.SaveChangesAsync();
         // }

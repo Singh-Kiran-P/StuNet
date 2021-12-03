@@ -1,4 +1,6 @@
-﻿using System;
+﻿// @Kiran
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,15 +13,15 @@ using Microsoft.IdentityModel.Tokens;
 using Server.Api.Dtos;
 using Server.Api.Models;
 
-namespace VmsApi.Services
+namespace Server.Api.Services
 {
     [ExcludeFromCodeCoverage]
-    public class JwtBearerTokenGenerator : ITokenGenerator
+    public class JwtTokenManager : ITokenManager
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfigurationSection _jwtSettings;
 
-        public JwtBearerTokenGenerator(UserManager<User> userManager, IConfiguration jwtSettings)
+        public JwtTokenManager(UserManager<User> userManager, IConfiguration jwtSettings)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings.GetSection("JwtSettings");
@@ -67,13 +69,14 @@ namespace VmsApi.Services
             {
                 System.Diagnostics.Debug.Write($"[{role}]");
             }
-        
-        
+
+
             foreach (var role in roles)
             {
                 claims.Add(new Claim("roles", role));
             }
             return claims;
         }
+
     }
 }

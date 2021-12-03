@@ -1,3 +1,5 @@
+// @Kiran
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +11,7 @@ using System.Text.RegularExpressions;
 using Server.Api.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using VmsApi.Services;
+using Server.Api.Services;
 using Server.Api.Enum;
 
 namespace Server.Api.Controllers
@@ -21,18 +23,18 @@ namespace Server.Api.Controllers
 
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        private readonly ITokenGenerator _tokenGenerator;
+        private readonly ITokenManager _tokenManager;
 
         //private readonly IUserRepository _userRepository;
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
-        public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenGenerator tokenGenerator)
+        public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenManager tokenGenerator)
         {
             //_userRepository = userRepository;
             _fieldOfStudyRepository = fieldOfStudyRepository;
 
             _mapper = mapper;
             _userManager = userManager;
-            _tokenGenerator = tokenGenerator;
+            _tokenManager = tokenGenerator;
         }
 
         [HttpPost("register")]
@@ -94,7 +96,7 @@ namespace Server.Api.Controllers
                 var user = await _userManager.FindByEmailAsync(dto.Email);
                 if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
                 {
-                    var token = await _tokenGenerator.GetTokenAsync(user);
+                    var token = await _tokenManager.GetTokenAsync(user);
 
                     return Ok(token);
                 }

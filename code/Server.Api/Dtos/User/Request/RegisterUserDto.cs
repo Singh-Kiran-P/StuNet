@@ -1,8 +1,10 @@
+// @Kiran @Senn
+
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Server.Api.Dtos
+namespace Server.Api.Dtos //LOOK AT USERDTO IN DTOS FOLDER
 {
     // [ExcludeFromCodeCoverage]
     // public record RegisterUserDto
