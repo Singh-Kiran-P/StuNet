@@ -49,7 +49,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
         await axios.post('/Topic', { courseId: params.courseId, name: name })
             // .then(() => setTopics(topicItems + [])) /* The id is required */
             .catch(error => console.error(error)); // TODO: handle error
-        fetch(); /* Thus fetch all to update full list */
+        fetch(); /* Thus fetch all to update full list, but will discard checks */
     }
 
     /**
@@ -62,6 +62,19 @@ export default Screen('EditTopics', ({ params, nav }) => {
         axios.put('/Topic/' + topic.id, { name: topic.name })
             .then(() => setEditableItem(null)) /* Topic name will already be changed, and thus doesn't need an update */
             .catch(error => console.error(error)); // TODO: handle error
+    }
+
+    /**
+     * Resets the global check if all checks are set to the
+     * given check; does not update if all checks are set to
+     * the opposite check.
+     *
+     * @param check The old check.
+     */
+    function resetGlobalChecked(check: boolean = globalCheck): void
+    {
+        if (topicItems.every(item_ => item_.checked === check))
+            setCheckAll(!check);
     }
 
     /**
