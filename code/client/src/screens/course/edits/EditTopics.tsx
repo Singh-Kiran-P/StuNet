@@ -178,6 +178,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
                     <Button
                         style={style.rowItem}
                         onPress={() => removeSelected()}
+                        disabled={topicItems.every(item => item.checked === false)}
                         >
                         Remove selection
                     </Button>
