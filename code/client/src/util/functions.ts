@@ -15,7 +15,15 @@ export const extend = <T extends React.JSXElementConstructor<any>, U extends {} 
 
 export const dateString = (date: any) => new Date(date).toLocaleString();
 
-export const getErr = (err: any): string => {
-    if (typeof err === 'string') return err;
-    return 'TODO';
+export const errorString = (err: any): string => {
+    const v = (a?: any): string => {
+        if (typeof a === 'object') return v(Object.values(a)[0]);
+        return a ? `${a}` : 'An unknown error has occurred';
+    }
+    err = err?.response?.data;
+    if (typeof err !== 'object') return v(err);
+    if (Array.isArray(err)) err = err[0] || {};
+    if (err.description) return v(err.description);
+    if (err.errors) return v(err.errors);
+    return v();
 }

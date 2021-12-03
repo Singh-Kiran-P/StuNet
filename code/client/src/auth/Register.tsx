@@ -1,4 +1,4 @@
-import React, { Route, useState, useToken, Style, useTheme, axios } from '@/.';
+import React, { Route, useState, useToken, Style, useTheme, axios, errorString } from '@/.';
 
 import {
 	View,
@@ -109,7 +109,7 @@ export default ({ navigation }: Route) => {
 			FieldOfStudy: FODSelection.name + '-' + degree + '-' + FODSelection.year
         })
         .then(res => setToken(res.data))
-        .catch(err => setError(err.response.data));
+        .catch(err => setError(errorString(err)));
     }
 
 	return (
@@ -139,7 +139,7 @@ export default ({ navigation }: Route) => {
 				</Picker>
 			</View>}
 			<Text style={s.margin} type='error' visible={!!error}>{error}</Text>
-			<Button style={s.margin} onPress={register} disabled={!mail || !password || password !== passwordConfirm || !validFOS()}>Register</Button>
+			<Button style={s.margin} onPress={register} /* disabled={!mail || !password || password !== passwordConfirm || !validFOS()} */>Register</Button>
 			<Text style={s.hint} type='hint'>
 				Already have an account? <Text type='link' size='small' onPress={() => navigation.navigate('Login')}>Login here!</Text>
 			</Text>
