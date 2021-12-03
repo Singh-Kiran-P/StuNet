@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 /* eslint-disable jsx-quotes */
 import React, {
     Screen,
@@ -63,6 +64,19 @@ export default Screen('EditTopics', ({ params, nav }) => {
             .catch(error => console.error(error)); // TODO: handle error
     }
 
+    /**
+     * Removes the provided topic from the server and awaits
+     * an ok result.
+     *
+     * @param topic The topic to be removed.
+     */
+    async function remove(topic: Topic): Promise<void>
+    {
+        await axios.delete('/Topic/' + topic.id)
+            .then(() => topicItems.filter(item => item.topic.id !== topic.id))
+            .catch(error => console.error(error)); // TODO: handle error
+    }
+
     function flipTopicChecked(item: TopicItem): void
     {
         item.checked = !item.checked;
@@ -73,6 +87,14 @@ export default Screen('EditTopics', ({ params, nav }) => {
     {
         topicItems.forEach(item => (item.checked = check));
         setCheckAll(!check);
+    }
+
+    function removeSelected(): void
+    {
+        const removeableItems = topicItems.filter(item => item.checked);
+        for (const item of removeableItems)
+            remove(item.topic);
+        fetch();
     }
 
     function renderRow(item: TopicItem): JSX.Element
@@ -114,6 +136,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
         <Loader load={fetch}>
             <ScrollView>
                 <Button onPress={() => setAllTopicChecks(globalCheck)}>{ globalCheck ? 'Check all' : 'Uncheck all' }</Button>
+                <Button onPress={() => removeSelected()}>Remove selection</Button>
                 <View>
                 {
                     topicItems.map((item, i) =>
