@@ -25,14 +25,14 @@ type TopicItem = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default Screen('EditTopics', ({ params, nav }) => {
-    const [topicItems, setTopics] = useState<Array<TopicItem>>([]);
+    const [topicItems, setTopicItems] = useState<Array<TopicItem>>([]);
     const [globalCheck, setGlobalCheck] = useState<boolean>(true);
     const [editableItem, setEditableItem] = useState<TopicItem|null>(null);
     const [newTopicName, setNewTopicName] = useState<string>('');
 
     function init(data: Course): void
     {
-        setTopics(data.topics.map(topic => ({ topic: topic, checked: false } as TopicItem)));
+        setTopicItems(data.topics.map(topic => ({ topic: topic, checked: false } as TopicItem)));
     }
 
     async function fetch() //: Promise<void | AxiosResponse<any, any>>
@@ -94,7 +94,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
     function flipTopicChecked(item: TopicItem): void
     {
         item.checked = !item.checked;
-        setTopics(topicItems.slice());
+        setTopicItems(topicItems.slice());
         resetGlobalChecked();
     }
 
