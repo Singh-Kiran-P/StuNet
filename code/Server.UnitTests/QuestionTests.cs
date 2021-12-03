@@ -14,7 +14,7 @@ namespace Server.UnitTests {
     public class QuestionTests {
 		private readonly Mock<IQuestionRepository> _questionRepositoryStub = new();
 		private readonly Mock<ITopicRepository> _topicRepositoryStub = new();
-		private readonly Mock<ICourseRepository> __courseRepositoryStub = new();
+		private readonly Mock<ICourseRepository> _courseRepositoryStub = new();
 		private readonly Random rand = new();
 
 		private Question createRandomQuestion() {
@@ -49,7 +49,7 @@ namespace Server.UnitTests {
 			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
-			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, __courseRepositoryStub.Object);
+			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
 			// Act
 			var result = await controller.GetQuestion(rand.Next());
@@ -67,7 +67,7 @@ namespace Server.UnitTests {
 			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
 				.ReturnsAsync(question);
 
-			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, __courseRepositoryStub.Object);
+			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
 			// Act
 			var result = await controller.GetQuestion(rand.Next());
@@ -87,6 +87,13 @@ namespace Server.UnitTests {
 				questions = null,
 			};
 
+			Course randomCourse = new()
+			{
+				id = rand.Next(),
+				name = rand.Next().ToString(),
+				number = rand.Next().ToString(),
+			};
+
 			createQuestionDto questionToCreate = new()
 			{
 				courseId = rand.Next(),
@@ -98,12 +105,16 @@ namespace Server.UnitTests {
 			_topicRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
 				.ReturnsAsync(randomTopic);
 
-			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, __courseRepositoryStub.Object);
+			_courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+				.ReturnsAsync(randomCourse);
+
+			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
 
 			var result = await controller.CreateQuestion(questionToCreate);
 
-			var createdQuestion = (result.Result as OkObjectResult).Value as Question;
+
+			var createdQuestion = (result.Result as OkObjectResult).Value as questionDto;
 			questionToCreate.Should().BeEquivalentTo(
 				createdQuestion,
 				options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
@@ -111,8 +122,14 @@ namespace Server.UnitTests {
 
 			createdQuestion.id.Should().NotBe(null);
 			createdQuestion.topics.Should().NotBeNullOrEmpty();
-			createdQuestion.topics.Should().OnlyContain(t => t == randomTopic);
-			createdQuestion.dateTime.Should().BeCloseTo(DateTime.Now, new TimeSpan(0, 0, 0, 0, 500)); // 500ms
+			foreach (getOnlyTopicDto t in createdQuestion.topics)
+			{
+				t.Should().BeEquivalentTo(
+					randomTopic,
+					options => options.ComparingByMembers<getOnlyTopicDto>().ExcludingMissingMembers()
+				);	
+			}
+			createdQuestion.time.Should().BeCloseTo(DateTime.Now, new TimeSpan(0, 0, 0, 0, 500)); // 500ms
 		}
 
 		[Fact]
@@ -120,7 +137,7 @@ namespace Server.UnitTests {
 			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
-			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, __courseRepositoryStub.Object);
+			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
 			var result = await controller.UpdateQuestion(rand.Next(), null);
 
@@ -141,7 +158,7 @@ namespace Server.UnitTests {
 			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)createRandomQuestion());
 
-			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, __courseRepositoryStub.Object);
+			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
 			var result = await controller.UpdateQuestion(rand.Next(), randomQuestion);
 
@@ -154,7 +171,7 @@ namespace Server.UnitTests {
 			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
-			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, __courseRepositoryStub.Object);
+			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
 			var result = await controller.DeleteQuestion(rand.Next());
 
@@ -167,7 +184,7 @@ namespace Server.UnitTests {
 			_questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)createRandomQuestion());
 
-			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, __courseRepositoryStub.Object);
+			var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object);
 
 			var result = await controller.DeleteQuestion(rand.Next());
 
