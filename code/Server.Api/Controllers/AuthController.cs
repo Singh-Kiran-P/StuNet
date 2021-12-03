@@ -101,7 +101,7 @@ namespace Server.Api.Controllers
                     return Ok(token);
                 }
 
-                return Unauthorized("Invalid Authentication");
+                return Unauthorized("Invalid password or email");
 
             } catch (System.Exception) {
 				return Unauthorized("Invalid Authentication");

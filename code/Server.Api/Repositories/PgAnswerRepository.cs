@@ -20,7 +20,7 @@ namespace Server.Api.Repositories
 			return await _context.Answers
             // .Include(q => q.userId)          
             .Include(q => q.question)          
-            .Include(q => q.question.user)          
+            // .Include(q => q.question.user)          
             .Include(q => q.question.course)          
             .ToListAsync();
 		}
@@ -29,7 +29,7 @@ namespace Server.Api.Repositories
 			return await _context.Answers
             // .Include(q => q.userId)          
             .Include(q => q.question)          
-            .Include(q => q.question.user)          
+            // .Include(q => q.question.user)          
             .Include(q => q.question.course)
             .Where(q => q.id == id).FirstOrDefaultAsync();
 		}
@@ -66,7 +66,7 @@ namespace Server.Api.Repositories
             return await _context.Answers
             // .Include(q => q.userId)          
             .Include(q => q.question)          
-            .Include(q => q.question.user)          
+            // .Include(q => q.question.user)          
             .Include(q => q.question.course)
             .Where(q => q.question.id == questionId).ToListAsync();
             // var answers = _context.Answers.Select(x => x).Where(answer => answer.question.id == questionId);
