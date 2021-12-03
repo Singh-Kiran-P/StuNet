@@ -117,7 +117,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
                         // TODO: maxLength={?}
                         defaultValue={item.topic.name}
                         // style={s.margin}
-                        label='E-mail'
+                        label='Name'
                         onChangeText={name => (item.topic.name = name)}
                         />
                     <Button
