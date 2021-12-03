@@ -26,7 +26,7 @@ type TopicItem = {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default Screen('EditTopics', ({ params, nav }) => {
     const [topicItems, setTopics] = useState<Array<TopicItem>>([]);
-    const [globalCheck, setCheckAll] = useState<boolean>(true);
+    const [globalCheck, setGlobalCheck] = useState<boolean>(true);
     const [editableItem, setEditableItem] = useState<TopicItem|null>(null);
     const [newTopicName, setNewTopicName] = useState<string>('');
 
@@ -75,7 +75,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
     function resetGlobalChecked(check: boolean = globalCheck): void
     {
         if (topicItems.every(item_ => item_.checked === check))
-            setCheckAll(!check);
+            setGlobalCheck(!check);
     }
 
     /**
@@ -101,7 +101,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
     function setAllTopicChecks(check: boolean): void
     {
         topicItems.forEach(item => (item.checked = check));
-        setCheckAll(!check);
+        setGlobalCheck(!check);
     }
 
     function removeSelected(): void
