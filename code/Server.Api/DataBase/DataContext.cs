@@ -46,9 +46,9 @@ namespace Server.Api.DataBase
             // .WithMany(u => u.answers)
             // .HasForeignKey(a => a.userId);
 
-            createUsers(modelBuilder);
             createCourse(modelBuilder);
             createFieldOfStudy(modelBuilder);
+            createUsers(modelBuilder);
         }
 
 
@@ -73,11 +73,46 @@ namespace Server.Api.DataBase
                 PasswordHash = "AQAAAAEAACcQAAAAEGpaVsQ7M5pomvpiM9HvM4/i8tDIyNp2hU9LY8dCggz4FdHwnqhRFwyW5/zNJnN4aw==",
                 ConcurrencyStamp = "687a9571-1098-4e18-bedc-f7075207a573",
             };
+            var defaultStudent = new Student()
+            {
+                FieldOfStudyId = 1,
+                Email = "student@student.uhasselt.be",
+                NormalizedEmail = "STUDENT@STUDENT.UHASSELT.BE",
+                UserName = "student@student.uhasselt.be",
+                NormalizedUserName = "STUDENT@STUDENT.UHASSELT.BE",
+                PhoneNumber = "+111111111111",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = "GSXIEJ7H7DWJTSRP24CU5DWFJV4WNFAI",
+                Id = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                PasswordHash = "AQAAAAEAACcQAAAAEM3NAKXyohZdXCFtacPu/m8XMK+7VbOGSSePxwzsA+RcDlg1m9p/5RWvBSJtrgNrjQ==", //abc123
+                ConcurrencyStamp = "de4df913-7e5b-4406-b710-ea134f7b4a43",
+            };
+            var defaultProf = new Professor()
+            {
+                Email = "prof@uhasselt.be",
+                NormalizedEmail = "PROF@UHASSELT.BE",
+                UserName = "prof@uhasselt.be",
+                NormalizedUserName = "PROF@UHASSELT.BE",
+                PhoneNumber = "+111111111111",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = "TZEZOM5SNMCQIPT4UPQPHWDJZVAZDIQ2",
+                Id = "7d2b412e-7de8-4341-90f4-49b741e83466",
+                PasswordHash = "AQAAAAEAACcQAAAAEJCOeIX31jPsOvnmQsfwN+7lRjUAAGFJ8ALpjqPTTXjIT9AbdDcr5vJkgK2gsVqK7A==", //abc123
+                ConcurrencyStamp = "83fe0b78-26c9-4c24-a39c-140ec82493b8",
+            };
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>().HasData(
                 defaultUser
              );
+            modelBuilder.Entity<Student>().HasData(
+                defaultStudent
+            );
+            modelBuilder.Entity<Professor>().HasData(
+                defaultProf
+            );
         }
 
         private void createFieldOfStudy(ModelBuilder modelBuilder){
