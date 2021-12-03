@@ -8,7 +8,6 @@ import {
 	TextInput,
 	PasswordInput
 } from '@/components';
-import { privateName } from '@babel/types';
 
 import { Picker } from '@react-native-picker/picker';
 
