@@ -26,6 +26,7 @@ export default Screen('EditTopics', ({ params, nav }) => {
     const [topicItems, setTopics] = useState<Array<TopicItem>>([]);
     const [globalCheck, setCheckAll] = useState<boolean>(true);
     const [editableItem, setEditableItem] = useState<TopicItem|null>(null)
+    const [newTopicName, setNewTopicName] = useState<string>('');
 
     function init(data: Course): void
     {
@@ -35,6 +36,18 @@ export default Screen('EditTopics', ({ params, nav }) => {
     async function fetch() //: Promise<void | AxiosResponse<any, any>>
     {
         return axios.get('/Course/' + params.courseId).then(res => init(res.data));
+    }
+
+    /**
+     * Submits the topic name and awaits an ok result.
+     * @param name The topic name.
+     */
+    async function submit(name: string): Promise<void>
+    {
+        await axios.post('/Topic', { courseId: params.courseId, name: name })
+            // .then(() => setTopics(topicItems + [])) /* The id is required */
+            .catch(error => console.error(error)); // TODO: handle error
+        fetch(); /* Thus fetch all to update full list */
     }
 
     /**
@@ -112,6 +125,16 @@ export default Screen('EditTopics', ({ params, nav }) => {
                         </Pressable>
                     )
                 }
+                </View>
+                <View>
+                    <TextInput
+                        editable
+                        // TODO: maxLength={?}
+                        // style={s.margin}
+                        label='Name'
+                        onChangeText={name_ => setNewTopicName(name_)}
+                        />
+                    <Button onPress={() => submit(newTopicName)}>Add topic</Button>
                 </View>
             </ScrollView>
         </Loader>
