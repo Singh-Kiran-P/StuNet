@@ -18,7 +18,7 @@ export const dateString = (date: any) => new Date(date).toLocaleString();
 export const errorString = (err: any): string => {
     const v = (a?: any): string => {
         if (typeof a === 'object') return v(Object.values(a)[0]);
-        return a ? `${a}` : 'An unknown error has occurred';
+        return `${a}` || 'An unknown error has occurred';
     }
     err = err?.response?.data;
     if (typeof err !== 'object') return v(err);
