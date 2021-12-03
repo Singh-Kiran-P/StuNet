@@ -14,6 +14,7 @@ import {
     ScrollView,
 } from '@/components';
 
+// TODO: fix loading title, whatever that is
 export default Screen('EditCourse', ({ params, nav }) => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');

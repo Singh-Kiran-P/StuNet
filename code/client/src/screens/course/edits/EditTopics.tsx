@@ -41,6 +41,7 @@ const style: Style = Style.create({
     },
 });
 
+// TODO: fix loading title, whatever that is
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default Screen('EditTopics', ({ params, nav }) => {
     const [topicItems, setTopicItems] = useState<Array<TopicItem>>([]);
