@@ -7,6 +7,7 @@ import React, {
     // AxiosResponse, // TODO: reexport from 'axios'
     Course,
     Topic,
+    Style,
 } from '@/.';
 import {
     View,
@@ -22,6 +23,23 @@ type TopicItem = {
     topic: Topic;
     checked: boolean;
 }
+
+const style: Style = Style.create({
+    row: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent:'space-between',
+    },
+    rowItem: {
+        flex: 1,
+    },
+    rowLongItem: {
+        flex: 3,
+    },
+    rowButton: {
+        padding: 2,
+    },
+});
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default Screen('EditTopics', ({ params, nav }) => {
@@ -126,18 +144,18 @@ export default Screen('EditTopics', ({ params, nav }) => {
         }
         else {
             return (
-                <View>
+                <View style={style.row}>
                     <TextInput
+                        style={style.rowLongItem}
                         editable
                         // TODO: maxLength={?}
                         defaultValue={item.topic.name}
-                        // style={s.margin}
                         label='Name'
                         onChangeText={name => (item.topic.name = name)}
                         />
                     <Button
+                        style={style.rowItem}
                         mode="contained"
-                        style={{width: '50%'}}
                         onPress={() => update(item.topic)}
                         >
                         Update
@@ -150,8 +168,20 @@ export default Screen('EditTopics', ({ params, nav }) => {
     return (
         <Loader load={fetch}>
             <ScrollView>
-                <Button onPress={() => setAllTopicChecks(globalCheck)}>{ globalCheck ? 'Check all' : 'Uncheck all' }</Button>
-                <Button onPress={() => removeSelected()}>Remove selection</Button>
+                <View style={style.row}>
+                    <Button
+                        style={style.rowItem}
+                        onPress={() => setAllTopicChecks(globalCheck)}
+                        >
+                        { globalCheck ? 'Check all' : 'Uncheck all' }
+                    </Button>
+                    <Button
+                        style={style.rowItem}
+                        onPress={() => removeSelected()}
+                        >
+                        Remove selection
+                    </Button>
+                </View>
                 <View>
                 {
                     topicItems.map((item, i) =>
@@ -165,15 +195,20 @@ export default Screen('EditTopics', ({ params, nav }) => {
                     )
                 }
                 </View>
-                <View>
+                <View style={style.row}>
                     <TextInput
+                        style={style.rowLongItem}
                         editable
                         // TODO: maxLength={?}
-                        // style={s.margin}
                         label='Name'
                         onChangeText={name_ => setNewTopicName(name_)}
                         />
-                    <Button onPress={() => submit(newTopicName)}>Add topic</Button>
+                    <Button
+                        style={style.rowItem}
+                        onPress={() => submit(newTopicName)}
+                        >
+                        Add topic
+                    </Button>
                 </View>
             </ScrollView>
         </Loader>
