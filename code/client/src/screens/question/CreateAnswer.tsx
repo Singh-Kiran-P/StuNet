@@ -23,7 +23,7 @@ export default Screen('CreateAnswer', ({ params, nav }) => {
             title: title,
             body: body
         }).then(() => nav.pop())
-        .catch(err => console.log(err.response.data));
+        .catch(err => {}); // TODO handle error
     }
 
     return (

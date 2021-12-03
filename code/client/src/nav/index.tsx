@@ -36,7 +36,6 @@ let hide: (hide: any) => void;
 const Components = screens.map(screen => {
     let name = Object.keys(screen)[0] as keyof typeof options.s;
     return [name, Component(({ params: { tabs }, nav }, props: any) => {
-        console.log(name);
         useEffect(() => { updates[nav.getParent()?.getState().index || 0] = nav; }, []);
         useFocusEffect(() => hide(nav.getState().index && !tabs));
         return Screen({ children: screen[name](props), ...props });
