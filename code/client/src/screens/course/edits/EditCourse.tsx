@@ -1,3 +1,4 @@
+/* eslint-disable jsx-quotes */
 import React, {
     Screen,
     axios,
@@ -9,6 +10,7 @@ import {
     TextInput,
     Button,
     Loader,
+    View,
     ScrollView,
 } from '@/components';
 
@@ -54,6 +56,11 @@ export default Screen('EditCourse', ({ params, nav }) => {
                     defaultValue={number}
                     onChangeText={(value_) => { setNumber(value_); setUpToDate(false); }}
                     />
+                <View>
+                    <Button onPress={() => nav.push('EditTopics', { courseId: params.id })} children='Edit topics' />
+                    {/* <Button onPress={() => nav.push('EditTopics', { id: params.id })} children='Edit channels' /> */}
+                    {/* <Button onPress={() => nav.push('EditTopics', { id: params.id })} children='Edit assitants' /> */}
+                </View>
                 <Button onPress={update} disabled={isUpToDate}  children='Update'/>
             </ScrollView>
         </Loader>
