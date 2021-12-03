@@ -22,6 +22,7 @@ type TopicItem = {
     checked: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default Screen('EditTopics', ({ params, nav }) => {
     const [topicItems, setTopics] = useState<Array<TopicItem>>([]);
     const [globalCheck, setCheckAll] = useState<boolean>(true);
