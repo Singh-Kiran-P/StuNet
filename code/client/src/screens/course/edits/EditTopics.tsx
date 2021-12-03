@@ -37,10 +37,15 @@ export default Screen('EditTopics', ({ params, nav }) => {
         return axios.get('/Course/' + params.courseId).then(res => init(res.data));
     }
 
+    /**
+     * Updates the topic in the server.
+     *
+     * @param topic The topic to be updated.
+     */
     function update(topic: Topic): void
     {
         axios.put('/Topic/' + topic.id, { name: topic.name })
-            // .then(() => setUpToDate(true))
+            // .then(() => ) /* Topic name will already be changed */
             .catch(error => console.error(error)); // TODO: handle error
     }
 
