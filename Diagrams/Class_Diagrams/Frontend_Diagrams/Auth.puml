@@ -46,6 +46,4 @@ Link --* RegisterView
 Button --* RegisterView
 Selection --* RegisterView
 Picker --* RegisterView
-
-
 @enduml
