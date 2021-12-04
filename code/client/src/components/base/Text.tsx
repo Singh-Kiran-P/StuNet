@@ -3,23 +3,20 @@ import { Text } from 'react-native-paper';
 
 type Props = {
     type?: 'normal' | 'header' | 'error' | 'hint' | 'link';
-    size?: '' | 'small' | 'medium' | 'large' | 'huge';
-    visible?: boolean;
+    size?: 'auto' | 'small' | 'normal' | 'large' | 'huge';
 }
 
-export default extend<typeof Text, Props>(Text, ({ type, size, style, visible = true, ...props }) => {
+export default extend<typeof Text, Props>(Text, ({ type, size, style, ...props }) => {
     let [theme] = useTheme();
 
-    const fontSize = (s: NonNullable<Exclude<Props['size'], ''>>) => ({
-        fontSize: size === undefined ? theme[s] : size ? theme[size] : undefined
+    const fontSize = (s: NonNullable<Exclude<Props['size'], 'auto'>>) => ({
+        fontSize: size === undefined ? theme[s] : size === 'auto' ? undefined : theme[size]
     })
 
     const s = Style.create({
-
         normal: {
             color: theme.foreground,
-            ...fontSize('medium')
-            
+            ...fontSize('normal')
         },
 
         header: {
@@ -30,7 +27,7 @@ export default extend<typeof Text, Props>(Text, ({ type, size, style, visible = 
 
         error: {
             color: theme.error,
-            ...fontSize('medium')
+            ...fontSize('normal')
         },
 
         hint: {
@@ -40,13 +37,11 @@ export default extend<typeof Text, Props>(Text, ({ type, size, style, visible = 
 
         link: {
             color: theme.accent,
-            ...fontSize('medium'),
+            ...fontSize('normal'),
             textDecorationLine: 'underline'
         }
-
     })
 
-    if (!visible) return null;
     return <Text
         style={[s[type || 'normal'], style]}
         {...props}

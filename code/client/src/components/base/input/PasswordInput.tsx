@@ -1,5 +1,5 @@
 import React, { extend, useState } from '@/.';
-import TextInput from '@/components/base/TextInput';
+import TextInput from '@/components/base/input/TextInput';
 
 type Props = {
 	showable?: boolean;

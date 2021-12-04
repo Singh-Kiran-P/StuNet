@@ -1,54 +1,23 @@
-import React, { Route, useState, useToken, Style, useTheme, axios, errorString } from '@/.';
+import React, { Route, Style, Field, FOS, User, useTheme, useState, axios, errorString } from '@/.';
+import { View, Text, Button, Loader, Picker, TextInput, PasswordInput } from '@/components';
 
-import {
-	View,
-	Text,
-	Button,
-	Loader,
-	TextInput,
-	PasswordInput
-} from '@/components';
+type Fields = { [name: string]: { [degree: string]: number[] } };
 
-import { Picker } from '@react-native-picker/picker';
-
-type FieldApi = {
-	id: number,
-	fullName: string,
-	name: string,
-	isBachelor: boolean,
-	year: number
-}
-
-type Fields = Record<string, Record<string, number[]>>
-
-type FODSelection = {
-	name: string,
-	degree: string,
-	year: string
-}
-
-const enum UserTypes {
-	UNKNOWN,
-	STUDENT,
-	PROFESSOR
-}
+const profRegex = new RegExp(/\w+@uhasselt\.be/);
+const studentRegex = new RegExp(/\w+@student\.uhasselt\.be/);
 
 export default ({ navigation }: Route) => {
-	const [mail, setMail] = useState('');
+	const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+	const [FOS, setFOS] = useState<FOS>({ field: '', degree: '', year: '' });
 	const [fields, setFields] = useState<Fields>({});
-    const [passwordConfirm, setpasswordConfirm] = useState('');
-	const [userType, setUserType] = useState<UserTypes>(UserTypes.UNKNOWN);
- 	const [FODSelection, setFODSelection] = useState<FODSelection>({ name: '', degree: '', year: '' });
 	const [error, setError] = useState('');
-	let [_, setToken] = useToken();
 	let [theme] = useTheme();
-
-	const studentRegex = new RegExp(/\w+@student.uhasselt.be/);
-	const profRegex = new RegExp(/\w+@uhasselt.be/);
 
 	const s = Style.create({
 		screen: {
+			flex: 1,
 			padding: theme.padding,
 			backgroundColor: theme.background
         },
@@ -58,90 +27,73 @@ export default ({ navigation }: Route) => {
             marginBottom: theme.padding
 		},
 
-		hint: {
-            marginTop: theme.margin
-        },
+		FOS: {
+			flexDirection: 'row'
+		},
 
-        margin: {
-            marginBottom: theme.margin
-        }
+		picker: {
+			flex: 1
+		}
     })
 
-	const validFOS = () : boolean => {
-		if (userType != UserTypes.STUDENT) return true;
-		else return !Object.values(FODSelection).some(e => !e);
+	const type = () => {
+		if (profRegex.test(email)) return User.PROF;
+		if (studentRegex.test(email)) return User.STUDENT;
+		return null;
 	}
 
-	const getFODs = async () => {
-		return axios.get('/FieldOfStudy')
-			.then(res => {
-				let ret: Fields = {};
-				res.data.forEach((element: FieldApi) => {
-					if (!(element.name in ret)) {
-						ret[element.name] = { Bachelor: [], Master: [] }
-					}
+	const degrees = (field: Fields[string]) => Object.keys(field || []).filter(degree => Object.values(field[degree]).length);
+	const years = (field: Fields[string], degree: string) => ((field || {})[degree] || []).map(degree => degree.toString());
 
-					let years: number[] = [];
-					if (element.isBachelor) years = ret[element.name].Bachelor;
-					else years = ret[element.name].Master;
-
-					years.push(element.year);
-				});
-				setFields(ret);
-			})
-	}
-
-	const validate = (s: string) => {
-		setMail(s);
-
-		if (studentRegex.test(s)) setUserType(UserTypes.STUDENT);
-		else if (profRegex.test(s)) setUserType(UserTypes.PROFESSOR);
-		else setUserType(0);
+	const fetch = async () => {
+		return axios.get('/FieldOfStudy').then(res => {
+			setFields((res.data as Field[]).reduce((acc, cur) => ({ ...acc, [cur.name]: (o => {
+					return (o[Object.keys(o)[cur.isBachelor ? 0  : 1]].push(cur.year), o);
+				})(acc[cur.name] || { Bachelor: [], Master: [] })
+			}), {} as Fields));
+		})
 	}
 
 	const register = () => {
-		let degree = FODSelection.degree == 'Bachelor' ? 'BACH' : 'MASTER';
-
         axios.post('/Auth/register', {
-            Email: mail,
+            Email: email,
             Password: password,
-			ConfirmPassword: passwordConfirm,
-			FieldOfStudy: FODSelection.name + '-' + degree + '-' + FODSelection.year
-        })
-        .then(res => setToken(res.data))
+			ConfirmPassword: confirmPassword,
+			FieldOfStudy: `${FOS.field}-${FOS.degree}-${FOS.year}`
+        }).then(res => {}) // TODO info about email confirmation
         .catch(err => setError(errorString(err)));
     }
 
 	return (
-		<Loader load={getFODs} style={s.screen}>
-			<TextInput style={s.margin} label='E-mail' onChangeText={validate}/>
-			<PasswordInput style={s.margin} label='Password' onChangeText={setPassword} showable={false}/>
-			<PasswordInput style={s.margin} label='Confirm password' onChangeText={setpasswordConfirm} showable={false}/>
-			<Text style={s.margin} type='error' visible={password !== passwordConfirm}>Passwords do not match.</Text>
-			{userType == UserTypes.STUDENT && <View style={[{ flexDirection: 'row' }, s.margin]}>
-				<Picker prompt='Degree' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.name} onValueChange={value => setFODSelection({ name: value, degree: '', year: '' })}>
-					<Picker.Item label='Field' value='' enabled={false} />
-					{Object.keys(fields).map((name, i) => (
-						<Picker.Item key={i} label={name} value={name} />
-					))}
-				</Picker>
-				<Picker prompt='Field' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.degree} onValueChange={value => setFODSelection({ ...FODSelection, degree: value, year: '' })} enabled={!!FODSelection.name}>
-					<Picker.Item label='Degree' value='' enabled={false} />
-					{!FODSelection.name ? null : Object.keys(fields[FODSelection.name]).map((degrees, i) => (
-						<Picker.Item key={i} label={degrees} value={degrees} />
-					))}
-				</Picker>
-				<Picker prompt='Year' mode='dropdown' style={{ flex: 1 }} selectedValue={FODSelection.year} onValueChange={value => setFODSelection({ ...FODSelection, year: value })} enabled={!!FODSelection.degree}>
-				<Picker.Item label='Year' value='' enabled={false} />
-					{!FODSelection.degree ? null : fields[FODSelection.name][FODSelection.degree].map((years, i) => (
-						<Picker.Item key={i} label={years.toString()} value={years} />
-					))}
-				</Picker>
-			</View>}
-			<Text style={s.margin} type='error' visible={!!error}>{error}</Text>
-			<Button style={s.margin} onPress={register} /* disabled={!mail || !password || password !== passwordConfirm || !validFOS()} */>Register</Button>
-			<Text style={s.hint} type='hint'>
-				Already have an account? <Text type='link' size='small' onPress={() => navigation.navigate('Login')}>Login here!</Text>
+		<Loader load={fetch} style={s.screen}>
+			<Text style={s.header} type='header' children='Register'/>
+
+			<TextInput label='Email' onChangeText={setEmail}/>
+			<PasswordInput margin label='Password' onChangeText={setPassword}/>
+			<PasswordInput margin label='Confirm password' onChangeText={setConfirmPassword}/>
+			<Text margin type='error' hidden={password == confirmPassword} children='Passwords do not match.'/>
+
+			<View margin style={s.FOS} hidden={type() != User.STUDENT}>
+				<Picker prompt='Field' style={s.picker}
+					selectedValue={FOS.field} values={Object.keys(fields)}
+					onValueChange={v => setFOS({ field: v, degree: '', year: '' })}/>
+
+				<Picker prompt='Degree' style={s.picker} enabled={!!FOS.field}
+					selectedValue={FOS.degree} values={degrees(fields[FOS.field])}
+					onValueChange={v => setFOS({ ...FOS, degree: v, year: '' })}/>
+	
+				<Picker prompt='Year' style={s.picker} enabled={!!FOS.degree}
+					selectedValue={FOS.year} values={years(fields[FOS.field], FOS.degree)}
+					onValueChange={v => setFOS({ ...FOS, year: v })}/>
+			</View>
+
+			<Text margin type='error' hidden={!error} children={error}/>
+			<Button margin onPress={register} disabled={!email || !password || password !== confirmPassword || !type()} children='Register'/>
+			<Text margin type='hint'>
+				Already have an account?{' '}
+				<Text type='link' size='auto' onPress={() => navigation.navigate('Login')}>
+					Log in here!
+				</Text>
 			</Text>
 		</Loader>
 	)

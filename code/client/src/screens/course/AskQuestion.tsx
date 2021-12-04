@@ -1,18 +1,5 @@
-import React, { Screen, useState, axios } from '@/.';
-
-import {
-    Text,
-    Button,
-    Loader,
-    Checkbox,
-    Collapse,
-    TextInput
-} from '@/components';
-
-type Topic = {
-    id: number,
-    name: string
-}
+import React, { Screen, useState, axios, Topic, useTheme } from '@/.';
+import { Text, Button, Loader, Checkbox, Collapse, TextInput } from '@/components';
 
 export default Screen('AskQuestion', ({ params, nav }) => {
     const [header, setHeader] = useState('');
@@ -34,7 +21,7 @@ export default Screen('AskQuestion', ({ params, nav }) => {
             title: title,
             body: body,
             topicIds: topics.filter(topic => topic[1]).map(topic => topic[0].id),
-        }).then(res => nav.pop())
+        }).then(() => nav.pop())
         .catch(err => {}); // TODO handle error
     }
 

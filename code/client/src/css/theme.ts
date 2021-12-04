@@ -3,7 +3,7 @@ export const Base = {
     radius: 5,
 
     small: 12,
-    medium: 16,
+    normal: 16,
     large: 24,
     huge: 48,
 

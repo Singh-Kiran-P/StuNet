@@ -17,20 +17,6 @@ export default Screen('Question', ({ params, nav }) => {
     let [theme] = useTheme();
 
     const s = Style.create({
-        margin: {
-            marginBottom: theme.margin
-        },
-
-        header: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            flexWrap: 'wrap'
-        },
-
-        right: {
-            marginLeft: 'auto'
-        },
-
         content: {
             flex: 1,
             flexGrow: 1
@@ -52,7 +38,6 @@ export default Screen('Question', ({ params, nav }) => {
             borderRadius: theme.radius,
             marginTop: theme.margin
         }
-
     })
 
     const info = async () => {
@@ -71,27 +56,27 @@ export default Screen('Question', ({ params, nav }) => {
         })
     }
 
-    const fetch = () => Promise.all([info(), questions()]);
+    const fetch = async () => Promise.all([info(), questions()]);
 
     return (
         <Loader load={fetch}>
-            <View style={[s.header, s.margin]}>
+            <View type='header'>
                 <Text type='header' children={title}/>
-                <Text type='hint' style={s.right} children={date}/>
+                <Text type='hint' alignRight children={date}/>
             </View>
-            <ScrollView style={s.content}>
-                <ScrollView style={[s.body, s.margin]} contentContainerStyle={s.bodyContent} nestedScrollEnabled>
+            <ScrollView margin style={s.content}>
+                <ScrollView style={s.body} contentContainerStyle={s.bodyContent} nestedScrollEnabled>
                     <Text>{body}</Text>
                 </ScrollView>
-                <Text style={s.margin} type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
-                <Button onPress={() => nav.push('CreateAnswer', {
-                    questionId: params.id, question: title, date: date
+                <Text margin type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
+                <Button margin onPress={() => nav.push('CreateAnswer', {
+                    questionId: params.id, question: title, date: date, course: params.course
                 })} children='Answer'/>
                 {answers.map((answer, i) => (
                     <View key={i} style={s.answer} onTouchEnd={() => nav.push('Answer', { ...answer, course: params.course || '' })}>
-                        <View style={s.header}>
-                            <Text type='header' size='medium' children={answer.title}/>
-                            <Text type='hint' style={s.right} children={dateString(answer.dateTime)}/>
+                        <View type='header'>
+                            <Text type='header' size='normal' children={answer.title}/>
+                            <Text type='hint' alignRight children={dateString(answer.dateTime)}/>
                         </View>
                         <Text numberOfLines={1} ellipsizeMode='tail' children={answer.body}/>
                     </View>

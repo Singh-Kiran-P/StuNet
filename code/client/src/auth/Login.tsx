@@ -1,17 +1,10 @@
-import React, { Route, useState, useToken, useTheme, Style, axios } from '@/.';
-
-import {
-    View,
-    Text,
-    Button,
-    TextInput,
-    PasswordInput
-} from '@/components';
+import React, { Route, Style, useTheme, useState, useToken, axios, errorString } from '@/.';
+import { View, Text, Button, TextInput, PasswordInput } from '@/components';
 
 export default ({ navigation }: Route) => {
-    let [mail, setMail] = useState('');
     let [password, setPassword] = useState('');
     let [error, setError] = useState('');
+    let [email, setEmail] = useState('');
     let [_, setToken] = useToken();
     let [theme] = useTheme();
 
@@ -21,41 +14,36 @@ export default ({ navigation }: Route) => {
             padding: theme.padding,
             backgroundColor: theme.background
         },
-        
+
         header: {
             color: theme.primary,
             marginBottom: theme.padding
-        },
-
-        hint: {
-            marginTop: theme.margin
-        },
-
-        margin: {
-            marginBottom: theme.margin
         }
     })
 
     const login = () => {
         axios.post('/Auth/login', {
-            email: mail,
+            email: email,
             password: password
-        }).then(res => setToken(res.data.jwtBearerToken))
-        .catch(err => setError(err.response.data));
+        }).then(res => setToken(res.data.jwtBearerToken || ''))
+        .catch(err => setError(errorString(err)));
     }
 
     return (
         <View style={s.screen}>
-            <Text style={s.header} type='header'>Login</Text>
+            <Text style={s.header} type='header' children='Log in'/>
     
-            <TextInput style={s.margin} label='E-mail' onChangeText={setMail} />
-            <PasswordInput style={s.margin} label='Password' onChangeText={setPassword} />
-            <Text style={s.margin} type='error' visible={!!error}>{error}</Text>
+            <TextInput label='Email' onChangeText={setEmail}/>
+            <PasswordInput margin label='Password' onChangeText={setPassword}/>
+            <Text margin type='error' hidden={!error} children={error}/>
     
-            <Button style={s.margin} onPress={login} disabled={!login || !password}>Log in</Button>
+            <Button margin onPress={login} disabled={!login || !password} children='Log in'/>
     
-            <Text style={s.hint} type='hint'>
-                Don't have an account yet? <Text type='link' size='' onPress={() => navigation.navigate('Register')}>Register here!</Text>
+            <Text margin type='hint'>
+                Don't have an account yet?{' '}
+                <Text type='link' size='auto' onPress={() => navigation.navigate('Register')}>
+                    Register here!
+                </Text>
             </Text>
         </View>
     )

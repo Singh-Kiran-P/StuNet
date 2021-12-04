@@ -4,9 +4,9 @@ import Store from 'react-native-encrypted-storage';
 import axios from 'axios';
 
 import ThemeProvider, { Theme } from '@/css';
-import { Children } from '@/util';
-import { Loader } from '@/components';
 import Register from '@/auth/Register';
+import { Loader } from '@/components';
+import { Children } from '@/util';
 import Login from '@/auth/Login';
 
 const Stack = createNativeStackNavigator();
