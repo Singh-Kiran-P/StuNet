@@ -1,4 +1,4 @@
-@startuml login
+@startuml Auth
 skinparam classAttributeIconSize 0
 
 class Selection {

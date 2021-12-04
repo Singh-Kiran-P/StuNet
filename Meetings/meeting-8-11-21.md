@@ -20,6 +20,7 @@ In het **vetgedrukt** staat het origineel, aangevuld met verduidelijking; in het
 
 ### Probleemstelling
 - `tijl`: De probleemstelling was geschreven **minder vanuit het probleem, eerder vanuit de oplossing**. **"Wij gaan nu dit doen"** schrijven **is niet de bedoeling.**
+- `senn`: De **inleiding moet langer** en de **requirements moeten hieruit afgeleid kunnen worden**.
 - `senn`: **Het probleem is kort, veel oplossing.**
 - `senn`: We kunnen **best alles vanuit het probleem zien**.
 
@@ -27,16 +28,26 @@ In het **vetgedrukt** staat het origineel, aangevuld met verduidelijking; in het
 - `tijl`: **UH-email** aanhalen **is een design constraint; hoeft niet bij Functionele Requirements**.
 - `tijl`: *De functionele requirements bevatten* **enkel functies op gebruikers-interactie**.
   - **functies die het systeem doet die niet rechts***treeks...*
+- `senn`: We moeten het **formaat gebruiken uit slides voor requirements** en **geen beschrijvingen van interface(!)** geven hierin. **<span style="color: red;">Ook naar van/voor inputs</span>**.
 - `senn`: **UHasselt-email enkel als constraint** bij **niet functionele requirements**.
 - `senn`: *Functionele requirements zijn* **functies die het systeem als blackbox kan uitvoeren** en **die** dus **niet rechtstreeks als gevolg van** *andere* **gebeurtenissen** uitgevoerd worden.
 
 ### Niet functionele requirements
 - `tijl`: De **attributen zijn** dan wel **meetbaar;** maar **niet zo realistisch**, *en moeten dus nog aangepast worden*.
+- `senn`: **Bij niet-functionele requirements moet het meetbaar zijn. En specifiek.** Het vereisten van **Veiligheid is dus eerder een design constraint**.
 - `senn`: **Opgelegd te gebruiken technologieen** behoren tot de **Design constraints**.
 
 ### Constraints
 - `tijl`: De aangehaalde constraints zijn **allemaal extern; emailadres is** ook **extern**.
-- `senn`: **Externe vs interne <span style="color: default;">constraints</span> i.p.v. niet functionele, zeg indien <span style="color: default;">deze</span> niet meetbaar is.**
+- `senn`: **Externe vs interne <span style="color: red;">constraints</span> i.p.v. niet functionele, zeg indien <span style="color: red;">deze</span> niet meetbaar is.**
+- `senn`: **SMART voor niet functionele requirements.**
+- `senn`: **<span style="color: red;">duur?</span>**
+- `senn`: **<span style="color: red;">kwaliteit?</span>**
+- `senn`: **<span style="color: red;">srein...</span>**
+- `senn`: **<span style="color: red;">kostencomfort?</span>**
+- `senn`: **<span style="color: red;">dienstverlening, dienstverlening</span>**
+- `senn`: **<span style="color: red;">innovatie, innovatie, innovatie</span>**
+- `senn`: **<span style="color: red;">dienstverlening</span>**
 
 ### UC
 - `tijl`: **Account aanmaken**: **denk** **goed** na over **wanneer een UC begint/eindigt op registreren of op accepteren klikken**.
