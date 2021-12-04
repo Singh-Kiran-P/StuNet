@@ -13,6 +13,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Server.Api.Services;
 using Server.Api.Enum;
+using Server.Api.Services;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace Server.Api.Controllers
 {
@@ -31,7 +34,6 @@ namespace Server.Api.Controllers
         {
             //_userRepository = userRepository;
             _fieldOfStudyRepository = fieldOfStudyRepository;
-
             _mapper = mapper;
             _userManager = userManager;
             _tokenManager = tokenGenerator;
@@ -81,6 +83,10 @@ namespace Server.Api.Controllers
 
                 await _userManager.AddToRoleAsync(_user, role);
 
+                //send email confirmation link
+                try {sendConfirmationEmail(_user);}
+                catch (Exception){return BadRequest("Error sending confirmation email");}
+
                 return StatusCode(201);
             }
             catch (System.Exception)
@@ -94,6 +100,7 @@ namespace Server.Api.Controllers
         {
             try {
                 var user = await _userManager.FindByEmailAsync(dto.Email);
+                if(!user.EmailConfirmed) {return Unauthorized("Please confirm your email adres before logging in!");}
                 if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
                 {
                     var token = await _tokenManager.GetTokenAsync(user);
@@ -102,31 +109,36 @@ namespace Server.Api.Controllers
                 }
 
                 return Unauthorized("Invalid password or email");
-
             } catch (System.Exception) {
 				return Unauthorized("Invalid Authentication");
 			}
         }
+        
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return base.Content("<div><p>This user does not exist</p></div>", "text/html");
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded){
+                return base.Content("<div><p>Thank you for confirming your email.</p></div>", "text/html");
+            } else {
+                return base.Content("<div><p>Email confirmation failed please contact stunet@gmail.com</p></div>", "text/html");
+            }
+        }
 
+        private async void sendConfirmationEmail(User user) {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action("ConfirmEmail", "Auth", new { token, email = user.Email }, Request.Scheme);
+            EmailSender emailHelper = new EmailSender();
+            await emailHelper.SendEmailAsync(user.Email, "Confirmation Email", confirmationLink);
+        }
+        
         [HttpPost("refreshToken")]
         public async Task<IActionResult> Refresh(string token, string refreshToken)
         {
-			// var principal = GetPrincipalFromExpiredToken(token);
-			// var username = principal.Identity.Name;
-			// var savedRefreshToken = GetRefreshToken(username); //retrieve the refresh token from a data store
-			// if (savedRefreshToken != refreshToken)
-			//     throw new SecurityTokenException("Invalid refresh token");
-
-			// var newJwtToken = GenerateToken(principal.Claims);
-			// var newRefreshToken = GenerateRefreshToken();
-			// DeleteRefreshToken(username, refreshToken);
-			// SaveRefreshToken(username, newRefreshToken);
-
-			// return new ObjectResult(new {
-			//     token = newJwtToken,
-			//     refreshToken = newRefreshToken
-			// });
-			return Ok();
-		}
+            return Ok();
+        }
     }
 }
