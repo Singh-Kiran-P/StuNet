@@ -11,25 +11,28 @@ export const s = screens({
         }
     },
     CreateAnswer: {
-        screenTitle: 'Answer ({questionId})',
+        screenTitle: '{course}',
         args: {} as {
             date: string;
             question: string;
             questionId: number;
+            course: string;
         }
     },
     Answer: {
         screenTitle: '{course}',
         args: {} as Answer & {
-            course: string
+            course: string;
         }
     },
+
+
 
     Course: {
         screenTitle: '{name}',
         name: '',
         args: {} as {
-            id: number
+            id: number;
         }
     },
     AskQuestion: {
@@ -41,13 +44,13 @@ export const s = screens({
     EditCourse: {
         screenTitle: 'Edit course ({id})',
         args: {} as {
-            id: number
+            id: number;
         }
     },
     EditTopics: {
         screenTitle: 'Edit topics of course ({id})',
         args: {} as {
-            courseId: number
+            courseId: number;
         }
     },
 
@@ -65,6 +68,7 @@ export const s = screens({
     CreateCourse: {
         screenTitle: 'Create Your Course'
     },
+
 
 
     Notifications: {

@@ -20,7 +20,6 @@ export const merge = (a: Obj, b: Obj) => Object.keys(a).reduce((c, k) => {
     return c;
 }, {} as Obj);
 
-export const contains = (a: Obj = {}, b: Obj = {}): boolean => Object.entries(b).every(([k, v]) => {
-    if (!(k in a) && v !== undefined) return false;
-    return typeof v === 'object' ? typeof a[k] === 'object' && contains(a[k], v) : a[k] === v;
+export const contains = (a: Obj = {}, b: Obj = {}): boolean => Object.keys(b).every(k => {
+    return typeof b[k] === 'object' ? typeof a[k] === 'object' && contains(a[k], b[k]) : a[k] === b[k];
 })

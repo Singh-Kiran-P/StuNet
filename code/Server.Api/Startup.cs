@@ -18,6 +18,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Server.Api.DataBase;
 using Server.Api.Models;
 using Server.Api.Repositories;
@@ -37,7 +38,7 @@ namespace Server.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+                        services.AddControllers();
 
             // Setup cors
             services.AddCors(options =>
@@ -95,6 +96,10 @@ namespace Server.Api
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
+                
+            // Email setup
+            services.AddTransient<IEmailSender, EmailSender>();
+
 
             // Custom
             services.AddSingleton<IConfiguration>(Configuration);
@@ -113,6 +118,8 @@ namespace Server.Api
             });
 
             services.AddTransient<DataContext>();
+
+
 
         }
 

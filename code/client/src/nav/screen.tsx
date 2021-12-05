@@ -1,9 +1,5 @@
 import React, { Component, Children, theming } from '@/.';
-
-import {
-    View,
-    ScrollView
-} from 'react-native';
+import { View, ScrollView } from '@/components';
 
 export default Component<Children>(({ children, params: { scroll = true, padding = true } }) => {
     const s = theming(theme => {

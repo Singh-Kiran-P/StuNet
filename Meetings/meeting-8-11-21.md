@@ -1,10 +1,10 @@
 # Feedback: Analysis
 ## Meeting Information
-**Meeting Date/Time:** 8/11/21, ? - ?  
-**Meeting Purpose:** Receive feedback for the submitted analysis  
-**Meeting Location:** online, at UHasselt  
-**Meeting Organizer:** Tom Veuskens  
-**Note Taker:** Senn, Tijl  
+**Meeting Date/Time:** 8/11/21, ? - ?
+**Meeting Purpose:** Receive feedback for the submitted analysis
+**Meeting Location:** online, at UHasselt
+**Meeting Organizer:** Tom Veuskens
+**Note Taker:** Senn, Tijl
 
 ## Attendees
 People who attended:

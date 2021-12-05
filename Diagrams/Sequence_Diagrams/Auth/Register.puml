@@ -1,4 +1,4 @@
-@startuml Login
+@startuml Register
 participant Student
 participant Prof
 participant DataAccessObject

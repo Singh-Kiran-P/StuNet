@@ -1,17 +1,13 @@
 import React, { Screen, useToken } from '@/.';
-
-import {
-    View,
-    Button
-} from '@/components';
+import { View, Button } from '@/components';
 
 export default Screen('Profile', ({ nav }) => {
     let [_, setToken] = useToken();
 
     return (
         <View>
-            <Button onPress={() => nav.push('EditProfile')} children='EditProfile'/>
-            <Button onPress={() => setToken('')} children='Logout'/>
+            <Button children='Edit Profile' onPress={() => nav.push('EditProfile')}/>
+            <Button margin children='Log out' onPress={() => setToken('')}/>
         </View>
     )
 })

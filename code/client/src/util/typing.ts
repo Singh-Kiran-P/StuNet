@@ -10,4 +10,4 @@ export type Styling = ViewStyle | TextStyle | ImageStyle;
 
 export type Route = { navigation: NativeStackNavigationProp<any>, route: RouteProp<any> };
 
-export type Props<Component extends (keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>)> = React.ComponentProps<Component>;
+export type GetProps<Component extends (keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>)> = React.ComponentProps<Component>;

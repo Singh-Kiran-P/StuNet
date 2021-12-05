@@ -1,21 +1,9 @@
-import React, { Screen, Style, Theme, useState, axios } from '@/.';
-
-import {
-    Text,
-    View,
-    Button,
-    TextInput
-} from '@/components';
+import React, { Screen, useState, axios } from '@/.';
+import { Text, View, Button, TextInput } from '@/components';
 
 export default Screen('CreateAnswer', ({ params, nav }) => {
     let [title, setTitle] = useState('');
     let [body, setBody] = useState('');
-
-    const s = Style.create({
-        margin: {
-            marginBottom: Theme.margin
-        }
-    })
 
     const submit = () => {
         axios.post('/Answer', {
@@ -28,12 +16,14 @@ export default Screen('CreateAnswer', ({ params, nav }) => {
 
     return (
         <View>
-            <Text style={s.margin} children={params.question}/>
-            <Text style={s.margin} children={params.date}/>
-            <TextInput style={s.margin} label='Title' onChangeText={setTitle}/>
-            <TextInput style={s.margin} label='Body' multiline onChangeText={setBody}/>
-            <Text style={s.margin}>TODO files</Text>
-            <Button children='Submit' onPress={submit}/>
+            <View type='header'>
+                <Text type='header' children={params.question}/>
+                <Text type='hint' align='right' children={params.date}/>
+            </View>
+            <TextInput margin label='Title' onChangeText={setTitle}/>
+            <TextInput margin label='Body' multiline onChangeText={setBody}/>
+            <Text margin>TODO files</Text>
+            <Button margin children='Submit' onPress={submit}/>
         </View>
     )
 })

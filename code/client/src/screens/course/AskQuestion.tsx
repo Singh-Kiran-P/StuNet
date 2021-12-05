@@ -1,18 +1,5 @@
-import React, { Screen, useState, axios } from '@/.';
-
-import {
-    Text,
-    Button,
-    Loader,
-    Checkbox,
-    Collapse,
-    TextInput
-} from '@/components';
-
-type Topic = {
-    id: number,
-    name: string
-}
+import React, { Screen, useState, axios, Topic } from '@/.';
+import { Text, Button, Loader, Checkbox, Collapse, TextInput } from '@/components';
 
 export default Screen('AskQuestion', ({ params, nav }) => {
     const [header, setHeader] = useState('');
@@ -20,7 +7,7 @@ export default Screen('AskQuestion', ({ params, nav }) => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
 
-    const fetch = async () => {
+    const fetch = async () => { // TODO get from route
         return axios.get('/Course/' + params.courseId)
             .then(res => {
                 setHeader(res.data.name);
@@ -34,23 +21,23 @@ export default Screen('AskQuestion', ({ params, nav }) => {
             title: title,
             body: body,
             topicIds: topics.filter(topic => topic[1]).map(topic => topic[0].id),
-        }).then(res => nav.pop())
+        }).then(() => nav.pop())
         .catch(err => {}); // TODO handle error
     }
 
     return (
         <Loader load={fetch}>
             <Text type='header' children={header}/>
-            <TextInput label='Title' onChangeText={setTitle}/>
-            <TextInput label='Body' multiline onChangeText={setBody}/>
-            <Collapse title='Topics'>
-                {topics.map(([{ name }, value], i) =>
+            <TextInput margin label='Title' onChangeText={setTitle}/>
+            <TextInput margin label='Body' multiline onChangeText={setBody}/>
+            <Collapse margin title='Topics'>
+                {topics.map(([{ name }, value], i) => (
                     <Checkbox.Item key={i} mode='ios' label={name} status={value ? 'checked' : 'unchecked'} onPress={() => {
                         setTopics(topics.map(([n, v], j) => i === j ? [n, !v] : [n, v]));
                     }}/>
-                )}
+                ))}
             </Collapse>
-            <Button children='Ask' disabled={!title || !body} onPress={submit}/>
+            <Button margin children='Ask' disabled={!title || !body} onPress={submit}/>
         </Loader>
     )
 })

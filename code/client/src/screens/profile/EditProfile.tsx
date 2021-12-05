@@ -1,8 +1,5 @@
 import React, { Screen } from '@/.';
-
-import {
-    View
-} from '@/components';
+import { View } from '@/components';
 
 export default Screen('EditProfile', () => {
 

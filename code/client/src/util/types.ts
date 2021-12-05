@@ -16,11 +16,30 @@ export type Question = {
     title: string;
     body: string;
     time: string;
-    // topicIds: Array<number>;
+    // TODO topicIds: number[];
 }
 
 export type Answer = {
     dateTime: string;
     title: string;
     body: string;
+}
+
+export type Field = {
+	id: number;
+	name: string;
+	year: number;
+	fullName: string;
+	isBachelor: boolean;
+}
+
+export type FOS = {
+	field: string;
+	degree: string;
+	year: string;
+}
+
+export const enum User {
+	PROF,
+	STUDENT
 }

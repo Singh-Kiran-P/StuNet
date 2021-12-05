@@ -1,4 +1,4 @@
-@startuml login
+@startuml Auth
 skinparam classAttributeIconSize 0
 
 class Selection {
@@ -46,6 +46,4 @@ Link --* RegisterView
 Button --* RegisterView
 Selection --* RegisterView
 Picker --* RegisterView
-
-
 @enduml
