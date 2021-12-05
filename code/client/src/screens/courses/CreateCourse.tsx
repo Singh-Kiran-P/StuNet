@@ -1,7 +1,7 @@
 import React, { Screen, useState, axios } from '@/.';
 import { View, Button, TextInput } from '@/components';
 
-export default Screen('CreateCourse', () => {
+export default Screen('CreateCourse', ({nav}) => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     const [description, setDescription] = useState(''); // TODO use description
@@ -9,8 +9,16 @@ export default Screen('CreateCourse', () => {
     const submit = () => {
         axios.post('/Course', {
             name: name,
-            number: number
+            number: number,
+            topicNames: []
         })
+        .then(res =>{
+            nav.replace("Course",{id: res.data.id})
+        })
+        .catch(error =>{
+            console.log(error)
+        });
+         
     }
 
     return (
