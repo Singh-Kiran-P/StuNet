@@ -7,7 +7,7 @@ type Props = {
 	state?: boolean;
 }
 
-export default extend<typeof View, Props>(View, ({ load, state, style, ...props }) => {
+export default extend<typeof View, Props>(View, ({ load, state, ...props }) => {
 	let [loading, setLoading] = useState(!!load);
 	let [theme] = useTheme();
 	let nav = useNav();
@@ -16,10 +16,6 @@ export default extend<typeof View, Props>(View, ({ load, state, style, ...props 
 			flex: 1,
 			justifyContent: 'center',
 			backgroundColor: theme.background
-		},
-
-		loaded: {
-			flex: 1
 		}
 	})
 
@@ -32,6 +28,6 @@ export default extend<typeof View, Props>(View, ({ load, state, style, ...props 
 		})
 	}, [])
 
-	if (state !== true && !loading) return <View style={[style, s.loaded]} {...props}/>
+	if (state !== true && !loading) return <View flex {...props}/>
 	return <ActivityIndicator style={s.loading} size={theme.huge} color={theme.primary}/>
 })
