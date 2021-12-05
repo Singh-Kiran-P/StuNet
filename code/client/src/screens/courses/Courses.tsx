@@ -13,16 +13,16 @@ export default Screen('Courses', ({ nav }) => {
         }).catch(err => setError(errorString(err)));
     }
 
-    useEffect(() => search(), []);
+    useEffect(() => search(), []); // TODO fuuzy substring matching in backend, so the empty string matches all courses
 
     return (
         <View>
             <SearchBar placeholder='Search courses' onChangeText={setQuery}/>
-            <Button margin onPress={search} children='Search'/>
+            <Button margin children='Search' onPress={search}/>
             <Text type='error' margin hidden={!error} children={error}/>
             <Text type='hint' size='normal' margin hidden={courses.length} children='No courses match your search'/>
             <ScrollView>
-                {courses.map((course, i) => (
+                {courses.map((course, i) => ( // TODO lazy list view
                     <List.Item key={i}
                         title={course.name}
                         description={course.number}

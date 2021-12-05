@@ -26,6 +26,8 @@ export const s = screens({
         }
     },
 
+
+
     Course: {
         screenTitle: '{name}',
         name: '',
@@ -66,6 +68,7 @@ export const s = screens({
     CreateCourse: {
         screenTitle: 'Create Your Course'
     },
+
 
 
     Notifications: {

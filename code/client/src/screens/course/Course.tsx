@@ -1,19 +1,5 @@
-import React, {
-    Screen,
-    axios,
-    useState,
-    Topic,
-    Course,
-} from '@/.';
-import {
-    Text,
-    Button,
-    Loader,
-    Question,
-    Collapse,
-    CompactQuestion,
-    ScrollView,
-} from '@/components';
+import React, { Screen, axios, useState, Topic, Course, Question } from '@/.';
+import { Button, Loader, Collapse, ScrollView, CompactQuestion } from '@/components';
 
 export default Screen('Course', ({ params, nav }) => {
     const [name, setName] = useState('');
@@ -29,7 +15,6 @@ export default Screen('Course', ({ params, nav }) => {
         nav.setParams({ name: data.name });
     }
 
-
     const fetch = async () => {
         return axios.get('/Course/' + params.id)
             .then(res => init(res.data))
@@ -39,22 +24,21 @@ export default Screen('Course', ({ params, nav }) => {
     return (
         <Loader load={fetch}>
             <ScrollView>
-                <Text>{name} ({number})</Text>
                 <Collapse title='Topics'>
                     {topics.map((topic, i) => ( // TODO: show search results with this topic only on click
                         <Button key={i}
                             onPress={() => nav.push('Course', params)}
                             children={topic.name}
-                            />
+                        />
                     ))}
                 </Collapse>
-                <Collapse title='Questions'>
+                <Collapse margin title='Questions'>
                     {questions.map((question, i) => (
                         <CompactQuestion key={i} question={question}/>
                     ))}
                 </Collapse>
-                <Button onPress={() => nav.push('AskQuestion', { courseId: params.id })} children='Ask a question' />
-                <Button onPress={() => nav.push('EditCourse', { id: params.id })} children='Edit course' />
+                <Button margin children='Ask a question' onPress={() => nav.push('AskQuestion', { courseId: params.id })}/>
+                <Button margin children='Edit course' onPress={() => nav.push('EditCourse', { id: params.id })}/>
             </ScrollView>
         </Loader>
     );

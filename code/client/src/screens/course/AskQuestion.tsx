@@ -1,4 +1,4 @@
-import React, { Screen, useState, axios, Topic, useTheme } from '@/.';
+import React, { Screen, useState, axios, Topic } from '@/.';
 import { Text, Button, Loader, Checkbox, Collapse, TextInput } from '@/components';
 
 export default Screen('AskQuestion', ({ params, nav }) => {
@@ -7,7 +7,7 @@ export default Screen('AskQuestion', ({ params, nav }) => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
 
-    const fetch = async () => {
+    const fetch = async () => { // TODO get from route
         return axios.get('/Course/' + params.courseId)
             .then(res => {
                 setHeader(res.data.name);
@@ -28,16 +28,16 @@ export default Screen('AskQuestion', ({ params, nav }) => {
     return (
         <Loader load={fetch}>
             <Text type='header' children={header}/>
-            <TextInput label='Title' onChangeText={setTitle}/>
-            <TextInput label='Body' multiline onChangeText={setBody}/>
-            <Collapse title='Topics'>
-                {topics.map(([{ name }, value], i) =>
+            <TextInput margin label='Title' onChangeText={setTitle}/>
+            <TextInput margin label='Body' multiline onChangeText={setBody}/>
+            <Collapse margin title='Topics'>
+                {topics.map(([{ name }, value], i) => (
                     <Checkbox.Item key={i} mode='ios' label={name} status={value ? 'checked' : 'unchecked'} onPress={() => {
                         setTopics(topics.map(([n, v], j) => i === j ? [n, !v] : [n, v]));
                     }}/>
-                )}
+                ))}
             </Collapse>
-            <Button children='Ask' disabled={!title || !body} onPress={submit}/>
+            <Button margin children='Ask' disabled={!title || !body} onPress={submit}/>
         </Loader>
     )
 })

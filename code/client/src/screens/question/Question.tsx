@@ -1,13 +1,6 @@
 import React, { axios, Screen, Style, useTheme, useState, Answer, dateString } from '@/.';
+import { Text, View, Loader, Button, ScrollView } from '@/components';
 import { Dimensions } from 'react-native';
-
-import {
-    Text,
-    View,
-    Loader,
-    Button,
-    ScrollView
-} from '@/components';
 
 export default Screen('Question', ({ params, nav }) => {
     let [answers, setAnswers] = useState<Answer[]>([]);
@@ -69,10 +62,10 @@ export default Screen('Question', ({ params, nav }) => {
                     <Text>{body}</Text>
                 </ScrollView>
                 <Text margin type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
-                <Button margin onPress={() => nav.push('CreateAnswer', {
+                <Button margin children='Answer' onPress={() => nav.push('CreateAnswer', {
                     questionId: params.id, question: title, date: date, course: params.course
-                })} children='Answer'/>
-                {answers.map((answer, i) => (
+                })}/>
+                {answers.map((answer, i) => ( // TODO lazy list view
                     <View key={i} style={s.answer} onTouchEnd={() => nav.push('Answer', { ...answer, course: params.course || '' })}>
                         <View type='header'>
                             <Text type='header' size='normal' children={answer.title}/>

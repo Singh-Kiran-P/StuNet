@@ -37,7 +37,7 @@ export default ({ navigation }: Route) => {
             <PasswordInput margin label='Password' onChangeText={setPassword}/>
             <Text margin type='error' hidden={!error} children={error}/>
     
-            <Button margin onPress={login} disabled={!login || !password} children='Log in'/>
+            <Button margin children='Log in' disabled={!login || !password} onPress={login}/>
     
             <Text margin type='hint'>
                 Don't have an account yet?{' '}

@@ -27,7 +27,6 @@ export default extend<typeof View, Props>(View, ({ load, state, style, ...props 
 		load().then(() => {
 			setTimeout(() => setLoading(false));
 		}).catch(err => {
-			console.log(err);
 			if (nav?.canGoBack()) nav.goBack();
 			// TODO system message
 		})
