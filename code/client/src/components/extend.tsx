@@ -36,8 +36,8 @@ export default <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c
         if (hidden) return null;
 
         const s = Style.create({
-            flex: !flex ? {} : {
-                'flex': flex === true ? 1 : flex
+            flex: flex === undefined ? {} : {
+                'flex': +flex
             },
 
             margin: !margin ? {} : {
