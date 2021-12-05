@@ -1,5 +1,13 @@
 # **StuNet**
 
+# Start Full-stack app
+Make sure you have docker, docker compose and nodejs installed!
+```
+cd code
+npm run upgrade
+npm run dev
+```
+
 # Frontend
 This section needs to be updated; is not necessary.
 ```
