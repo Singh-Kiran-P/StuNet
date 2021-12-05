@@ -1,6 +1,6 @@
 # **StuNet**
 
-# Start Full-stack app
+# Start full-stack app
 Make sure you have docker, docker compose and nodejs installed!
 ```
 cd code
