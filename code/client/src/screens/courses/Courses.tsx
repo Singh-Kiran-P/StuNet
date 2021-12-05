@@ -7,6 +7,7 @@ export default Screen('Courses', ({ nav }) => {
     const [error, setError] = useState('');
     const [courses, setCourses] = useState<Course[]>([]);
 
+    //TODO: flash message on error
     const search = () => {
         axios.get('/Course/search', { params: { name: query } }).then(res => {
             setCourses(res.status === 200 ? res.data : []);
