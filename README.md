@@ -1,7 +1,7 @@
 # **StuNet**
 
 # Start full-stack app
-Make sure you have docker, docker compose and nodejs installed!
+Make sure you have docker, docker compose, java v8 and nodejs installed!
 ```
 cd code
 npm run upgrade
