@@ -1,4 +1,4 @@
-# Meeting Minutes
+# Plan: Finish iteration 1
 ## Meeting Information
 **Meeting Date/Time:** 3/12/21, 9:15 - 9:30
 **Meeting Purpose:** Sprint 3 bespreken  

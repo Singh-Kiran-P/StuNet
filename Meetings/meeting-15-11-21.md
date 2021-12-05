@@ -1,4 +1,4 @@
-# Meeting Minutes
+# Feedback: iteration 1 approach
 ## Meeting Information
 **Meeting Date/Time:** meeting_date, meeting_time  
 **Meeting Purpose:** meeting_purpose  

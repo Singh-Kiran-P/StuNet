@@ -1,4 +1,4 @@
-# Meeting Minutes
+# Plan: Prepare Sprint 1
 ## Meeting Information
 **Meeting Date/Time:** 11/11/2021, 14:00 TO 15:30\
 **Meeting Purpose:** Briefing\

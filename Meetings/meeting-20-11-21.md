@@ -1,4 +1,4 @@
-# Meeting Minutes
+# Plan: Prepare sprint 2
 ## Meeting Information
 **Meeting Date/Time:** 20/11/21, 9:10 - 10:08<br>
 **Meeting Purpose:** Sprint 2 voorbereiden<br>
