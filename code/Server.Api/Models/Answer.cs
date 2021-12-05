@@ -10,7 +10,7 @@ namespace Server.Api.Models
 		public virtual Question question { get; set; }
 	    public string title { get; set; }
         public string body { get; set; }
-        // public File[] files { get; set; }
+        public string[] files { get; set; }
 		public DateTime dateTime { get; set; }
     }
 }
