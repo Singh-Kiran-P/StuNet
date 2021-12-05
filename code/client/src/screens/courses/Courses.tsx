@@ -7,17 +7,17 @@ export default Screen('Courses', ({ nav }) => {
     const [error, setError] = useState('');
     const [courses, setCourses] = useState<Course[]>([]);
 
-    //TODO: flash message on error
+    // TODO: flash message on error?
     const search = () => {
         axios.get('/Course/search', { params: { name: query } }).then(res => {
             setCourses(res.status === 200 ? res.data : []);
         }).catch(err => setError(errorString(err)));
     }
 
-    useEffect(() => search(), []); // TODO fuuzy substring matching in backend, so the empty string matches all courses
+    useEffect(() => search(), []); // TODO fuzzy substring matching in backend, so the empty string matches all courses
 
     return (
-        <View>
+        <View flex>
             <SearchBar placeholder='Search courses' onChangeText={setQuery}/>
             <Button margin children='Search' onPress={search}/>
             <Text type='error' margin hidden={!error} children={error}/>
@@ -32,6 +32,7 @@ export default Screen('Courses', ({ nav }) => {
                     />
                 ))}
             </ScrollView>
+            <Button align='bottom' onPress={() => nav.push('CreateCourse')} children='Create Course'/>
         </View>
     )
 })

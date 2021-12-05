@@ -32,6 +32,6 @@ export default extend<typeof View, Props>(View, ({ load, state, style, ...props 
 		})
 	}, [])
 
-	if (state !== true && !loading) return <View style={[s.loaded, style]} {...props}/>
+	if (state !== true && !loading) return <View style={[style, s.loaded]} {...props}/>
 	return <ActivityIndicator style={s.loading} size={theme.huge} color={theme.primary}/>
 })

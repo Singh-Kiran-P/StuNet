@@ -6,7 +6,7 @@ export default Screen('Answer', ({ params }) => {
         <View>
             <View type='header'>
                 <Text type='header' children={params.title}/>
-                <Text type='hint' alignRight children={dateString(params.dateTime)}/>
+                <Text type='hint' align='right' children={dateString(params.dateTime)}/>
             </View>
             <Text margin children={params.body}/>
         </View>

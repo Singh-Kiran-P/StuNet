@@ -29,7 +29,7 @@ export default ({ question }: Props) => {
         <View style={s.question}>
             <View type='header'>
                 <Text type='header' size='normal' children={question.title}/>
-                <Text type='hint' alignRight children={dateString(question.time)}/>
+                <Text type='hint' align='right' children={dateString(question.time)}/>
             </View>
             <Text margin children={question.body}/>
             {topics.map((topic, i) => <Text key={i} style={s.topic} children={topic}/>)}

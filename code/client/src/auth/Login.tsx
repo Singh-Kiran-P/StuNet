@@ -10,7 +10,6 @@ export default ({ navigation }: Route) => {
 
     const s = Style.create({
         screen: {
-            flex: 1,
             padding: theme.padding,
             backgroundColor: theme.background
         },
@@ -30,7 +29,7 @@ export default ({ navigation }: Route) => {
     }
 
     return (
-        <View style={s.screen}>
+        <View style={s.screen} flex>
             <Text style={s.header} type='header' children='Log in'/>
     
             <TextInput label='Email' onChangeText={setEmail}/>

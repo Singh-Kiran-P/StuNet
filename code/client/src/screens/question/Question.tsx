@@ -11,7 +11,6 @@ export default Screen('Question', ({ params, nav }) => {
 
     const s = Style.create({
         content: {
-            flex: 1,
             flexGrow: 1
         },
 
@@ -55,9 +54,9 @@ export default Screen('Question', ({ params, nav }) => {
         <Loader load={fetch}>
             <View type='header'>
                 <Text type='header' children={title}/>
-                <Text type='hint' alignRight children={date}/>
+                <Text type='hint' align='right' children={date}/>
             </View>
-            <ScrollView margin style={s.content}>
+            <ScrollView margin style={s.content} flex>
                 <ScrollView style={s.body} contentContainerStyle={s.bodyContent} nestedScrollEnabled>
                     <Text>{body}</Text>
                 </ScrollView>
@@ -69,7 +68,7 @@ export default Screen('Question', ({ params, nav }) => {
                     <View key={i} style={s.answer} onTouchEnd={() => nav.push('Answer', { ...answer, course: params.course || '' })}>
                         <View type='header'>
                             <Text type='header' size='normal' children={answer.title}/>
-                            <Text type='hint' alignRight children={dateString(answer.dateTime)}/>
+                            <Text type='hint' align='right' children={dateString(answer.dateTime)}/>
                         </View>
                         <Text numberOfLines={1} ellipsizeMode='tail' children={answer.body}/>
                     </View>

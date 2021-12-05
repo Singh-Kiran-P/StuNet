@@ -18,7 +18,7 @@ export default Screen('CreateAnswer', ({ params, nav }) => {
         <View>
             <View type='header'>
                 <Text type='header' children={params.question}/>
-                <Text type='hint' alignRight children={params.date}/>
+                <Text type='hint' align='right' children={params.date}/>
             </View>
             <TextInput margin label='Title' onChangeText={setTitle}/>
             <TextInput margin label='Body' multiline onChangeText={setBody}/>

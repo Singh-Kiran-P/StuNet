@@ -17,7 +17,6 @@ export default ({ navigation }: Route) => {
 
 	const s = Style.create({
 		screen: {
-			flex: 1,
 			padding: theme.padding,
 			backgroundColor: theme.background
         },
@@ -29,10 +28,6 @@ export default ({ navigation }: Route) => {
 
 		FOS: {
 			flexDirection: 'row'
-		},
-
-		picker: {
-			flex: 1
 		}
     })
 
@@ -65,7 +60,7 @@ export default ({ navigation }: Route) => {
     }
 
 	return (
-		<Loader load={fetch} style={s.screen}>
+		<Loader style={s.screen} load={fetch}>
 			<Text style={s.header} type='header' children='Register'/>
 
 			<TextInput label='Email' onChangeText={setEmail}/>
@@ -74,15 +69,15 @@ export default ({ navigation }: Route) => {
 			<Text margin type='error' hidden={password == confirmPassword} children='Passwords do not match.'/>
 
 			<View margin style={s.FOS} hidden={type() != User.STUDENT}>
-				<Picker prompt='Field' style={s.picker}
+				<Picker prompt='Field' flex
 					selectedValue={FOS.field} values={Object.keys(fields)}
 					onValueChange={v => setFOS({ field: v, degree: '', year: '' })}/>
 
-				<Picker prompt='Degree' style={s.picker} enabled={!!FOS.field}
+				<Picker prompt='Degree' flex enabled={!!FOS.field}
 					selectedValue={FOS.degree} values={degrees(fields[FOS.field])}
 					onValueChange={v => setFOS({ ...FOS, degree: v, year: '' })}/>
 	
-				<Picker prompt='Year' style={s.picker} enabled={!!FOS.degree}
+				<Picker prompt='Year' flex enabled={!!FOS.degree}
 					selectedValue={FOS.year} values={years(fields[FOS.field], FOS.degree)}
 					onValueChange={v => setFOS({ ...FOS, year: v })}/>
 			</View>
