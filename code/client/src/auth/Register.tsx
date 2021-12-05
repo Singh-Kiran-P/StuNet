@@ -50,11 +50,13 @@ export default ({ navigation }: Route) => {
 	}
 
 	const register = () => {
+		let degree = FOS.degree === 'Bachelor' ? 'BACH' : 'MAST';
+
         axios.post('/Auth/register', {
             Email: email,
             Password: password,
 			ConfirmPassword: confirmPassword,
-			FieldOfStudy: `${FOS.field}-${FOS.degree}-${FOS.year}`
+			FieldOfStudy: `${FOS.field}-${degree}-${FOS.year}`
         }).then(res => {}) // TODO info about email confirmation
         .catch(err => setError(errorString(err)));
     }
