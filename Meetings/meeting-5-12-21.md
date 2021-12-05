@@ -1,4 +1,4 @@
-# Finish iteration 1: Prepare video, analysis
+# Plan: Finish iteration 1, Prepare video, analysis
 ## Meeting Information
 **Meeting Date/Time:** 5/12/21, 9:01 - 9:10, 9:30-9:50,  
 **Meeting Purpose:** Sprint 3 bespreken  
