@@ -40,8 +40,8 @@ export default <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c
                 'flex': +flex
             },
 
-            margin: !margin ? {} : {
-                [marginProperty(margin)]: Theme.margin
+            margin: margin === undefined ? {} : {
+                [marginProperty(margin)]: margin ? Theme.margin : 0
             },
 
             right: !align ? {} : {
