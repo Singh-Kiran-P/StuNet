@@ -18,7 +18,7 @@ People who attended:
 
 Item | Description
 ---- | ----
-Agenda Item Evaluatue sprint 3 | • <br>• <br>• <br>• <br>• 
+Agenda Item Evaluate sprint 3 | • <br>• <br>• <br>• <br>• 
 Agenda Item Afronden iteratie 1 | • <br>• <br>• <br>• <br>• 
 
 ## Discussion Items
