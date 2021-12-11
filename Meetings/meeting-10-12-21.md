@@ -1,4 +1,4 @@
-# Meeting Minutes
+# Feeback Meeting Iteration 1
 ## Meeting Information
 **Meeting Date/Time:** 10/12, 10:03 - 11:39  
 **Meeting Purpose:** Get feedback  
