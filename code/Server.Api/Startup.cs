@@ -23,6 +23,7 @@ using Server.Api.DataBase;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Services;
+using ChatSample.Hubs;
 
 namespace Server.Api
 {
@@ -96,10 +97,12 @@ namespace Server.Api
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-                
+
             // Email setup
             services.AddTransient<IEmailSender, EmailSender>();
 
+            //signalR
+            services.AddSignalR();
 
             // Custom
             services.AddSingleton<IConfiguration>(Configuration);
@@ -118,8 +121,6 @@ namespace Server.Api
             });
 
             services.AddTransient<DataContext>();
-
-
 
         }
 
@@ -143,6 +144,8 @@ namespace Server.Api
                .AllowCredentials());               // allow credentials
 
             app.UseRouting();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             // Required for Authentication!!
             app.UseAuthentication();
@@ -151,6 +154,8 @@ namespace Server.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
+
             });
         }
     }

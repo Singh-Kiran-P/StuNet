@@ -1,6 +1,7 @@
 import React, { Screen, useTheme, extend } from "@/.";
 import { ScrollView, View, TextInput, Text } from '@/components'
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as signalR from "@microsoft/signalr";
 
 enum Alignment { Left, Right };
 
@@ -17,11 +18,11 @@ type Props = {
 };
 
 const Message = extend<typeof View, Props>(View, ({ user, color, alignment, children }) => {
-	const margin = alignment == Alignment.Left ? {marginRight: 'auto'} : {marginLeft: 'auto'} 
+	const margin = alignment == Alignment.Left ? {marginRight: 'auto'} : {marginLeft: 'auto'}
 
 	return (
 		<View style={{maxWidth: '70%', backgroundColor: color, borderRadius: 10, padding: 10, marginTop: 5, ...margin }}>
-			<Text style={margin}>{user}</Text>	
+			<Text style={margin}>{user}</Text>
 			<Text>{children}</Text>
 		</View>
 	)
@@ -29,18 +30,41 @@ const Message = extend<typeof View, Props>(View, ({ user, color, alignment, chil
 
 export default Screen('textChannel', ({ params, nav }) => {
 	const [message, setMessage] = useState('');
-	const [messages, setMessages] = useState<Message[]>([]);
-	let [theme] = useTheme();
+    const [messages, setMessages] = useState<Message[]>([]);
 
-	const sendMessage = (msg: string) => {
-		console.log(msg);
+	const [connection, setConnection] = useState<signalR.HubConnection>();
+    const username = new Date().getTime();
+    let [theme] = useTheme();
+
+    useEffect(() => {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://10.0.2.2:5000/chat")
+            .build();
+        setConnection(connection)
+
+        connection.on("messageReceived", (username: string, message: string) => {
+            let m = {
+                sender: username,
+                content: message,
+                time: '0'
+            }
+            setMessages([...messages, m])
+        });
+
+        connection
+            .start()
+            .catch(err => console.log(err));
+
+    }, []);
+
+    const sendMessage = (msg: string) => {
+
+        connection!.send("newMessage", username, msg)
+            .catch(err => console.log(err));
+
+
 		setMessage('');
-		let m = {
-			sender: 'testUser',
-			content: msg,
-			time: '0'
-		}
-		setMessages([...messages, m])
+
 	}
 
 	return (
