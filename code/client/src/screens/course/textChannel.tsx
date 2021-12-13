@@ -33,9 +33,9 @@ export default Screen('textChannel', ({ params, nav }) => {
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [newMessage, setNewMessage] = useState<Message>();
-
 	const [connection, setConnection] = useState<signalR.HubConnection>();
-    const username = new Date().getTime();
+	const [username, setUsername] = useState<number>(new Date().getTime());
+
 	let [theme] = useTheme();
 	let listRef = useRef();
 	
@@ -62,6 +62,14 @@ export default Screen('textChannel', ({ params, nav }) => {
         conn
             .start()
 			.catch(err => console.log(err));
+
+        return () => {
+            connection
+                .stop()
+                .then(() => console.log("bye bye"))
+                .catch(err => console.log(err))
+
+        }
 
 	}, []);
 
