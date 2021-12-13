@@ -13,7 +13,7 @@ export default Screen('Course', ({ params, nav }) => {
         setNumber(data.number);
         setTopics(data.topics);
         setQuestions(data.questions);
-        setChannels([{id: 0, name: 'testName'}])
+        setChannels([{id: 0, name: 'testChannel'}])
         nav.setParams({ name: data.name });
     }
 
