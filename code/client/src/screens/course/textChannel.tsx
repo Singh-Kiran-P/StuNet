@@ -42,35 +42,37 @@ export default Screen('textChannel', ({ params, nav }) => {
             .build();
         setConnection(connection)
 
-        connection.on("messageReceived", (username: string, message: string) => {
-            let m = {
-                sender: username,
+		connection.on("messageReceived", (username: string, message: string) => {
+			let m = {
+				sender: username,
                 content: message,
                 time: '0'
-            }
-            setMessages([...messages, m])
+			}
+			let temp = messages
+			temp.push(m)
+			setMessages(temp.slice())
         });
 
         connection
             .start()
-            .catch(err => console.log(err));
+			.catch(err => console.log(err));
+		
+		return () => { connection.stop() }
 
     }, []);
 
     const sendMessage = (msg: string) => {
-
         connection!.send("newMessage", username, msg)
             .catch(err => console.log(err));
 
-
 		setMessage('');
-
 	}
 
 	return (
 		<View flex>
 			<ScrollView style={{flexGrow: 1, flexDirection: 'column-reverse' }}>
-				{messages.map((msg, i) => ( //TODO: Change alignment & color based on sender (like Messenger)
+				{
+					messages.map((msg, i) => ( //TODO: Change alignment & color based on sender (like Messenger)
 					<Message key={i} user={msg.sender} color={theme.primary} alignment={Alignment.Right}>
 						{msg.content}
 					</Message>
