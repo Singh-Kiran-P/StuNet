@@ -32,15 +32,16 @@ export default Screen('textChannel', ({ params, nav }) => {
 	const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
 
-	const [connection, setConnection] = useState<signalR.HubConnection>();
-    const username = new Date().getTime();
+    const [connection, setConnection] = useState<signalR.HubConnection>();
+    const [username, setUsername] = useState<number>(new Date().getTime());
+
     let [theme] = useTheme();
 
     useEffect(() => {
-        const connection = new signalR.HubConnectionBuilder()
+        const conn = new signalR.HubConnectionBuilder()
             .withUrl("http://10.0.2.2:5000/chat")
             .build();
-        setConnection(connection)
+        setConnection(conn)
 
 		connection.on("messageReceived", (username: string, message: string) => {
 			let m = {
@@ -53,7 +54,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 			setMessages(temp.slice())
         });
 
-        connection
+        conn
             .start()
 			.catch(err => console.log(err));
 		
