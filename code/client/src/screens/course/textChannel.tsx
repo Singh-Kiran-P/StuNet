@@ -1,8 +1,6 @@
 import React, { Screen, useTheme, extend } from "@/.";
 import { ScrollView, View, TextInput, Text } from '@/components'
-import { Theme } from "@/css";
 import { useState } from "react";
-import { KeyboardAvoidingView } from "react-native";
 
 enum Alignment { Left, Right };
 
@@ -19,7 +17,6 @@ type Props = {
 };
 
 const Message = extend<typeof View, Props>(View, ({ user, color, alignment, children }) => {
-
 	const margin = alignment == Alignment.Left ? {marginRight: 'auto'} : {marginLeft: 'auto'} 
 
 	return (
@@ -47,15 +44,15 @@ export default Screen('textChannel', ({ params, nav }) => {
 	}
 
 	return (
-		<KeyboardAvoidingView style={{flex: 1}}>
+		<View flex>
 			<ScrollView style={{flexGrow: 1, flexDirection: 'column-reverse' }}>
-				{messages.map((msg, i) => (
+				{messages.map((msg, i) => ( //TODO: Change alignment & color based on sender (like Messenger)
 					<Message key={i} user={msg.sender} color={theme.primary} alignment={Alignment.Right}>
 						{msg.content}
 					</Message>
 				))}
 			</ScrollView>
-			<TextInput style={{}} value={message} placeholder={"send message in #" + params.name} onChangeText={setMessage} onSubmitEditing={(e) => sendMessage(message)} returnKeyType="send"/>
-		</KeyboardAvoidingView >
+			<TextInput value={message} placeholder={"send message in #" + params.name} onChangeText={setMessage} onSubmitEditing={(e) => sendMessage(message)} returnKeyType="send"/>
+		</View>
 	)
 })
