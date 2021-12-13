@@ -20,7 +20,7 @@ namespace ChatSample.Hubs
 
         public override Task OnConnectedAsync()
         {
-            System.Console.WriteLine(Context.ConnectionId);
+            System.Console.WriteLine("connect: "+Context.ConnectionId);
 
             UserHandler.ConnectedIds.Add(Context.ConnectionId);
             return base.OnConnectedAsync();
@@ -28,6 +28,8 @@ namespace ChatSample.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            System.Console.WriteLine("disconnect:" +Context.ConnectionId);
+
             UserHandler.ConnectedIds.Remove(Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }

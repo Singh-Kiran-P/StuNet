@@ -38,12 +38,12 @@ export default Screen('textChannel', ({ params, nav }) => {
     let [theme] = useTheme();
 
     useEffect(() => {
-        const conn = new signalR.HubConnectionBuilder()
+        const connection = new signalR.HubConnectionBuilder()
             .withUrl("http://10.0.2.2:5000/chat")
             .build();
-        setConnection(conn)
+        setConnection(connection)
 
-		connection.on("messageReceived", (username: string, message: string) => {
+		connection!.on("messageReceived", (username: string, message: string) => {
 			let m = {
 				sender: username,
                 content: message,
@@ -54,11 +54,17 @@ export default Screen('textChannel', ({ params, nav }) => {
 			setMessages(temp.slice())
         });
 
-        conn
+        connection
             .start()
 			.catch(err => console.log(err));
-		
-		return () => { connection.stop() }
+
+        return () => {
+            connection
+                .stop()
+                .then(() => console.log("bye bye"))
+                .catch(err => console.log(err))
+
+        }
 
     }, []);
 
