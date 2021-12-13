@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { FlatList } from "react-native";
 import * as signalR from "@microsoft/signalr";
 
+// https://github.com/dotnet/aspnetcore/issues/38286#issuecomment-970580861
+if (!globalThis.document) {
+	(globalThis.document as any) = undefined;
+}
+
 enum Alignment { Left, Right };
 
 type Message = {
@@ -19,11 +24,11 @@ type Props = {
 };
 
 const Message = extend<typeof View, Props>(View, ({ user, color, alignment, children }) => {
-	const margin = alignment == Alignment.Left ? { marginRight: 'auto' } : { marginLeft: 'auto' }
+	const align: string = alignment == Alignment.Left ? 'flex-start' : 'flex-end'
 
 	return (
-		<View style={{ maxWidth: '70%', backgroundColor: color, borderRadius: 10, padding: 10, marginTop: 5, ...margin }}>
-			<Text style={margin}>{user}</Text>
+		<View style={{flex: 1, maxWidth: '70%', backgroundColor: color, borderRadius: 10, padding: 10, marginTop: 5, alignItems: align, alignSelf: align }}>
+			<Text>{user}</Text>
 			<Text>{children}</Text>
 		</View>
 	)
@@ -33,7 +38,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [newMessage, setNewMessage] = useState<Message>();
-	const [connection, setConnection] = useState<signalR.HubConnection>();
+	const [connection, setConnection] = useState<signalR.HubConnection>(new signalR.HubConnectionBuilder().withUrl("http://10.0.2.2:5000/chat").build());
 	const [username, setUsername] = useState<number>(new Date().getTime());
 
 	let [theme] = useTheme();
@@ -46,12 +51,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 	}, [newMessage])
 
     useEffect(() => {
-        const conn = new signalR.HubConnectionBuilder()
-            .withUrl("http://10.0.2.2:5000/chat")
-            .build();
-        setConnection(conn)
-
-		conn.on("messageReceived", (username: string, message: string) => {
+		connection.on("messageReceived", (username: string, message: string) => {
 			setNewMessage({
 				sender: username,
                 content: message,
@@ -59,18 +59,14 @@ export default Screen('textChannel', ({ params, nav }) => {
 			})
         });
 
-        conn
-            .start()
+        connection.start()
 			.catch(err => console.log(err));
 
         return () => {
-            connection
-                .stop()
-                .then(() => console.log("bye bye"))
+            connection.stop()
                 .catch(err => console.log(err))
 
         }
-
 	}, []);
 
     const sendMessage = (msg: string) => {
