@@ -54,6 +54,13 @@ export const s = screens({
         }
     },
 
+    textChannel: {
+        screenTitle: '{course}: {name}',
+        args: {} as {
+            course: string,
+            name: string
+        }
+    },
 
 
     Home: {

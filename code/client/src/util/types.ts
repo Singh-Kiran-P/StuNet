@@ -6,6 +6,11 @@ export type Course = {
     questions: Question[];
 }
 
+export type Channel = {
+    id: number;
+    name: string;
+}
+
 export type Topic = {
     id: number;
     name: string;
