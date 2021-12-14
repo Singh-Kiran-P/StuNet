@@ -22,6 +22,7 @@ namespace Server.Api.Repositories
             return await _context.Courses
                 .Include(c => c.topics)
                 .Include(c => c.questions)
+                .Include(c => c.channels)
                 .ToListAsync();
         }
 
@@ -30,6 +31,7 @@ namespace Server.Api.Repositories
             return await _context.Courses
                 .Include(c => c.topics)
                 .Include(c => c.questions)
+                .Include(c => c.channels)
                 .Where(c => c.id == id)
                 .FirstOrDefaultAsync();
         }
@@ -66,6 +68,7 @@ namespace Server.Api.Repositories
             return await _context.Courses
                         .Include(c => c.topics)
                         .Include(c => c.questions)
+                        .Include(c => c.channels)
                         .Where(c => c.name == name)
                         .FirstOrDefaultAsync();
         }

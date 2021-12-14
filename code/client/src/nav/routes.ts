@@ -48,7 +48,13 @@ export const s = screens({
         }
     },
     EditTopics: {
-        screenTitle: 'Edit topics of course ({id})',
+        screenTitle: 'Edit topics of course ({courseId})',
+        args: {} as {
+            courseId: number;
+        }
+    },
+    EditChannels: {
+        screenTitle: 'Edit channels',
         args: {} as {
             courseId: number;
         }

@@ -114,8 +114,9 @@ namespace Server.Api
             services.AddScoped<IQuestionRepository, PgQuestionRepository>();
             services.AddScoped<IFieldOfStudyRepository, PgFieldOfStudyRepository>();
             services.AddScoped<ICourseRepository, PgCourseRepository>();
+            services.AddScoped<IChannelRepository, pgChannelRepository>();
 
-            services.AddSwaggerGen(c =>
+			services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server.Api", Version = "v1" });
             });

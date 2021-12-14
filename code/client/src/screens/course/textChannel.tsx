@@ -29,7 +29,7 @@ const Message = extend<typeof View, Props>(View, ({ user, color, alignment, chil
 	return (
 		<View style={{flex: 1, maxWidth: '70%', backgroundColor: color, borderRadius: 10, padding: 10, marginTop: 5, alignItems: align, alignSelf: align }}>
 			<Text>{user}</Text>
-			<Text>{children}</Text>
+			<Text style={{ textAlign: alignment == Alignment.Left ? 'left' : 'right'}}>{children}</Text>
 		</View>
 	)
 });
