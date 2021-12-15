@@ -29,6 +29,7 @@ namespace Server.Api.DataBase
         public DbSet<Question> Questions { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<TextChannel> Channels { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -42,7 +43,7 @@ namespace Server.Api.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<Answer>() 
+			// modelBuilder.Entity<Answer>()
             // .HasOne(a => a.user)
             // .WithMany(u => u.answers)
             // .HasForeignKey(a => a.userId);
@@ -155,7 +156,8 @@ namespace Server.Api.DataBase
 			{
 				id = 1,
 				name = "testChannel",
-                courseId = course1.id
+                courseId = course1.id,
+                messages = new List<Message>()
 			};
 
 			modelBuilder.Entity<Course>().HasData(course1);

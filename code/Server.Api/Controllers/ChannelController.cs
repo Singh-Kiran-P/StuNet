@@ -15,15 +15,6 @@ namespace Server.Api.Controllers
         private readonly IChannelRepository _channelRepository;
         private readonly ICourseRepository _courseRepository;
 
-        private getOnlyChannelDto toDto(TextChannel channel) {
-			return new getOnlyChannelDto
-			{
-				id = channel.id,
-				name = channel.name
-			};
-		}
-
-
         public ChannelController(IChannelRepository channelRepository, ICourseRepository courseRepository)
         {
             _channelRepository = channelRepository;
@@ -34,30 +25,31 @@ namespace Server.Api.Controllers
         public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannels(int courseId)
         {
             var channels = await _channelRepository.getByCourseIdAsync(courseId);
-            return Ok(channels.Select(channel => toDto(channel)));
+            return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));
         }
     
         [HttpGet("{id}")]
-        public async Task<ActionResult<getOnlyChannelDto>> GetChannel(int id)
+        public async Task<ActionResult<getChannelDto>> GetChannel(int id)
         {
             var channel = await _channelRepository.getAsync(id);
             if(channel == null)
                 return NotFound();
 
-			return Ok(toDto(channel));
+			return Ok(getChannelDto.convert(channel));
 		}
     
         [HttpPost]
         public async Task<ActionResult<getOnlyChannelDto>> CreateChannel(createChannelDto dto)
         {
-            TextChannel channel = new()
-            {
-                name = dto.name,
-                course = await _courseRepository.getAsync(dto.courseId)
-            };
+			TextChannel channel = new()
+			{
+				name = dto.name,
+				course = await _courseRepository.getAsync(dto.courseId),
+				messages = new List<Message>()
+		};
     
             await _channelRepository.createAsync(channel);
-            return Ok(toDto(channel));
+            return Ok(getOnlyChannelDto.convert(channel));
         }
     
         [HttpDelete("{id}")]

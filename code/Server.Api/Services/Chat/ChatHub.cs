@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Server.Api.Repositories;
+using Server.Api.Models;
 
 namespace ChatSample.Hubs
 {
@@ -10,13 +12,30 @@ namespace ChatSample.Hubs
         public static HashSet<string> ConnectedIds = new HashSet<string>();
     }
 
-    public class ChatHub : Hub
-    {
-        public async Task NewMessage(long username, string message, string group)
-        {
-            System.Console.WriteLine(Context.ConnectionId + " sent message to " + group);
 
-            await Clients.Group(group).SendAsync("messageReceived", username, message);
+	public class ChatHub : Hub
+    {
+        private readonly pgMessageRepository _messageRepository;
+
+        public ChatHub(pgMessageRepository messageRepository) 
+        {
+			_messageRepository = messageRepository;
+		}
+
+		public async Task NewMessage(string email, string message, string channelName, int channelId)
+		{
+			System.Console.WriteLine(Context.ConnectionId + " sent message to " + channelName);
+
+			Message m = new() {
+				userMail = email,
+                channelId = channelId,
+                body = message,
+                dateTime = DateTime.Now
+			};
+
+			await _messageRepository.createAsync(m);
+
+			await Clients.Group(channelName).SendAsync("messageReceived", email, message, DateTime.Now);
         }
 
         public override Task OnConnectedAsync()

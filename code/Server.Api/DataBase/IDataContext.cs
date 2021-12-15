@@ -19,6 +19,7 @@ namespace Server.Api.DataBase
         DbSet<FieldOfStudy> FieldOfStudies { get; set; }
         DbSet<Course> Courses { get; set; }
         DbSet<TextChannel> Channels { get; set; }
+        DbSet<Message> Messages { get; set; }
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

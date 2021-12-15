@@ -19,6 +19,7 @@ namespace Server.Api.Repositories
         {
             return await _context.Channels
             .Include(c => c.course)
+			.Include(c => c.messages)
             .ToListAsync();
         }
         public async Task createAsync(TextChannel channel)
@@ -39,6 +40,7 @@ namespace Server.Api.Repositories
         {
 			return await _context.Channels
 			.Include(c => c.course)
+			.Include(c => c.messages)
 			.Where(c => c.id == id).FirstOrDefaultAsync();
 		}
 
@@ -56,6 +58,7 @@ namespace Server.Api.Repositories
                 throw new NullReferenceException();
             channelToUpdate.name = channel.name;
             channelToUpdate.course = channel.course;
+            channelToUpdate.messages = channel.messages;
             await _context.SaveChangesAsync();
         }
     }

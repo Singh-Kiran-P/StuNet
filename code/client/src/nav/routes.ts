@@ -1,5 +1,5 @@
 import { screens, tabs } from '@/nav/types';
-import { Answer } from '@/util/types';
+import { Answer, Channel } from '@/util/types';
 
 export const s = screens({
 
@@ -61,10 +61,10 @@ export const s = screens({
     },
 
     textChannel: {
-        screenTitle: '{course}: {name}',
+        screenTitle: '{course}',
         args: {} as {
             course: string,
-            name: string
+            channel: Channel
         }
     },
 
