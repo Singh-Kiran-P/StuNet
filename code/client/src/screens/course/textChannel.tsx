@@ -2,12 +2,7 @@ import React, { Screen, useTheme, extend } from "@/.";
 import {  View, TextInput, Text } from '@/components'
 import { useEffect, useRef, useState } from "react";
 import { FlatList } from "react-native";
-import * as signalR from "@microsoft/signalr";
-
-// https://github.com/dotnet/aspnetcore/issues/38286#issuecomment-970580861
-if (!globalThis.document) {
-	(globalThis.document as any) = undefined;
-}
+import { useConnection } from "@/connection";
 
 enum Alignment { Left, Right };
 
@@ -38,8 +33,8 @@ export default Screen('textChannel', ({ params, nav }) => {
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [newMessage, setNewMessage] = useState<Message>();
-	const [connection, setConnection] = useState<signalR.HubConnection>(new signalR.HubConnectionBuilder().withUrl("http://10.0.2.2:5000/chat").build());
 	const [username, setUsername] = useState<number>(new Date().getTime());
+	const connection = useConnection();
 
 	let [theme] = useTheme();
 	let listRef = useRef();
@@ -50,27 +45,26 @@ export default Screen('textChannel', ({ params, nav }) => {
 		}
 	}, [newMessage])
 
-    useEffect(() => {
+	useEffect(() => {
+		connection.invoke('JoinChannel', params.name)
+
 		connection.on("messageReceived", (username: string, message: string) => {
 			setNewMessage({
 				sender: username,
                 content: message,
                 time: '0'
 			})
-        });
+		});
+		
+		return () => {
+			connection.off("messageReceived")
+			connection.invoke('LeaveChannel', params.name)
+		}
 
-        connection.start()
-			.catch(err => console.log(err));
-
-        return () => {
-            connection.stop()
-                .catch(err => console.log(err))
-
-        }
 	}, []);
 
     const sendMessage = (msg: string) => {
-        connection!.send("newMessage", username, msg)
+        connection.send("newMessage", username, msg, params.name)
             .catch(err => console.log(err));
 
 		setMessage('');

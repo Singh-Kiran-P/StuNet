@@ -12,15 +12,16 @@ namespace ChatSample.Hubs
 
     public class ChatHub : Hub
     {
-        public async Task NewMessage(long username, string message)
+        public async Task NewMessage(long username, string message, string group)
         {
-            System.Console.WriteLine("test");
-            await Clients.All.SendAsync("messageReceived", username, message);
+            System.Console.WriteLine(Context.ConnectionId + " sent message to " + group);
+
+            await Clients.Group(group).SendAsync("messageReceived", username, message);
         }
 
         public override Task OnConnectedAsync()
         {
-            System.Console.WriteLine("connect: "+Context.ConnectionId);
+            System.Console.WriteLine(Context.ConnectionId + " connected");
 
             UserHandler.ConnectedIds.Add(Context.ConnectionId);
             return base.OnConnectedAsync();
@@ -28,10 +29,21 @@ namespace ChatSample.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            System.Console.WriteLine("disconnect:" +Context.ConnectionId);
+            System.Console.WriteLine(Context.ConnectionId + " disconnected");
 
             UserHandler.ConnectedIds.Remove(Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
+
+        public Task JoinChannel(string channelName) {
+
+            System.Console.WriteLine(Context.ConnectionId + " joined Channel: " + channelName);
+			return Groups.AddToGroupAsync(Context.ConnectionId, channelName);
+		}
+        
+        public Task LeaveChannel(string channelName) {
+            System.Console.WriteLine(Context.ConnectionId + " left Channel: " + channelName);
+			return Groups.RemoveFromGroupAsync(Context.ConnectionId, channelName);
+		}
     }
 }
