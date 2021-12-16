@@ -7,58 +7,54 @@ using Server.Api.Repositories;
 using Server.Api.Models;
 using Microsoft.AspNetCore.SignalR;
 
-namespace ChatSample.Hubs {
-    public static class UserHandler {
-        public static HashSet<string> ConnectedIds = new HashSet<string> ();
+namespace ChatSample.Hubs
+{
+    public static class UserHandler
+    {
+        public static HashSet<string> ConnectedIds = new HashSet<string>();
     }
 
-
-	public class ChatHub : Hub
+    public class ChatHub : Hub
     {
         private readonly pgMessageRepository _messageRepository;
 
-        public ChatHub(pgMessageRepository messageRepository) 
+        public ChatHub(pgMessageRepository messageRepository)
         {
-			_messageRepository = messageRepository;
-		}
+            _messageRepository = messageRepository;
+        }
 
-		public async Task NewMessage(string email, string message, string channelName, int channelId)
-		{
-			System.Console.WriteLine(Context.ConnectionId + " sent message to " + channelName);
+        public async Task SendMessageToChannel(string email, string message, string channelName, int channelId)
+        {
+            System.Console.WriteLine(Context.ConnectionId + " sent message to " + channelName);
 
-			Message m = new() {
-				userMail = email,
+            Message m = new()
+            {
+                userMail = email,
                 channelId = channelId,
                 body = message,
                 dateTime = DateTime.Now
-			};
+            };
 
-			await _messageRepository.createAsync(m);
+            await _messageRepository.createAsync(m);
 
-			await Clients.Group(channelName).SendAsync("messageReceived", email, message, DateTime.Now);
+            await Clients.Group(channelName).SendAsync("messageReceived", email, message, DateTime.Now);
         }
 
-        public override Task OnConnectedAsync()
+        public Task JoinChannel(string channelName)
         {
-            System.Console.WriteLine("connect: "+Context.ConnectionId);
 
-        public Task SendMessageToUser (string username, string message) {
-            return Clients.Client (username).SendAsync ("ReceiveMessage", message);
-
+            System.Console.WriteLine(Context.ConnectionId + " joined Channel: " + channelName);
+            return Groups.AddToGroupAsync(Context.ConnectionId, channelName);
         }
 
-        public Task JoinGroup (string group) {
-            return Groups.AddToGroupAsync (Context.ConnectionId, group);
-
-        }
-
-        public Task SendMessageToGroup(string group,string message)
+        public Task LeaveChannel(string channelName)
         {
-            System.Console.WriteLine("disconnect:" +Context.ConnectionId);
-
+            System.Console.WriteLine(Context.ConnectionId + " left Channel: " + channelName);
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, channelName);
         }
 
-        public override async Task OnConnectedAsync () {
+        public override async Task OnConnectedAsync()
+        {
 
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;
             if (currentUser.HasClaim(c => c.Type == "username"))
@@ -68,32 +64,23 @@ namespace ChatSample.Hubs {
 
             }
 
-            await Clients.All.SendAsync ("UserConnected", Context.ConnectionId);
+            await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
 
-            System.Console.WriteLine ("connect: " + Context.ConnectionId);
+            System.Console.WriteLine("connect: " + Context.ConnectionId);
 
-            UserHandler.ConnectedIds.Add (Context.ConnectionId);
-            await base.OnConnectedAsync ();
+            UserHandler.ConnectedIds.Add(Context.ConnectionId);
+            await base.OnConnectedAsync();
         }
 
-        public override async Task OnDisconnectedAsync (Exception exception) {
-            await Clients.All.SendAsync ("UserConnected", Context.ConnectionId);
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
 
-            System.Console.WriteLine ("disconnect:" + Context.ConnectionId);
+            System.Console.WriteLine("disconnect:" + Context.ConnectionId);
 
-            UserHandler.ConnectedIds.Remove (Context.ConnectionId);
-            await base.OnDisconnectedAsync (exception);
+            UserHandler.ConnectedIds.Remove(Context.ConnectionId);
+            await base.OnDisconnectedAsync(exception);
         }
 
-        public Task JoinChannel(string channelName) {
-
-            System.Console.WriteLine(Context.ConnectionId + " joined Channel: " + channelName);
-			return Groups.AddToGroupAsync(Context.ConnectionId, channelName);
-		}
-        
-        public Task LeaveChannel(string channelName) {
-            System.Console.WriteLine(Context.ConnectionId + " left Channel: " + channelName);
-			return Groups.RemoveFromGroupAsync(Context.ConnectionId, channelName);
-		}
     }
 }

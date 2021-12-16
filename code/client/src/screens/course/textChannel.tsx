@@ -59,7 +59,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 
 	let [theme] = useTheme();
 	let listRef = useRef();
-	
+
 	useEffect(() => {
 		if (newMessage) {
 			setMessages([...messages, newMessage])
@@ -76,7 +76,7 @@ export default Screen('textChannel', ({ params, nav }) => {
                 dateTime: time
 			})
 		});
-		
+
 		return () => {
 			connection.off('messageReceived')
 			connection.invoke('LeaveChannel', params.channel.name)
@@ -90,7 +90,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 	}
 
     const sendMessage = (msg: string) => {
-		connection.invoke('NewMessage', email, msg, params.channel.name, params.channel.id)
+		connection.invoke('SendMessageToChannel', email, msg, params.channel.name, params.channel.id)
             .catch(err => console.log(err));
 
 		setMessage('');
@@ -104,7 +104,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 						{item.body}
 					</Message>
 				)} />
-				
+
 			<TextInput value={message} placeholder={"send message in #" + params.channel.name} onChangeText={setMessage} onSubmitEditing={(e) => sendMessage(message)} returnKeyType="send"/>
 		</Loader>
 	)
