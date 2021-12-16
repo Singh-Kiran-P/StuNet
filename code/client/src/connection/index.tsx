@@ -8,7 +8,7 @@ export const useConnection = () => useContext(Context)
 
 export default ({ children }: Children) => {
 	const token = useToken()[0];
-	const connection = useState(new signalR.HubConnectionBuilder().withUrl("http://10.0.2.2:5000/chat").build())[0];
+    const connection = useState(new signalR.HubConnectionBuilder().withUrl("http://10.0.2.2:5000/chat", { accessTokenFactory: () => token }).build())[0];
 
 	useEffect(() => {
 		connection.start()

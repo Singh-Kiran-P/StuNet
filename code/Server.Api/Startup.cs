@@ -24,6 +24,7 @@ using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Services;
 using ChatSample.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Server.Api
 {
@@ -136,6 +137,7 @@ namespace Server.Api
 
             //signalR
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
         }
 
@@ -172,6 +174,9 @@ namespace Server.Api
                 endpoints.MapHub<ChatHub>("/chat");
 
             });
+
+
+
         }
     }
 }

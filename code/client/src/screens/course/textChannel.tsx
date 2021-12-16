@@ -90,7 +90,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 	}
 
     const sendMessage = (msg: string) => {
-		connection.invoke('SendMessageToChannel', email, msg, params.channel.name, params.channel.id)
+		connection.invoke('SendMessageToChannel', msg, params.channel.name, params.channel.id)
             .catch(err => console.log(err));
 
 		setMessage('');

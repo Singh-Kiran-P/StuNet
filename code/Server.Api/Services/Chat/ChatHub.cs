@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Server.Api.Repositories;
 using Server.Api.Models;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChatSample.Hubs
 {
@@ -14,6 +15,7 @@ namespace ChatSample.Hubs
         public static HashSet<string> ConnectedIds = new HashSet<string>();
     }
 
+    // [Authorize]
     public class ChatHub : Hub
     {
         private readonly pgMessageRepository _messageRepository;
@@ -23,13 +25,15 @@ namespace ChatSample.Hubs
             _messageRepository = messageRepository;
         }
 
-        public async Task SendMessageToChannel(string email, string message, string channelName, int channelId)
+        public async Task SendMessageToChannel(string message, string channelName, int channelId)
         {
             System.Console.WriteLine(Context.ConnectionId + " sent message to " + channelName);
 
+            string userEmail = getCurrentUserEmail();
+
             Message m = new()
             {
-                userMail = email,
+                userMail = userEmail,
                 channelId = channelId,
                 body = message,
                 dateTime = DateTime.Now
@@ -37,7 +41,7 @@ namespace ChatSample.Hubs
 
             await _messageRepository.createAsync(m);
 
-            await Clients.Group(channelName).SendAsync("messageReceived", email, message, DateTime.Now);
+            await Clients.Group(channelName).SendAsync("messageReceived", userEmail, message, DateTime.Now);
         }
 
         public Task JoinChannel(string channelName)
@@ -55,15 +59,6 @@ namespace ChatSample.Hubs
 
         public override async Task OnConnectedAsync()
         {
-
-            ClaimsPrincipal currentUser = Context.GetHttpContext().User;
-            if (currentUser.HasClaim(c => c.Type == "username"))
-            {
-                string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-                System.Console.WriteLine("email: " + userEmail);
-
-            }
-
             await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
 
             System.Console.WriteLine("connect: " + Context.ConnectionId);
@@ -82,5 +77,16 @@ namespace ChatSample.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
+        public string getCurrentUserEmail()
+        {
+            string userEmail = null;
+            ClaimsPrincipal currentUser = Context.GetHttpContext().User;
+            if (currentUser.HasClaim(c => c.Type == "username"))
+            {
+                userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+                System.Console.WriteLine("email: " + userEmail);
+            }
+            return userEmail;
+        }
     }
 }
