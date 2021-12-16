@@ -43,7 +43,7 @@ export default Screen('textChannel', ({ params, nav }) => {
             .build();
         setConnection(connection)
 
-		connection!.on("messageReceived", (username: string, message: string) => {
+        connection!.on("ReceiveMessage", (username: string, message: string) => {
 			let m = {
 				sender: username,
                 content: message,
@@ -69,7 +69,7 @@ export default Screen('textChannel', ({ params, nav }) => {
     }, []);
 
     const sendMessage = (msg: string) => {
-        connection!.send("newMessage", username, msg)
+        connection!.send("SendMessageToAll", username, msg)
             .catch(err => console.log(err));
 
 		setMessage('');
