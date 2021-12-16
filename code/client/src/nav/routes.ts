@@ -57,7 +57,7 @@ export const s = screens({
 
 
     Home: {
-        screenTitle: 'Home'
+        screenTitle: 'StuNet'
     },
 
 

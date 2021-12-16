@@ -8,7 +8,7 @@ export default Component<Children>(({ children, params: { scroll = true, padding
             padding: padding || undefined,
             backgroundColor: theme.background,
             [scroll ? 'minHeight' : 'height']: '100%',
-            width: '100%',
+            width: '100%'
         }
     })
 

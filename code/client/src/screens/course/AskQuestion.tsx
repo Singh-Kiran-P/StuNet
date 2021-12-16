@@ -32,7 +32,7 @@ export default Screen('AskQuestion', ({ params, nav }) => {
             <TextInput margin label='Body' multiline onChangeText={setBody}/>
             <Collapse margin title='Topics'>
                 {topics.map(([{ name }, value], i) => (
-                    <Checkbox.Item key={i} mode='ios' label={name} status={value ? 'checked' : 'unchecked'} onPress={() => {
+                    <Checkbox key={i} label={name} status={value ? 'checked' : 'unchecked'} onPress={() => {
                         setTopics(topics.map(([n, v], j) => i === j ? [n, !v] : [n, v]));
                     }}/>
                 ))}

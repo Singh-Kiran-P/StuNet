@@ -1,37 +1,31 @@
 import React, { axios, Screen, useState, useEffect, Course, errorString } from '@/.';
-import { View, Text, Button, SearchBar, ScrollView } from '@/components';
-import { List } from 'react-native-paper';
+import { View, Text, List, Button, SearchBar } from '@/components';
 
 export default Screen('Courses', ({ nav }) => {
-    const [query, setQuery] = useState('');
     const [error, setError] = useState('');
     const [courses, setCourses] = useState<Course[]>([]);
 
-    // TODO: flash message on error?
-    const search = () => {
+    const search = (query: string) => {
         axios.get('/Course/search', { params: { name: query } }).then(res => {
             setCourses(res.status === 200 ? res.data : []);
         }).catch(err => setError(errorString(err)));
     }
 
-    useEffect(() => search(), []); // TODO fuzzy substring matching in backend, so the empty string matches all courses
+    useEffect(() => search(''), []); // TODO fuzzy substring matching in backend, so the empty string matches all courses
 
     return (
         <View flex>
-            <SearchBar placeholder='Search courses' onChangeText={setQuery}/>
-            <Button margin children='Search' onPress={search}/>
+            <SearchBar placeholder='Search courses' onSearch={search}/>
             <Text type='error' margin hidden={!error} children={error}/>
             <Text type='hint' size='normal' margin hidden={courses.length} children='No courses match your search'/>
-            <ScrollView>
-                {courses.map((course, i) => ( // TODO lazy list view
-                    <List.Item key={i}
-                        title={course.name}
-                        description={course.number}
-                        onPress={() => nav.push('Course', { id: course.id })}
-                        left={props => <List.Icon {...props} icon='book'/>}
-                    />
-                ))}
-            </ScrollView>
+            <List data={courses} renderItem={course => ( // TODO test
+                <List.Item
+                    title={course.item.name}
+                    description={course.item.number}
+                    onPress={() => nav.push('Course', { id: course.item.id })}
+                    left={props => <List.Icon {...props} icon='book'/>}
+                />
+            )}/>
             <Button align='bottom' onPress={() => nav.push('CreateCourse')} children='Create Course'/>
         </View>
     )

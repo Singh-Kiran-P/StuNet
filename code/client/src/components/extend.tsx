@@ -1,7 +1,7 @@
 import React, { Style, Theme } from '@/.';
 import { GetProps } from '@/util';
 
-type Props = {
+export type Props = {
     hidden?: any;
     flex?: boolean | number;
     align?: 'right' | 'bottom';

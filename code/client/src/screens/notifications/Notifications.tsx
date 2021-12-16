@@ -1,11 +1,11 @@
 import React, { Screen } from '@/.';
-import { View, Button } from '@/components';
+import { View, Text } from '@/components';
 
 export default Screen('Notifications', ({ nav }) => {
 
     return (
         <View>
-            <Button children='Question' onPress={() => nav.push('Question', { id: 1 })}/>
+            <Text children='TODO show notifications for courses and questions'/>
         </View>
     )
 })

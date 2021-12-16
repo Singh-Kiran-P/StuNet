@@ -2,9 +2,5 @@ export * from './compact';
 export * from './base';
 
 export {
-    Pressable
+    Pressable // TODO ??
 } from 'react-native';
-
-export {
-    Checkbox
-} from 'react-native-paper';

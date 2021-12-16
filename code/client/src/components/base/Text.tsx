@@ -2,7 +2,7 @@ import React, { extend, useTheme, Style } from '@/.';
 import { Text } from 'react-native-paper';
 
 type Props = {
-    type?: 'normal' | 'header' | 'error' | 'hint' | 'link';
+    type?: 'normal' | 'header' | 'title' | 'error' | 'hint' | 'link';
     size?: 'auto' | 'small' | 'normal' | 'large' | 'huge';
 }
 
@@ -21,6 +21,13 @@ export default extend<typeof Text, Props>(Text, ({ type, size, style, ...props }
 
         header: {
             color: theme.foreground,
+            ...fontSize('large'),
+            fontWeight: 'bold'
+        },
+
+        title: {
+            marginBottom: theme.padding,
+            color: theme.primary,
             ...fontSize('large'),
             fontWeight: 'bold'
         },

@@ -21,11 +21,6 @@ export default ({ navigation }: Route) => {
 			backgroundColor: theme.background
         },
 
-		header: {
-			color: theme.primary,
-            marginBottom: theme.padding
-		},
-
 		FOS: {
 			flexDirection: 'row'
 		}
@@ -57,36 +52,36 @@ export default ({ navigation }: Route) => {
             Password: password,
 			ConfirmPassword: confirmPassword,
 			FieldOfStudy: `${FOS.field}-${degree}-${FOS.year}`
-        }).then(res => {}) // TODO info about email confirmation
+        }).then(() => navigation.navigate('Login', { registered: email }))
         .catch(err => setError(errorString(err)));
     }
 
 	return (
 		<Loader style={s.screen} load={fetch}>
-			<Text style={s.header} type='header' children='Register'/>
+			<Text type='title' children='Register'/>
 
 			<TextInput label='Email' onChangeText={setEmail}/>
 			<PasswordInput margin label='Password' onChangeText={setPassword}/>
 			<PasswordInput margin label='Confirm password' onChangeText={setConfirmPassword}/>
-			<Text margin type='error' hidden={password == confirmPassword} children='Passwords do not match.'/>
+			<Text type='error' margin hidden={password == confirmPassword} children='Passwords do not match.'/>
 
 			<View margin style={s.FOS} hidden={type() != User.STUDENT}>
-				<Picker prompt='Field' flex
+				<Picker flex prompt='Field'
 					selectedValue={FOS.field} values={Object.keys(fields)}
 					onValueChange={v => setFOS({ field: v, degree: '', year: '' })}/>
 
-				<Picker prompt='Degree' flex enabled={!!FOS.field}
+				<Picker  flex prompt='Degree' enabled={!!FOS.field}
 					selectedValue={FOS.degree} values={degrees(fields[FOS.field])}
 					onValueChange={v => setFOS({ ...FOS, degree: v, year: '' })}/>
-	
-				<Picker prompt='Year' flex enabled={!!FOS.degree}
+
+				<Picker flex prompt='Year' enabled={!!FOS.degree}
 					selectedValue={FOS.year} values={years(fields[FOS.field], FOS.degree)}
 					onValueChange={v => setFOS({ ...FOS, year: v })}/>
 			</View>
 
-			<Text margin type='error' hidden={!error} children={error}/>
+			<Text type='error' margin hidden={!error} children={error}/>
 			<Button margin onPress={register} disabled={!email || !password || password !== confirmPassword || !type()} children='Register'/>
-			<Text margin type='hint'>
+			<Text type='hint' margin>
 				Already have an account?{' '}
 				<Text type='link' size='auto' onPress={() => navigation.navigate('Login')}>
 					Log in here!
