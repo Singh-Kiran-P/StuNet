@@ -13,7 +13,7 @@ export default Screen('Course', ({ params, nav }) => {
         setNumber(data.number);
         setTopics(data.topics);
         setQuestions(data.questions);
-        setChannels([{id: 0, name: 'testName'}])
+        setChannels(data.channels)
         nav.setParams({ name: data.name });
     }
 
@@ -37,7 +37,7 @@ export default Screen('Course', ({ params, nav }) => {
                 <Collapse title='Channels'>
                     {channels.map((channel, i) => (
                         <Button key={i}
-                            onPress={() => nav.push('textChannel', { course: name, name: channel.name, scroll: false } )}
+                            onPress={() => nav.push('textChannel', { course: name, channel: channel, scroll: false } )}
                             children={channel.name}
                         />
                     ))}

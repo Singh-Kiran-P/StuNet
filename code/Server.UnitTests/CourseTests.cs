@@ -68,6 +68,7 @@ namespace Server.UnitTests
                 name = "random" + random.Next().ToString(),
                 number = random.Next().ToString(),
                 topics = new List<Topic> { new Topic() { name = randomName(), id = randomInt() } },
+                channels = new List<TextChannel> { new TextChannel() { name = randomName(), id = randomInt() } },
                 questions = new List<Question>()
             };
             _courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))

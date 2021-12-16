@@ -115,8 +115,6 @@ namespace Server.Api
             // Email setup
             services.AddTransient<IEmailSender, EmailSender>();
 
-            //signalR
-            services.AddSignalR();
 
             // Custom
             services.AddSingleton<IConfiguration>(Configuration);
@@ -128,14 +126,16 @@ namespace Server.Api
             services.AddScoped<IQuestionRepository, PgQuestionRepository>();
             services.AddScoped<IFieldOfStudyRepository, PgFieldOfStudyRepository>();
             services.AddScoped<ICourseRepository, PgCourseRepository>();
+            services.AddScoped<IChannelRepository, pgChannelRepository>();
+            services.AddScoped<pgMessageRepository, pgMessageRepository>();
 
-            services.AddSwaggerGen(c =>
+			services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server.Api", Version = "v1" });
             });
 
-            services.AddTransient<DataContext>();
-
+            //signalR
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
