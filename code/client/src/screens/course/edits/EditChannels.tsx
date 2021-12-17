@@ -1,5 +1,6 @@
-import React, { Screen, axios, useState, Course, Channel, Style, } from '@/.';
-import { View, Button, Pressable, Loader, Checkbox, ScrollView, TextInput, } from '@/components';
+import React, { Screen, axios, useState, Channel, Style, } from '@/.';
+import { View, Button, Loader, Checkbox, ScrollView, TextInput, } from '@/components';
+import { TouchableRipple } from 'react-native-paper';
 
 type ChannelItem = {
     channel: Channel;
@@ -134,13 +135,13 @@ export default Screen('EditChannels', ({ params, nav }) => {
                 <View>
                 {
                     channelItems.map((item, i) =>
-                        <Pressable
+                        <TouchableRipple
                             key={i}
                             onPress={() => flipChannelChecked(item)}
                             onLongPress={() => setEditableItem(item)}
                             >
                             { renderRow(item) }
-                        </Pressable>
+                        </TouchableRipple>
                     )
                 }
                 </View>
