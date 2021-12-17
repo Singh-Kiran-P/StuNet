@@ -67,7 +67,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 	}, [newMessage])
 
 	useEffect(() => {
-		connection.invoke('JoinChannel', params.channel.name)
+		connection.invoke('JoinChannel', params.channel.id)
 
 		connection.on('messageReceived', (username: string, message: string, time: string) => {
 			setNewMessage({
@@ -79,7 +79,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 
 		return () => {
 			connection.off('messageReceived')
-			connection.invoke('LeaveChannel', params.channel.name)
+			connection.invoke('LeaveChannel', params.channel.id)
 		}
 
 	}, []);
