@@ -99,7 +99,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 	return (
 		<Loader load={fetch} style={{flex: 1}}>
 			<FlatList ref={listRef} contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }} data={messages} onContentSizeChange={() => listRef.current.scrollToEnd()} renderItem={
-				({ item, index }) => ( //TODO: Change alignment & color based on userMail (like Messenger)
+				({ item, index }) => (
 					<Message key={index} user={item.userMail} time={item.dateTime} color={item.userMail === email ? theme.primary : theme.accent} alignment={item.userMail === email ? Alignment.Right : Alignment.Left}>
 						{item.body}
 					</Message>
