@@ -1,0 +1,35 @@
+@startuml SignalR Websockets
+participant signalR.hub
+participant MessageRepository
+participant DataContext
+participant DataStore
+
+-> signalR.hub : JoinChannel(channelId)
+activate signalR.hub
+signalR.hub -> signalR.hub : AddToGroup(connectionId, channelId)
+
+opt
+	loop
+		-> signalR.hub : sendMessageToChannel(message, channelId)
+		signalR.hub -> MessageRepository : createMessage(message)
+		activate MessageRepository
+		MessageRepository -> DataContext : createMessage(message)
+		activate DataContext
+		DataContext -> DataStore : load()
+		activate DataStore
+		DataStore -> DataStore : query()
+		DataStore -> DataContext : Message
+		deactivate DataStore
+		DataContext -> MessageRepository : Message
+		deactivate DataContext
+		MessageRepository -> signalR.hub : Message
+		deactivate MessageRepository
+		<- signalR.hub : send("messageReceived", mail, message, DateTime)
+	end
+end
+
+signalR.hub -> signalR.hub : RemoveFromGroup(connectionId, channelId)
+<- signalR.hub : LeaveChannel()
+deactivate signalR.hub
+
+@enduml

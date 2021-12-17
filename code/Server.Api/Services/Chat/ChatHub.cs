@@ -25,9 +25,9 @@ namespace ChatSample.Hubs
             _messageRepository = messageRepository;
         }
 
-        public async Task SendMessageToChannel(string message, string channelName, int channelId)
+        public async Task SendMessageToChannel(string message, int channelId)
         {
-            System.Console.WriteLine(Context.ConnectionId + " sent message to " + channelName);
+            System.Console.WriteLine(Context.ConnectionId + " sent message to " + channelId.ToString());
 
             string userEmail = getCurrentUserEmail();
 
@@ -41,20 +41,20 @@ namespace ChatSample.Hubs
 
             await _messageRepository.createAsync(m);
 
-            await Clients.Group(channelName).SendAsync("messageReceived", userEmail, message, DateTime.Now);
+            await Clients.Group(channelId.ToString()).SendAsync("messageReceived", userEmail, message, DateTime.Now);
         }
 
-        public Task JoinChannel(string channelName)
+        public Task JoinChannel(int channelId)
         {
 
-            System.Console.WriteLine(Context.ConnectionId + " joined Channel: " + channelName);
-            return Groups.AddToGroupAsync(Context.ConnectionId, channelName);
+            System.Console.WriteLine(Context.ConnectionId + " joined Channel: " + channelId.ToString());
+            return Groups.AddToGroupAsync(Context.ConnectionId, channelId.ToString());
         }
 
-        public Task LeaveChannel(string channelName)
+        public Task LeaveChannel(int channelId)
         {
-            System.Console.WriteLine(Context.ConnectionId + " left Channel: " + channelName);
-            return Groups.RemoveFromGroupAsync(Context.ConnectionId, channelName);
+            System.Console.WriteLine(Context.ConnectionId + " left Channel: " + channelId.ToString());
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, channelId.ToString());
         }
 
         public override async Task OnConnectedAsync()
