@@ -36,12 +36,12 @@ namespace ChatSample.Hubs
                 userMail = userEmail,
                 channelId = channelId,
                 body = message,
-                dateTime = DateTime.Now
+                dateTime = DateTime.UtcNow
             };
 
             await _messageRepository.createAsync(m);
 
-            await Clients.Group(channelId.ToString()).SendAsync("messageReceived", userEmail, message, DateTime.Now);
+            await Clients.Group(channelId.ToString()).SendAsync("messageReceived", userEmail, message, DateTime.UtcNow);
         }
 
         public Task JoinChannel(int channelId)

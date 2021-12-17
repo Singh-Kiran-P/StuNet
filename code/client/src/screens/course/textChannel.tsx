@@ -28,13 +28,13 @@ const prettyPrintDateTime = (date: Date) => {
 	if (today.getUTCFullYear() == date.getUTCFullYear()) {
 		if (today.getUTCMonth() == date.getUTCMonth()) {
 			if (today.getUTCDay() == date.getUTCDay()) {
-				return moment(date).format('HH:mm')
+				return moment(date).local().format('HH:mm')
 			} else {
-				return moment(date).format('D MMM, HH:mm')
+				return moment(date).local().format('D MMM, HH:mm')
 			}
 		}
 	} else {
-		return moment(date).format('D MMM yyyy, HH:mm')
+		return moment(date).local().format('D MMM yyyy, HH:mm')
 	}
 }
 
