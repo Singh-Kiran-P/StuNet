@@ -8,6 +8,7 @@ export default Screen('Question', ({ params, nav }) => {
     let [body, setBody] = useState('');
     let [date, setDate] = useState('');
     let [theme] = useTheme();
+    const [notificationsEnabled, setNotifactionsEnabled] = useState<boolean>(true);
 
     const s = Style.create({
         content: {
@@ -50,10 +51,20 @@ export default Screen('Question', ({ params, nav }) => {
 
     const fetch = async () => Promise.all([info(), questions()]);
 
+    /**
+     * Updates the notification on the server, and if succes
+     * updates the local notification.
+     */
+    function updateNotificationSubscription(): void {
+        setNotifactionsEnabled(!notificationsEnabled);
+    }
+
     return (
         <Loader load={fetch}>
             <View type='header'>
                 <Text type='header' children={title}/>
+                {/* Temporary button which should be moved to the page header as an icon */}
+                <Button margin align='right' children={(notificationsEnabled ? 'Enable' : 'Disable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
                 <Text type='hint' align='right' children={date}/>
             </View>
             <ScrollView margin style={s.content} flex>
