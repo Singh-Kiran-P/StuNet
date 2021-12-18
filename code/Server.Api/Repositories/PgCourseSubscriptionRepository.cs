@@ -31,14 +31,12 @@ namespace Server.Api.Repositories
 
         public async Task<IEnumerable<CourseSubscription>> getAllAsync()
         {
-            //TODO: test function
             return await _context.CourseSubscriptions
                 .ToListAsync();
         }
 
         public async Task<CourseSubscription> getAsync(int id)
         {
-            //TODO: this function shouldn't be here
             return await _context.CourseSubscriptions
                 .Where(s => s.id == id)
                 .FirstOrDefaultAsync();
@@ -46,20 +44,18 @@ namespace Server.Api.Repositories
 
         public async Task updateAsync(CourseSubscription coursesubscription)
         {
-            //TODO: test function
+            //FIXME: this method doesn't belong here...
             await _context.SaveChangesAsync();
         }
 
         public async Task createAsync(CourseSubscription coursesubscription)
         {
-            //TODO: test function
             _context.CourseSubscriptions.Add(coursesubscription);
             await _context.SaveChangesAsync();
         }
 
         public async Task deleteAsync(int id)
         {
-            //TODO: test function
             CourseSubscription coursesubscription = await _context.CourseSubscriptions.FindAsync(id);
             if (coursesubscription == null)
                 throw new NullReferenceException();
