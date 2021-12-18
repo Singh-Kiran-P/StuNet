@@ -29,6 +29,8 @@ namespace Server.Api.Dtos
 			return new getCourseSubscriptionDto
 			{
 				dateTime = subscription.dateTime,
+                userId = subscription.userId,
+                courseId = subscription.courseId,
 			};
 		}
     }
