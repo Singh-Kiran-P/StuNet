@@ -40,7 +40,7 @@ namespace Server.Api.Repositories
         {
             //TODO: this function shouldn't be here
             return await _context.CourseSubscriptions
-                // .Where(c => c.id == id)
+                .Where(s => s.id == id)
                 .FirstOrDefaultAsync();
         }
 
