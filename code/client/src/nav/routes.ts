@@ -61,7 +61,8 @@ export const s = screens({
     },
 
     textChannel: {
-        screenTitle: '{course}',
+        screenTitle: '',
+        channelName: '',
         args: {} as {
             course: string,
             channel: Channel

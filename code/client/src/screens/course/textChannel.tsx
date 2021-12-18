@@ -6,7 +6,7 @@ import { useConnection } from "@/connection";
 import { useToken } from "@/.";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import moment from 'moment'
+import moment from "moment"
 
 enum Alignment { Left, Right };
 
@@ -39,15 +39,14 @@ const prettyPrintDateTime = (date: Date) => {
 }
 
 const Message = extend<typeof View, Props>(View, ({ user, color, time, alignment, children }) => {
-	const align: string = alignment == Alignment.Left ? 'flex-start' : 'flex-end'
+	const align = alignment == Alignment.Left ? 'flex-start' : 'flex-end'
+	const textAlign = alignment == Alignment.Left ? 'left' : 'right'
 
-	return (
-		<View style={{flex: 1, maxWidth: '70%', backgroundColor: color, borderRadius: 10, padding: 10, marginTop: 5, alignItems: align, alignSelf: align }}>
-			<Text>{user}</Text>
-			<Text>{children}</Text>
-			<Text style={{ alignSelf: alignment == Alignment.Left ? 'flex-end' : 'flex-start'}}>{prettyPrintDateTime(new Date(time))}</Text>
-		</View>
-	)
+	return <View style={{ flex: 1, maxWidth: '70%', backgroundColor: color, borderRadius: 10, padding: 10, marginTop: 5, alignSelf: align, alignItems: align }}>
+		<Text style={{ fontWeight: "bold", textAlign: textAlign }}>{user}</Text>
+		<Text style={{ textAlign: textAlign }}>{children}</Text>
+		<Text style={{ alignSelf: alignment == Alignment.Left ? 'flex-end' : 'flex-start' }}>{prettyPrintDateTime(new Date(time))}</Text>
+	</View>
 });
 
 export default Screen('textChannel', ({ params, nav }) => {
@@ -86,7 +85,10 @@ export default Screen('textChannel', ({ params, nav }) => {
 
 	const fetch = () => {
 		return axios.get('/Channel/' + params.channel.id)
-			.then(res => setMessages(res.data.messages));
+			.then(res => {
+				setMessages(res.data.messages)
+				nav.setParams({ screenTitle: '{course}: #{channelName}', channelName: params.channel.name })
+			});
 	}
 
     const sendMessage = (msg: string) => {
@@ -97,15 +99,15 @@ export default Screen('textChannel', ({ params, nav }) => {
 	}
 
 	return (
-		<Loader load={fetch} style={{flex: 1}}>
+		<Loader load={fetch} style={{ flex: 1 }}>
 			<FlatList ref={listRef} contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }} data={messages} onContentSizeChange={() => listRef.current.scrollToEnd()} renderItem={
 				({ item, index }) => (
-					<Message key={index} user={item.userMail} time={item.dateTime} color={item.userMail === email ? theme.primary : theme.accent} alignment={item.userMail === email ? Alignment.Right : Alignment.Left}>
+					<Message key={index} user={item.userMail} time={item.dateTime} color={item.userMail === email ? theme.primary : theme.surface} alignment={item.userMail === email ? Alignment.Right : Alignment.Left}>
 						{item.body}
 					</Message>
 				)} />
 
-			<TextInput value={message} placeholder={"send message in #" + params.channel.name} onChangeText={setMessage} onSubmitEditing={(e) => sendMessage(message)} returnKeyType="send"/>
+			<TextInput value={message} placeholder={"send message in #" + params.channel.name} onChangeText={setMessage} onSubmitEditing={(e) => sendMessage(message)} returnKeyType='send' />
 		</Loader>
 	)
 })
