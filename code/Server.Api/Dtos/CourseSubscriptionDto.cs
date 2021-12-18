@@ -18,4 +18,18 @@ namespace Server.Api.Dtos
 			};
 		}
     }
+
+    public class getCourseSubscriptionDto
+    {  
+		public DateTime dateTime { get; set; }
+        public int userId { get; set; }      
+        public int courseId { get; set; }      
+        public static getCourseSubscriptionDto convert(CourseSubscription subscription)
+        {
+			return new getCourseSubscriptionDto
+			{
+				dateTime = subscription.dateTime,
+			};
+		}
+    }
 }
