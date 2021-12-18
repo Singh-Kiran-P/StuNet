@@ -7,6 +7,7 @@ export default Screen('Course', ({ params, nav }) => {
     const [topics, setTopics] = useState<Topic[]>([]);
     const [channels, setChannels] = useState<Channel[]>([]);
     const [questions, setQuestions] = useState<Question[]>([]);
+    const [notificationsEnabled, setNotifactionsEnabled] = useState<boolean>(true);
 
     const init = (data: Course) => {
         setName(data.name);
@@ -21,6 +22,14 @@ export default Screen('Course', ({ params, nav }) => {
         return axios.get('/Course/' + params.id)
             .then(res => init(res.data))
             .catch(err => {}) // TODO handle error
+    }
+
+    /**
+     * Updates the notification on the server, and if succes
+     * updates the local notification.
+     */
+    function updateNotificationSubscription(): void {
+        setNotifactionsEnabled(!notificationsEnabled);
     }
 
     return (
@@ -49,6 +58,8 @@ export default Screen('Course', ({ params, nav }) => {
                 </Collapse>
                 <Button margin children='Ask a question' onPress={() => nav.push('AskQuestion', { courseId: params.id })}/>
                 <Button margin children='Edit course' onPress={() => nav.push('EditCourse', { id: params.id })}/>
+                {/* Temporary button which should be moved to the page header as an icon */}
+                <Button margin children={(notificationsEnabled ? 'Enable' : 'Disable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
             </ScrollView>
         </Loader>
     );
