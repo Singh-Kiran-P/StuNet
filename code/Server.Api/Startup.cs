@@ -129,6 +129,7 @@ namespace Server.Api
             services.AddScoped<ICourseRepository, PgCourseRepository>();
             services.AddScoped<IChannelRepository, pgChannelRepository>();
             services.AddScoped<pgMessageRepository, pgMessageRepository>();
+            services.AddScoped<ICourseSubscriptionRepository, PgCourseSubscriptionRepository>();
 
 			services.AddSwaggerGen(c =>
             {
