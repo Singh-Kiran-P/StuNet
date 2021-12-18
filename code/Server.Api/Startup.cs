@@ -23,6 +23,8 @@ using Server.Api.DataBase;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Services;
+using ChatSample.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Server.Api
 {
@@ -38,7 +40,7 @@ namespace Server.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-                        services.AddControllers();
+            services.AddControllers();
 
             // Setup cors
             services.AddCors(options =>
@@ -71,22 +73,36 @@ namespace Server.Api
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
             }).AddJwtBearer(options =>
             {
+
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
+                    ValidAudience = jwtSettings.GetSection("validAudience").Value,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings.GetSection("secretKey").Value))
+                };
+
+
+                // event for signalR
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
                     {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
-                        ValidAudience = jwtSettings.GetSection("validAudience").Value,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(jwtSettings.GetSection("secretKey").Value))
-                    };
-                }
+                        if (context.Request.Path.ToString().StartsWith("/chat"))
+                            context.Token = context.Request.Query["access_token"];
+                        return Task.CompletedTask;
+                    },
+                };
             });
+
+
 
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession();
@@ -96,7 +112,7 @@ namespace Server.Api
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-                
+
             // Email setup
             services.AddTransient<IEmailSender, EmailSender>();
 
@@ -111,15 +127,17 @@ namespace Server.Api
             services.AddScoped<IQuestionRepository, PgQuestionRepository>();
             services.AddScoped<IFieldOfStudyRepository, PgFieldOfStudyRepository>();
             services.AddScoped<ICourseRepository, PgCourseRepository>();
+            services.AddScoped<IChannelRepository, pgChannelRepository>();
+            services.AddScoped<pgMessageRepository, pgMessageRepository>();
 
-            services.AddSwaggerGen(c =>
+			services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server.Api", Version = "v1" });
             });
 
-            services.AddTransient<DataContext>();
-
-
+            //signalR
+            services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
         }
 
@@ -143,6 +161,8 @@ namespace Server.Api
                .AllowCredentials());               // allow credentials
 
             app.UseRouting();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             // Required for Authentication!!
             app.UseAuthentication();
@@ -151,7 +171,12 @@ namespace Server.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
+
             });
+
+
+
         }
     }
 }

@@ -12,12 +12,13 @@ import React, {
 import {
     View,
     Button,
-    Pressable,
     Loader,
     Checkbox,
     ScrollView,
     TextInput,
 } from '@/components';
+
+import { TouchableRipple } from 'react-native-paper';
 
 type TopicItem = {
     topic: Topic;
@@ -28,7 +29,8 @@ const style: Style = Style.create({
     row: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     rowItem: {
         flex: 1,
@@ -187,13 +189,13 @@ export default Screen('EditTopics', ({ params, nav }) => {
                 <View>
                 {
                     topicItems.map((item, i) =>
-                        <Pressable
+                        <TouchableRipple
                             key={i}
                             onPress={() => flipTopicChecked(item)}
                             onLongPress={() => setEditableItem(item)}
                             >
                             { renderRow(item) }
-                        </Pressable>
+                        </TouchableRipple>
                     )
                 }
                 </View>

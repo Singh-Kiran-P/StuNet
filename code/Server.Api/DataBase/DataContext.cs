@@ -28,8 +28,10 @@ namespace Server.Api.DataBase
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<TextChannel> Channels { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+		public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
         }
@@ -41,7 +43,7 @@ namespace Server.Api.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<Answer>() 
+			// modelBuilder.Entity<Answer>()
             // .HasOne(a => a.user)
             // .WithMany(u => u.answers)
             // .HasForeignKey(a => a.userId);
@@ -131,6 +133,11 @@ namespace Server.Api.DataBase
             modelBuilder.Entity<Topic>()
                  .HasOne(t => t.course)
                  .WithMany(c => c.topics)
+                 .HasForeignKey(t => t.courseId);
+
+            modelBuilder.Entity<TextChannel>()
+                 .HasOne(c => c.course)
+                 .WithMany(c => c.channels)
                  .HasForeignKey(c => c.courseId);
 
             var course1 = new Course()
@@ -145,9 +152,17 @@ namespace Server.Api.DataBase
                 name = "testTopic",
                 courseId = course1.id,
             };
+			var channel1 = new TextChannel
+			{
+				id = 1,
+				name = "testChannel",
+                courseId = course1.id,
+                messages = new List<Message>()
+			};
 
-            modelBuilder.Entity<Course>().HasData(course1);
+			modelBuilder.Entity<Course>().HasData(course1);
             modelBuilder.Entity<Topic>().HasData(topic1);
+            modelBuilder.Entity<TextChannel>().HasData(channel1);
         }
     }
 }

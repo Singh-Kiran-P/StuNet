@@ -32,7 +32,7 @@ export default Screen('EditCourse', ({ params, nav }) => {
                 <TextInput label='name' defaultValue={name} onChangeText={change(setName)}/>
                 <TextInput margin label='number' defaultValue={number} onChangeText={change(setNumber)}/>
                 <Button margin children='Edit topics' onPress={() => nav.push('EditTopics', { courseId: params.id })}/>
-                {/* <Button children='Edit channels' onPress={() => nav.push('EditTopics', { id: params.id })}/> */}
+                <Button margin children='Edit channels' onPress={() => nav.push('EditChannels', { courseId: params.id })}/>
                 {/* <Button children='Edit assitants' onPress={() => nav.push('EditTopics', { id: params.id })}/> */}
                 <Button margin children='Update' onPress={update} disabled={!changed}/>
             </ScrollView>

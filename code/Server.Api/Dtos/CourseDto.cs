@@ -16,6 +16,7 @@ namespace Server.Api.Dtos // controllers?
         public string name { get; set; }
         public string number { get; set; }
         public ICollection<getOnlyTopicDto> topics;
+        
     }
 
     public record GetCourseDto
@@ -24,7 +25,8 @@ namespace Server.Api.Dtos // controllers?
         public string name { get; set; }
         public string number { get; set; }
         public ICollection<getOnlyTopicDto> topics;
-        public ICollection<onlyQuestionDto> questions;
+		public ICollection<getOnlyChannelDto> channels;
+		public ICollection<onlyQuestionDto> questions;
     }
 
     public record getOnlyCourseDto {

@@ -1,10 +1,11 @@
-import React, { Screen, axios, useState, Topic, Course, Question } from '@/.';
+import React, { Screen, axios, useState, Topic, Course, Channel, Question } from '@/.';
 import { Button, Loader, Collapse, ScrollView, CompactQuestion } from '@/components';
 
 export default Screen('Course', ({ params, nav }) => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     const [topics, setTopics] = useState<Topic[]>([]);
+    const [channels, setChannels] = useState<Channel[]>([]);
     const [questions, setQuestions] = useState<Question[]>([]);
 
     const init = (data: Course) => {
@@ -12,6 +13,7 @@ export default Screen('Course', ({ params, nav }) => {
         setNumber(data.number);
         setTopics(data.topics);
         setQuestions(data.questions);
+        setChannels(data.channels)
         nav.setParams({ name: data.name });
     }
 
@@ -29,6 +31,14 @@ export default Screen('Course', ({ params, nav }) => {
                         <Button key={i}
                             onPress={() => nav.push('Course', params)}
                             children={topic.name}
+                        />
+                    ))}
+                </Collapse>
+                <Collapse title='Channels'>
+                    {channels.map((channel, i) => (
+                        <Button key={i}
+                            onPress={() => nav.push('textChannel', { course: name, channel: channel, scroll: false } )}
+                            children={channel.name}
                         />
                     ))}
                 </Collapse>
