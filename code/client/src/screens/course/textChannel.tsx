@@ -84,7 +84,7 @@ export default Screen('TextChannel', ({ params, nav }) => {
 	}, []);
 
 	const fetch = () => {
-		return axios.get('/Channel/GetChannelsByCourseId/' + params.channel.id)
+		return axios.get('/Channel/' + params.channel.id)
 			.then(res => {
 				setMessages(res.data.messages)
 				nav.setParams({ screenTitle: '{course}: #{channelName}', channelName: params.channel.name })
