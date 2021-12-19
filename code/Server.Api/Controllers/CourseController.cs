@@ -29,12 +29,12 @@ namespace Server.Api.Controllers
             IEnumerable<GetAllCourseDto> getDtos = courses.Select(course =>
                new GetAllCourseDto()
                {
-                   id = course.id,
-                   name = course.name,
-                   number = course.number,
-                   topics = course.topics.Select(topic =>
-                       new getOnlyTopicDto() { name = topic.name, id = topic.id }
-                       ).ToList(),
+                    id = course.id,
+                    name = course.name,
+                    number = course.number,
+                    topics = course.topics.Select(topic =>
+                        new getOnlyTopicDto() { name = topic.name, id = topic.id }
+                        ).ToList(),
                }
             );
             return getDtos;
@@ -60,6 +60,9 @@ namespace Server.Api.Controllers
                 number = course.number,
                 topics = course.topics.Select(topic =>
                     new getOnlyTopicDto() { id = topic.id, name = topic.name }
+                ).ToList(),
+                channels = course.channels.Select(channel =>
+                    new getOnlyChannelDto() { id = channel.id, name = channel.name }
                 ).ToList(),
                 questions = course.questions.Select(question =>
                     onlyQuestionDto.convert(question)

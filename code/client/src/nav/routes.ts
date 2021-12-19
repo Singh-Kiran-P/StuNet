@@ -1,5 +1,5 @@
 import { screens, tabs } from '@/nav/types';
-import { Course, Question } from '@/util/types';
+import { Course, Question, Channel } from '@/util/types';
 
 export const s = screens({
 
@@ -51,7 +51,21 @@ export const s = screens({
             course: Course;
         }
     },
+    EditChannels: {
+        screenTitle: 'Edit channels of {course.name}',
+        args: {} as {
+            course: Course;
+        }
+    },
 
+    textChannel: { // TODO ?????
+        screenTitle: '',
+        channelName: '',
+        args: {} as {
+            course: string,
+            channel: Channel
+        }
+    },
 
 
     Question: {

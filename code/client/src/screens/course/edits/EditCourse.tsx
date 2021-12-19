@@ -22,7 +22,7 @@ export default Screen('EditCourse', ({ params: { course }, nav }) => {
             <Button margin icon='content-save' children='Save' disabled={!name || !number} toggled={error} onPress={save}/>
             <Text type='error' margin hidden={!error} children={error}/>
             <Button align='bottom' icon='pencil' children='Edit topics' onPress={() => nav.push('EditTopics', { course })}/>
-            {/* <Button children='Edit channels' onPress={() => nav.push('EditTopics', { course })}/> */}
+            <Button children='Edit channels' onPress={() => nav.push('EditChannels', { course })}/>
             {/* <Button children='Edit assitants' onPress={() => nav.push('EditTopics', { course })}/> */}
         </View>
     )
