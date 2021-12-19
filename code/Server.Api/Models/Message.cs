@@ -5,6 +5,6 @@ namespace Server.Api.Models
     public class Message
     {
         public string body { get; set; }
-        public DateTime dateTime { get; set; }
+        public DateTime time { get; set; }
     }
 }

@@ -1,45 +1,29 @@
-import React, { Screen, axios, useState, Topic, Course, Question } from '@/.';
-import { Button, Loader, Collapse, ScrollView, CompactQuestion } from '@/components';
+import React, { Screen, EmptyCourse, Question, useState, axios } from '@/.';
+import { Text, List, Button, Loader, CompactQuestion, SelectTopics } from '@/components';
 
 export default Screen('Course', ({ params, nav }) => {
-    const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
-    const [topics, setTopics] = useState<Topic[]>([]);
-    const [questions, setQuestions] = useState<Question[]>([]);
-
-    const init = (data: Course) => {
-        setName(data.name);
-        setNumber(data.number);
-        setTopics(data.topics);
-        setQuestions(data.questions);
-        nav.setParams({ name: data.name });
-    }
+    let [course, setCourse] = useState(EmptyCourse);
+    let [actives, setActives] = useState<number[]>([]);
 
     const fetch = async () => {
-        return axios.get('/Course/' + params.id)
-            .then(res => init(res.data))
-            .catch(err => {}) // TODO handle error
+        return axios.get('/Course/' + params.id).then(res => {
+            setCourse(res.data);
+            nav.setParams({ name: res.data.name });
+        })
     }
+
+    const display = (question: Question) => actives.every(i => question.topics.find(t => t.id === i));
 
     return (
         <Loader load={fetch}>
-            <ScrollView>
-                <Collapse title='Topics'>
-                    {topics.map((topic, i) => ( // TODO: show search results with this topic only on click
-                        <Button key={i}
-                            onPress={() => nav.push('Course', params)}
-                            children={topic.name}
-                        />
-                    ))}
-                </Collapse>
-                <Collapse margin title='Questions'>
-                    {questions.map((question, i) => (
-                        <CompactQuestion key={i} question={question}/>
-                    ))}
-                </Collapse>
-                <Button margin children='Ask a question' onPress={() => nav.push('AskQuestion', { courseId: params.id })}/>
-                <Button margin children='Edit course' onPress={() => nav.push('EditCourse', { id: params.id })}/>
-            </ScrollView>
+            <Text children={course.description || 'TODO description'}/>
+            <SelectTopics margin topics={course.topics} actives={actives} setActives={setActives}/>
+            <Button margin='top-2' icon='comment-plus' children='Ask a question' onPress={() => nav.push('AskQuestion', { course, selected: actives })}/>
+            <Text type='hint' size='normal' margin='top-2' hidden={course.questions.filter(display).length} children='No questions match these topics'/>
+            <List margin='vertical-2' data={course.questions} renderItem={({ item, index }) => !display(item) ? null : (
+                <CompactQuestion margin={!!index} question={item} selected={actives}/>
+            )}/>
+            <Button align='bottom' icon='pencil' children='Edit course' onPress={() => nav.push('EditCourse', { course })}/>
         </Loader>
-    );
-});
+    )
+})

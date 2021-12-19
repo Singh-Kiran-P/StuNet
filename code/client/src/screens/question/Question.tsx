@@ -1,50 +1,20 @@
-import React, { axios, Screen, Style, useTheme, useState, Answer, dateString } from '@/.';
-import { Text, View, Loader, Button, ScrollView } from '@/components';
-import { Dimensions } from 'react-native';
+import React, { Screen, Answer, EmptyQuestion, useState, axios, dateString } from '@/.';
+import { View, Text, Chip, List, Icon, Loader, Button, ScrollView, CompactAnswer } from '@/components';
 
-export default Screen('Question', ({ params, nav }) => {
+export default Screen('Question', ({ nav, params: { id } }) => {
+    let [question, setQuestion] = useState(EmptyQuestion);
     let [answers, setAnswers] = useState<Answer[]>([]);
-    let [title, setTitle] = useState('');
-    let [body, setBody] = useState('');
-    let [date, setDate] = useState('');
-    let [theme] = useTheme();
-
-    const s = Style.create({
-        content: {
-            flexGrow: 1
-        },
-
-        body: {
-            maxHeight: Dimensions.get('window').height / 2,
-            backgroundColor: theme.surface,
-            borderRadius: theme.radius
-        },
-
-        bodyContent: {
-            padding: theme.padding / 2
-        },
-
-        answer: {
-            padding: theme.padding / 2,
-            backgroundColor: theme.surface,
-            borderRadius: theme.radius,
-            marginTop: theme.margin
-        }
-    })
 
     const info = async () => {
-        return axios.get('/Question/' + params.id).then(res => {
-            let d = res?.data || {};
-            setBody(d.body || '');
-            setTitle(d.title || '');
-            setDate(dateString(d.time));
-            nav.setParams({ course: d.course?.name });
+        return axios.get('/Question/' + id).then(res => {
+            setQuestion(res.data);
+            nav.setParams({ course: res.data.course?.name || '' });
         })
     }
 
     const questions = async () => {
-        return axios.get('/Answer/GetAnswersByQuestionId/' + params.id).then(res => {
-            setAnswers(Array.isArray(res.data) ? res.data : []);
+        return axios.get('/Answer/GetAnswersByQuestionId/' + id).then(res => {
+            setAnswers(res.data);
         })
     }
 
@@ -52,28 +22,26 @@ export default Screen('Question', ({ params, nav }) => {
 
     return (
         <Loader load={fetch}>
+            <View type='header' hidden={!question.topics?.length} children={question.topics?.map((topic, i) => (
+                <Chip margin='bottom,right-0.5' key={i} children={topic.name}/>
+            ))}/>
             <View type='header'>
-                <Text type='header' children={title}/>
-                <Text type='hint' align='right' children={date}/>
+                <Text type='header' children={question.title}/>
+                <Text type='hint' align='right' children={dateString(question.time)}/>
             </View>
-            <ScrollView margin style={s.content} flex>
-                <ScrollView style={s.body} contentContainerStyle={s.bodyContent} nestedScrollEnabled>
-                    <Text>{body}</Text>
-                </ScrollView>
-                <Text margin type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
-                <Button margin children='Answer' onPress={() => nav.push('CreateAnswer', {
-                    questionId: params.id, question: title, date: date, course: params.course
-                })}/>
-                {answers.map((answer, i) => ( // TODO lazy list view
-                    <View key={i} style={s.answer} onTouchEnd={() => nav.push('Answer', { ...answer, course: params.course || '' })}>
-                        <View type='header'>
-                            <Text type='header' size='normal' children={answer.title}/>
-                            <Text type='hint' align='right' children={dateString(answer.dateTime)}/>
-                        </View>
-                        <Text numberOfLines={1} ellipsizeMode='tail' children={answer.body}/>
+            <List margin ListHeaderComponent={
+                <ScrollView>
+                    <Text children={question.body}/>
+                    <View type='row' margin>
+                        <Icon sizing='large' margin='right-0.5' coloring='accent' name='download'/>
+                        <Text type='link' {...{}/* TODO attachments */}>
+                            Download 3 Attachments
+                        </Text>
                     </View>
-                ))}
-            </ScrollView>
+                    <Button margin='top-2' icon='text-box-plus' children='Give An Answer' onPress={() => nav.push('GiveAnswer', { question })}/>
+                    <Text margin='top-2' type='header' children={answers.length ? 'Answers' : 'No answers yet'}/>
+                </ScrollView>
+            } data={answers} renderItem={answer => <CompactAnswer margin answer={answer.item}/>}/>
         </Loader>
     )
 })

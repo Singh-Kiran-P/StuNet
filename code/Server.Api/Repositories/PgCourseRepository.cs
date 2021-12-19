@@ -22,15 +22,17 @@ namespace Server.Api.Repositories
             return await _context.Courses
                 .Include(c => c.topics)
                 .Include(c => c.questions)
+                .ThenInclude(q => q.topics)
                 .ToListAsync();
         }
 
         public async Task<Course> getAsync(int id)
         {
             return await _context.Courses
+                .Where(c => c.id == id)
                 .Include(c => c.topics)
                 .Include(c => c.questions)
-                .Where(c => c.id == id)
+                .ThenInclude(q => q.topics)
                 .FirstOrDefaultAsync();
         }
 
@@ -64,9 +66,10 @@ namespace Server.Api.Repositories
         public async Task<Course> getByNameAsync(string name)
         {
             return await _context.Courses
+                        .Where(c => c.name == name)
                         .Include(c => c.topics)
                         .Include(c => c.questions)
-                        .Where(c => c.name == name)
+                        .ThenInclude(q => q.topics)        
                         .FirstOrDefaultAsync();
         }
     }

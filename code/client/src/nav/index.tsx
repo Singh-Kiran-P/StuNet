@@ -1,34 +1,36 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Component, Params } from '@/nav/types';
 import ThemeProvider, { Theme } from '@/css';
-import { useAnimate, Route } from '@/util';
 import * as options from '@/nav/routes';
 import { contains } from '@/util/alg';
 import header from '@/nav/header';
 import Screen from '@/nav/screen';
 import screens from '@/screens';
+import { Route } from '@/util';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
+const index = Array(Object.keys(options.t).length).fill(0);
 const updates = Array<Route['navigation']>(Object.keys(options.t).length);
 export const update = <T extends keyof typeof options.s>(name: T, params?: Partial<Params[T]>) => {
-    updates.forEach(tab => {
+    updates.forEach((tab, i) => {
+        index[i] = index[i] + 1;
         let state = tab.getState();
-        state.routes.forEach(route => {
+        state.routes.reduceRight((_, route) => {
             if (route.name !== name) return;
             if (!contains(route.params, params)) return;
             tab.dispatch({
                 type: 'SET_PARAMS',
-                payload: { params: {} },
+                payload: { params: { update: index[i] } },
                 source: route.key,
                 target: state.key
             })
-        })
+        }, null as any);
     })
 }
 
@@ -83,7 +85,7 @@ const Tabs = Object.entries(options.t).map(([name, tab], i) => {
 })
 
 export default () => {
-    const [hidden, setHidden] = useAnimate(false);
+    let [hidden, setHidden] = useState(false);
     hide = hide => setHidden(!!hide);
     return <Tab.Navigator
         barStyle={{ height: hidden ? 0 : undefined }}

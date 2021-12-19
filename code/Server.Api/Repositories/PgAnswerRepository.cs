@@ -18,20 +18,23 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Answer>> getAllAsync()
         {
 			return await _context.Answers
-            // .Include(q => q.userId)          
-            .Include(q => q.question)          
-            // .Include(q => q.question.user)          
-            .Include(q => q.question.course)          
+            // .Include(a => a.userId)          
+            .Include(a => a.question)          
+            // .Include(a => a.question.user)          
+            .Include(a => a.question.course)
+            .Include(a => a.question.topics)
             .ToListAsync();
 		}
         public async Task<Answer> getAsync(int id)
         {
 			return await _context.Answers
-            // .Include(q => q.userId)          
-            .Include(q => q.question)          
-            // .Include(q => q.question.user)          
-            .Include(q => q.question.course)
-            .Where(q => q.id == id).FirstOrDefaultAsync();
+            .Where(a => a.id == id)
+            // .Include(a => a.userId)          
+            .Include(a => a.question)          
+            // .Include(a => a.question.user)          
+            .Include(a => a.question.course)
+            .Include(a => a.question.topics)
+            .FirstOrDefaultAsync();
 		}
         public async Task createAsync(Answer answer)
         {
@@ -57,18 +60,20 @@ namespace Server.Api.Repositories
             answerToUpdate.body = answer.body;
 			answerToUpdate.userId = answer.userId;
 			answerToUpdate.question = answer.question;
-			answerToUpdate.dateTime = DateTime.Now;
+			answerToUpdate.time = DateTime.Now;
             await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Answer>> getByQuestionId(int questionId)
         {
             return await _context.Answers
-            // .Include(q => q.userId)          
-            .Include(q => q.question)          
-            // .Include(q => q.question.user)          
-            .Include(q => q.question.course)
-            .Where(q => q.question.id == questionId).ToListAsync();
+            // .Include(a => a.userId)          
+            .Include(a => a.question)          
+            // .Include(a => a.question.user)          
+            .Include(a => a.question.course)
+            .Include(a => a.question.topics)
+            .Where(a => a.question.id == questionId)
+            .ToListAsync();
             // var answers = _context.Answers.Select(x => x).Where(answer => answer.question.id == questionId);
             // return answers.ToList();//_context.Answers.ToList().Where(answer => answer.question.id == questionId);
             // return answers.ToList();

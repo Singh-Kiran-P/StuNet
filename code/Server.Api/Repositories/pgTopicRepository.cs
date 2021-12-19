@@ -17,8 +17,9 @@ namespace Server.Api.Repositories
         }
         public async Task<IEnumerable<Topic>> getAllAsync()
         {
-            return await _context.Topics
+            return await _context.Topics            
             .Include(t => t.questions)
+            .ThenInclude(q => q.topics)
             .Include(t => t.course)
             .ToListAsync();
         }
@@ -39,9 +40,11 @@ namespace Server.Api.Repositories
         public async Task<Topic> getAsync(int id)
         {
 			return await _context.Topics
+            .Where(t => t.id == id)            
 			.Include(t => t.questions)
+            .ThenInclude(q => q.topics)
 			.Include(t => t.course)
-			.Where(t => t.id == id).FirstOrDefaultAsync();
+			.FirstOrDefaultAsync();
 
 		}
 

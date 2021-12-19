@@ -1,4 +1,5 @@
 export { default as PasswordInput } from './PasswordInput';
+export { default as IconButton } from './IconButton';
 export { default as SearchBar } from './SearchBar';
 export { default as TextInput } from './TextInput';
 export { default as Checkbox } from './Checkbox';

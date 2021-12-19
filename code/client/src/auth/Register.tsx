@@ -1,4 +1,4 @@
-import React, { Route, Style, Field, FOS, User, useTheme, useState, axios, errorString } from '@/.';
+import React, { Route, Style, Field, FOS, User, useTheme, useState, axios, show } from '@/.';
 import { View, Text, Button, Loader, Picker, TextInput, PasswordInput } from '@/components';
 
 type Fields = { [name: string]: { [degree: string]: number[] } };
@@ -17,13 +17,8 @@ export default ({ navigation }: Route) => {
 
 	const s = Style.create({
 		screen: {
-			padding: theme.padding,
 			backgroundColor: theme.background
-        },
-
-		FOS: {
-			flexDirection: 'row'
-		}
+        }
     })
 
 	const type = () => {
@@ -52,12 +47,11 @@ export default ({ navigation }: Route) => {
             Password: password,
 			ConfirmPassword: confirmPassword,
 			FieldOfStudy: `${FOS.field}-${degree}-${FOS.year}`
-        }).then(() => navigation.navigate('Login', { registered: email }))
-        .catch(err => setError(errorString(err)));
+        }).then(() => navigation.navigate('Login', { registered: email }), show(setError))
     }
 
 	return (
-		<Loader style={s.screen} load={fetch}>
+		<Loader style={s.screen} padding load={fetch}>
 			<Text type='title' children='Register'/>
 
 			<TextInput label='Email' onChangeText={setEmail}/>
@@ -65,7 +59,7 @@ export default ({ navigation }: Route) => {
 			<PasswordInput margin label='Confirm password' onChangeText={setConfirmPassword}/>
 			<Text type='error' margin hidden={password == confirmPassword} children='Passwords do not match.'/>
 
-			<View margin style={s.FOS} hidden={type() != User.STUDENT}>
+			<View type='row' margin hidden={type() != User.STUDENT}>
 				<Picker flex prompt='Field'
 					selectedValue={FOS.field} values={Object.keys(fields)}
 					onValueChange={v => setFOS({ field: v, degree: '', year: '' })}/>

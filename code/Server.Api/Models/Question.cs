@@ -13,6 +13,6 @@ namespace Server.Api.Models
 
         // public File[] files { get; set; }
         public ICollection<Topic> topics { get; set; }
-		public DateTime dateTime { get; set; }
+		public DateTime time { get; set; }
     }
 }

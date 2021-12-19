@@ -48,7 +48,7 @@ namespace Server.Api.Controllers
         //             id = topic.id,
         //             name = topic.name
         //         }).ToList(),
-        //         time = question.dateTime
+        //         time = question.time
         //     };
         // }
 
@@ -116,7 +116,7 @@ namespace Server.Api.Controllers
                     body = dto.body,
                     // files = createQuestionDto.files TODO
                     topics = topics,
-                    dateTime = DateTime.Now
+                    time = DateTime.Now
                 };
 
                 await _questionRepository.createAsync(question);
@@ -161,7 +161,7 @@ namespace Server.Api.Controllers
                 topics = dto.topicIds.Select(id => _topicRepository.getAsync(id))
                                                 .Select(task => task.Result)
                                                 .ToList(),
-                dateTime = DateTime.Now
+                time = DateTime.Now
             };
 
             await _questionRepository.updateAsync(updatedQuestion);

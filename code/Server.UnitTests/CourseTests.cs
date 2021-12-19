@@ -56,7 +56,6 @@ namespace Server.UnitTests
             course.topics.Should().NotBeNullOrEmpty();
             course.topics.Should().AllBeOfType<Topic>();
             course.topics.Should().HaveCount(count);
-            // course.dateTime.Should().BeCloseTo(DateTime.Now, new TimeSpan(0, 0, 0, 0, 500)); // 500ms
         }
 
         [Fact]

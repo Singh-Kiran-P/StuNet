@@ -5,9 +5,8 @@ import { List } from 'react-native-paper';
 
 type ItemList = <T>(props: FlatListProps<T> & Props) => JSX.Element
 
-export default Object.assign(List, extend(FlatList, props => {
-
+export default Object.assign(extend(FlatList, props => {
     return <FlatList
         {...props}
     />
-}) as ItemList)
+}) as ItemList, List)

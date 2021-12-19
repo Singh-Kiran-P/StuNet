@@ -1,72 +1,79 @@
 import { screens, tabs } from '@/nav/types';
-import { Answer } from '@/util/types';
+import { Course, Question } from '@/util/types';
 
 export const s = screens({
 
-    Question: {
-        screenTitle: '{course}',
-        course: '',
-        args: {} as {
-            id: number;
-        }
+    Home: {
+        screenTitle: 'StuNet',
+        scroll: false,
+        tabs: true
     },
-    CreateAnswer: {
-        screenTitle: '{course}',
-        args: {} as {
-            date: string;
-            question: string;
-            questionId: number;
-            course: string;
-        }
+
+
+
+    Courses: {
+        screenTitle: 'Search For Courses',
+        scroll: false,
+        search: '',
+        tabs: true
     },
-    Answer: {
-        screenTitle: '{course}',
-        args: {} as Answer & {
-            course: string;
-        }
+    CreateCourse: {
+        screenTitle: 'Create Your Course',
+        tabs: true
     },
 
 
 
     Course: {
         screenTitle: '{name}',
+        scroll: false,
         name: '',
         args: {} as {
             id: number;
         }
     },
     AskQuestion: {
-        screenTitle: 'Ask Question ({courseId})',
+        screenTitle: '{course.name}',
+        selected: [] as number[],
         args: {} as {
-            courseId: number;
+            course: Course;
         }
     },
     EditCourse: {
-        screenTitle: 'Edit course ({id})',
+        screenTitle: 'Edit {course.name}',
+        args: {} as {
+            course: Course;
+        }
+    },
+    EditTopics: {
+        screenTitle: 'Edit topics of {course.name}',
+        args: {} as {
+            course: Course;
+        }
+    },
+
+
+
+    Question: {
+        screenTitle: '{course}',
+        scroll: false,
+        course: '',
         args: {} as {
             id: number;
         }
     },
-    EditTopics: {
-        screenTitle: 'Edit topics of course ({id})',
+    GiveAnswer: {
+        screenTitle: '{question.course.name}',
         args: {} as {
-            courseId: number;
+            question: Question
         }
     },
-
-
-
-    Home: {
-        screenTitle: 'StuNet'
-    },
-
-
-
-    Courses: {
-        screenTitle: 'Search For Courses'
-    },
-    CreateCourse: {
-        screenTitle: 'Create Your Course'
+    Answer: {
+        screenTitle: '{course}',
+        course: '',
+        args: {} as {
+            id: number;
+        }
     },
 
 
@@ -79,9 +86,7 @@ export const s = screens({
 
     Profile: {
         screenTitle: 'Your Profile',
-    },
-    EditProfile: {
-        screenTitle: 'Edit Your Profile'
+        tabs: true
     }
 
 })

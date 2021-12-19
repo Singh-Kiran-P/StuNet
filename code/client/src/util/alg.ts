@@ -3,9 +3,12 @@ const r = (s: string, o: { [key: string]: any }): string => {
     if (i < 0) return s;
     let j = s.indexOf('}', i);
     if (j < 0) return s;
-    let name = s.slice(i + 1, j++);
-    if (!(name in o)) return s.slice(0, j) + r(s.slice(j), o);
-    return s.slice(0, i) + o[name] + r(s.slice(j), o);
+    let names = s.slice(i + 1, j++).split('.');
+    while (names.length) {
+        if (!(names[0] in o)) return s.slice(0, j) + r(s.slice(j), o);
+        o = o[names.shift() || ''];
+    }
+    return s.slice(0, i) + o + r(s.slice(j), o);
 }
 
 export { r as replace };

@@ -55,13 +55,14 @@ namespace Server.Api.Controllers
 
             GetCourseDto getDto = new()
             {
+                id = course.id,
                 name = course.name,
                 number = course.number,
                 topics = course.topics.Select(topic =>
                     new getOnlyTopicDto() { id = topic.id, name = topic.name }
                 ).ToList(),
                 questions = course.questions.Select(question =>
-                    new onlyQuestionDto() { id = question.id, title = question.title, body = question.body, time = question.dateTime }
+                    onlyQuestionDto.convert(question)
                 ).ToList(),
             };
 

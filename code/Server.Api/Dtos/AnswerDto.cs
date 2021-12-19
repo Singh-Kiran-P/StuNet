@@ -7,21 +7,21 @@ namespace Server.Api.Dtos
     public record ResponseAnswerDto {
         public int id { get; set; }
         public ResponseUserDto user { get; set; }
-        public onlyQuestionUserDto question { get; set; }
+        public questionDto question { get; set; }
         // public getOnlyCourseDto course { get; set; }
 		public string title { get; set; }
         public string body { get; set; }
-        public DateTime dateTime { get; set; }
+        public DateTime time { get; set; }
         public static ResponseAnswerDto convert(Answer answer, User user) {
 			return new ResponseAnswerDto
 			{
 				id = answer.id,
 				user = ResponseUserDto.convert(user),
-				question = onlyQuestionUserDto.convert(answer.question, user),
-                //course = getOnlyCourseDto.convert(answer.question.course),
+				question = questionDto.convert(answer.question, user),
+                // course = getOnlyCourseDto.convert(answer.question.course),
 				title = answer.title,
 				body = answer.body,
-				dateTime = answer.dateTime
+				time = answer.time
 			};
 		}
 	}

@@ -1,4 +1,4 @@
-import React, { Route, Style, useTheme, useState, useToken, axios, errorString } from '@/.';
+import React, { Route, Style, useTheme, useState, useToken, axios, show } from '@/.';
 import { View, Text, Button, TextInput, PasswordInput } from '@/components';
 
 export default ({ navigation, route: { params } }: Route) => {
@@ -10,7 +10,6 @@ export default ({ navigation, route: { params } }: Route) => {
 
     const s = Style.create({
         screen: {
-            padding: theme.padding,
             backgroundColor: theme.background
         }
     })
@@ -19,12 +18,11 @@ export default ({ navigation, route: { params } }: Route) => {
         axios.post('/Auth/login', {
             email: email,
             password: password
-        }).then(res => setToken(res.data.jwtBearerToken || ''))
-        .catch(err => setError(errorString(err)));
+        }).then(res => setToken(res.data.jwtBearerToken || ''), show(setError))
     }
 
     return (
-        <View style={s.screen} flex>
+        <View style={s.screen} padding flex>
             <Text type='title' children='Log in'/>
 
             <Text type='hint' margin='bottom' hidden={!params?.registered}>
