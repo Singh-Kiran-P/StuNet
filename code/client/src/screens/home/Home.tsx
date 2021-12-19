@@ -1,15 +1,22 @@
-import React, { Screen, Course, Question, Answer, useState, axios, update } from '@/.';
+import React, { Screen, Course, Channel, Question, Answer, useState, axios, update } from '@/.';
 import { Text, Loader, Button, CompactCourse, CompactQuestion, CompactAnswer } from '@/components';
 import { SectionList } from 'react-native';
 
-export default Screen('Home', () => {
+export default Screen('Home', ({ nav }) => {
     let [courses, setCourses] = useState<Course[]>([]);
+    let [channels, setChannels] = useState<Channel[]>([]);
     let [questions, setQuestions] = useState<Question[]>([]);
     let [answers, setAnswers] = useState<Answer[]>([]);
 
     const course = async () => {
         return axios.get('/Course').then(res => {
             setCourses(res.data);
+        })
+    }
+
+    const channel = async () => {
+        return axios.get('/Channel').then(res => {
+            setChannels(res.data);
         })
     }
 
@@ -25,7 +32,7 @@ export default Screen('Home', () => {
         })
     }
 
-    const fetch = async () => Promise.all([course(), question(), answer()]);
+    const fetch = async () => Promise.all([course(), channel(), question(), answer()]);
 
     return (
         <Loader load={fetch}>
@@ -33,15 +40,17 @@ export default Screen('Home', () => {
             <Button margin children='Update' onPress={() => update('Home')}/>
             <SectionList sections={[
                 { title: 'Courses', data: courses as any[] },
+                { title: 'Channels', data: channels as any[] },
                 { title: 'Questions', data: questions as any[] },
                 { title: 'Answers', data: answers as any[] }
             ]} renderSectionHeader={({ section }) => (
                 <Text type='header' margin='top-2' children={section.title}/>
             )} renderItem={({ item, section }) => {
                 switch (section.title) {
-                    case 'Courses': return <CompactCourse course={item}/>
-                    case 'Questions': return <CompactQuestion question={item}/>
-                    case 'Answers': return <CompactAnswer answer={item}/>
+                    case 'Courses': return <CompactCourse course={item}/>;
+                    case 'Channels': return <Button children={item.name} onPress={() => nav.push('TextChannel', { course: 'TODO CHANGE', channel: item })}/>; // TODO CompactChannel
+                    case 'Questions': return <CompactQuestion question={item}/>;
+                    case 'Answers': return <CompactAnswer answer={item}/>;
                     default: return null;
                 }
             }}/>

@@ -10,10 +10,12 @@ export type Course = BaseCourse & {
     channels: Channel[];
 }
 
-export type Channel = {
+export type BaseChannel = {
     id: number;
     name: string;
 }
+
+export type Channel = BaseChannel & {}
 
 export type BaseTopic = {
     id: number;

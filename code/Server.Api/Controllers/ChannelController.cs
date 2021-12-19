@@ -20,9 +20,16 @@ namespace Server.Api.Controllers
             _channelRepository = channelRepository;
             _courseRepository = courseRepository;
         }
-    
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannels(int courseId)
+        public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannels()
+        {
+            var channels = await _channelRepository.getAllAsync();
+            return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));
+        }
+    
+        [HttpGet("GetChannelsByCourseId/{courseId}")]
+        public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannelsByCourseId(int courseId)
         {
             var channels = await _channelRepository.getByCourseIdAsync(courseId);
             return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));

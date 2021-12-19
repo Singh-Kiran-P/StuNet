@@ -1,11 +1,11 @@
+import TextChannel from './TextChannel';
 import AskQuestion from './AskQuestion';
 import Course from './Course';
 import Edits from './edits';
-import textChannel from './textChannel';
 
 export default [
+    TextChannel,
     AskQuestion,
     Course,
-    textChannel,
     ...Edits
 ]

@@ -1,12 +1,12 @@
-import React, { Screen, useTheme, extend } from "@/.";
+import React, { Screen, useTheme, extend } from '@/.';
 import {  View, TextInput, Text, Loader } from '@/components'
-import { useEffect, useRef, useState } from "react";
-import { FlatList } from "react-native";
-import { useConnection } from "@/connection";
-import { useToken } from "@/.";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
-import moment from "moment"
+import { useEffect, useRef, useState } from 'react';
+import { FlatList } from 'react-native';
+import { useConnection } from '@/connection';
+import { useToken } from '@/.';
+import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import moment from 'moment'
 
 enum Alignment { Left, Right };
 
@@ -43,13 +43,13 @@ const Message = extend<typeof View, Props>(View, ({ user, color, time, alignment
 	const textAlign = alignment == Alignment.Left ? 'left' : 'right'
 
 	return <View style={{ flex: 1, maxWidth: '70%', backgroundColor: color, borderRadius: 10, padding: 10, marginTop: 5, alignSelf: align, alignItems: align }}>
-		<Text style={{ fontWeight: "bold", textAlign: textAlign }}>{user}</Text>
+		<Text style={{ fontWeight: 'bold', textAlign: textAlign }}>{user}</Text>
 		<Text style={{ textAlign: textAlign }}>{children}</Text>
 		<Text style={{ alignSelf: alignment == Alignment.Left ? 'flex-end' : 'flex-start' }}>{prettyPrintDateTime(new Date(time))}</Text>
 	</View>
 });
 
-export default Screen('textChannel', ({ params, nav }) => {
+export default Screen('TextChannel', ({ params, nav }) => {
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [newMessage, setNewMessage] = useState<Message>();
@@ -84,7 +84,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 	}, []);
 
 	const fetch = () => {
-		return axios.get('/Channel/' + params.channel.id)
+		return axios.get('/Channel/GetChannelsByCourseId/' + params.channel.id)
 			.then(res => {
 				setMessages(res.data.messages)
 				nav.setParams({ screenTitle: '{course}: #{channelName}', channelName: params.channel.name })
@@ -107,7 +107,7 @@ export default Screen('textChannel', ({ params, nav }) => {
 					</Message>
 				)} />
 
-			<TextInput value={message} placeholder={"send message in #" + params.channel.name} onChangeText={setMessage} onSubmitEditing={(e) => sendMessage(message)} returnKeyType='send' />
+			<TextInput value={message} placeholder={'send message in #' + params.channel.name} onChangeText={setMessage} onSubmitEditing={(e) => sendMessage(message)} returnKeyType='send' />
 		</Loader>
 	)
 })

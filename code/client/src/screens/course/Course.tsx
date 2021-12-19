@@ -33,7 +33,7 @@ export default Screen('Course', ({ params, nav }) => {
 <Collapse title='Channels'>
     {channels.map((channel, i) => (
         <Button key={i}
-            onPress={() => nav.push('textChannel', { course: name, channel: channel, scroll: false } )}
+            onPress={() => nav.push('TextChannel', { course: name, channel: channel, scroll: false } )}
             children={channel.name}
         />
     ))}

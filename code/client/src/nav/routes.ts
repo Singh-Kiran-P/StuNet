@@ -58,9 +58,10 @@ export const s = screens({
         }
     },
 
-    textChannel: { // TODO ?????
+    TextChannel: { // TODO ?????
         screenTitle: '',
         channelName: '',
+        scroll: false,
         args: {} as {
             course: string,
             channel: Channel

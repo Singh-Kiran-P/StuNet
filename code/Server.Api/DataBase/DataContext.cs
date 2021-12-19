@@ -226,8 +226,6 @@ namespace Server.Api.DataBase
                             new { questionId = 1, topicId = 1 },
                             new { questionId = 1, topicId = 2 },
                             new { questionId = 1, topicId = 3 },
-                            new { questionId = 1, topicId = 4 },
-                            new { questionId = 1, topicId = 5 },
                             new { questionId = 2, topicId = 1 }
                         );
                     }

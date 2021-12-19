@@ -1,166 +1,67 @@
-import React, { Screen, axios, useState, Channel, Style, } from '@/.';
-import { View, Button, Loader, Checkbox, ScrollView, TextInput, } from '@/components';
-import { TouchableRipple } from 'react-native-paper';
+import React, { Screen, BaseChannel, useState, axios, show, update } from '@/.';
+import { View, Text, Button, Touchable, Checkbox, IconButton, SearchBar, TextInput } from '@/components';
 
-type ChannelItem = {
-    channel: Channel;
-    checked: boolean;
-}
+export default Screen('EditChannels', ({ params: { course } }) => {
+    let [channels, setChannels] = useState<[BaseChannel, boolean?][]>(course.channels.map(t => [t]));
+    let [edit, setEdit] = useState<[number, string] | []>([]);
+    let [error, setError] = useState('');
 
-const style: Style = Style.create({
-    row: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    rowItem: {
-        flex: 1,
-    },
-    rowLongItem: {
-        flex: 3,
-    },
-    rowButton: {
-        padding: 2,
-    },
-});
+    let selection = channels.filter(t => t[1]);
+    let save = () => update('Course', { id: course.id });
 
-export default Screen('EditChannels', ({ params, nav }) => {
-    const [channelItems, setChannelItems] = useState<Array<ChannelItem>>([]);
-    const [globalCheck, setGlobalCheck] = useState<boolean>(true);
-    const [editableItem, setEditableItem] = useState<ChannelItem|null>(null);
-    const [newChannelName, setNewChannelName] = useState<string>('');
-
-    function init(data: Channel[]) {
-        setChannelItems(data.map((channel: Channel) => ({ channel: channel, checked: false } as ChannelItem)));
+    const post = (name: string) => {
+        axios.post('/Channel', {
+            courseId: course.id,
+            name: name
+        }).then(
+            res => (save(), setChannels(channels.concat([[{ id: res.data.id, name: name }]]))),
+            show(setError)
+        )
     }
 
-    async function fetch() {
-        return axios.get('/Channel', { params: { courseId: params.courseId } }).then(res => init(res.data));
+    const put = (id: number, name: string) => {
+        axios.put('/Channel/' + id, { name: name }).then(
+            () => (save(), setChannels(channels.map(([t, s]) => [t.id === id ? { ...t, name } : t, s]))),
+            show(setError)
+        )
     }
 
-    async function submit(name: string) {
-        await axios.post('/Channel', { courseId: params.courseId, name: name })
-            .catch(error => console.error(error)); // TODO: handle error
-        fetch(); /* Thus fetch all to update full list, but will discard checks */
-    }
-
-    function update(channel: Channel) {
-        axios.put('/Channel/' + channel.id, { name: channel.name })
-            .then(() => setEditableItem(null))
-            .catch(error => console.error(error)); // TODO: handle error
-        resetGlobalChecked();
-    }
-
-    function resetGlobalChecked(check: boolean = globalCheck) {
-        if (channelItems.every(item_ => item_.checked === check))
-            setGlobalCheck(!check);
-    }
-
-    async function remove(channel: Channel) {
-        await axios.delete('/Channel/' + channel.id)
-            .then(() => channelItems.filter(item => item.channel.id !== channel.id))
-            .catch(error => console.error(error)); // TODO: handle error
-    }
-
-    function flipChannelChecked(item: ChannelItem) {
-        item.checked = !item.checked;
-        setChannelItems(channelItems.slice());
-        resetGlobalChecked();
-    }
-
-    function setAllChannelChecks(check: boolean) {
-        channelItems.forEach(item => (item.checked = check));
-        setGlobalCheck(!check);
-    }
-
-    function removeSelected() {
-        for (const item of channelItems.filter(item => item.checked))
-            remove(item.channel);
-        fetch();
-    }
-
-    function renderRow(item: ChannelItem) {
-        if (editableItem !== item) {
-            return (
-                <Checkbox.Item
-                    mode='ios'
-                    label={item.channel.name}
-                    status={item.checked ? 'checked' : 'unchecked'}
-                    // onPress={() => flipChannelCheck(i)}
-                    />
-            );
-        }
-        else {
-            return (
-                <View style={style.row}>
-                    <TextInput
-                        style={style.rowLongItem}
-                        editable
-                        // TODO: maxLength={?}
-                        defaultValue={item.channel.name}
-                        label='Name'
-                        onChangeText={name => (item.channel.name = name)}
-                        />
-                    <Button
-                        style={style.rowItem}
-                        mode="contained"
-                        onPress={() => update(item.channel)}
-                        >
-                        Update
-                    </Button>
-                </View>
-            );
-        }
+    const remove = (ids: number[]) => {
+        Promise.all(ids.map(id => axios.delete('/Channel/' + id))).then(
+            () => (save(), setChannels(channels.filter(t => !ids.includes(t[0].id)))),
+            show(setError)
+        )
     }
 
     return (
-        <Loader load={fetch}>
-            <ScrollView>
-                <View style={style.row}>
-                    <Button
-                        style={style.rowItem}
-                        onPress={() => setAllChannelChecks(globalCheck)}
-                        >
-                        { globalCheck ? 'Check all' : 'Uncheck all' }
-                    </Button>
-                    <Button
-                        style={style.rowItem}
-                        onPress={() => removeSelected()}
-                        disabled={channelItems.every(item => item.checked === false)}
-                        >
-                        Remove selection
-                    </Button>
-                </View>
-                <View>
-                {
-                    channelItems.map((item, i) =>
-                        <TouchableRipple
-                            key={i}
-                            onPress={() => flipChannelChecked(item)}
-                            onLongPress={() => setEditableItem(item)}
-                            >
-                            { renderRow(item) }
-                        </TouchableRipple>
-                    )
-                }
-                </View>
-                <View style={style.row}>
-                    <TextInput
-                        style={style.rowLongItem}
-                        editable
-                        // TODO: maxLength={?}
-                        label='Name'
-                        onChangeText={name_ => setNewChannelName(name_)}
-                        />
-                    <Button
-                        style={style.rowItem}
-                        onPress={() => submit(newChannelName)}
-                        >
-                        Add channel
-                    </Button>
-                </View>
-            </ScrollView>
-        </Loader>
-    );
-});
+        <View>
+            <View type='row' margin='bottom-2'>
+                <Button flex margin='right' icon='close' children='Clear' onPress={() => (setEdit([]), setChannels(channels.map(t => [t[0]])))}/>
+                <Button flex margin='left' icon='delete' children='Delete' disabled={!selection.length || !!edit.length} toggled={channels}
+                    onPress={() => (setChannels(channels.map(t => [t[0], false])), remove(selection.map(t => t[0].id)))}
+                />
+            </View>
+            {channels.map(([channel, selected], i) => {
+                let editing = edit[0] === channel.id;
+                let toggle = () => setChannels(channels.map(([t, s], j) => [t, i === j ? !s : s]));
+                return (
+                    <View type='header' key={i}>
+                        <Touchable type='header' flex hidden={editing} onPress={toggle}>
+                            <Checkbox checked={selected ? true : undefined}/>
+                            <Text children={channel.name}/>
+                        </Touchable>
+                        <IconButton margin='left-1.5' icon='close' hidden={!editing} onPress={() => setEdit([])}/>
+                        <TextInput flex mode='flat' hidden={!editing} defaultValue={channel.name} onChangeText={s => setEdit([edit[0] || 0, s])}/>
+                        <IconButton margin='left' icon='pencil' hidden={editing} disabled={!!edit.length} onPress={() => setEdit([channel.id, channel.name])}/>
+                        <IconButton margin='left' icon='content-save' hidden={!editing} disabled={!edit[1] || channel.name === edit[1]} onPress={() => {
+                            if (edit.length) put(...edit);
+                            setEdit([]);
+                        }}/>
+                    </View>
+                )
+            })}
+            <SearchBar margin='top-2' icon='plus-thick' placeholder='Add Channel' disableEmpty onSearch={(channel, set) => (set(''), post(channel))}/>
+            <Text type='error' margin hidden={!error} children={error}/>
+        </View>
+    )
+})

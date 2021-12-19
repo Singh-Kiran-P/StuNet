@@ -21,9 +21,9 @@ export default Screen('EditCourse', ({ params: { course }, nav }) => {
             <TextInput margin label='Description' defaultValue={description} onChangeText={setDescription}/>
             <Button margin icon='content-save' children='Save' disabled={!name || !number} toggled={error} onPress={save}/>
             <Text type='error' margin hidden={!error} children={error}/>
-            <Button align='bottom' icon='pencil' children='Edit topics' onPress={() => nav.push('EditTopics', { course })}/>
-            <Button children='Edit channels' onPress={() => nav.push('EditChannels', { course })}/>
-            {/* <Button children='Edit assitants' onPress={() => nav.push('EditTopics', { course })}/> */}
+            <Button align='bottom' icon='pencil' children='Edit topics' onPress={() => nav.replace('EditTopics', { course })}/>
+            <Button margin icon='pencil' children='Edit channels' onPress={() => nav.replace('EditChannels', { course })}/>
+            {/* TODO ? <Button children='Edit assitants' onPress={() => nav.replace('EditAssistants', { course })}/> */}
         </View>
     )
 })
