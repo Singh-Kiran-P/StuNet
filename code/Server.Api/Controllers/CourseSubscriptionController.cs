@@ -57,14 +57,16 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("ByUserAndCourseId/{courseId}")]
-        public async Task<ActionResult<getCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
+        public async Task<ActionResult<getByIdsCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
         {
-            IEnumerable<getCourseSubscriptionDto> dtos = await _getCourseSubscriptions();
+            IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.getAllAsync();
             ClaimsPrincipal currentUser = HttpContext.User;
             string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
             User user = await _userManager.FindByEmailAsync(userEmail);
 
-            IEnumerable<getCourseSubscriptionDto> userSubscriptionDtos = dtos.Where(dto => dto.courseId == courseId && dto.userId == user.Id);
+            IEnumerable<getByIdsCourseSubscriptionDto> userSubscriptionDtos = subscriptions
+                .Where(subscription => subscription.courseId == courseId && subscription.userId == user.Id)
+                .Select(subscription => getByIdsCourseSubscriptionDto.convert(subscription));
             return Ok(userSubscriptionDtos);
         }
 
