@@ -17,6 +17,8 @@ export type Props = {
     padding?: boolean | Values;
     radius?: boolean | 'round';
     align?: 'right' | 'bottom';
+
+    content?: boolean;
 }
 
 const values = (s: string, values: undefined | boolean | Values, d: Side) => {
@@ -56,7 +58,7 @@ const side = (s: string, margin: undefined | boolean | Side, d: Side) => {
 
 export default <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c: T, e: (p: GetProps<T> & Props & Omit<U, keyof Props>) => JSX.Element | null) => {
 
-    const Extend = ({ hidden, flex, grow, shrink, margin, padding, radius, align, ...props }: Partial<Omit<GetProps<T>, keyof (Props & U)> & Props & U>) =>  {
+    const Extend = ({ hidden, flex, grow, shrink, margin, padding, radius, align, content, ...props }: Partial<Omit<GetProps<T>, keyof (Props & U)> & Props & U>) =>  {
         if (hidden) return null;
 
         let margins = values('margin', margin, 'top');
@@ -83,16 +85,25 @@ export default <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c
                 [margin[0]]: Theme.margin * margin[1]
             }))),
 
-            padding: padding === undefined ? {} : Object.assign({}, ...paddings.map(padding => ({
-                [padding[0]]: Theme.padding * padding[1]
-            }))),
-
             right: align === undefined ? {} : {
                 [side('margin', reverse(align), 'all')]: 'auto'
             }
         })
 
-        return e({ ...props, style: [...Object.values(s), (props as any).style] } as any);
+        const p = Style.create({
+            padding: padding === undefined ? {} : Object.assign({}, ...paddings.map(padding => ({
+                [padding[0]]: Theme.padding * padding[1]
+            })))
+        })
+
+        if (content) return e({ ...props,
+            style: [...Object.values(s), (props as any).style],
+            contentContainerStyle: [p.padding, (props as any).contentContainerStyle]
+        } as any);
+    
+        return e({ ...props,
+            style: [...Object.values(s), p.padding, (props as any).style]
+        } as any);
     }
 
     return Object.assign(Extend, c as Omit<T, keyof (GetProps<T> & Props & U)>);

@@ -1,5 +1,5 @@
 import React, { Screen, Answer, EmptyQuestion, useState, axios, dateString } from '@/.';
-import { View, Text, Chip, List, Icon, Loader, Button, ScrollView, CompactAnswer } from '@/components';
+import { View, Text, Chip, List, Icon, Loader, Button, CompactAnswer } from '@/components';
 
 export default Screen('Question', ({ nav, params: { id } }) => {
     let [question, setQuestion] = useState(EmptyQuestion);
@@ -29,8 +29,8 @@ export default Screen('Question', ({ nav, params: { id } }) => {
                 <Text type='header' children={question.title}/>
                 <Text type='hint' align='right' children={dateString(question.time)}/>
             </View>
-            <List margin ListHeaderComponent={
-                <ScrollView>
+            <List margin content padding='bottom' ListHeaderComponent={
+                <View>
                     <Text children={question.body}/>
                     <View type='row' margin>
                         <Icon sizing='large' margin='right-0.5' coloring='accent' name='download'/>
@@ -40,7 +40,7 @@ export default Screen('Question', ({ nav, params: { id } }) => {
                     </View>
                     <Button margin='top-2' icon='text-box-plus' children='Give An Answer' onPress={() => nav.push('GiveAnswer', { question })}/>
                     <Text margin='top-2' type='header' children={answers.length ? 'Answers' : 'No answers yet'}/>
-                </ScrollView>
+                </View>
             } data={answers} renderItem={answer => <CompactAnswer margin answer={answer.item}/>}/>
         </Loader>
     )

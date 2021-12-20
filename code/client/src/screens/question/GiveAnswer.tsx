@@ -1,4 +1,4 @@
-import React, { Screen, useState, axios, update, dateString, show } from '@/.';
+import React, { Screen, useState, axios, update, show } from '@/.';
 import { Text, View, Button, TextInput, CompactQuestion } from '@/components';
 
 export default Screen('GiveAnswer', ({ nav, params: { question } }) => {

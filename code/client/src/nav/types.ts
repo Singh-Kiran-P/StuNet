@@ -10,6 +10,8 @@ type BaseScreens = {
         args?: object;
         screenTitle: string;
         padding?: boolean | number;
+        paddingTop?: boolean | number;
+        paddingBottom?: boolean | number;
         scroll?: boolean;
         search?: string;
         tabs?: boolean;

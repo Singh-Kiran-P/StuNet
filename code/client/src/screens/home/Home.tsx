@@ -1,6 +1,5 @@
 import React, { Screen, Course, Channel, Question, Answer, useState, axios, update } from '@/.';
-import { Text, Loader, Button, CompactCourse, CompactQuestion, CompactAnswer } from '@/components';
-import { SectionList } from 'react-native';
+import { Text, Loader, Button, SectionList, CompactCourse, CompactQuestion, CompactAnswer } from '@/components';
 
 export default Screen('Home', ({ nav }) => {
     let [courses, setCourses] = useState<Course[]>([]);
@@ -38,7 +37,7 @@ export default Screen('Home', ({ nav }) => {
         <Loader load={fetch}>
             <Text children='TODO only show subscribed items'/>
             <Button margin children='Update' onPress={() => update('Home')}/>
-            <SectionList sections={[
+            <SectionList content padding='bottom' sections={[
                 { title: 'Courses', data: courses as any[] },
                 { title: 'Channels', data: channels as any[] },
                 { title: 'Questions', data: questions as any[] },

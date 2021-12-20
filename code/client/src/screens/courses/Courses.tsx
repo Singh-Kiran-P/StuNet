@@ -15,8 +15,8 @@ export default Screen('Courses', ({ nav, params: { search } }) => {
         <View flex>
             <Text type='error' margin='bottom' hidden={!error} children={error}/>
             <Text type='hint' size='normal' margin='bottom' hidden={courses.length} children='No courses match your search'/>
-            <List margin='bottom-2' data={courses} renderItem={course => <CompactCourse margin={!!course.index} course={course.item}/>}/>
-            <Button align='bottom' icon='book-plus' children='Create Course' onPress={() => nav.push('CreateCourse')}/>
+            <List content padding='vertical' data={courses} renderItem={course => <CompactCourse margin={!!course.index} course={course.item}/>}/>
+            <Button align='bottom' margin='bottom-2' icon='book-plus' children='Create Course' onPress={() => nav.push('CreateCourse')}/>
         </View>
     )
 })

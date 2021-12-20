@@ -9,4 +9,4 @@ export default Object.assign(extend(FlatList, props => {
     return <FlatList
         {...props}
     />
-}) as ItemList, List)
+}) as ItemList, List);

@@ -1,3 +1,4 @@
+export { default as SectionList } from './SectionList';
 export { default as ScrollView } from './ScrollView';
 export { default as Touchable } from './Touchable';
 export { default as Loader } from './Loader';

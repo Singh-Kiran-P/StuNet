@@ -7,17 +7,17 @@ import { Component, Params } from '@/nav/types';
 import ThemeProvider, { Theme } from '@/css';
 import * as options from '@/nav/routes';
 import { contains } from '@/util/alg';
+import { Route, Opt } from '@/util';
 import header from '@/nav/header';
 import Screen from '@/nav/screen';
 import screens from '@/screens';
-import { Route } from '@/util';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const index = Array(Object.keys(options.t).length).fill(0);
 const updates = Array<Route['navigation']>(Object.keys(options.t).length);
-export const update = <T extends keyof typeof options.s>(name: T, params?: Partial<Params[T]>) => {
+export const update = <T extends keyof typeof options.s>(name: T, params?: Opt<Params[T]>) => {
     updates.forEach((tab, i) => {
         index[i] = index[i] + 1;
         let state = tab.getState();
