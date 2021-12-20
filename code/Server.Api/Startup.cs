@@ -136,7 +136,6 @@ namespace Server.Api
                .AllowCredentials());               // allow credentials
 
             app.UseRouting();
-
             // Required for Authentication!!
             app.UseAuthentication();
             app.UseAuthorization();

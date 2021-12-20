@@ -3,6 +3,9 @@ using Server.Api.Models;
 using System.Collections.Generic;
 using System.Linq;
 
+//
+using Microsoft.AspNetCore.Http;
+
 namespace Server.Api.Dtos
 {
     public record createQuestionDto {
@@ -10,6 +13,17 @@ namespace Server.Api.Dtos
 	    public string title { get; set; }
         public string body { get; set; }
         public ICollection<int> topicIds { get; set; }
+        public ICollection<IFormFile> files {get;set;}
+    }
+
+    public record fileDto {
+        public ICollection<String> titles { get; set; }
+        public ICollection<IFormFile> files {get;set;}
+    }
+
+    public record singleFileDto{
+        public string title { get; set; }
+        public IFormFile files {get;set;}
     }
 
     public record onlyQuestionDto {

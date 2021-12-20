@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
-using Server.Api.Repositories;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Server.Api.Controllers
 {
@@ -95,7 +97,7 @@ namespace Server.Api.Controllers
                     question = question,
                     title = dto.title,
                     body = dto.body,
-                    // files = createAnswerDto.files
+                    //files = dto.files,
                     dateTime = DateTime.Now
                 };
 

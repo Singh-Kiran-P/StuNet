@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using Microsoft.AspNetCore.Http;
 namespace Server.Api.Models
 {
 	public class Question
@@ -11,7 +11,9 @@ namespace Server.Api.Models
 	    public string title { get; set; }
         public string body { get; set; }
 
-        // public File[] files { get; set; }
+        //public IFormFile[] files { get; set; }
+
+		public List<String> filepaths {get;set;}
         public ICollection<Topic> topics { get; set; }
 		public DateTime dateTime { get; set; }
     }

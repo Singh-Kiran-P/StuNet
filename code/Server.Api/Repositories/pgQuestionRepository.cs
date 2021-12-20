@@ -54,6 +54,7 @@ namespace Server.Api.Repositories
             questionToUpdate.title = question.title;
             questionToUpdate.body = question.body;
 			questionToUpdate.topics = question.topics;
+            questionToUpdate.filepaths = question.filepaths;
 			questionToUpdate.dateTime = DateTime.Now;
             await _context.SaveChangesAsync();
         }
