@@ -1,4 +1,4 @@
-import TextChannel from './textChannel';
+import TextChannel from './TextChannel';
 import AskQuestion from './AskQuestion';
 import Course from './Course';
 import Edits from './edits';
