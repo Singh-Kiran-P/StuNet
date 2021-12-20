@@ -6,7 +6,7 @@ namespace Server.Api.Repositories
 {
     public interface ICourseSubscriptionRepository : IInterfaceRepository<CourseSubscription>
     {
-        Task<ICollection<CourseSubscription>> getByUserIdAndCourseIdAsync(int userId, int courseId);
-        Task<CourseSubscription> getSingleByUserIdAndCourseIdAsync(int userId, int courseId);
+        Task<ICollection<CourseSubscription>> getByUserIdAndCourseIdAsync(string userId, int courseId);
+        Task<CourseSubscription> getSingleByUserIdAndCourseIdAsync(string userId, int courseId);
     }
 }

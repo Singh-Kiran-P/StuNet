@@ -22,7 +22,7 @@ namespace Server.Api.Dtos
     public class getCourseSubscriptionDto
     {  
 		public DateTime dateTime { get; set; }
-        public int userId { get; set; }      
+        public string userId { get; set; }      
         public int courseId { get; set; }      
         public static getCourseSubscriptionDto convert(CourseSubscription subscription)
         {
@@ -37,7 +37,7 @@ namespace Server.Api.Dtos
 
     public class createCourseSubscriptionDto
     {  
-        public int userId { get; set; }      
+        public string userId { get; set; }      
         public int courseId { get; set; }      
         public static getCourseSubscriptionDto convert(CourseSubscription subscription)
         {
