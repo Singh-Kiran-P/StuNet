@@ -60,7 +60,7 @@ export default Screen('EditTopics', ({ params: { course } }) => {
                     </View>
                 )
             })}
-            <SearchBar margin='top-2' icon='plus-thick' placeholder='Add Topic' disableEmpty onSearch={(topic, set) => (set(''), post(topic))}/>
+            <SearchBar margin='top-2' icon='plus-thick' returnKeyType='done' placeholder='Add Topic' disableEmpty onSearch={(topic, set) => (set(''), post(topic))}/>
             <Text type='error' margin hidden={!error} children={error}/>
         </View>
     )

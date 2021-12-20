@@ -60,7 +60,7 @@ export default Screen('EditChannels', ({ params: { course } }) => {
                     </View>
                 )
             })}
-            <SearchBar margin='top-2' icon='plus-thick' placeholder='Add Channel' disableEmpty onSearch={(channel, set) => (set(''), post(channel))}/>
+            <SearchBar margin='top-2' icon='plus-thick' returnKeyType='done' placeholder='Add Channel' disableEmpty onSearch={(channel, set) => (set(''), post(channel))}/>
             <Text type='error' margin hidden={!error} children={error}/>
         </View>
     )
