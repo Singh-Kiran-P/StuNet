@@ -17,6 +17,14 @@ export type BaseChannel = {
 
 export type Channel = BaseChannel & {}
 
+export type BaseMessage = {
+	userMail: string,
+	body: string,
+	time: string
+}
+
+export type Message = BaseMessage & {}
+
 export type BaseTopic = {
     id: number;
     name: string;

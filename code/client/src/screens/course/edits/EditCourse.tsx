@@ -1,6 +1,6 @@
 import React, { Screen, useState, axios, update, show } from '@/.';
 import { View, Text, Button, TextInput } from '@/components';
-import { contains, merge } from '@/util/alg';
+import { contains } from '@/util/alg';
 
 export default Screen('EditCourse', ({ params: { course }, nav }) => {
     let [description, setDescription] = useState(course.description || 'TODO description');

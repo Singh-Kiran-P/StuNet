@@ -8,6 +8,11 @@ export const EmptyCourse: T.Course = {
     questions: []
 }
 
+export const EmptyChannel: T.Channel = {
+    id: 0,
+    name: ''
+}
+
 export const EmptyTopic: T.Topic = {
     id: 0,
     name: '',

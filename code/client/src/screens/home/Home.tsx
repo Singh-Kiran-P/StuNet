@@ -1,5 +1,5 @@
 import React, { Screen, Course, Channel, Question, Answer, useState, axios, update } from '@/.';
-import { Text, Loader, Button, SectionList, CompactCourse, CompactQuestion, CompactAnswer } from '@/components';
+import { Text, Loader, Button, SectionList, CompactCourse, CompactChannel, CompactQuestion, CompactAnswer } from '@/components';
 
 export default Screen('Home', ({ nav }) => {
     let [courses, setCourses] = useState<Course[]>([]);
@@ -47,7 +47,7 @@ export default Screen('Home', ({ nav }) => {
             )} renderItem={({ item, section }) => {
                 switch (section.title) {
                     case 'Courses': return <CompactCourse course={item}/>;
-                    case 'Channels': return <Button children={item.name} onPress={() => nav.push('TextChannel', { course: 'TODO CHANGE', channel: item })}/>; // TODO CompactChannel
+                    case 'Channels': return <CompactChannel channel={item}/>;
                     case 'Questions': return <CompactQuestion question={item}/>;
                     case 'Answers': return <CompactAnswer answer={item}/>;
                     default: return null;

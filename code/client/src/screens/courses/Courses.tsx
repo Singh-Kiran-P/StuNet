@@ -1,7 +1,7 @@
 import React, { Screen, Course, useState, useEffect, axios, show } from '@/.';
 import { View, Text, List, Button, CompactCourse } from '@/components';
 
-export default Screen('Courses', ({ nav, params: { search } }) => {
+export default Screen('Courses', ({ nav, params: { search, update } }) => {
     let [error, setError] = useState('');
     let [courses, setCourses] = useState<Course[]>([]);
 
@@ -9,7 +9,7 @@ export default Screen('Courses', ({ nav, params: { search } }) => {
         axios.get('/Course/search', {
             params: { name: search }
         }).then(res => setCourses(res.data), show(setError))
-    }, [search]);
+    }, [search, update]);
 
     return (
         <View flex>

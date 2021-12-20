@@ -1,4 +1,5 @@
 export { default as default, useState, useEffect } from 'react';
+export { default as jwt_decode } from 'jwt-decode';
 export { default as axios } from 'axios';
 
 export * from '@/util';
