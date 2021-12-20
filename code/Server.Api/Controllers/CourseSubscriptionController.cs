@@ -1,7 +1,10 @@
 // @Tijl @Melih
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
@@ -14,10 +17,12 @@ namespace Server.Api.Controllers
     public class CourseSubscriptionController : ControllerBase
     {
         private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
+        private readonly UserManager<User> _userManager;
 
-        public CourseSubscriptionController(ICourseSubscriptionRepository repository)
+        public CourseSubscriptionController(ICourseSubscriptionRepository repository, UserManager<User> userManager)
         {
             _courseSubscriptionRepository = repository;
+            _userManager = userManager;
         }
         
         [HttpGet]
@@ -47,14 +52,25 @@ namespace Server.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<createCourseSubscriptionDto>> createCourseSubscription(createCourseSubscriptionDto dto)
         {
-            CourseSubscription subscription = new()
+            ClaimsPrincipal currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == "username"))
             {
-                dateTime = DateTime.UtcNow,
-                userId = dto.userId,
-                courseId = dto.courseId,
-            };
-            await _courseSubscriptionRepository.createAsync(subscription);
-            return Ok(subscription);
+                string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+                User user = await _userManager.FindByEmailAsync(userEmail);
+                
+                CourseSubscription subscription = new()
+                {
+                    dateTime = DateTime.UtcNow,
+                    userId = user.Id,
+                    courseId = dto.courseId,
+                };
+                await _courseSubscriptionRepository.createAsync(subscription);
+                return Ok(subscription);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpDelete("{id}")]
