@@ -1,4 +1,4 @@
-import React, { Screen, axios, useState, Topic, Course, Channel, Question } from '@/.';
+import React, { Screen, axios, useState, Topic, Course, Channel, Question, CourseSubscription } from '@/.';
 import { Button, Loader, Collapse, ScrollView, CompactQuestion } from '@/components';
 
 export default Screen('Course', ({ params, nav }) => {
@@ -24,14 +24,31 @@ export default Screen('Course', ({ params, nav }) => {
             .catch(err => {}) // TODO handle error
     }
 
+    //TODO: Move this functionality to the server side
+    function toggeNotificationSubcription(data: CourseSubscription[]): void {
+        console.log(data);
+        if (data.length === 0) {
+            axios.post('/CourseSubscription/', { courseId: params.id } as CourseSubscription)
+                .catch(error => console.error(error));
+        }
+        else {
+            axios.delete('/courseSubscription/' + data[0].id)
+                .catch(error => console.error(error));
+        }
+    }
+
     /**
      * Updates the notification on the server, and if succes
      * updates the local notification.
      */
     function updateNotificationSubscription(): void {
+        axios.get('/CourseSubscription/ByUserAndCourseId/' + params.id)
+            .then(response => toggeNotificationSubcription(response.data))
+            .catch(error => console.error(error));
         setNotifactionsEnabled(!notificationsEnabled);
     }
 
+    console.log(params.id);
     return (
         <Loader load={fetch}>
             <ScrollView>
