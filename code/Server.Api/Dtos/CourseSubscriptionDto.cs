@@ -34,4 +34,18 @@ namespace Server.Api.Dtos
 			};
 		}
     }
+
+    public class createCourseSubscriptionDto
+    {  
+        public int userId { get; set; }      
+        public int courseId { get; set; }      
+        public static getCourseSubscriptionDto convert(CourseSubscription subscription)
+        {
+			return new getCourseSubscriptionDto
+			{
+                userId = subscription.userId,
+                courseId = subscription.courseId,
+			};
+		}
+    }
 }
