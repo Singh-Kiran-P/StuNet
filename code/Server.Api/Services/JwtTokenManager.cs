@@ -44,7 +44,7 @@ namespace Server.Api.Services {
                 issuer: _jwtSettings.GetSection ("validIssuer").Value,
                 audience: _jwtSettings.GetSection ("validAudience").Value,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes (Convert.ToDouble (_jwtSettings.GetSection ("expiryInMinutes").Value)),
+                expires: DateTime.UtcNow.AddMinutes (Convert.ToDouble (_jwtSettings.GetSection ("expiryInMinutes").Value)),
                 signingCredentials: signingCredentials);
 
             return tokenOptions;

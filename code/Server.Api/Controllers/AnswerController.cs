@@ -99,7 +99,7 @@ namespace Server.Api.Controllers
                     title = dto.title,
                     body = dto.body,
                     // files = createAnswerDto.files
-                    time = DateTime.Now
+                    time = DateTime.UtcNow
                 };
 
                 await _answerRepository.createAsync(answer);
@@ -147,7 +147,7 @@ namespace Server.Api.Controllers
                 title = dto.title,
                 body = dto.body,
                 // files = createAnswerDto.files
-                time = DateTime.Now
+                time = DateTime.UtcNow
             };
 
             await _answerRepository.updateAsync(updatedAnswer);

@@ -60,7 +60,7 @@ namespace Server.Api.Repositories
             answerToUpdate.body = answer.body;
 			answerToUpdate.userId = answer.userId;
 			answerToUpdate.question = answer.question;
-			answerToUpdate.time = DateTime.Now;
+			answerToUpdate.time = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
 
