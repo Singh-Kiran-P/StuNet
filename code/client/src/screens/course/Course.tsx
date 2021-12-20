@@ -19,9 +19,12 @@ export default Screen('Course', ({ params, nav }) => {
     }
 
     const fetch = async () => {
-        return axios.get('/Course/' + params.id)
+        axios.get('/Course/' + params.id)
             .then(res => init(res.data))
             .catch(err => {}) // TODO handle error
+        axios.get('/CourseSubscription/ByUserAndCourseId/' + params.id)
+            .then(response => setNotifactionsEnabled(response.data.length > 0))
+            .catch(error => console.error(error));
     }
 
     //TODO: Move this functionality to the server side
