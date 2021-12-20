@@ -76,7 +76,7 @@ export default Screen('Course', ({ params, nav }) => {
                 <Button margin children='Ask a question' onPress={() => nav.push('AskQuestion', { courseId: params.id })}/>
                 <Button margin children='Edit course' onPress={() => nav.push('EditCourse', { id: params.id })}/>
                 {/* Temporary button which should be moved to the page header as an icon */}
-                <Button margin children={(notificationsEnabled ? 'Enable' : 'Disable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
+                <Button margin children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
             </ScrollView>
         </Loader>
     );
