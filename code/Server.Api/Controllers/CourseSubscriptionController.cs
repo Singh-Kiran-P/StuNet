@@ -25,10 +25,17 @@ namespace Server.Api.Controllers
             _userManager = userManager;
         }
         
+        private async Task<IEnumerable<getCourseSubscriptionDto>> _getCourseSubscriptions()
+        {
+            IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.getAllAsync();
+            IEnumerable<getCourseSubscriptionDto> getDtos = subscriptions.Select(subscription => getCourseSubscriptionDto.convert(subscription));
+            return getDtos;
+        }
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<getCourseSubscriptionDto>>> getCourseSubscriptions()
         {
-            IEnumerable<CourseSubscription> getDtos = await _courseSubscriptionRepository.getAllAsync();
+            IEnumerable<getCourseSubscriptionDto> getDtos = await _getCourseSubscriptions();
             return Ok(getDtos);
         }
 
@@ -47,6 +54,18 @@ namespace Server.Api.Controllers
             };
 
             return Ok(getDto);
+        }
+
+        [HttpGet("ByUserAndCourseId/{courseId}")]
+        public async Task<ActionResult<getCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
+        {
+            IEnumerable<getCourseSubscriptionDto> dtos = await _getCourseSubscriptions();
+            ClaimsPrincipal currentUser = HttpContext.User;
+            string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+            User user = await _userManager.FindByEmailAsync(userEmail);
+
+            IEnumerable<getCourseSubscriptionDto> userSubscriptionDtos = dtos.Where(dto => dto.courseId == courseId && dto.userId == user.Id);
+            return Ok(userSubscriptionDtos);
         }
 
         [HttpPost]
