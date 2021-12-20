@@ -29,7 +29,6 @@ export default Screen('Course', ({ params, nav }) => {
 
     //TODO: Move this functionality to the server side
     function toggeNotificationSubcription(data: CourseSubscription[]): void {
-        console.log(data);
         if (data.length === 0) {
             axios.post('/CourseSubscription/', { courseId: params.id } as CourseSubscription)
                 .catch(error => console.error(error));
