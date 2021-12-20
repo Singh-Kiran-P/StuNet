@@ -28,14 +28,16 @@ export default Screen('Course', ({ params, nav }) => {
     }
 
     //TODO: Move this functionality to the server side
-    function toggeNotificationSubcription(data: CourseSubscription[]): void {
+    function toggleNotificationSubcription(data: CourseSubscription[]): void {
         if (data.length === 0) {
             axios.post('/CourseSubscription/', { courseId: params.id } as CourseSubscription)
-                .catch(error => console.error(error));
+            .then(setNotifactionsEnabled(!notificationsEnabled))
+            .catch(error => console.error(error));
         }
         else {
             axios.delete('/courseSubscription/' + data[0].id)
-                .catch(error => console.error(error));
+            .then(setNotifactionsEnabled(!notificationsEnabled))
+            .catch(error => console.error(error));
         }
     }
 
@@ -45,9 +47,8 @@ export default Screen('Course', ({ params, nav }) => {
      */
     function updateNotificationSubscription(): void {
         axios.get('/CourseSubscription/ByUserAndCourseId/' + params.id)
-            .then(response => toggeNotificationSubcription(response.data))
+            .then(response => toggleNotificationSubcription(response.data))
             .catch(error => console.error(error));
-        setNotifactionsEnabled(!notificationsEnabled);
     }
 
     console.log(params.id);
