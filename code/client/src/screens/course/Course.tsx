@@ -35,10 +35,11 @@ export default Screen('Course', ({ params, nav }) => {
             .catch(error => console.error(error));
         }
         else {
-            axios.delete('/courseSubscription/' + data[0].id)
+            axios.delete('/CourseSubscription/' + data[0].id)
             .then(setNotifactionsEnabled(!notificationsEnabled))
             .catch(error => console.error(error));
         }
+        
     }
 
     /**
@@ -51,7 +52,7 @@ export default Screen('Course', ({ params, nav }) => {
             .catch(error => console.error(error));
     }
 
-    console.log(params.id);
+
     return (
         <Loader load={fetch}>
             <ScrollView>

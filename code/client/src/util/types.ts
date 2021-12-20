@@ -56,3 +56,10 @@ export type CourseSubscription = {
     courseId: number;
     dateTime: string;
 }
+
+export type QuestionSubscription = {
+    id: number;
+    userId: string;
+    questionId: number;
+    dateTime: string;
+}

@@ -1,4 +1,4 @@
-import React, { axios, Screen, Style, useTheme, useState, Answer, dateString } from '@/.';
+import React, { axios, Screen, Style, useTheme, useState, Answer, dateString, QuestionSubscription } from '@/.';
 import { Text, View, Loader, Button, ScrollView } from '@/components';
 import { Dimensions } from 'react-native';
 
@@ -49,14 +49,36 @@ export default Screen('Question', ({ params, nav }) => {
         })
     }
 
-    const fetch = async () => Promise.all([info(), questions()]);
+    const infoNotification = async () => {
+        axios.get('/QuestionSubscription/ByUserAndQuestionId/' + params.id)
+            .then(response => setNotifactionsEnabled(response.data.length > 0))
+            .catch(error => console.error(error));
+    }
+    const fetch = async () => Promise.all([info(), questions(), infoNotification()]);
+
+    //TODO: Move this functionality to the server side
+    function toggleNotificationSubcription(data: QuestionSubscription[]): void {
+        if (data.length === 0) {
+            axios.post('/QuestionSubscription/', { questionId: params.id } as QuestionSubscription)
+            .then(setNotifactionsEnabled(!notificationsEnabled))
+            .catch(error => console.error(error, notificationsEnabled));
+        }
+        else {
+            axios.delete('/QuestionSubscription/' + data[0].id)
+            .then(setNotifactionsEnabled(!notificationsEnabled))
+            .catch(error => console.error(error, notificationsEnabled));
+        }
+        
+    }
 
     /**
      * Updates the notification on the server, and if succes
      * updates the local notification.
      */
     function updateNotificationSubscription(): void {
-        setNotifactionsEnabled(!notificationsEnabled);
+        axios.get('/QuestionSubscription/ByUserAndQuestionId/' + params.id)
+            .then(response => toggleNotificationSubcription(response.data))
+            .catch(error => console.error(error));
     }
 
     return (
@@ -64,7 +86,7 @@ export default Screen('Question', ({ params, nav }) => {
             <View type='header'>
                 <Text type='header' children={title}/>
                 {/* Temporary button which should be moved to the page header as an icon */}
-                <Button margin align='right' children={(notificationsEnabled ? 'Enable' : 'Disable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
+                <Button margin align='right' children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
                 <Text type='hint' align='right' children={date}/>
             </View>
             <ScrollView margin style={s.content} flex>
