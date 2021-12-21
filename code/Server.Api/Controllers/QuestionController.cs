@@ -10,6 +10,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
+using ChatSample.Hubs;
 
 namespace Server.Api.Controllers
 {
@@ -21,14 +23,16 @@ namespace Server.Api.Controllers
         private readonly ITopicRepository _topicRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly UserManager<User> _userManager;
+		private readonly IHubContext<ChatHub> _hubContext;
 
-        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager)
+		public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;
             _courseRepository = courseRepository;
             _userManager = userManager;
-        }
+			_hubContext = hubContext;
+		}
 
         // private static questionDto toDto(Question question, User user)
         // {
@@ -134,7 +138,8 @@ namespace Server.Api.Controllers
                 };
 
                 await _questionRepository.createAsync(question);
-                return Ok(questionDto.convert(question, user));
+				await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", question.id);
+				return Ok(questionDto.convert(question, user));
             }
             else
             {

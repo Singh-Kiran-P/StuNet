@@ -30,6 +30,9 @@ namespace Server.Api.DataBase
         public DbSet<Course> Courses { get; set; }
         public DbSet<TextChannel> Channels { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<CourseSubscription> CourseSubscriptions { get; set; } 
+        public DbSet<QuestionSubscription> QuestionSubscriptions { get; set; } 
+
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 

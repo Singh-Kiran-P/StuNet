@@ -85,3 +85,17 @@ export const enum User {
 	PROF,
 	STUDENT
 }
+
+export type CourseSubscription = {
+    id: number;
+    userId: string;
+    courseId: number;
+    dateTime: string;
+}
+
+export type QuestionSubscription = {
+    id: number;
+    userId: string;
+    questionId: number;
+    dateTime: string;
+}

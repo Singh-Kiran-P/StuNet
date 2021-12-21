@@ -17,6 +17,9 @@ export default ({ children }: Children) => {
 
 	useEffect(() => {
 		connection.start().catch(err => console.log(err)); // TODO handle error
+		
+		connection.on('QuestionNotification', (id: number) => console.log(id));
+		connection.on('AnswerNotification', (id: number) => console.log(id));
 
 		return () => {
 			connection.stop().catch(err => console.log(err)) // TODO handle error
