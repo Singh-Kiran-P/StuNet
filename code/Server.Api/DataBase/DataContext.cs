@@ -152,11 +152,13 @@ namespace Server.Api.DataBase
 					id = 1,
 					name = "Course 1",
 					number = "Course 1 number",
+					description = "Course 1 description"
 				},
 				new Course() {
 					id = 2,
 					name = "Course 2",
 					number = "Course 2 number",
+					description = "Course 2 description"
 				}
 			};
 

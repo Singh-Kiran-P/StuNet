@@ -7,6 +7,7 @@ namespace Server.Api.Repositories
 {
     public interface IQuestionRepository: IInterfaceRepository<Question>
     {
+        Task<IEnumerable<Question>> getByCourseIdAsync(int courseId);
         //  Task<IEnumerable<Question>> getAllAsync();
         //  Task<User> getAsync(int id);
         //  Task createAsync(Question question);

@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using Microsoft.AspNetCore.SignalR;
+using ChatSample.Hubs;
+
 
 namespace Server.Api.Controllers
 {
@@ -18,12 +21,14 @@ namespace Server.Api.Controllers
     {
         private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
         private readonly UserManager<User> _userManager;
+		private readonly IHubContext<ChatHub> _hubContext;
 
-        public CourseSubscriptionController(ICourseSubscriptionRepository repository, UserManager<User> userManager)
+		public CourseSubscriptionController(ICourseSubscriptionRepository repository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
         {
             _courseSubscriptionRepository = repository;
             _userManager = userManager;
-        }
+			_hubContext = hubContext;
+		}
         
         private async Task<IEnumerable<getCourseSubscriptionDto>> _getCourseSubscriptions()
         {
@@ -85,7 +90,8 @@ namespace Server.Api.Controllers
                     userId = user.Id,
                     courseId = dto.courseId,
                 };
-                await _courseSubscriptionRepository.createAsync(subscription);
+				await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + subscription.courseId.ToString());
+				await _courseSubscriptionRepository.createAsync(subscription);
                 return Ok(subscription);
             }
             else
@@ -99,8 +105,19 @@ namespace Server.Api.Controllers
         {
             try
             {
-                await _courseSubscriptionRepository.deleteAsync(id);
-            }
+				CourseSubscription sub = await _courseSubscriptionRepository.getAsync(id);
+				ClaimsPrincipal currentUser = HttpContext.User;
+				if (currentUser.HasClaim(c => c.Type == "username"))
+				{
+					string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+					User user = await _userManager.FindByEmailAsync(userEmail);
+
+					await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + sub.courseId.ToString());
+					await _courseSubscriptionRepository.deleteAsync(id);
+				} else {
+                    return Unauthorized();
+                }
+			}
             catch (System.Exception)
             {
                 return NotFound();

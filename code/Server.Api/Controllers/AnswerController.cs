@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using Microsoft.AspNetCore.SignalR;
+using ChatSample.Hubs;
 
 namespace Server.Api.Controllers
 {
@@ -20,14 +22,16 @@ namespace Server.Api.Controllers
         private readonly UserManager<User> _userManager;
         // private readonly ITopicRepository _topicRepository;
         private readonly IQuestionRepository _questionRepository;
-        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository /*, ITopicRepository topicRepository*/ )
+		private readonly IHubContext<ChatHub> _hubContext;
+		public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext /*, ITopicRepository topicRepository*/ )
         {
             _answerRepository = answerRepository;
             _userManager = userManager;
             _questionRepository = questionRepository;
-            // _topicRepository = topicRepository;
-            // _courseRepository = courseRepository;
-        }
+			_hubContext = hubContext;
+			// _topicRepository = topicRepository;
+			// _courseRepository = courseRepository;
+		}
 
         //[Authorize(Roles = "student")]
         [HttpGet]
@@ -103,6 +107,7 @@ namespace Server.Api.Controllers
                 };
 
                 await _answerRepository.createAsync(answer);
+                await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", answer.id);
                 return Ok(ResponseAnswerDto.convert(answer, user));
             }
             else

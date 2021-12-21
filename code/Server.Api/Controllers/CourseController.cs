@@ -32,6 +32,7 @@ namespace Server.Api.Controllers
                     id = course.id,
                     name = course.name,
                     number = course.number,
+                    description = course.description,
                     topics = course.topics.Select(topic =>
                         new getOnlyTopicDto() { name = topic.name, id = topic.id }
                         ).ToList(),
@@ -58,15 +59,13 @@ namespace Server.Api.Controllers
                 id = course.id,
                 name = course.name,
                 number = course.number,
+                description = course.description,
                 topics = course.topics.Select(topic =>
                     new getOnlyTopicDto() { id = topic.id, name = topic.name }
                 ).ToList(),
                 channels = course.channels.Select(channel =>
                     new getOnlyChannelDto() { id = channel.id, name = channel.name }
-                ).ToList(),
-                questions = course.questions.Select(question =>
-                    onlyQuestionDto.convert(question)
-                ).ToList(),
+                ).ToList()
             };
 
             return Ok(getDto);
@@ -93,15 +92,9 @@ namespace Server.Api.Controllers
             {
                 name = dto.name,
                 number = dto.number,
-                topics = dto.topicNames.Select(name => new Topic() { name = name }).ToList(),
+                description = dto.description
             };
             await _courseRepository.createAsync(course);
-
-            foreach (var topic in course.topics)
-            {
-                topic.course = course;
-                await _topicRepository.updateAsync(topic);
-            }
             return Ok(course);
         }
 
@@ -126,7 +119,8 @@ namespace Server.Api.Controllers
             {
                 id = id,
                 name = courseDto.name,
-                number = courseDto.number
+                number = courseDto.number,
+                description = courseDto.description,
             };
 
             await _courseRepository.updateAsync(course);

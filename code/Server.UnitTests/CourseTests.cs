@@ -39,7 +39,7 @@ namespace Server.UnitTests
             {
                 name = randomName(),
                 number = randomInt().ToString(),
-                topicNames = Enumerable.Range(1, count).Select(_ => randomName()).ToList()
+                description = randomName()
             };
             var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object);
 
@@ -52,10 +52,6 @@ namespace Server.UnitTests
                 options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
             );
             course.id.Should().NotBe(null);
-            course.topics.Should().OnlyContain(topic => topic.course == course);
-            course.topics.Should().NotBeNullOrEmpty();
-            course.topics.Should().AllBeOfType<Topic>();
-            course.topics.Should().HaveCount(count);
         }
 
         [Fact]
@@ -66,9 +62,9 @@ namespace Server.UnitTests
             {
                 name = "random" + random.Next().ToString(),
                 number = random.Next().ToString(),
+                description = random.Next().ToString(),
                 topics = new List<Topic> { new Topic() { name = randomName(), id = randomInt() } },
-                channels = new List<TextChannel> { new TextChannel() { name = randomName(), id = randomInt() } },
-                questions = new List<Question>()
+                channels = new List<TextChannel> { new TextChannel() { name = randomName(), id = randomInt() } }
             };
             _courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);

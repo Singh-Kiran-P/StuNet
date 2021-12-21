@@ -22,8 +22,6 @@ namespace Server.Api.Repositories
             return await _context.Courses
                 .Include(c => c.topics)
                 .Include(c => c.channels)
-                .Include(c => c.questions)
-                .ThenInclude(q => q.topics)
                 .ToListAsync();
         }
 
@@ -33,8 +31,6 @@ namespace Server.Api.Repositories
                 .Where(c => c.id == id)
                 .Include(c => c.topics)
                 .Include(c => c.channels)
-                .Include(c => c.questions)
-                .ThenInclude(q => q.topics)
                 .FirstOrDefaultAsync();
         }
 
@@ -45,6 +41,7 @@ namespace Server.Api.Repositories
                 throw new NullReferenceException();
             courseToUpdate.name = course.name;
             courseToUpdate.number = course.number;
+            courseToUpdate.description = course.description;
             courseToUpdate.topics = course.topics;
             await _context.SaveChangesAsync();
         }
@@ -71,8 +68,6 @@ namespace Server.Api.Repositories
                         .Where(c => c.name == name)
                         .Include(c => c.topics)
                         .Include(c => c.channels)
-                        .Include(c => c.questions)
-                        .ThenInclude(q => q.topics)        
                         .FirstOrDefaultAsync();
         }
     }
