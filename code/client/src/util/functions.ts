@@ -4,13 +4,18 @@ import 'intl/locale-data/jsonp/en-US';
 export const dateString = (moment: any) => {
     if (!moment) return '';
     let datetime = new Date(moment);
-    let s = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('en-US', o).format(datetime);
+    const s = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('en-US', o).format(datetime);
     let weekday = s({ weekday: 'short' });
     let month = s({ month: 'short' });
     let day = s({ day: 'numeric' });
-    let hour = s({ hour: '2-digit' });
+    let hour = s({ hour: '2-digit', hour12: false });
     let min = s({ minute: '2-digit' });
     return `${weekday} ${month} ${day}, ${hour}:${min}`;
+}
+
+export const timeDiff = (start: any, end: any) => {
+    const time = (a: any) => new Date(a).getTime() || 0;
+    return Math.abs(time(start) - time(end)) / 1000;
 }
 
 export const errorString = (err: any): string => {

@@ -42,7 +42,7 @@ export default Screen('Home', () => {
     return (
         <Loader load={fetch}>
             <Text pad='top' children='TODO only show subscribed items'/>
-            <Button pad='bottom' margin children='Update' onPress={() => update('Home')}/>
+            <Button pad margin children='Update' onPress={() => update('Home')}/>
             <SectionList inner padding='horizontal,bottom' refreshing={refresh} sections={[
                 { title: 'Courses', data: courses as any[] },
                 { title: 'Channels', data: channels as any[] },
