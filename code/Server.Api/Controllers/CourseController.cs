@@ -95,12 +95,6 @@ namespace Server.Api.Controllers
                 description = dto.description
             };
             await _courseRepository.createAsync(course);
-
-            foreach (var topic in course.topics)
-            {
-                topic.course = course;
-                await _topicRepository.updateAsync(topic);
-            }
             return Ok(course);
         }
 

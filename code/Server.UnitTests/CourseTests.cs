@@ -52,10 +52,6 @@ namespace Server.UnitTests
                 options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
             );
             course.id.Should().NotBe(null);
-            course.topics.Should().OnlyContain(topic => topic.course == course);
-            course.topics.Should().NotBeNullOrEmpty();
-            course.topics.Should().AllBeOfType<Topic>();
-            course.topics.Should().HaveCount(count);
         }
 
         [Fact]
