@@ -43,7 +43,7 @@ export default Screen('Course', ({ params: { id }, nav }) => {
     return (
         <Loader load={fetch}>
             {/* Temporary button which should be moved to the page header as an icon */}
-            <Button margin children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
+            <Button margin icon={notificationsEnabled ? 'bell' : 'bell-off'} /* children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} */ onPress={() => updateNotificationSubscription()}/>
             <Text children={course.description || 'TODO description'}/>
             <Button margin='top-2' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
             <ScrollView content padding='vertical' flex>

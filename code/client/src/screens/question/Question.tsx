@@ -57,7 +57,7 @@ export default Screen('Question', ({ nav, params: { id } }) => {
     return (
         <Loader load={fetch}>
             {/* Temporary button which should be moved to the page header as an icon */}
-            <Button margin align='right' children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
+            <Button margin align='right' icon={notificationsEnabled ? 'bell' : 'bell-off'} /* children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} */ onPress={() => updateNotificationSubscription()}/>
             <View type='header' hidden={!question.topics?.length} children={question.topics?.map((topic, i) => (
                 <Chip margin='bottom,right-0.5' key={i} children={topic.name}/>
             ))}/>
