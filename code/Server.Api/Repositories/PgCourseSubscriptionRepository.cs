@@ -17,11 +17,13 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
+        public async Task<ICollection<CourseSubscription>> getByUserId(string userId) {
+			return await _context.CourseSubscriptions.Where(s => userId == s.userId).ToListAsync();
+		}
         public async Task<ICollection<CourseSubscription>> getByUserIdAndCourseIdAsync(string userId, int courseId)
         {
             return await _context.CourseSubscriptions
-                .Where(s => s.userId == userId && s.courseId == courseId).ToListAsync()
-                ;
+                .Where(s => s.userId == userId && s.courseId == courseId).ToListAsync();
         }
 
         public async Task<CourseSubscription> getSingleByUserIdAndCourseIdAsync(string userId, int courseId)
