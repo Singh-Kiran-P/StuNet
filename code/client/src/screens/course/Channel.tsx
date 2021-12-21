@@ -38,7 +38,7 @@ export default Screen('Channel', ({ params: { id, name }, nav }) => {
 
 	return (
 		<Loader load={fetch}>
-			<List flex content padding='vertical' inverted data={messages} renderItem={message => (
+			<List flex inner padding='vertical' inverted data={messages} renderItem={message => (
 				<CompactMessage margin='bottom' message={message.item} sender={message.item.userMail === email}/>
 			)}/>
 			<Text type='error' margin='bottom' hidden={!error} children={error}/>

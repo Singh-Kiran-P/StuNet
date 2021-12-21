@@ -37,7 +37,7 @@ export default Screen('Home', ({ nav }) => {
         <Loader load={fetch}>
             <Text children='TODO only show subscribed items'/>
             <Button margin children='Update' onPress={() => update('Home')}/>
-            <SectionList content padding='bottom' sections={[
+            <SectionList inner padding='bottom' sections={[
                 { title: 'Courses', data: courses as any[] },
                 { title: 'Channels', data: channels as any[] },
                 { title: 'Questions', data: questions as any[] },

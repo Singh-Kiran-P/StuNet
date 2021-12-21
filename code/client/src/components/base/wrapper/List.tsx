@@ -5,7 +5,7 @@ import { List } from 'react-native-paper';
 
 type ItemList = <T>(props: FlatListProps<T> & Props) => JSX.Element;
 
-// TODO scroll indicator mode change
+// TODO indicatorstyle, refreshing
 
 export default Object.assign(extend(FlatList, props => {
     return <FlatList

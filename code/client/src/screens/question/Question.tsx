@@ -65,7 +65,7 @@ export default Screen('Question', ({ nav, params: { id } }) => {
                 <Text type='header' children={question.title}/>
                 <Text type='hint' align='right' children={dateString(question.time)}/>
             </View>
-            <List margin content padding='bottom' ListHeaderComponent={
+            <List margin inner padding='bottom' ListHeaderComponent={
                 <View>
                     <Text children={question.body}/>
                     <View type='row' margin>

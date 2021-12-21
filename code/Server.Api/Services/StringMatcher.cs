@@ -13,7 +13,6 @@ namespace Server.Api.Services {
         private static Boolean Match(string target, string search) {
             if (search == null || search == "") return true;
             var match = Fuzz.PartialRatio(target.ToLower(), search.ToLower());
-            Console.WriteLine(match);
             return match >= matchPercent;
         }
 

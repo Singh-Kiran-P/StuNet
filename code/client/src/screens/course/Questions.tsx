@@ -4,14 +4,17 @@ import { View, Text, List, Button, CompactQuestion, SelectTopics } from '@/compo
 export default Screen('Questions', ({ params: { course, search, update }, nav }) => {
     let [questions, setQuestions] = useState<Question[]>([]);
     let [actives, setActives] = useState<number[]>([]);
+    let [refresh, setRefresh] = useState(true);
     let [error, setError] = useState('');
 
     const display = (question: Question) => actives.every(i => question.topics.find(t => t.id === i));
 
     useEffect(() => {
-        axios.get('/Question/GetQuestionsByCourseId/search/' + course.id, {
-            params: { name: search }
-        }).then(res => setQuestions(res.data), show(setError))
+        if (!refresh) setRefresh(true);
+        axios.get('/Question/GetQuestionsByCourseId/search/' + course.id, { params: { name: search }}).then(
+            res => (setRefresh(false), setQuestions(res.data)),
+            show(setError)
+        )
     }, [search, update]);
 
     return (
@@ -22,7 +25,7 @@ export default Screen('Questions', ({ params: { course, search, update }, nav })
             />
             <Text type='error' margin='top-2' hidden={!error} children={error}/>
             <Text type='hint' size='normal' margin='top-2' hidden={questions.filter(display).length} children='No questions match these topics'/>
-            <List content padding='vertical' data={questions} renderItem={({ item, index }) => !display(item) ? null : (
+            <List inner padding='vertical' data={questions} refreshing={refresh} renderItem={({ item, index }) => !display(item) ? null : (
                 <CompactQuestion margin={!!index} question={item} selected={actives}/>
             )}/>
         </View>
