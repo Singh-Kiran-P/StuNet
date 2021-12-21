@@ -107,8 +107,9 @@ namespace Server.Api.Controllers
                 };
 
                 await _answerRepository.createAsync(answer);
-                await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", answer.id);
-                return Ok(ResponseAnswerDto.convert(answer, user));
+				var ret = ResponseAnswerDto.convert(answer, user);
+				await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
+                return Ok(ret);
             }
             else
             {

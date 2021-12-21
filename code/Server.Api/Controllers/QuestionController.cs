@@ -124,8 +124,9 @@ namespace Server.Api.Controllers
                 };
 
                 await _questionRepository.createAsync(question);
-				await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", question.id);
-				return Ok(questionDto.convert(question, user));
+				var ret = questionDto.convert(question, user);
+				await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
+				return Ok(ret);
             }
             else
             {
