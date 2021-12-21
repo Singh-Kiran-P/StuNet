@@ -1,38 +1,27 @@
-import React, { Style, useTheme, Question, dateString } from '@/.';
-import { View, Text } from '@/components';
+import React, { extend, BaseQuestion, dateString, useNav } from '@/.';
+import { View, Text, Chip, Icon, Touchable } from '@/components/base';
 
 type Props = {
-	question: Question;
+    question: BaseQuestion;
+    selected?: number[];
 }
 
-const topics = ['Topic 1', 'Backtracking', 'Recursie']; // TODO load topics
+export default extend<typeof Touchable, Props>(Touchable, ({ question, selected = [], ...props }) => {
+    let nav = useNav();
 
-export default ({ question }: Props) => {
-    let [theme] = useTheme();
-
-    const s = Style.create({
-        question: {
-            padding: theme.padding,
-        },
-    
-        topic: { // TODO fix
-            fontSize: theme.small,
-            backgroundColor: theme.surface,
-            borderRadius: 20,
-            paddingVertical: 2,
-            paddingHorizontal: 6,
-            marginRight: 6
-        }
-    })
-
-    return (
-        <View style={s.question}>
-            <View type='header'>
-                <Text type='header' size='normal' children={question.title}/>
-                <Text type='hint' align='right' children={dateString(question.time)}/>
+    return ( // TODO push?
+        <Touchable type='row' padding='all-0.2' onPress={() => nav.navigate({ name: 'Question', params: { id: question.id }, merge: true })} {...props}>
+            <Icon sizing='huge' padding='vertical-0.2' name='comment-question'/>
+            <View shrink grow margin='left'>
+                <View type='header'>
+                    <Text type='header' size='normal' children={question.title}/>
+                    <Text type='hint' align='right' children={dateString(question.time)}/>
+                </View>
+                <Text numberOfLines={3} children={question.body}/>
+                <View type='header' margin hidden={!question.topics.length} children={question.topics.map((topic, i) => (
+                    <Chip margin='bottom,right-0.5' key={i} children={topic.name} active={selected.includes(topic.id)}/>
+                ))}/>
             </View>
-            <Text margin children={question.body}/>
-            {topics.map((topic, i) => <Text key={i} style={s.topic} children={topic}/>)}
-        </View>
-    );
-}
+        </Touchable>
+    )
+})

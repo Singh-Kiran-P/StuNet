@@ -17,14 +17,14 @@ namespace Server.Api.Dtos
 	public class MessageDto {
 		public string userMail { get; set; }
 		public string body { get; set; }
-        public DateTime dateTime { get; set; }
+        public DateTime time { get; set; }
 
 		public static MessageDto convert(Message msg) {
 			return new()
 			{
 				userMail = msg.userMail,
 				body = msg.body,
-				dateTime = msg.dateTime
+				time = msg.time
 			};
 		}
 	}

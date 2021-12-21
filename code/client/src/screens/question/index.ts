@@ -1,9 +1,9 @@
-import CreateAnswer from './CreateAnswer';
+import GiveAnswer from './GiveAnswer';
 import Question from './Question';
 import Answer from './Answer';
 
 export default [
-    CreateAnswer,
+    GiveAnswer,
     Question,
     Answer
 ]

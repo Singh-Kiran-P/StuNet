@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
-using Server.Api.Repositories;
 
 namespace Server.Api.Controllers
 {
@@ -67,12 +66,16 @@ namespace Server.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseAnswerDto>> GetAnswer(int id)
         {
-            var answer = await _answerRepository.getAsync(id);
-            User user = await _userManager.FindByIdAsync(answer.userId);
-            if (answer == null)
-                return NotFound();
+            try
+            {
+                var answer = await _answerRepository.getAsync(id);
+                User user = await _userManager.FindByIdAsync(answer.userId);
+                if (answer == null)
+                    return NotFound();
 
-            return Ok(ResponseAnswerDto.convert(answer, user));
+                return Ok(ResponseAnswerDto.convert(answer, user));
+            }
+            catch { return BadRequest("Error finding all answers"); }
         }
 
         //[Authorize(Roles = "student")]
@@ -96,7 +99,7 @@ namespace Server.Api.Controllers
                     title = dto.title,
                     body = dto.body,
                     // files = createAnswerDto.files
-                    dateTime = DateTime.Now
+                    time = DateTime.UtcNow
                 };
 
                 await _answerRepository.createAsync(answer);
@@ -144,7 +147,7 @@ namespace Server.Api.Controllers
                 title = dto.title,
                 body = dto.body,
                 // files = createAnswerDto.files
-                dateTime = DateTime.Now
+                time = DateTime.UtcNow
             };
 
             await _answerRepository.updateAsync(updatedAnswer);

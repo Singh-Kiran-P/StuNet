@@ -1,7 +1,7 @@
-import React, { Route, Style, useTheme, useState, useToken, axios, errorString } from '@/.';
+import React, { Route, Style, useTheme, useState, useToken, axios, show } from '@/.';
 import { View, Text, Button, TextInput, PasswordInput } from '@/components';
 
-export default ({ navigation }: Route) => {
+export default ({ navigation, route: { params } }: Route) => {
     let [password, setPassword] = useState('');
     let [error, setError] = useState('');
     let [email, setEmail] = useState('');
@@ -10,13 +10,7 @@ export default ({ navigation }: Route) => {
 
     const s = Style.create({
         screen: {
-            padding: theme.padding,
             backgroundColor: theme.background
-        },
-
-        header: {
-            color: theme.primary,
-            marginBottom: theme.padding
         }
     })
 
@@ -24,21 +18,26 @@ export default ({ navigation }: Route) => {
         axios.post('/Auth/login', {
             email: email,
             password: password
-        }).then(res => setToken(res.data.jwtBearerToken || ''))
-        .catch(err => setError(errorString(err)));
+        }).then(res => setToken(res.data.jwtBearerToken || ''), show(setError))
     }
 
     return (
-        <View style={s.screen} flex>
-            <Text style={s.header} type='header' children='Log in'/>
-    
+        <View style={s.screen} padding flex>
+            <Text type='title' children='Log in'/>
+
+            <Text type='hint' margin='bottom' hidden={!params?.registered}>
+                You must first confirm the verification email sent to{'\n'}
+                <Text type='link' size='auto' children={params?.registered || ''}/>{'\n'}
+                before you can log in.
+            </Text>
+
             <TextInput label='Email' onChangeText={setEmail}/>
             <PasswordInput margin label='Password' onChangeText={setPassword}/>
-            <Text margin type='error' hidden={!error} children={error}/>
-    
+            <Text type='error' margin hidden={!error} children={error}/>
+
             <Button margin children='Log in' disabled={!login || !password} onPress={login}/>
-    
-            <Text margin type='hint'>
+
+            <Text type='hint' margin>
                 Don't have an account yet?{' '}
                 <Text type='link' size='auto' onPress={() => navigation.navigate('Register')}>
                     Register here!

@@ -1,14 +1,5 @@
-import { LayoutAnimation } from 'react-native';
-import { useState } from 'react';
 
-export const animate = LayoutAnimation.easeInEaseOut;
-
-export const useAnimate = <S>(initialState: S | (() => S)): [S, (value: S | ((prevState: S) => S)) => void] => {
-    const state = useState(initialState);
-    return [state[0], a => (animate(), state[1](a))];
-}
-
-export const dateString = (date: any) => new Date(date).toLocaleString();
+export const dateString = (date: any) => date && new Date(date).toLocaleString();
 
 export const errorString = (err: any): string => {
     const v = (a?: any): string => {
@@ -22,3 +13,5 @@ export const errorString = (err: any): string => {
     if (err.errors) return v(err.errors);
     return v();
 }
+
+export const show = (set: React.Dispatch<React.SetStateAction<string>>) => (err: any) => set(errorString(err));

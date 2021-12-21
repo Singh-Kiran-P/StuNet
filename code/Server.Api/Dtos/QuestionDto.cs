@@ -17,22 +17,43 @@ namespace Server.Api.Dtos
 		public String title { get; set; }
         public String body { get; set; }
         public DateTime time { get; set; }
+        public ICollection<getOnlyTopicDto> topics { get; set; }
+        public static onlyQuestionDto convert(Question question) {
+            return new onlyQuestionDto {
+                    id = question.id,
+                    title = question.title,
+                    body = question.body,
+                    topics = question.topics.Select(topic => new getOnlyTopicDto
+                    {
+                        id = topic.id,
+                        name = topic.name
+                    }).ToList(),
+                    time = question.time
+                };
+        }
     }
+
     public record onlyQuestionUserDto {
         public int id { get; set; }
 		public String title { get; set; }
         public ResponseUserDto user { get; set; }
         public String body { get; set; }
-        public DateTime dateTime { get; set; }
+        public ICollection<getOnlyTopicDto> topics { get; set; }
+        public DateTime time { get; set; }
         public static onlyQuestionUserDto convert(Question question, User user) {
             return new onlyQuestionUserDto {
                     id = question.id,
                     title = question.title,
                     user = ResponseUserDto.convert(user),
                     body = question.body,
-                    dateTime = question.dateTime
+                    topics = question.topics.Select(topic => new getOnlyTopicDto
+                    {
+                        id = topic.id,
+                        name = topic.name
+                    }).ToList(),
+                    time = question.time
                 };
-        }        
+        }
     }
 
     public record questionDto {
@@ -60,7 +81,7 @@ namespace Server.Api.Dtos
                         id = topic.id,
                         name = topic.name
                     }).ToList(),
-                    time = question.dateTime
+                    time = question.time
                 };
         }       
 	}

@@ -1,55 +1,24 @@
-import React, { Screen, axios, useState, Topic, Course, Channel, Question } from '@/.';
-import { Button, Loader, Collapse, ScrollView, CompactQuestion } from '@/components';
+import React, { Screen, EmptyCourse, useState, axios } from '@/.';
+import { Text, Button, Loader, ScrollView, CompactChannel } from '@/components';
 
-export default Screen('Course', ({ params, nav }) => {
-    const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
-    const [topics, setTopics] = useState<Topic[]>([]);
-    const [channels, setChannels] = useState<Channel[]>([]);
-    const [questions, setQuestions] = useState<Question[]>([]);
-
-    const init = (data: Course) => {
-        setName(data.name);
-        setNumber(data.number);
-        setTopics(data.topics);
-        setQuestions(data.questions);
-        setChannels(data.channels)
-        nav.setParams({ name: data.name });
-    }
+export default Screen('Course', ({ params: { id }, nav }) => {
+    let [course, setCourse] = useState(EmptyCourse);
 
     const fetch = async () => {
-        return axios.get('/Course/' + params.id)
-            .then(res => init(res.data))
-            .catch(err => {}) // TODO handle error
+        return axios.get('/Course/' + id).then(res => {
+            setCourse(res.data);
+            nav.setParams({ name: res.data.name });
+        })
     }
 
     return (
         <Loader load={fetch}>
-            <ScrollView>
-                <Collapse title='Topics'>
-                    {topics.map((topic, i) => ( // TODO: show search results with this topic only on click
-                        <Button key={i}
-                            onPress={() => nav.push('Course', params)}
-                            children={topic.name}
-                        />
-                    ))}
-                </Collapse>
-                <Collapse title='Channels'>
-                    {channels.map((channel, i) => (
-                        <Button key={i}
-                            onPress={() => nav.push('textChannel', { course: name, channel: channel, scroll: false } )}
-                            children={channel.name}
-                        />
-                    ))}
-                </Collapse>
-                <Collapse margin title='Questions'>
-                    {questions.map((question, i) => (
-                        <CompactQuestion key={i} question={question}/>
-                    ))}
-                </Collapse>
-                <Button margin children='Ask a question' onPress={() => nav.push('AskQuestion', { courseId: params.id })}/>
-                <Button margin children='Edit course' onPress={() => nav.push('EditCourse', { id: params.id })}/>
+            <Text children={course.description || 'TODO description'}/>
+            <Button margin='top-2' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
+            <ScrollView content padding='vertical' flex>
+                {course.channels?.map((channel, i) => <CompactChannel margin='bottom' key={i} channel={channel}/>)}
             </ScrollView>
+            <Button align='bottom' icon='pencil' children='Edit course' onPress={() => nav.push('EditCourse', { course })}/>
         </Loader>
-    );
-});
+    )
+})

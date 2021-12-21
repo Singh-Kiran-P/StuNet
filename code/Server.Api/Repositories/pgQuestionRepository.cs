@@ -26,10 +26,11 @@ namespace Server.Api.Repositories
         public async Task<Question> getAsync(int id)
         {
 			return await _context.Questions
+            .Where(q => q.id == id)
             .Include(q => q.topics)
             // .Include(q => q.user)          
             .Include(q => q.course)
-            .Where(q => q.id == id).FirstOrDefaultAsync();
+            .FirstOrDefaultAsync();
 		}
         public async Task createAsync(Question question)
         {
@@ -54,7 +55,7 @@ namespace Server.Api.Repositories
             questionToUpdate.title = question.title;
             questionToUpdate.body = question.body;
 			questionToUpdate.topics = question.topics;
-			questionToUpdate.dateTime = DateTime.Now;
+			questionToUpdate.time = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
     }

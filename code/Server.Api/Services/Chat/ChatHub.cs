@@ -36,7 +36,7 @@ namespace ChatSample.Hubs
                 userMail = userEmail,
                 channelId = channelId,
                 body = message,
-                dateTime = DateTime.UtcNow
+                time = DateTime.UtcNow
             };
 
             await _messageRepository.createAsync(m);

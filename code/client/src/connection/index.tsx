@@ -1,28 +1,29 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import * as signalR from "@microsoft/signalr";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { Children } from '@/util';
-import { useToken } from "@/auth";
+import { useToken } from '@/auth';
+import axios from 'axios';
 
-const Context = createContext<signalR.HubConnection>()
-export const useConnection = () => useContext(Context)
+const Context = createContext<HubConnection>(null as any as HubConnection);
+export const useConnection = () => useContext(Context);
 
 export default ({ children }: Children) => {
-	const token = useToken()[0];
-    const connection = useState(new signalR.HubConnectionBuilder().withUrl("http://10.0.2.2:5000/chat", { accessTokenFactory: () => token }).build())[0];
+	let [token] = useToken();
+    let [connection] = useState(() => {
+		return new HubConnectionBuilder().withUrl(axios.defaults.baseURL + '/chat', {
+			accessTokenFactory: () => token
+		}).build();
+	})
 
 	useEffect(() => {
-		connection.start()
-		.catch(err => console.log(err));
+		connection.start() // TODO handle error
+			.catch(err => console.log(err));
 
 		return () => {
-			connection.stop()
+			connection.stop() // TODO handle error
 				.catch(err => console.log(err))
 		}
 	}, [])
 
-	return (
-		< Context.Provider value={connection} >
-			{ children }
-		</Context.Provider >
-	)
+	return <Context.Provider value={connection} children={children}/>
 }

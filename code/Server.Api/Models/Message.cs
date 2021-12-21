@@ -9,6 +9,6 @@ namespace Server.Api.Models
         public TextChannel channel { get; set; }
 		public string userMail { get; set; }
 		public string body { get; set; }
-        public DateTime dateTime { get; set; }
+        public DateTime time { get; set; }
     }
 }

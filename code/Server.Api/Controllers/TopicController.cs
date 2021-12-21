@@ -25,13 +25,7 @@ namespace Server.Api.Controllers
                     name = topic.course.name,
                     number = topic.course.number,
                 },
-				questions = topic.questions.Select(question => new onlyQuestionDto
-				{
-					id = question.id,
-					title = question.title,
-					body = question.body,
-					time = question.dateTime
-				}).ToList()
+				questions = topic.questions.Select(question => onlyQuestionDto.convert(question)).ToList()
 			};
 		}
         public TopicController(ITopicRepository topicRepository, ICourseRepository courseRepository)

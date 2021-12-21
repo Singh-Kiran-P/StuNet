@@ -10,8 +10,12 @@ type BaseScreens = {
         args?: object;
         screenTitle: string;
         padding?: boolean | number;
+        paddingTop?: boolean | number;
+        paddingBottom?: boolean | number;
         scroll?: boolean;
+        search?: string;
         tabs?: boolean;
+        update?: number;
     }
 }
 
@@ -24,8 +28,8 @@ type BaseTabs<T extends BaseScreens> = {
     }
 }
 
-const s = <T extends BaseScreens>(v: T): Base<BaseScreens, T> => v;
-const t = <T extends BaseScreens, U extends BaseTabs<T>>(_: T, v: U): Base<BaseTabs<T>, U> => v;
+const s = <T extends BaseScreens>(v: T): Base<BaseScreens, T> => v as any;
+const t = <T extends BaseScreens, U extends BaseTabs<T>>(_: T, v: U): Base<BaseTabs<T>, U> => v as any;
 type Generic<T, U extends { [key: string]: any }> = { [V in keyof U]: U[V] extends T ? T : U[V] };
 type Base<T extends { [key: string]: any }, U extends T> = { [V in keyof U]: Generic<boolean, U[V]> & T[string] };
 export { s as screens, t as tabs };
