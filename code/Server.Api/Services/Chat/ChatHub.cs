@@ -79,13 +79,14 @@ namespace ChatSample.Hubs
         {
             // await Clients.All.SendAsync("UserDisconnected", Context.ConnectionId);
 
+            System.Console.WriteLine(Context.ConnectionId + " disconnected");
             UserHandler.ConnectedIds.Remove(getCurrentUserId());
             await base.OnDisconnectedAsync(exception);
         }
 
 		public async Task AddUserToSubscribedGroups()
 		{
-			string userId = UserHandler.ConnectedIds[Context.ConnectionId];
+			string userId = getCurrentUserId();
 			ICollection<CourseSubscription> subscribedCourses = await _courseSubscriptionRepository.getByUserId(userId);
 			ICollection<QuestionSubscription> subscribedQuestions = await _questionSubscriptionRepository.getByUserId(userId);
 

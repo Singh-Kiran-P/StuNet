@@ -17,6 +17,9 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
+        public async Task<ICollection<QuestionSubscription>> getByUserId(string userId) {
+			return await _context.QuestionSubscriptions.Where(s => userId == s.userId).ToListAsync();
+		}
         public async Task<ICollection<QuestionSubscription>> getByUserIdAndQuestionIdAsync(string userId, int questionId)
         {
             return await _context.QuestionSubscriptions
