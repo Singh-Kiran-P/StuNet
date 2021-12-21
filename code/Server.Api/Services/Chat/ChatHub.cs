@@ -70,7 +70,7 @@ namespace ChatSample.Hubs
 
             System.Console.WriteLine("connect: " + Context.ConnectionId);
 
-			UserHandler.ConnectedIds.Add(getCurrentUserId(), Context.ConnectionId);
+			UserHandler.ConnectedIds[getCurrentUserId()] = Context.ConnectionId;
 			await AddUserToSubscribedGroups();
 			await base.OnConnectedAsync();
         }
