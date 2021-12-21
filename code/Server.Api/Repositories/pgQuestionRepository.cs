@@ -11,10 +11,12 @@ namespace Server.Api.Repositories
     public class PgQuestionRepository : IQuestionRepository
     {
         private readonly IDataContext _context;
+
         public PgQuestionRepository(IDataContext context)
         {
             _context = context;
         }
+
         public async Task<IEnumerable<Question>> getAllAsync()
         {
 			return await _context.Questions
@@ -23,6 +25,17 @@ namespace Server.Api.Repositories
             .Include(q => q.course)          
             .ToListAsync();
 		}
+
+        public async Task<IEnumerable<Question>> getByCourseIdAsync(int courseId)
+        {
+            return await _context.Questions
+            .Include(q => q.course)
+            .Where(q => q.course.id == courseId)
+            .Include(q => q.topics)
+            // .Include(q => q.user)
+            .ToListAsync();
+        }
+
         public async Task<Question> getAsync(int id)
         {
 			return await _context.Questions
@@ -32,11 +45,13 @@ namespace Server.Api.Repositories
             .Include(q => q.course)
             .FirstOrDefaultAsync();
 		}
+
         public async Task createAsync(Question question)
         {
             _context.Questions.Add(question);
             await _context.SaveChangesAsync();
         }
+
         public async Task deleteAsync(int questionId)
         {
             var questionToRemove = await _context.Questions.FindAsync(questionId);

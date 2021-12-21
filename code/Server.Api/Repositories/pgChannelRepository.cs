@@ -39,16 +39,18 @@ namespace Server.Api.Repositories
         public async Task<TextChannel> getAsync(int id)
         {
 			return await _context.Channels
-			.Include(c => c.course)
+			.Where(c => c.id == id)
+            .Include(c => c.course)
 			.Include(c => c.messages)
-			.Where(c => c.id == id).FirstOrDefaultAsync();
+			.FirstOrDefaultAsync();
 		}
 
 		public async Task<ICollection<TextChannel>> getByCourseIdAsync(int courseId)
 		{
 			return await _context.Channels
-			.Include(c => c.course)
-			.Where(c => c.course.id == courseId).ToListAsync();
+			.Where(c => c.course.id == courseId)
+            .Include(c => c.course)
+			.ToListAsync();
 		}
 
         public async Task updateAsync(TextChannel channel)

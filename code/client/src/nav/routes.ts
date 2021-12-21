@@ -29,6 +29,7 @@ export const s = screens({
 
     Course: {
         screenTitle: '{name}',
+        subscribe: null,
         scroll: false,
         name: '',
         args: {} as {
@@ -37,6 +38,7 @@ export const s = screens({
     },
     Channel: {
         screenTitle: '{name} in {course}',
+        paddingTop: false,
         scroll: false,
         course: '',
         name: '',
@@ -83,6 +85,7 @@ export const s = screens({
     Question: {
         screenTitle: '{course}',
         paddingBottom: false,
+        subscribe: null,
         scroll: false,
         course: '',
         args: {} as {

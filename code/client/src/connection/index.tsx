@@ -16,12 +16,10 @@ export default ({ children }: Children) => {
 	})
 
 	useEffect(() => {
-		connection.start() // TODO handle error
-			.catch(err => console.log(err));
+		connection.start().catch(err => console.log(err)); // TODO handle error
 
 		return () => {
-			connection.stop() // TODO handle error
-				.catch(err => console.log(err))
+			connection.stop().catch(err => console.log(err)) // TODO handle error
 		}
 	}, [])
 

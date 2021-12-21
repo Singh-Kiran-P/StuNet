@@ -13,8 +13,11 @@ type BaseScreens = {
         paddingTop?: boolean | number;
         paddingBottom?: boolean | number;
         scroll?: boolean;
-        search?: string;
         tabs?: boolean;
+
+        search?: string;
+        subscribe?: boolean | null;
+
         update?: number;
     }
 }

@@ -3,7 +3,7 @@ import { Appbar } from 'react-native-paper';
 import { SearchBar } from '@/components';
 import { replace } from '@/util/alg';
 
-export default Component(({ params, params: { screenTitle, search }, nav }) => {
+export default Component(({ params, params: { screenTitle, search, subscribe }, nav }) => {
     let [theme] = useTheme();
     let title = replace(screenTitle, params) || 'Loading...';
 
@@ -23,8 +23,13 @@ export default Component(({ params, params: { screenTitle, search }, nav }) => {
         <Appbar.Header theme={paper(theme)}>
             {!nav.getState().index || <Appbar.BackAction onPress={() => nav.goBack()}/>}
             {search === undefined ? <Appbar.Content title={title}/> : <SearchBar
-                placeholder={title} onSearch={query => nav.setParams({ search: query })}
-                iconColor={theme.bright} style={s.search} theme={paper(Object.assign({}, theme, themed))}
+                style={s.search} theme={paper(Object.assign({}, theme, themed))}
+                iconColor='bright' returnKeyType='search' placeholder={title}
+                onSearch={query => nav.setParams({ search: query })}
+            />}
+            {subscribe !== undefined && <Appbar.Action
+                icon={subscribe ? 'bell-ring' : 'bell-outline'}
+                onPress={() => nav.setParams({ subscribe: !subscribe })}
             />}
         </Appbar.Header>
     )

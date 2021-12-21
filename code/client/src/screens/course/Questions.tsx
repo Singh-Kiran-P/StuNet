@@ -9,10 +9,9 @@ export default Screen('Questions', ({ params: { course, search, update }, nav })
     const display = (question: Question) => actives.every(i => question.topics.find(t => t.id === i));
 
     useEffect(() => {
-        axios.get('/Course/' + course.id).then( // TODO get questions by search
-            res => setQuestions(res.data.questions),
-            show(setError)
-        )
+        axios.get('/Question/GetQuestionsByCourseId/search/' + course.id, {
+            params: { name: search }
+        }).then(res => setQuestions(res.data), show(setError))
     }, [search, update]);
 
     return (

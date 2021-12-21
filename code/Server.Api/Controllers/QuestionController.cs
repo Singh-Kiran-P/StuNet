@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using Server.Api.Services;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -88,6 +89,19 @@ namespace Server.Api.Controllers
                 return Ok(questionDto.convert(question, user));
             }
             catch { return BadRequest("Error finding question"); }
+        }
+
+        [HttpGet("GetQuestionsByCourseId/search/{courseId}")]
+        public async Task<ActionResult<GetCourseDto>> searchByName(int courseId, [FromQuery] string name)
+        {
+                var questions = await _questionRepository.getByCourseIdAsync(courseId);
+                IEnumerable<Question> matches = StringMatcher.FuzzyMatchObject(questions, name);
+                List<questionDto> res = new List<questionDto>();
+                foreach (var q in matches) {
+                    User user = await _userManager.FindByIdAsync(q.userId);
+                    res.Add(questionDto.convert(q, user));
+                }
+                return Ok(res);
         }
     
         //[Authorize(Roles = "student")]

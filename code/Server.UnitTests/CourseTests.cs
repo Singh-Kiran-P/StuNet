@@ -39,7 +39,7 @@ namespace Server.UnitTests
             {
                 name = randomName(),
                 number = randomInt().ToString(),
-                topicNames = Enumerable.Range(1, count).Select(_ => randomName()).ToList()
+                description = randomName()
             };
             var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object);
 

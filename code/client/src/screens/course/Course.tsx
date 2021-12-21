@@ -13,7 +13,7 @@ export default Screen('Course', ({ params: { id }, nav }) => {
 
     return (
         <Loader load={fetch}>
-            <Text children={course.description || 'TODO description'}/>
+            <Text children={course.description}/>
             <Button margin='top-2' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
             <ScrollView content padding='vertical' flex>
                 {course.channels?.map((channel, i) => <CompactChannel margin='bottom' key={i} channel={channel}/>)}

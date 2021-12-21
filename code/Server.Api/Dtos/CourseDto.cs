@@ -6,8 +6,19 @@ namespace Server.Api.Dtos // controllers?
 {
     public record CourseDto
     {
+        public int id { get; set; }
         public string name { get; set; }
         public string number { get; set; }
+        public string description { get; set; }
+        public static CourseDto convert(Course course){
+            return new CourseDto {
+                id = course.id,
+                name = course.name,
+                number = course.number,
+                description = course.description
+            };
+        }
+
     }
 
     public record GetAllCourseDto
@@ -15,6 +26,7 @@ namespace Server.Api.Dtos // controllers?
         public int id { get; set; }
         public string name { get; set; }
         public string number { get; set; }
+        public string description { get; set; }
         public ICollection<getOnlyTopicDto> topics;
         
     }
@@ -24,16 +36,16 @@ namespace Server.Api.Dtos // controllers?
         public int id { get; set; }
         public string name { get; set; }
         public string number { get; set; }
+        public string description { get; set; }
         public ICollection<getOnlyTopicDto> topics;
 		public ICollection<getOnlyChannelDto> channels;
-		public ICollection<onlyQuestionDto> questions;
     }
 
     public record getOnlyCourseDto {
         public int id { get; set; }
         public string name { get; set; }
         public string number { get; set; }
-
+        public string description { get; set; }
         public static getOnlyCourseDto convert(Course course){
             return new getOnlyCourseDto{
                     id = course.id,
@@ -47,11 +59,6 @@ namespace Server.Api.Dtos // controllers?
     {
         public string name { get; set; }
         public string number { get; set; }
-
-        //public ICollection<string> channels {get; set;}
-
-        public ICollection<string> topicNames {get; set;}
-
-        //ublic ICollection<string> assitents {get; set;} 
+        public string description { get; set; }
     }
 }
