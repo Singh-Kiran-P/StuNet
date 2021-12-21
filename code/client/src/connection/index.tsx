@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
-import { Children } from '@/util';
+import notifee, { AndroidImportance, AndroidStyle } from '@notifee/react-native';
+import { Children, Question, Answer } from '@/util';
 import { useToken } from '@/auth';
 import axios from 'axios';
 
@@ -16,13 +17,50 @@ export default ({ children }: Children) => {
 	})
 
 	useEffect(() => {
-		connection.start().catch(err => console.log(err)); // TODO handle error
+		connection.start() // TODO handle error
+			.catch(err => console.log(err));
 		
-		connection.on('QuestionNotification', (id: number) => console.log(id));
-		connection.on('AnswerNotification', (id: number) => console.log(id));
+		connection.on('QuestionNotification', async (question: Question) => {
+			const channelId = await notifee.createChannel({
+				id: 'Question',
+				name: 'Course notifications',
+				importance: AndroidImportance.HIGH,
+			});
+		
+			await notifee.displayNotification({
+				title: 'Question asked in ' + question.course.name,
+				body: question.title,
+				android: {
+					channelId,
+					smallIcon: 'ic_launcher',
+					style: { type: AndroidStyle.BIGTEXT, text: question.body }
+				},
+			});
+		});
+
+		connection.on('AnswerNotification', async (answer: Answer) => {
+			const channelId = await notifee.createChannel({
+				id: 'Answer',
+				name: 'Question notifications',
+				importance: AndroidImportance.HIGH,
+			});
+		
+			await notifee.displayNotification({
+				title: 'Answer received',
+				body: answer.question.title,
+				android: {
+					channelId,
+					smallIcon: 'ic_launcher',
+					style: { type: AndroidStyle.BIGTEXT, text: answer.body }
+				},
+			});
+		});
 
 		return () => {
-			connection.stop().catch(err => console.log(err)) // TODO handle error
+			connection.off('QuestionNotification')
+			connection.off('AnswerNotification')
+			connection.stop() // TODO handle error
+				.catch(err => console.log(err))
 		}
 	}, [])
 
