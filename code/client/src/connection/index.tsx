@@ -28,7 +28,7 @@ export default ({ children }: Children) => {
 			});
 		
 			await notifee.displayNotification({
-				title: 'Question asked in ' + question.course.name + '.',
+				title: 'Question asked in ' + question.course.name,
 				body: question.title,
 				android: {
 					channelId,
