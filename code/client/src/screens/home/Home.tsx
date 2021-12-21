@@ -41,15 +41,15 @@ export default Screen('Home', () => {
 
     return (
         <Loader load={fetch}>
-            <Text children='TODO only show subscribed items'/>
-            <Button margin children='Update' onPress={() => update('Home')}/>
-            <SectionList inner padding='bottom' refreshing={refresh} sections={[
+            <Text pad='top' children='TODO only show subscribed items'/>
+            <Button pad='bottom' margin children='Update' onPress={() => update('Home')}/>
+            <SectionList inner padding='horizontal,bottom' refreshing={refresh} sections={[
                 { title: 'Courses', data: courses as any[] },
                 { title: 'Channels', data: channels as any[] },
                 { title: 'Questions', data: questions as any[] },
                 { title: 'Answers', data: answers as any[] }
             ]} renderSectionHeader={({ section }) => (
-                <Text type='header' margin='top-2' children={section.title}/>
+                <Text type='header' margin='top' children={section.title}/>
             )} renderItem={({ item, section }) => {
                 switch (section.title) {
                     case 'Courses': return <CompactCourse course={item}/>

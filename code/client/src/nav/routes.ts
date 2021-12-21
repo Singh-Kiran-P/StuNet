@@ -5,7 +5,7 @@ export const s = screens({
 
     Home: {
         screenTitle: 'StuNet',
-        paddingBottom: false,
+        padding: false,
         scroll: false,
         tabs: true
     },
@@ -14,8 +14,7 @@ export const s = screens({
 
     Courses: {
         screenTitle: 'Search For Courses',
-        paddingBottom: false,
-        paddingTop: false,
+        padding: false,
         scroll: false,
         search: '',
         tabs: true
@@ -30,6 +29,7 @@ export const s = screens({
     Course: {
         screenTitle: '{name}',
         subscribe: null,
+        padding: false,
         scroll: false,
         name: '',
         args: {} as {
@@ -38,7 +38,7 @@ export const s = screens({
     },
     Channel: {
         screenTitle: '{name} in {course}',
-        paddingTop: false,
+        padding: false,
         scroll: false,
         course: '',
         name: '',
@@ -48,7 +48,7 @@ export const s = screens({
     },
     Questions: {
         screenTitle: 'Questions in {course.name}',
-        paddingBottom: false,
+        padding: false,
         scroll: false,
         search: '',
         args: {} as {
@@ -84,7 +84,7 @@ export const s = screens({
 
     Question: {
         screenTitle: '{course}',
-        paddingBottom: false,
+        padding: false,
         subscribe: null,
         scroll: false,
         course: '',

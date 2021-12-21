@@ -16,12 +16,12 @@ export default Screen('Courses', ({ nav, params: { search, update } }) => {
 
     return (
         <View flex>
-            <Text type='error' margin='bottom' hidden={!error} children={error}/>
-            <Text type='hint' size='normal' margin='top-2,bottom' hidden={courses.length} children='No courses match your search'/>
-            <List inner padding='vertical' data={courses} refreshing={refresh} renderItem={course =>
+            <Text type='error' pad='top' margin='bottom' hidden={!error} children={error}/>
+            <Text type='hint' size='normal' pad='top' margin='bottom' hidden={courses.length} children='No courses match your search'/>
+            <List inner padding data={courses} refreshing={refresh} renderItem={course =>
                 <CompactCourse margin={!!course.index} course={course.item}/>}
             />
-            <Button align='bottom' margin='bottom-2' icon='book-plus' children='Create Course' onPress={() => nav.push('CreateCourse')}/>
+            <Button align='bottom' pad='bottom' icon='book-plus' children='Create Course' onPress={() => nav.push('CreateCourse')}/>
         </View>
     )
 })

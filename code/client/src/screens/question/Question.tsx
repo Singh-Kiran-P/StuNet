@@ -50,14 +50,16 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
 
     return (
         <Loader load={fetch}>
-            <View type='header' hidden={!question.topics?.length} children={question.topics?.map((topic, i) => (
-                <Chip margin='bottom,right-0.5' key={i} children={topic.name}/>
-            ))}/>
-            <View type='header'>
-                <Text type='header' children={question.title}/>
-                <Text type='hint' align='right' children={dateString(question.time)}/>
+            <View pad='top'>
+                <View type='header' hidden={!question.topics?.length} children={question.topics?.map((topic, i) => (
+                    <Chip margin='bottom,right-0.5' key={i} children={topic.name}/>
+                ))}/>
+                <View type='header'>
+                    <Text type='header' children={question.title}/>
+                    <Text type='hint' align='right' children={dateString(question.time)}/>
+                </View>
             </View>
-            <List margin inner padding='bottom' ListHeaderComponent={
+            <List margin inner padding='horizontal,bottom' ListHeaderComponent={
                 <View>
                     <Text children={question.body}/>
                     <View type='row' margin>

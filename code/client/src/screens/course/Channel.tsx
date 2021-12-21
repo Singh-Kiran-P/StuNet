@@ -38,11 +38,11 @@ export default Screen('Channel', ({ nav, params: { id, name } }) => {
 
 	return (
 		<Loader load={fetch}>
-			<List flex inner padding='vertical' inverted data={messages} renderItem={message => (
+			<List flex inner padding inverted data={messages} renderItem={message => (
 				<CompactMessage margin='bottom' message={message.item} sender={message.item.userMail === email}/>
 			)}/>
-			<Text type='error' margin='bottom' hidden={!error} children={error}/>
-			<SearchBar icon='send' returnKeyType='send' placeholder={'Message ' + name} disableEmpty
+			<Text type='error' pad margin='bottom' hidden={!error} children={error}/>
+			<SearchBar pad='bottom' icon='send' returnKeyType='send' placeholder={'Message ' + name} disableEmpty
 				onSearch={(msg, set) => (set(''), sendMessage(msg))}
 			/>
 		</Loader>

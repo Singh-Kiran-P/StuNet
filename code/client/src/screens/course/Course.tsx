@@ -38,12 +38,12 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
 
     return (
         <Loader load={fetch}>
-            <Text children={course.description}/>
-            <Button margin='top-2' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
-            <ScrollView inner padding='vertical' flex>
-                {course.channels?.map((channel, i) => <CompactChannel margin='bottom' key={i} channel={channel}/>)}
-            </ScrollView>
-            <Button align='bottom' icon='pencil' children='Edit course' onPress={() => nav.push('EditCourse', { course })}/>
+            <Text pad='top' children={course.description}/>
+            <Button pad='top' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
+            <ScrollView inner padding flex children={course.channels?.map((channel, i) =>
+                <CompactChannel margin='bottom' key={i} channel={channel}/>)}
+            />
+            <Button align='bottom' pad='bottom' icon='pencil' children='Edit course' onPress={() => nav.push('EditCourse', { course })}/>
         </Loader>
     )
 })
