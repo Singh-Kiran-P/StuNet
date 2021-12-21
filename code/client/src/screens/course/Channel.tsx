@@ -2,7 +2,7 @@ import React, { Screen, Message, useEffect, useState, useToken, jwt_decode, axio
 import { Text, List, Loader, SearchBar, CompactMessage } from '@/components';
 import { useConnection } from '@/connection';
 
-export default Screen('Channel', ({ params: { id, name }, nav }) => {
+export default Screen('Channel', ({ nav, params: { id, name } }) => {
 	let [messages, setMessages] = useState<Message[]>([]);
 	let [error, setError] = useState('');
 	

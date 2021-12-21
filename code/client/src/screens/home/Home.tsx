@@ -1,11 +1,12 @@
 import React, { Screen, Course, Channel, Question, Answer, useState, axios, update } from '@/.';
 import { Text, Loader, Button, SectionList, CompactCourse, CompactChannel, CompactQuestion, CompactAnswer } from '@/components';
 
-export default Screen('Home', ({ nav }) => {
+export default Screen('Home', () => {
     let [courses, setCourses] = useState<Course[]>([]);
     let [channels, setChannels] = useState<Channel[]>([]);
     let [questions, setQuestions] = useState<Question[]>([]);
     let [answers, setAnswers] = useState<Answer[]>([]);
+    let [refresh, setRefresh] = useState(true);
 
     const course = async () => {
         return axios.get('/Course').then(res => {
@@ -31,13 +32,18 @@ export default Screen('Home', ({ nav }) => {
         })
     }
 
-    const fetch = async () => Promise.all([course(), channel(), question(), answer()]);
+    const fetch = async () => {
+        if (!refresh) setRefresh(true);
+        return Promise.all([course(), channel(), question(), answer()]).then(
+            () => setRefresh(false)
+        )
+    }
 
     return (
         <Loader load={fetch}>
             <Text children='TODO only show subscribed items'/>
             <Button margin children='Update' onPress={() => update('Home')}/>
-            <SectionList inner padding='bottom' sections={[
+            <SectionList inner padding='bottom' refreshing={refresh} sections={[
                 { title: 'Courses', data: courses as any[] },
                 { title: 'Channels', data: channels as any[] },
                 { title: 'Questions', data: questions as any[] },
@@ -46,10 +52,10 @@ export default Screen('Home', ({ nav }) => {
                 <Text type='header' margin='top-2' children={section.title}/>
             )} renderItem={({ item, section }) => {
                 switch (section.title) {
-                    case 'Courses': return <CompactCourse course={item}/>;
-                    case 'Channels': return <CompactChannel channel={item}/>;
-                    case 'Questions': return <CompactQuestion question={item}/>;
-                    case 'Answers': return <CompactAnswer answer={item}/>;
+                    case 'Courses': return <CompactCourse course={item}/>
+                    case 'Channels': return <CompactChannel channel={item}/>
+                    case 'Questions': return <CompactQuestion question={item}/>
+                    case 'Answers': return <CompactAnswer answer={item}/>
                     default: return null;
                 }
             }}/>

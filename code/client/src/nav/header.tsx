@@ -3,7 +3,7 @@ import { Appbar } from 'react-native-paper';
 import { SearchBar } from '@/components';
 import { replace } from '@/util/alg';
 
-export default Component(({ params, params: { screenTitle, search, subscribe }, nav }) => {
+export default Component(({ nav, params, params: { screenTitle, search, subscribe } }) => {
     let [theme] = useTheme();
     let title = replace(screenTitle, params) || 'Loading...';
 

@@ -2,7 +2,7 @@ import React, { Screen, useState, axios, update, show } from '@/.';
 import { View, Text, Button, TextInput } from '@/components';
 import { contains } from '@/util/alg';
 
-export default Screen('EditCourse', ({ params: { course }, nav }) => {
+export default Screen('EditCourse', ({ nav, params: { course } }) => {
     let [description, setDescription] = useState(course.description);
     let [number, setNumber] = useState(course.number);
     let [name, setName] = useState(course.name);
