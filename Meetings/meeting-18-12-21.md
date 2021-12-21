@@ -45,6 +45,8 @@ Linter | Kiran/Lander | • Gezien dit de laatste code-sprint is heeft het niet 
 #### Extra-ish
 - account aanmaken
   - 2 jaren (jaar verwijderen/negeren)
+- vak aanmaken
+  - description
 - vak opzoeken
   - enkel de filters en substring matching
   - vanuit home pagina navigeren naar genavigeerde vakken
@@ -52,6 +54,9 @@ Linter | Kiran/Lander | • Gezien dit de laatste code-sprint is heeft het niet 
 - vraag opzoeken
   - voorlopig nog terug te vinden in een lijst
   - filteren op topics
+- vak beheren
+  - gebruiker op admin rechten controleren
+  - routes beschermen
 
 #### requirement-ish
 Use cases met moeilijkheidsgraad van 1 tot 5.
