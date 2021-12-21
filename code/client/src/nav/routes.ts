@@ -1,86 +1,106 @@
 import { screens, tabs } from '@/nav/types';
-import { Answer, Channel } from '@/util/types';
+import { Course, Question } from '@/util/types';
 
 export const s = screens({
 
-    Question: {
-        screenTitle: '{course}',
-        course: '',
-        args: {} as {
-            id: number;
-        }
+    Home: {
+        screenTitle: 'StuNet',
+        paddingBottom: false,
+        scroll: false,
+        tabs: true
     },
-    CreateAnswer: {
-        screenTitle: '{course}',
-        args: {} as {
-            date: string;
-            question: string;
-            questionId: number;
-            course: string;
-        }
+
+
+
+    Courses: {
+        screenTitle: 'Search For Courses',
+        paddingBottom: false,
+        paddingTop: false,
+        scroll: false,
+        search: '',
+        tabs: true
     },
-    Answer: {
-        screenTitle: '{course}',
-        args: {} as Answer & {
-            course: string;
-        }
+    CreateCourse: {
+        screenTitle: 'Create Your Course',
+        tabs: true
     },
 
 
 
     Course: {
         screenTitle: '{name}',
+        scroll: false,
         name: '',
         args: {} as {
             id: number;
         }
     },
-    AskQuestion: {
-        screenTitle: 'Ask Question ({courseId})',
+    Channel: {
+        screenTitle: '{name} in {course}',
+        scroll: false,
+        course: '',
+        name: '',
         args: {} as {
-            courseId: number;
+            id: number
+        }
+    },
+    Questions: {
+        screenTitle: 'Questions in {course.name}',
+        paddingBottom: false,
+        scroll: false,
+        search: '',
+        args: {} as {
+            course: Course
+        }
+    },
+    AskQuestion: {
+        screenTitle: '{course.name}',
+        selected: [] as number[],
+        args: {} as {
+            course: Course;
         }
     },
     EditCourse: {
-        screenTitle: 'Edit course ({id})',
+        screenTitle: 'Edit {course.name}',
+        args: {} as {
+            course: Course;
+        }
+    },
+    EditTopics: {
+        screenTitle: 'Edit topics of {course.name}',
+        args: {} as {
+            course: Course;
+        }
+    },
+    EditChannels: {
+        screenTitle: 'Edit channels of {course.name}',
+        args: {} as {
+            course: Course;
+        }
+    },
+
+
+    Question: {
+        screenTitle: '{course}',
+        paddingBottom: false,
+        scroll: false,
+        course: '',
         args: {} as {
             id: number;
         }
     },
-    EditTopics: {
-        screenTitle: 'Edit topics of course ({courseId})',
+    GiveAnswer: {
+        screenTitle: '{question.course.name}',
         args: {} as {
-            courseId: number;
+            question: Question
         }
     },
-    EditChannels: {
-        screenTitle: 'Edit channels',
+    Answer: {
+        screenTitle: '{course}',
+        course: '',
         args: {} as {
-            courseId: number;
+            id: number;
         }
-    },
-
-    textChannel: {
-        screenTitle: '',
-        channelName: '',
-        args: {} as {
-            course: string,
-            channel: Channel
-        }
-    },
-
-
-    Home: {
-        screenTitle: 'Home'
-    },
-
-
-
-    Courses: {
-        screenTitle: 'Search For Courses'
-    },
-    CreateCourse: {
-        screenTitle: 'Create Your Course'
     },
 
 
@@ -93,9 +113,7 @@ export const s = screens({
 
     Profile: {
         screenTitle: 'Your Profile',
-    },
-    EditProfile: {
-        screenTitle: 'Edit Your Profile'
+        tabs: true
     }
 
 })

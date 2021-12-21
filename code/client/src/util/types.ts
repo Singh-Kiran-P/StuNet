@@ -1,34 +1,67 @@
-export type Course = {
+export type BaseCourse = {
     id: number;
     name: string;
     number: string;
+}
+
+export type Course = BaseCourse & {
     topics: Topic[];
     questions: Question[];
     channels: Channel[];
 }
 
-export type Channel = {
+export type BaseChannel = {
     id: number;
     name: string;
 }
 
-export type Topic = {
+export type Channel = BaseChannel & {}
+
+export type BaseMessage = {
+	userMail: string,
+	body: string,
+	time: string
+}
+
+export type Message = BaseMessage & {}
+
+export type BaseTopic = {
     id: number;
     name: string;
 }
 
-export type Question = {
+export type Topic = BaseTopic & {
+    course: BaseCourse;
+    questions: BaseQuestion[];
+}
+
+export type BaseQuestion = {
     id: number;
     title: string;
     body: string;
     time: string;
-    // TODO topicIds: number[];
+    topics: BaseTopic[];
 }
 
-export type Answer = {
-    dateTime: string;
+export type Question = BaseQuestion & {
+    course: BaseCourse;
+    user: {
+        email: string;
+    }
+}
+
+export type BaseAnswer = {
+    id: number;
     title: string;
     body: string;
+    time: string;
+}
+
+export type Answer = BaseAnswer & {
+    question: BaseQuestion;
+    user: {
+        email: string;
+    }
 }
 
 export type Field = {

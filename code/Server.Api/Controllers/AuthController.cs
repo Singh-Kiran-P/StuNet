@@ -116,8 +116,8 @@ namespace Server.Api.Controllers {
             await emailHelper.SendEmailAsync (user.Email, "Confirmation Email", confirmationLink);
         }
 
-        [HttpPost("validateToken")]
-        public IActionResult ValidateToken(string token)
+        [HttpGet ("validateToken")]
+        public IActionResult ValidateToken([FromQuery] string token)
         {
             if (_tokenManager.ValidateToken(token))
                 return Ok();

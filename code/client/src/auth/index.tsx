@@ -23,18 +23,23 @@ export default ({ children }: Children) => {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     useEffect(() => {
-        Store.getItem(key)
-            .then(token => setToken(token || ''))
-            .catch(() => setToken(''))
-            .finally(() => setLoad(false));
+        Store.getItem(key).then(
+            token => {
+                if (!token) throw Error();
+                axios.get('/Auth/validateToken', { params: { token: token } }).then(
+                    () => setToken(token || ''),
+                    () => setToken('')
+                ).finally(() => setLoad(false));
+            }).catch(() => (setToken(''), setLoad(false)));
     }, [])
 
     const context = useMemo<Context>(() =>
         [token, token => {
             setLoad(true);
             setToken(token);
-            Store.setItem(key, token)
-                .finally(() => setLoad(false));
+            Store.setItem(key, token).finally(
+                () => setLoad(false)
+            )
         }
     ], [token])
 

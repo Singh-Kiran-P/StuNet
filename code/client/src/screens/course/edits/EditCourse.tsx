@@ -1,41 +1,32 @@
-import React, { Screen, axios, useState } from '@/.';
-import { View, Button, Loader, TextInput, ScrollView } from '@/components';
+import React, { Screen, useState, axios, update, show } from '@/.';
+import { View, Text, Button, TextInput } from '@/components';
+import { contains } from '@/util/alg';
 
-export default Screen('EditCourse', ({ params, nav }) => {
-    const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
-    const [changed, setChanged] = useState(false);
+export default Screen('EditCourse', ({ params: { course }, nav }) => {
+    let [description, setDescription] = useState(course.description || 'TODO description');
+    let [number, setNumber] = useState(course.number);
+    let [name, setName] = useState(course.name);
+    let [error, setError] = useState('');
 
-    const change = (set: (value: any) => void) => (value: any) => {
-        setChanged(true);
-        set(value);
-    }
+    let changed = !contains(course, { name, number }); // TODO add description
 
-    const fetch = async () => {
-        return axios.get('/Course/' + params.id).then(res => {
-            setName(res.data.name);
-            setNumber(res.data.number);
-        })
-    }
-
-    const update = () => {
-        axios.put('/Course/' + params.id, {
+    const save = () => {
+        axios.put('/Course/' + course.id, {
             name: name,
             number: number
-        }).then(() => setChanged(false))
-        .catch(err => {}); // TODO handle error
+        }).then(() => (update('Course', { id: course.id }), nav.pop()), show(setError))
     }
 
     return (
-        <Loader load={fetch}>
-            <ScrollView>
-                <TextInput label='name' defaultValue={name} onChangeText={change(setName)}/>
-                <TextInput margin label='number' defaultValue={number} onChangeText={change(setNumber)}/>
-                <Button margin children='Edit topics' onPress={() => nav.push('EditTopics', { courseId: params.id })}/>
-                <Button margin children='Edit channels' onPress={() => nav.push('EditChannels', { courseId: params.id })}/>
-                {/* <Button children='Edit assitants' onPress={() => nav.push('EditTopics', { id: params.id })}/> */}
-                <Button margin children='Update' onPress={update} disabled={!changed}/>
-            </ScrollView>
-        </Loader>
-    );
-});
+        <View flex>
+            <TextInput label='Name' defaultValue={name} onChangeText={setName}/>
+            <TextInput margin label='Number' defaultValue={number} onChangeText={setNumber}/>
+            <TextInput margin label='Description' defaultValue={description} onChangeText={setDescription}/>
+            <Button margin icon='content-save' children='Save' disabled={!name || !number || !changed} toggled={error} onPress={save}/>
+            <Text type='error' margin hidden={!error} children={error}/>
+            <Button align='bottom' icon='pencil' children='Edit topics' disabled={changed} onPress={() => nav.replace('EditTopics', { course })}/>
+            <Button margin icon='pencil' children='Edit channels' disabled={changed} onPress={() => nav.replace('EditChannels', { course })}/>
+            {/* TODO ? <Button children='Edit assitants' onPress={() => nav.replace('EditAssistants', { course })}/> */}
+        </View>
+    )
+})

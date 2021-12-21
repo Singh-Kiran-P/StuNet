@@ -38,7 +38,7 @@
 			"appsettings.Development.json": true,
 			"Server.Api.csproj": true
 		},
-		
+
 		"search.exclude": {
 			".buckconfig": true,
 			".editorconfig": true,

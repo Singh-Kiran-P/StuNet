@@ -138,8 +138,8 @@ In het **vetgedrukt** staat het origineel, aangevuld met verduidelijking; in het
 - Tijl: Hebben we **voldoende diagrammen?** Tom: Er zit geen *maximum of minimum* op. Tijl: Het kan dus mogelijk zijn dat we exact dezelfde diagrammen op het einde van de 2e iteratie hebben? Tom: Ja.
 
 #### Testing & Documentatie
-- Tijl: **moeten alle**s een unit test krijgen? Tom: Hiervoor moeten jullie **de gulden middenweg** vinden. **Er worden geen punten afgetrokken als er geen unit testing is** *op sommige plaatsen*. Wijzelf hadden alleszins in ons groepje wel alles unit testing gegeven, en dat op het einde. Doe dit dus meteen op het begin wanneer jullie er zelf voordeel aan hebben.
-- Tijl: **moet alles een documentatie hebben?** **Bij elke functie** moeten jullie **een pre- en post-conditie zetten**. **Doe het enkel** voor **belangrijke functie**s. **Mijn gevoel zou zijn dat als er documentatie bij algemene** ...
+- Tijl: **moet alle**s een unit test krijgen? Tom: Hiervoor moeten jullie **de gulden middenweg** vinden. **Er worden geen punten afgetrokken als er geen unit testing is** *op sommige plaatsen*. Wijzelf hadden alleszins in ons groepje wel alles unit testing gegeven, en dat op het einde. Doe dit dus meteen op het begin wanneer jullie er zelf voordeel aan hebben.
+- Tijl: **moet alles** **documentatie hebben?** Tom: **Bij elke functie** moeten jullie **een pre- en post-conditie zetten**. **Doe het enkel** voor **belangrijke functie**s. **Mijn gevoel zou zijn dat als er documentatie bij algemene** ...
 - Tijl: Wat zijn dan geen belangrijke functies? **Alle functies die geen getters/setters en geen constrsuctors zijn**? Tom: Ja, zo zou ge het kunnen zien, ja.
 
 ### Afsluitende suggesties

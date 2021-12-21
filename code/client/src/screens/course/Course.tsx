@@ -1,42 +1,29 @@
-import React, { Screen, axios, useState, Topic, Course, Channel, Question, CourseSubscription } from '@/.';
-import { Button, Loader, Collapse, ScrollView, CompactQuestion } from '@/components';
+import React, { Screen, EmptyCourse, CourseSubscription, useState, axios } from '@/.';
+import { Text, Button, Loader, ScrollView, CompactChannel } from '@/components';
 
-export default Screen('Course', ({ params, nav }) => {
-    const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
-    const [topics, setTopics] = useState<Topic[]>([]);
-    const [channels, setChannels] = useState<Channel[]>([]);
-    const [questions, setQuestions] = useState<Question[]>([]);
-    const [notificationsEnabled, setNotifactionsEnabled] = useState<boolean>(true);
-
-    const init = (data: Course) => {
-        setName(data.name);
-        setNumber(data.number);
-        setTopics(data.topics);
-        setQuestions(data.questions);
-        setChannels(data.channels)
-        nav.setParams({ name: data.name });
-    }
+export default Screen('Course', ({ params: { id }, nav }) => {
+    let [course, setCourse] = useState(EmptyCourse);
+    let [notificationsEnabled, setNotifactionsEnabled] = useState<boolean>(true);
 
     const fetch = async () => {
-        axios.get('/Course/' + params.id)
-            .then(res => init(res.data))
-            .catch(err => {}) // TODO handle error
-        axios.get('/CourseSubscription/ByUserAndCourseId/' + params.id)
-            .then(response => setNotifactionsEnabled(response.data.length > 0))
-            .catch(error => console.error(error));
+        return axios.get('/Course/' + id).then(res => {
+            setCourse(res.data);
+            nav.setParams({ name: res.data.name });
+        }).then(() => { 
+            axios.get('/CourseSubscription/ByUserAndCourseId/' + id).then(res => setNotifactionsEnabled(res.data.length > 0))
+        });
     }
 
     //TODO: Move this functionality to the server side
     function toggleNotificationSubcription(data: CourseSubscription[]): void {
         if (data.length === 0) {
-            axios.post('/CourseSubscription/', { courseId: params.id } as CourseSubscription)
-            .then(setNotifactionsEnabled(!notificationsEnabled))
+            axios.post('/CourseSubscription/', { courseId: id } as CourseSubscription)
+            .then(() => setNotifactionsEnabled(!notificationsEnabled))
             .catch(error => console.error(error));
         }
         else {
             axios.delete('/CourseSubscription/' + data[0].id)
-            .then(setNotifactionsEnabled(!notificationsEnabled))
+            .then(() => setNotifactionsEnabled(!notificationsEnabled))
             .catch(error => console.error(error));
         }
         
@@ -47,7 +34,7 @@ export default Screen('Course', ({ params, nav }) => {
      * updates the local notification.
      */
     function updateNotificationSubscription(): void {
-        axios.get('/CourseSubscription/ByUserAndCourseId/' + params.id)
+        axios.get('/CourseSubscription/ByUserAndCourseId/' + id)
             .then(response => toggleNotificationSubcription(response.data))
             .catch(error => console.error(error));
     }
@@ -55,33 +42,14 @@ export default Screen('Course', ({ params, nav }) => {
 
     return (
         <Loader load={fetch}>
-            <ScrollView>
-                <Collapse title='Topics'>
-                    {topics.map((topic, i) => ( // TODO: show search results with this topic only on click
-                        <Button key={i}
-                            onPress={() => nav.push('Course', params)}
-                            children={topic.name}
-                        />
-                    ))}
-                </Collapse>
-                <Collapse title='Channels'>
-                    {channels.map((channel, i) => (
-                        <Button key={i}
-                            onPress={() => nav.push('textChannel', { course: name, channel: channel, scroll: false } )}
-                            children={channel.name}
-                        />
-                    ))}
-                </Collapse>
-                <Collapse margin title='Questions'>
-                    {questions.map((question, i) => (
-                        <CompactQuestion key={i} question={question}/>
-                    ))}
-                </Collapse>
-                <Button margin children='Ask a question' onPress={() => nav.push('AskQuestion', { courseId: params.id })}/>
-                <Button margin children='Edit course' onPress={() => nav.push('EditCourse', { id: params.id })}/>
-                {/* Temporary button which should be moved to the page header as an icon */}
-                <Button margin children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
+            {/* Temporary button which should be moved to the page header as an icon */}
+            <Button margin children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} onPress={() => updateNotificationSubscription()}/>
+            <Text children={course.description || 'TODO description'}/>
+            <Button margin='top-2' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
+            <ScrollView content padding='vertical' flex>
+                {course.channels?.map((channel, i) => <CompactChannel margin='bottom' key={i} channel={channel}/>)}
             </ScrollView>
+            <Button align='bottom' icon='pencil' children='Edit course' onPress={() => nav.push('EditCourse', { course })}/>
         </Loader>
-    );
-});
+    )
+})

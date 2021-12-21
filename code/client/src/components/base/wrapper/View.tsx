@@ -1,7 +1,7 @@
 import React, { extend, Style } from '@/.';
 import { View } from 'react-native';
 
-type Props = {
+export type Props = {
     type?: keyof typeof s;
 }
 
@@ -12,6 +12,10 @@ const s = Style.create({
         flexDirection: 'row',
         alignItems: 'center',
         flexWrap: 'wrap'
+    },
+
+    row: {
+        flexDirection: 'row'
     }
 })
 

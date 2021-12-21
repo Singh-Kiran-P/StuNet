@@ -38,7 +38,7 @@ namespace Server.UnitTests {
 		// 			id = rand.Next(),
 		// 			name = rand.Next().ToString()
 		// 		}).ToList(),
-		// 		dateTime = start.AddDays(rand.Next(range))
+		// 		time = start.AddDays(rand.Next(range))
 		// 	};
 		// }
 

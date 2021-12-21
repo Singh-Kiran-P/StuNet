@@ -1,7 +1,7 @@
 import React, { extend, useTheme, paper } from '@/.';
 import { TextInput } from 'react-native-paper';
 
-export default extend(TextInput, props => { // TODO label loading incorrect
+export default extend(TextInput, props => {
    let [theme] = useTheme();
 
     return <TextInput
