@@ -3,14 +3,14 @@ import { Text, Button, Loader, ScrollView, CompactChannel } from '@/components';
 
 export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     let [course, setCourse] = useState(EmptyCourse);
-    let [notificationsEnabled, setNotifactionsEnabled] = useState<boolean>(true);
+    let [subscribed, setSubscribed] = useState<boolean>(subscribe);
 
-    const fetch = async () => {
+    const fetch = () => {
         return axios.get('/Course/' + id).then(res => {
             setCourse(res.data);
             nav.setParams({ name: res.data.name });
         }).then(() => { 
-            axios.get('/CourseSubscription/ByUserAndCourseId/' + id).then(res => setNotifactionsEnabled(res.data.length > 0))
+            axios.get('/CourseSubscription/ByUserAndCourseId/' + id).then(res => { setSubscribed(res.data.length > 0); nav.setParams({subscribe: res.data.length > 0}) })
         });
     }
 
@@ -18,19 +18,19 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     function toggleNotificationSubcription(data: CourseSubscription[]): void {
         if (data.length === 0) {
             axios.post('/CourseSubscription/', { courseId: id } as CourseSubscription)
-            .then(() => setNotifactionsEnabled(!notificationsEnabled))
+            .then(_ => setSubscribed(true))
             .catch(error => console.error(error));
         }
         else {
             axios.delete('/CourseSubscription/' + data[0].id)
-            .then(() => setNotifactionsEnabled(!notificationsEnabled))
+            .then(_ => setSubscribed(false))
             .catch(error => console.error(error));
         }
-        
     }
 
     useEffect(() => {
         if (subscribe === null) return;
+        if (subscribe === subscribed) return;
         axios.get('/CourseSubscription/ByUserAndCourseId/' + id) // TODO test
             .then(response => toggleNotificationSubcription(response.data))
             .catch(error => console.error(error));

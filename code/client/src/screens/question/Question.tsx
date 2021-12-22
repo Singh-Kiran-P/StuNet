@@ -4,7 +4,7 @@ import { View, Text, Chip, List, Icon, Loader, Button, CompactAnswer } from '@/c
 export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
     let [question, setQuestion] = useState(EmptyQuestion);
     let [answers, setAnswers] = useState<Answer[]>([]);
-    let [notificationsEnabled, setNotifactionsEnabled] = useState<boolean>(true);
+    let [subscribed, setSubscribed] = useState<boolean>(subscribe);
 
     const info = async () => {
         return axios.get('/Question/' + id).then(res => {
@@ -21,7 +21,7 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
 
     const infoNotification = async () => {
         axios.get('/QuestionSubscription/ByUserAndQuestionId/' + id)
-            .then(response => setNotifactionsEnabled(response.data.length > 0))
+            .then(res => { setSubscribed(res.data.length > 0); nav.setParams({subscribe: res.data.length > 0}) })
             .catch(error => console.error(error));
     }
     const fetch = async () => Promise.all([info(), questions(), infoNotification()]);
@@ -30,19 +30,20 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
     function toggleNotificationSubcription(data: QuestionSubscription[]): void {
         if (data.length === 0) {
             axios.post('/QuestionSubscription/', { questionId: id } as QuestionSubscription)
-            .then(() => setNotifactionsEnabled(!notificationsEnabled))
-            .catch(error => console.error(error, notificationsEnabled));
+            .then(_ => setSubscribed(true))
+            .catch(error => console.error(error, subscribed));
         }
         else {
             axios.delete('/QuestionSubscription/' + data[0].id)
-            .then(() => setNotifactionsEnabled(!notificationsEnabled))
-            .catch(error => console.error(error, notificationsEnabled));
+            .then(_ => setSubscribed(false))
+            .catch(error => console.error(error, subscribed));
         }
         
     }
 
     useEffect(() => {
         if (subscribe === null) return;
+        if (subscribe === subscribed) return;
         axios.get('/QuestionSubscription/ByUserAndQuestionId/' + id) // TODO test
             .then(response => toggleNotificationSubcription(response.data))
             .catch(error => console.error(error));

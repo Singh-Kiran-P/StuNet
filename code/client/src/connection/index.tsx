@@ -4,6 +4,7 @@ import notifee, { AndroidImportance, AndroidStyle } from '@notifee/react-native'
 import { Children, Question, Answer } from '@/util';
 import { useToken } from '@/auth';
 import axios from 'axios';
+import { update } from '@/.';
 
 const Context = createContext<HubConnection>(null as any as HubConnection);
 export const useConnection = () => useContext(Context);
@@ -36,6 +37,7 @@ export default ({ children }: Children) => {
 					style: { type: AndroidStyle.BIGTEXT, text: question.body }
 				},
 			});
+			update('Notifications');
 		});
 
 		connection.on('AnswerNotification', async (answer: Answer) => {
@@ -54,6 +56,7 @@ export default ({ children }: Children) => {
 					style: { type: AndroidStyle.BIGTEXT, text: answer.body }
 				},
 			});
+			update('Notifications');
 		});
 
 		return () => {
