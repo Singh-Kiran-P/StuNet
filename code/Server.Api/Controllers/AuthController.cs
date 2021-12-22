@@ -49,8 +49,8 @@ namespace Server.Api.Controllers
                 var hash = PasswordHelper.generateHashAndSalt(dto.Password).Item1;
 
                 //email check en aanmaken account
-                Regex regStudent = new Regex(@"\w+@student.uhasselt.be");
-                Regex regProf = new Regex(@"\w+@uhasselt.be");
+                Regex regStudent = new Regex(@"\w+@student\.uhasselt\.be");
+                Regex regProf = new Regex(@"\w+@uhasselt\.be");
                 if (regStudent.IsMatch(dto.Email))
                 {
                     //fieldOfStudy processing
@@ -127,7 +127,7 @@ namespace Server.Api.Controllers
             }
             else
             {
-                return base.Content("<div><p>Email confirmation failed please contact stunet@gmail.com</p></div>", "text/html");
+                return base.Content("<div><p>Email confirmation failed, please contact stunetuh@gmail.com</p></div>", "text/html");
             }
         }
 
