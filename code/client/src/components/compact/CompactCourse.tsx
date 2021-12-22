@@ -5,7 +5,7 @@ type Props = {
     course: BaseCourse;
 }
 
-export default extend<typeof Touchable, Props>(Touchable, ({ course, ...props }) => {
+export default extend<typeof Touchable, Props>(Touchable, ({ course, ...props }) => {  // TODO show course number
     let nav = useNav();
 
     return ( // TODO push?

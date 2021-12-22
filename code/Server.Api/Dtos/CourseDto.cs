@@ -10,6 +10,8 @@ namespace Server.Api.Dtos // controllers?
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
+        public string courseEmail { get; set; }
+        public string profEmail { get; set; }
         public static CourseDto convert(Course course)
         {
             return new CourseDto
@@ -17,10 +19,11 @@ namespace Server.Api.Dtos // controllers?
                 id = course.id,
                 name = course.name,
                 number = course.number,
-                description = course.description
+                description = course.description,
+                courseEmail = course.courseEmail,
+                profEmail = course.profEmail
             };
         }
-
     }
 
     public record GetAllCourseDto
@@ -29,6 +32,8 @@ namespace Server.Api.Dtos // controllers?
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
+        public string courseEmail { get; set; }
+        public string profEmail { get; set; }
         public ICollection<getOnlyTopicDto> topics;
 
     }
@@ -39,6 +44,8 @@ namespace Server.Api.Dtos // controllers?
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
+        public string courseEmail { get; set; }
+        public string profEmail { get; set; }
         public ICollection<getOnlyTopicDto> topics;
         public ICollection<getOnlyChannelDto> channels;
     }
@@ -49,13 +56,18 @@ namespace Server.Api.Dtos // controllers?
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
+        public string courseEmail { get; set; }
+        public string profEmail { get; set; }
         public static getOnlyCourseDto convert(Course course)
         {
             return new getOnlyCourseDto
             {
                 id = course.id,
                 name = course.name,
-                number = course.number
+                number = course.number,
+                description = course.description,
+                courseEmail = course.courseEmail,
+                profEmail = course.profEmail
             };
         }
     }
@@ -65,5 +77,7 @@ namespace Server.Api.Dtos // controllers?
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
+        public string courseEmail { get; set; }
+        public string profEmail { get; set; }
     }
 }

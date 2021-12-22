@@ -3,13 +3,15 @@ import { View, Text, Button, TextInput } from '@/components';
 
 export default Screen('CreateCourse', ({ nav }) => {
     let [name, setName] = useState('');
-    let [error, setError] = useState('');
     let [number, setNumber] = useState('');
     let [description, setDescription] = useState('');
+    let [email, setEmail] = useState('');
+    let [error, setError] = useState('');
 
     const submit = () => {
         axios.post('/Course', {
             name: name,
+            email: email,
             number: number,
             description: description
         }).then(res => (update('Courses'), nav.replace('Course', { id: res.data.id })), show(setError))
@@ -20,7 +22,8 @@ export default Screen('CreateCourse', ({ nav }) => {
             <TextInput label='Name' onChangeText={setName}/>
             <TextInput margin label='Number' onChangeText={setNumber}/>
             <TextInput margin label='Description' multiline onChangeText={setDescription}/>
-            <Button margin icon='book-plus' children='Create' disabled={!name || !number} toggled={error} onPress={submit}/>
+            <TextInput margin label='Email' onChangeText={setEmail}/>
+            <Button margin icon='book-plus' children='Create' disabled={!name || !number || !email} toggled={error} onPress={submit}/>
             <Text type='error' margin hidden={!error} children={error}/>
         </View>
     )

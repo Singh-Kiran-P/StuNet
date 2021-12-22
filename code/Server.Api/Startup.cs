@@ -113,9 +113,6 @@ namespace Server.Api
               options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-            // Email setup
-            // services.AddTransient<IEmailSender, EmailSender>();
-
             // Email FluentMail
             setupFluentGmail(services);
 

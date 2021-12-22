@@ -1,5 +1,5 @@
 public enum EmailTemplate
 {
-    ConfirmEmail,
-    ChangeEmail
+    QuestionAsked,
+    ConfirmEmail
 }

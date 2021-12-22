@@ -1,6 +1,6 @@
-// @Kiran @Tijl @Melih
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using FuzzySharp;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +33,8 @@ namespace Server.Api.Controllers
                    name = course.name,
                    number = course.number,
                    description = course.description,
+                   courseEmail = course.courseEmail,
+                   profEmail = course.profEmail,
                    topics = course.topics.Select(topic =>
                        new getOnlyTopicDto() { name = topic.name, id = topic.id }
                         ).ToList(),
@@ -40,6 +42,7 @@ namespace Server.Api.Controllers
             );
             return getDtos;
         }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getCourses()
         {
@@ -60,6 +63,8 @@ namespace Server.Api.Controllers
                 name = course.name,
                 number = course.number,
                 description = course.description,
+                courseEmail = course.courseEmail,
+                profEmail = course.profEmail,
                 topics = course.topics.Select(topic =>
                     new getOnlyTopicDto() { id = topic.id, name = topic.name }
                 ).ToList(),
@@ -76,7 +81,6 @@ namespace Server.Api.Controllers
         {
             IEnumerable<GetAllCourseDto> getDtos = await _getCourseAsync();
 
-
             IEnumerable<GetAllCourseDto> searchResults = StringMatcher.FuzzyMatchObject(getDtos, name);
 
             if (searchResults == null || !searchResults.Any())
@@ -88,14 +92,23 @@ namespace Server.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Course>> createCourse(createCourseDto dto)
         {
-            Course course = new()
+            ClaimsPrincipal currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == "username"))
             {
-                name = dto.name,
-                number = dto.number,
-                description = dto.description
-            };
-            await _courseRepository.createAsync(course);
-            return Ok(course);
+                string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+                Course course = new()
+                {
+                    name = dto.name,
+                    number = dto.number,
+                    description = dto.description,
+                    courseEmail = dto.courseEmail,
+                    profEmail = userEmail
+                };
+                await _courseRepository.createAsync(course);
+                return Ok(course);
+            } else {
+                return Unauthorized();
+            }
         }
 
         [HttpDelete("{id}")]
@@ -121,6 +134,8 @@ namespace Server.Api.Controllers
                 name = courseDto.name,
                 number = courseDto.number,
                 description = courseDto.description,
+                courseEmail = courseDto.courseEmail,
+                profEmail = courseDto.profEmail
             };
 
             await _courseRepository.updateAsync(course);

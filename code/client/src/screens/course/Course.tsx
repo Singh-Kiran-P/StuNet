@@ -1,7 +1,7 @@
 import React, { Screen, EmptyCourse, CourseSubscription, useState, useEffect, axios } from '@/.';
 import { Text, Button, Loader, ScrollView, CompactChannel } from '@/components';
 
-export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
+export default Screen('Course', ({ nav, params: { id, subscribe } }) => { // TODO show course number
     let [course, setCourse] = useState(EmptyCourse);
     let [notificationsEnabled, setNotifactionsEnabled] = useState<boolean>(true);
 

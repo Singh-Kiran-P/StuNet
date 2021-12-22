@@ -24,7 +24,6 @@ namespace Server.Api.Controllers
         private readonly ICourseRepository _courseRepository;
         private readonly UserManager<User> _userManager;
         private readonly IHubContext<ChatHub> _hubContext;
-
         private readonly IEmailSender _mailSender;
 
         public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, IEmailSender mailSender)
@@ -145,6 +144,11 @@ namespace Server.Api.Controllers
 
                 await _questionRepository.createAsync(question);
                 await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", question.id);
+
+                await _mailSender.SendEmail(c.courseEmail, "TODO Question Asked", EmailTemplate.QuestionAsked, new {
+                    // TODO email info
+                });
+                
                 return Ok(questionDto.convert(question, user));
             }
             else
