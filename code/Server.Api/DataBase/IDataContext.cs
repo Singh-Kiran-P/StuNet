@@ -20,8 +20,8 @@ namespace Server.Api.DataBase
         DbSet<Course> Courses { get; set; }
         DbSet<TextChannel> Channels { get; set; }
         DbSet<Message> Messages { get; set; }
-        DbSet<CourseSubscription> CourseSubscriptions { get; set; } 
-        DbSet<QuestionSubscription> QuestionSubscriptions { get; set; } 
-		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        DbSet<CourseSubscription> CourseSubscriptions { get; set; }
+        DbSet<QuestionSubscription> QuestionSubscriptions { get; set; }
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

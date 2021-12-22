@@ -30,10 +30,10 @@ namespace Server.Api.DataBase
         public DbSet<Course> Courses { get; set; }
         public DbSet<TextChannel> Channels { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<CourseSubscription> CourseSubscriptions { get; set; } 
-        public DbSet<QuestionSubscription> QuestionSubscriptions { get; set; } 
+        public DbSet<CourseSubscription> CourseSubscriptions { get; set; }
+        public DbSet<QuestionSubscription> QuestionSubscriptions { get; set; }
 
-		public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
         }
@@ -149,20 +149,20 @@ namespace Server.Api.DataBase
             //     .WithMany(c => c.channels)
             //     .HasForeignKey(c => c.courseId);
 
-			var courses = new List<Course> {
-				new Course() {
-					id = 1,
-					name = "Course 1",
-					number = "Course 1 number",
-					description = "Course 1 description"
-				},
-				new Course() {
-					id = 2,
-					name = "Course 2",
-					number = "Course 2 number",
-					description = "Course 2 description"
-				}
-			};
+            var courses = new List<Course> {
+                new Course() {
+                    id = 1,
+                    name = "Course 1",
+                    number = "Course 1 number",
+                    description = "Course 1 description"
+                },
+                new Course() {
+                    id = 2,
+                    name = "Course 2",
+                    number = "Course 2 number",
+                    description = "Course 2 description"
+                }
+            };
 
             var topics = new List<Topic> {
                 new Topic {

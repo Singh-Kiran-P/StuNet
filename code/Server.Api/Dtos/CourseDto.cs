@@ -10,8 +10,10 @@ namespace Server.Api.Dtos // controllers?
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
-        public static CourseDto convert(Course course){
-            return new CourseDto {
+        public static CourseDto convert(Course course)
+        {
+            return new CourseDto
+            {
                 id = course.id,
                 name = course.name,
                 number = course.number,
@@ -38,7 +40,7 @@ namespace Server.Api.Dtos // controllers?
         public string number { get; set; }
         public string description { get; set; }
         public ICollection<getOnlyTopicDto> topics;
-		public ICollection<getOnlyChannelDto> channels;
+        public ICollection<getOnlyChannelDto> channels;
     }
 
     public record getOnlyCourseDto
@@ -47,11 +49,13 @@ namespace Server.Api.Dtos // controllers?
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
-        public static getOnlyCourseDto convert(Course course){
-            return new getOnlyCourseDto{
-                    id = course.id,
-                    name = course.name,
-                    number = course.number
+        public static getOnlyCourseDto convert(Course course)
+        {
+            return new getOnlyCourseDto
+            {
+                id = course.id,
+                name = course.name,
+                number = course.number
             };
         }
     }

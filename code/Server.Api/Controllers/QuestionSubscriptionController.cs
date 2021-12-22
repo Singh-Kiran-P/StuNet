@@ -20,22 +20,22 @@ namespace Server.Api.Controllers
     {
         private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
         private readonly UserManager<User> _userManager;
-		private readonly IHubContext<ChatHub> _hubContext;
+        private readonly IHubContext<ChatHub> _hubContext;
 
         public QuestionSubscriptionController(IQuestionSubscriptionRepository repository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
         {
             _questionSubscriptionRepository = repository;
             _userManager = userManager;
-			_hubContext = hubContext;
-		}
-        
+            _hubContext = hubContext;
+        }
+
         private async Task<IEnumerable<getQuestionSubscriptionDto>> _getQuestionSubscriptions()
         {
             IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getAllAsync();
             IEnumerable<getQuestionSubscriptionDto> getDtos = subscriptions.Select(subscription => getQuestionSubscriptionDto.convert(subscription));
             return getDtos;
         }
-        
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<getQuestionSubscriptionDto>>> getQuestionSubscriptions()
         {
@@ -82,7 +82,7 @@ namespace Server.Api.Controllers
             {
                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 User user = await _userManager.FindByEmailAsync(userEmail);
-                
+
                 QuestionSubscription subscription = new()
                 {
                     dateTime = DateTime.UtcNow,
@@ -106,17 +106,19 @@ namespace Server.Api.Controllers
             {
                 QuestionSubscription sub = await _questionSubscriptionRepository.getAsync(id);
                 ClaimsPrincipal currentUser = HttpContext.User;
-				if (currentUser.HasClaim(c => c.Type == "username"))
-				{
-					string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-					User user = await _userManager.FindByEmailAsync(userEmail);
+                if (currentUser.HasClaim(c => c.Type == "username"))
+                {
+                    string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+                    User user = await _userManager.FindByEmailAsync(userEmail);
 
-					await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + sub.questionId.ToString());
-					await _questionSubscriptionRepository.deleteAsync(id);
-				} else {
-					return Unauthorized();
-				}
-			}
+                    await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + sub.questionId.ToString());
+                    await _questionSubscriptionRepository.deleteAsync(id);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
             catch (System.Exception)
             {
                 return NotFound();
