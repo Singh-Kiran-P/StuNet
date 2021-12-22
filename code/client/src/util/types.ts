@@ -10,6 +10,7 @@ export type BaseCourse = {
     id: number;
     name: string;
     number: string;
+    description: string;
 }
 
 export type Course = BaseCourse & {
@@ -23,7 +24,9 @@ export type BaseChannel = {
     name: string;
 }
 
-export type Channel = BaseChannel & {}
+export type Channel = BaseChannel & {
+    course: BaseCourse
+}
 
 export type BaseMessage = {
 	userMail: string,

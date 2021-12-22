@@ -2,13 +2,13 @@ import React, { Screen, useState, axios, update, show } from '@/.';
 import { View, Text, Button, TextInput } from '@/components';
 import { contains } from '@/util/alg';
 
-export default Screen('EditCourse', ({ params: { course }, nav }) => {
-    let [description, setDescription] = useState(course.description || 'TODO description');
+export default Screen('EditCourse', ({ nav, params: { course } }) => {
+    let [description, setDescription] = useState(course.description);
     let [number, setNumber] = useState(course.number);
     let [name, setName] = useState(course.name);
     let [error, setError] = useState('');
 
-    let changed = !contains(course, { name, number }); // TODO add description
+    let changed = !contains(course, { name, number, description });
 
     const save = () => {
         axios.put('/Course/' + course.id, {

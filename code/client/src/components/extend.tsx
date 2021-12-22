@@ -17,8 +17,9 @@ export type Props = {
     padding?: boolean | Values;
     radius?: boolean | 'round';
     align?: 'right' | 'bottom';
+    pad?: boolean | 'top' | 'bottom';
 
-    content?: boolean;
+    inner?: boolean;
 }
 
 const values = (s: string, values: undefined | boolean | Values, d: Side) => {
@@ -58,7 +59,7 @@ const side = (s: string, margin: undefined | boolean | Side, d: Side) => {
 
 export default <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c: T, e: (p: GetProps<T> & Props & Omit<U, keyof Props>) => JSX.Element | null) => {
 
-    const Extend = ({ hidden, flex, grow, shrink, margin, padding, radius, align, content, ...props }: Partial<Omit<GetProps<T>, keyof (Props & U)> & Props & U>) =>  {
+    const Extend = ({ hidden, flex, grow, shrink, margin, padding, radius, align, pad, inner, ...props }: Partial<Omit<GetProps<T>, keyof (Props & U)> & Props & U>) =>  {
         if (hidden) return null;
 
         let margins = values('margin', margin, 'top');
@@ -87,6 +88,12 @@ export default <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c
 
             right: align === undefined ? {} : {
                 [side('margin', reverse(align), 'all')]: 'auto'
+            },
+
+            pad: pad === undefined ? {} : {
+                marginLeft: Theme.padding,
+                marginRight: Theme.padding,
+                [side('margin', pad, 'horizontal')]: Theme.padding
             }
         })
 
@@ -96,7 +103,7 @@ export default <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c
             })))
         })
 
-        if (content) return e({ ...props,
+        if (inner) return e({ ...props,
             style: [...Object.values(s), (props as any).style],
             contentContainerStyle: [p.padding, (props as any).contentContainerStyle]
         } as any);

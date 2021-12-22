@@ -9,9 +9,9 @@ namespace Server.Api.DataBase
     public interface IDataContext
     {
         DbSet<Answer> Answers { get; set; }
-        DbSet<User> Users { get; set;}
-        DbSet<Topic> Topics { get; set;}
-        DbSet<Question> Questions { get; set;}
+        DbSet<User> Users { get; set; }
+        DbSet<Topic> Topics { get; set; }
+        DbSet<Question> Questions { get; set; }
 
         DbSet<IdentityUserRole<string>> Roles { get; set; }
         DbSet<Student> Students { get; set; }

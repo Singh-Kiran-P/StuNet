@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using Server.Api.Services;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -72,7 +73,8 @@ namespace Server.Api.Controllers
             {
                 var questions = await _questionRepository.getAllAsync();
                 List<questionDto> res = new List<questionDto>();
-                foreach (var q in questions) {
+                foreach (var q in questions)
+                {
                     User user = await _userManager.FindByIdAsync(q.userId);
                     res.Add(questionDto.convert(q, user));
                 }
@@ -94,12 +96,26 @@ namespace Server.Api.Controllers
                 if (question == null)
                     return NotFound();
                 User user = await _userManager.FindByIdAsync(question.userId);
-            
+
                 return Ok(questionDto.convert(question, user));
             }
             catch { return BadRequest("Error finding question"); }
         }
-    
+
+        [HttpGet("GetQuestionsByCourseId/search/{courseId}")]
+        public async Task<ActionResult<GetCourseDto>> searchByName(int courseId, [FromQuery] string name)
+        {
+            var questions = await _questionRepository.getByCourseIdAsync(courseId);
+            IEnumerable<Question> matches = StringMatcher.FuzzyMatchObject(questions, name);
+            List<questionDto> res = new List<questionDto>();
+            foreach (var q in matches)
+            {
+                User user = await _userManager.FindByIdAsync(q.userId);
+                res.Add(questionDto.convert(q, user));
+            }
+            return Ok(res);
+        }
+
         //[Authorize(Roles = "student")]
         [HttpPost]
         public async Task<ActionResult<questionDto>> CreateQuestion(createQuestionDto dto)
@@ -115,9 +131,9 @@ namespace Server.Api.Controllers
                 topics = dto.topicIds.Select(id => _topicRepository.getAsync(id)) //TODO: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
                                                 .Select(task => task.Result)
                                                 .ToList();
-                
-                if (c==null) {return BadRequest("Course does not exist");}
-                if (topics.Contains(null)) {return BadRequest("One of the topics does not exist");}
+
+                if (c == null) { return BadRequest("Course does not exist"); }
+                if (topics.Contains(null)) { return BadRequest("One of the topics does not exist"); }
                 Question question = new()
                 {
                     title = dto.title,
@@ -140,8 +156,6 @@ namespace Server.Api.Controllers
 
                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + question.id.ToString());
 
-				var ret = questionDto.convert(question, user);
-
 				IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.getByCourseId(c.id)).Select(sub => sub.userId);
 				await _notificationRepository.createAllAync(subscriberIds.Select(userId => new QuestionNotification
 				{
@@ -151,12 +165,13 @@ namespace Server.Api.Controllers
 					time = question.time
 				}));
                 
+				var ret = questionDto.convert(question, user);
 				await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
 				return Ok(ret);
             }
             else
             {
-                return  Unauthorized();
+                return Unauthorized();
             }
         }
 

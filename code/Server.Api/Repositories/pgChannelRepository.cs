@@ -19,7 +19,7 @@ namespace Server.Api.Repositories
         {
             return await _context.Channels
             .Include(c => c.course)
-			.Include(c => c.messages)
+            .Include(c => c.messages)
             .ToListAsync();
         }
         public async Task createAsync(TextChannel channel)
@@ -32,24 +32,26 @@ namespace Server.Api.Repositories
             var channelToRemove = await _context.Channels.FindAsync(channelId);
             if (channelToRemove == null)
                 throw new NullReferenceException();
-            
+
             _context.Channels.Remove(channelToRemove);
             await _context.SaveChangesAsync();
         }
         public async Task<TextChannel> getAsync(int id)
         {
-			return await _context.Channels
-			.Include(c => c.course)
-			.Include(c => c.messages)
-			.Where(c => c.id == id).FirstOrDefaultAsync();
-		}
+            return await _context.Channels
+            .Where(c => c.id == id)
+            .Include(c => c.course)
+            .Include(c => c.messages)
+            .FirstOrDefaultAsync();
+        }
 
-		public async Task<ICollection<TextChannel>> getByCourseIdAsync(int courseId)
-		{
-			return await _context.Channels
-			.Include(c => c.course)
-			.Where(c => c.course.id == courseId).ToListAsync();
-		}
+        public async Task<ICollection<TextChannel>> getByCourseIdAsync(int courseId)
+        {
+            return await _context.Channels
+            .Where(c => c.course.id == courseId)
+            .Include(c => c.course)
+            .ToListAsync();
+        }
 
         public async Task updateAsync(TextChannel channel)
         {

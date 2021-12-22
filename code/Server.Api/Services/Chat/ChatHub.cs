@@ -20,17 +20,17 @@ namespace ChatSample.Hubs
     public class ChatHub : Hub
     {
         private readonly pgMessageRepository _messageRepository;
-		private readonly UserManager<User> _userManager;
-		private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
-		private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
+        private readonly UserManager<User> _userManager;
+        private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
+        private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
 
-		public ChatHub(pgMessageRepository messageRepository, UserManager<User> userManager, IQuestionSubscriptionRepository questionSubscriptionRepository, ICourseSubscriptionRepository courseSubscriptionRepository)
+        public ChatHub(pgMessageRepository messageRepository, UserManager<User> userManager, IQuestionSubscriptionRepository questionSubscriptionRepository, ICourseSubscriptionRepository courseSubscriptionRepository)
         {
             _messageRepository = messageRepository;
-			_userManager = userManager;
-			_questionSubscriptionRepository = questionSubscriptionRepository;
-			_courseSubscriptionRepository = courseSubscriptionRepository;
-		}
+            _userManager = userManager;
+            _questionSubscriptionRepository = questionSubscriptionRepository;
+            _courseSubscriptionRepository = courseSubscriptionRepository;
+        }
 
         public async Task SendMessageToChannel(string message, int channelId)
         {
@@ -84,17 +84,17 @@ namespace ChatSample.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
-		public async Task AddUserToSubscribedGroups()
-		{
-			string userId = getCurrentUserId();
-			ICollection<CourseSubscription> subscribedCourses = await _courseSubscriptionRepository.getByUserId(userId);
-			ICollection<QuestionSubscription> subscribedQuestions = await _questionSubscriptionRepository.getByUserId(userId);
+        public async Task AddUserToSubscribedGroups()
+        {
+            string userId = getCurrentUserId();
+            ICollection<CourseSubscription> subscribedCourses = await _courseSubscriptionRepository.getByUserId(userId);
+            ICollection<QuestionSubscription> subscribedQuestions = await _questionSubscriptionRepository.getByUserId(userId);
 
-			await Task.WhenAll(subscribedCourses.Select(sc => Groups.AddToGroupAsync(Context.ConnectionId, "Course " + sc.courseId.ToString())));
-			await Task.WhenAll(subscribedQuestions.Select(sq => Groups.AddToGroupAsync(Context.ConnectionId, "Question " + sq.questionId.ToString())));
-		}
+            await Task.WhenAll(subscribedCourses.Select(sc => Groups.AddToGroupAsync(Context.ConnectionId, "Course " + sc.courseId.ToString())));
+            await Task.WhenAll(subscribedQuestions.Select(sq => Groups.AddToGroupAsync(Context.ConnectionId, "Question " + sq.questionId.ToString())));
+        }
 
-		public string getCurrentUserEmail()
+        public string getCurrentUserEmail()
         {
             string userEmail = null;
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;
@@ -106,10 +106,12 @@ namespace ChatSample.Hubs
             return userEmail;
         }
 
-        public string getCurrentUserId() {
+        public string getCurrentUserId()
+        {
             string userId = null;
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;
-            if (currentUser.HasClaim(c => c.Type == "userref")) {
+            if (currentUser.HasClaim(c => c.Type == "userref"))
+            {
                 userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
             }
             return userId;

@@ -1,7 +1,7 @@
-import React, { Screen, EmptyCourse, CourseSubscription, useState, axios } from '@/.';
+import React, { Screen, EmptyCourse, CourseSubscription, useState, useEffect, axios } from '@/.';
 import { Text, Button, Loader, ScrollView, CompactChannel } from '@/components';
 
-export default Screen('Course', ({ params: { id }, nav }) => {
+export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     let [course, setCourse] = useState(EmptyCourse);
     let [notificationsEnabled, setNotifactionsEnabled] = useState<boolean>(true);
 
@@ -14,7 +14,7 @@ export default Screen('Course', ({ params: { id }, nav }) => {
         });
     }
 
-    //TODO: Move this functionality to the server side
+    // TODO: Move this functionality to the server side
     function toggleNotificationSubcription(data: CourseSubscription[]): void {
         if (data.length === 0) {
             axios.post('/CourseSubscription/', { courseId: id } as CourseSubscription)
@@ -29,27 +29,21 @@ export default Screen('Course', ({ params: { id }, nav }) => {
         
     }
 
-    /**
-     * Updates the notification on the server, and if succes
-     * updates the local notification.
-     */
-    function updateNotificationSubscription(): void {
-        axios.get('/CourseSubscription/ByUserAndCourseId/' + id)
+    useEffect(() => {
+        if (subscribe === null) return;
+        axios.get('/CourseSubscription/ByUserAndCourseId/' + id) // TODO test
             .then(response => toggleNotificationSubcription(response.data))
             .catch(error => console.error(error));
-    }
-
+    }, [subscribe]);
 
     return (
         <Loader load={fetch}>
-            {/* Temporary button which should be moved to the page header as an icon */}
-            <Button margin icon={notificationsEnabled ? 'bell' : 'bell-off'} /* children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} */ onPress={() => updateNotificationSubscription()}/>
-            <Text children={course.description || 'TODO description'}/>
-            <Button margin='top-2' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
-            <ScrollView content padding='vertical' flex>
-                {course.channels?.map((channel, i) => <CompactChannel margin='bottom' key={i} channel={channel}/>)}
-            </ScrollView>
-            <Button align='bottom' icon='pencil' children='Edit course' onPress={() => nav.push('EditCourse', { course })}/>
+            <Text pad='top' children={course.description}/>
+            <Button pad='top' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
+            <ScrollView inner padding flex children={course.channels?.map((channel, i) =>
+                <CompactChannel margin='bottom' key={i} channel={channel}/>)}
+            />
+            <Button align='bottom' pad='bottom' icon='pencil' children='Edit course' onPress={() => nav.push('EditCourse', { course })}/>
         </Loader>
     )
 })

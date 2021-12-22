@@ -24,7 +24,8 @@ namespace Server.Api.Helpers
             return Convert.ToBase64String(hash);
         }
 
-        public static (string, string) generateHashAndSalt(string pass) {
+        public static (string, string) generateHashAndSalt(string pass)
+        {
             string salt = CreateSalt(64);
             return (GenerateHash(pass, salt), salt);
         }

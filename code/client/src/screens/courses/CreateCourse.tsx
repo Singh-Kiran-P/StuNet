@@ -5,14 +5,13 @@ export default Screen('CreateCourse', ({ nav }) => {
     let [name, setName] = useState('');
     let [error, setError] = useState('');
     let [number, setNumber] = useState('');
-    let [description, setDescription] = useState(''); // TODO use description
+    let [description, setDescription] = useState('');
 
     const submit = () => {
         axios.post('/Course', {
             name: name,
             number: number,
-            topicNames: [] // TODO remove this
-            // TODO add description: description
+            description: description
         }).then(res => (update('Courses'), nav.replace('Course', { id: res.data.id })), show(setError))
     }
 

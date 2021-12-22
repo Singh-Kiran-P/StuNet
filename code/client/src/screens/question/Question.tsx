@@ -1,10 +1,7 @@
-// import React, { axios, Screen, Style, useTheme, useState, Answer, dateString, QuestionSubscription } from '@/.';
-// import { Text, View, Loader, Button, ScrollView } from '@/components';
-// import { Dimensions } from 'react-native';
-import React, { Screen, Answer, EmptyQuestion, QuestionSubscription, useState, axios, dateString } from '@/.';
+import React, { Screen, Answer, EmptyQuestion, QuestionSubscription, useState, useEffect, axios, dateString } from '@/.';
 import { View, Text, Chip, List, Icon, Loader, Button, CompactAnswer } from '@/components';
 
-export default Screen('Question', ({ nav, params: { id } }) => {
+export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
     let [question, setQuestion] = useState(EmptyQuestion);
     let [answers, setAnswers] = useState<Answer[]>([]);
     let [notificationsEnabled, setNotifactionsEnabled] = useState<boolean>(true);
@@ -44,28 +41,25 @@ export default Screen('Question', ({ nav, params: { id } }) => {
         
     }
 
-    /**
-     * Updates the notification on the server, and if succes
-     * updates the local notification.
-     */
-    function updateNotificationSubscription(): void {
-        axios.get('/QuestionSubscription/ByUserAndQuestionId/' + id)
+    useEffect(() => {
+        if (subscribe === null) return;
+        axios.get('/QuestionSubscription/ByUserAndQuestionId/' + id) // TODO test
             .then(response => toggleNotificationSubcription(response.data))
             .catch(error => console.error(error));
-    }
+    }, [subscribe]);
 
     return (
         <Loader load={fetch}>
-            {/* Temporary button which should be moved to the page header as an icon */}
-            <Button margin align='right' icon={notificationsEnabled ? 'bell' : 'bell-off'} /* children={(notificationsEnabled ? 'Disable' : 'Enable') + ' notifications'} */ onPress={() => updateNotificationSubscription()}/>
-            <View type='header' hidden={!question.topics?.length} children={question.topics?.map((topic, i) => (
-                <Chip margin='bottom,right-0.5' key={i} children={topic.name}/>
-            ))}/>
-            <View type='header'>
-                <Text type='header' children={question.title}/>
-                <Text type='hint' align='right' children={dateString(question.time)}/>
+            <View pad='top'>
+                <View type='header' hidden={!question.topics?.length} children={question.topics?.map((topic, i) => (
+                    <Chip margin='bottom,right-0.5' key={i} children={topic.name}/>
+                ))}/>
+                <View type='header'>
+                    <Text type='header' children={question.title}/>
+                    <Text type='hint' align='right' children={dateString(question.time)}/>
+                </View>
             </View>
-            <List margin content padding='bottom' ListHeaderComponent={
+            <List margin inner padding='horizontal,bottom' ListHeaderComponent={
                 <View>
                     <Text children={question.body}/>
                     <View type='row' margin>

@@ -21,22 +21,22 @@ namespace Server.Api.Controllers
     {
         private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
         private readonly UserManager<User> _userManager;
-		private readonly IHubContext<ChatHub> _hubContext;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-		public CourseSubscriptionController(ICourseSubscriptionRepository repository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
+        public CourseSubscriptionController(ICourseSubscriptionRepository repository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
         {
             _courseSubscriptionRepository = repository;
             _userManager = userManager;
-			_hubContext = hubContext;
-		}
-        
+            _hubContext = hubContext;
+        }
+
         private async Task<IEnumerable<getCourseSubscriptionDto>> _getCourseSubscriptions()
         {
             IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.getAllAsync();
             IEnumerable<getCourseSubscriptionDto> getDtos = subscriptions.Select(subscription => getCourseSubscriptionDto.convert(subscription));
             return getDtos;
         }
-        
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<getCourseSubscriptionDto>>> getCourseSubscriptions()
         {
@@ -83,15 +83,15 @@ namespace Server.Api.Controllers
             {
                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 User user = await _userManager.FindByEmailAsync(userEmail);
-                
+
                 CourseSubscription subscription = new()
                 {
                     dateTime = DateTime.UtcNow,
                     userId = user.Id,
                     courseId = dto.courseId,
                 };
-				await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + subscription.courseId.ToString());
-				await _courseSubscriptionRepository.createAsync(subscription);
+                await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + subscription.courseId.ToString());
+                await _courseSubscriptionRepository.createAsync(subscription);
                 return Ok(subscription);
             }
             else
@@ -105,19 +105,21 @@ namespace Server.Api.Controllers
         {
             try
             {
-				CourseSubscription sub = await _courseSubscriptionRepository.getAsync(id);
-				ClaimsPrincipal currentUser = HttpContext.User;
-				if (currentUser.HasClaim(c => c.Type == "username"))
-				{
-					string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-					User user = await _userManager.FindByEmailAsync(userEmail);
+                CourseSubscription sub = await _courseSubscriptionRepository.getAsync(id);
+                ClaimsPrincipal currentUser = HttpContext.User;
+                if (currentUser.HasClaim(c => c.Type == "username"))
+                {
+                    string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+                    User user = await _userManager.FindByEmailAsync(userEmail);
 
-					await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + sub.courseId.ToString());
-					await _courseSubscriptionRepository.deleteAsync(id);
-				} else {
+                    await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + sub.courseId.ToString());
+                    await _courseSubscriptionRepository.deleteAsync(id);
+                }
+                else
+                {
                     return Unauthorized();
                 }
-			}
+            }
             catch (System.Exception)
             {
                 return NotFound();

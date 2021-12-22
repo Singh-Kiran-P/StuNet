@@ -13,7 +13,7 @@ export default extend<typeof Touchable, Props>(Touchable, ({ course, ...props })
             <Icon sizing='huge' padding='vertical-0.2' name='book'/>
             <View shrink grow margin='left'>
                 <Text type='header' size='normal' children={course.name}/>
-                <Text numberOfLines={3} children={course.number/* TODO description */}/>
+                <Text numberOfLines={3} children={course.description}/>
             </View>
         </Touchable>
     )
