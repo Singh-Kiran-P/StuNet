@@ -129,8 +129,6 @@ namespace Server.Api.Controllers
             {
                 return Unauthorized();
             }
-
-
         }
 
         [Authorize(Roles = "prof")]
@@ -162,16 +160,37 @@ namespace Server.Api.Controllers
 
             Answer updatedAnswer = new()
             {
+                id = existingAnswer.id,
                 userId = user.Id,
                 question = question,
                 title = dto.title,
                 body = dto.body,
                 // files = createAnswerDto.files
-                time = DateTime.UtcNow
+                time = DateTime.UtcNow,
+                isAccepted = existingAnswer.isAccepted
             };
 
             await _answerRepository.updateAsync(updatedAnswer);
             return NoContent();
+        }
+
+        // [Authorize(Roles = "prof")]
+        [HttpPut("SetAccepted/{id}")]
+        public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
+        {
+            System.Console.WriteLine(accepted);
+            Answer existingAnswer = await _answerRepository.getAsync(id);
+            ClaimsPrincipal currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == "userref")) {
+                string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
+                Question question = await _questionRepository.getAsync(existingAnswer.questionId);
+                if (question.userId == userId) {
+                    existingAnswer.isAccepted = accepted;
+                    await _answerRepository.updateAsync(existingAnswer);
+                    return NoContent();
+                }                
+            }
+            return Unauthorized();
         }
     }
 }
