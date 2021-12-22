@@ -1,5 +1,5 @@
 import React, { Screen, useState, Notification, axios } from '@/.';
-import { View, Text, Loader, List, CompactQuestion } from '@/components';
+import { View, Text, Loader, List, CompactQuestion, CompactAnswer } from '@/components';
 import { useEffect } from 'react';
 
 export default Screen('Notifications', ({ nav }) => {
@@ -9,16 +9,18 @@ export default Screen('Notifications', ({ nav }) => {
         return axios.get('/Notification').then(res => setNotifications([res.data.item1, res.data.item2]))
     }
 
-    useEffect(() => {
-        console.log(QuestionNotifications)
-    }, [QuestionNotifications])
-
     return (
         <Loader load={fetch}>
             {QuestionNotifications.map((notif, i) => {
-                return <View>
-                    <Text>{notif.id}</Text>
-                    <Text>{notif.notifierId}</Text>
+                return <View key={i}>
+                    <Text>A question has been asked:</Text>
+                    <CompactQuestion question={{id: notif.notifierId, title: notif.title, body: notif.body, time: notif.time, topics: []}}></CompactQuestion>
+                </View>
+            })}
+            {AnswerNotifications.map((notif, i) => {
+                return <View key={i}>
+                    <Text>An answer has been given:</Text>
+                    <CompactAnswer answer={{id: notif.notifierId, title: notif.title, body: notif.body, time: notif.time}}></CompactAnswer>
                 </View>
             })}
         </Loader>

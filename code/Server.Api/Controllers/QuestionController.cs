@@ -135,6 +135,7 @@ namespace Server.Api.Controllers
 				{
 					userId = userId,
 					questionId = question.id,
+                    question = question,
 					time = DateTime.UtcNow
 				}));
                 

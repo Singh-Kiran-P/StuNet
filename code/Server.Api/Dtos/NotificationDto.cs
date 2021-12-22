@@ -7,6 +7,8 @@ namespace Server.Api.Dtos
 	{
 		public int id { get; set; }
 		public int notifierId { get; set; }
+		public string title { get; set; }
+		public string body { get; set; }
 		public DateTime time { get; set; }
 
 		public static NotificationDto convert(AnswerNotification notification) {
@@ -14,6 +16,8 @@ namespace Server.Api.Dtos
 			{
 				id = notification.id,
 				notifierId = notification.answerId,
+				title = notification.answer.title,
+				body = notification.answer.body,
 				time = notification.time
 			};
 		}
@@ -22,6 +26,8 @@ namespace Server.Api.Dtos
 			{
 				id = notification.id,
 				notifierId = notification.questionId,
+				title = notification.question.title,
+				body = notification.question.body,
 				time = notification.time
 			};
 		}

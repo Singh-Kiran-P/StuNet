@@ -1,6 +1,8 @@
 export type Notification = {
     id: number;
     notifierId: number;
+    title: string,
+    body: string,
     time: string;
 }
 

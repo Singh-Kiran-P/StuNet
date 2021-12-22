@@ -8,6 +8,7 @@ namespace Server.Api.Models
         public int id { get; set; }
 		public string userId { get; set; }
 		public int answerId { get; set; }
+		public Answer answer { get; set; }
 		public DateTime time { get; set; }
 	}
     public class QuestionNotification
@@ -15,6 +16,7 @@ namespace Server.Api.Models
         public int id { get; set; }
 		public string userId { get; set; }
 		public int questionId { get; set; }
+		public Question question { get; set; }
 		public DateTime time { get; set; }
 	}
 }

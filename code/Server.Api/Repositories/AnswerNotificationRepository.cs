@@ -31,12 +31,14 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<AnswerNotification>> getAllAsync()
         {
             return await _context.AnswerNotifications
+                .Include(n => n.answer)
                 .ToListAsync();
         }
 
         public async Task<AnswerNotification> getAsync(int id)
         {
             return await _context.AnswerNotifications
+                .Include(n => n.answer)
                 .Where(s => s.id == id)
                 .FirstOrDefaultAsync();
         }

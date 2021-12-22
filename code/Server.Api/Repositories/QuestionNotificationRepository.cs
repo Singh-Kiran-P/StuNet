@@ -25,12 +25,15 @@ namespace Server.Api.Repositories
         }
 
         public async Task<ICollection<QuestionNotification>> getByUserId(string userId) {
-			return await _context.QuestionNotifications.Where(s => userId == s.userId).ToListAsync();
+			return await _context.QuestionNotifications
+                .Include(n => n.question)
+                .Where(s => userId == s.userId).ToListAsync();
 		}
 
         public async Task<IEnumerable<QuestionNotification>> getAllAsync()
         {
             return await _context.QuestionNotifications
+                .Include(n => n.question)
                 .ToListAsync();
         }
 

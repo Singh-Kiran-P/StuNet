@@ -116,6 +116,7 @@ namespace Server.Api.Controllers
 				{
 					userId = userId,
 					answerId = answer.id,
+                    answer = answer,
 					time = DateTime.UtcNow
 				}));
 
