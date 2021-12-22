@@ -1,5 +1,5 @@
 @model dynamic
-
+ 
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +12,16 @@
     </head>
 
     <body>
-        TODO
+        A Person asked a question with title: @Model.title, in @Model.course.name
+        With the following topics: [@foreach(var topic in Model.topics) { @topic.name }] TODO: ben niet zeker of lists zo werken, moet nog getest worden
+        
+        @Model.body
+
+        Question asked at @Model.time
+
+        Please answer this question by replying to this mail or navigate to this question in the application
+
+        - Team StuNet
+        TODO html/css styling
     </body>
 </html>
