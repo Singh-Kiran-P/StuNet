@@ -5,7 +5,10 @@
         },
         {
             "path": "Server.Api"
-        }
+        },
+		{
+			"path": "client"
+		}
     ],
 	"settings": {
 		"terminal.integrated.cwd": "../",
