@@ -34,7 +34,7 @@ namespace Server.Api.Controllers
             _userManager = userManager;
             _tokenManager = tokenGenerator;
             _mailSender = mailSender;
-            
+
         }
 
         [HttpPost("register")]
@@ -136,20 +136,9 @@ namespace Server.Api.Controllers
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "Auth", new { token, email = user.Email }, Request.Scheme);
-            /* EmailSender emailHelper = new EmailSender();
-            emailHelper.SendEmail(user.Email, "Confirmation Email", confirmationLink); */
-            _mailSender.SendUsingTemplate(user.Email, "Confirmation Email", EmailTemplate.ConfirmEmail, new {
+            await _mailSender.SendEmail(user.Email, "Confirmation Email", EmailTemplate.ConfirmEmail, new {
                link = confirmationLink
             });
-        }
-
-        [HttpPost("TestEmail")]
-        public async Task<IActionResult> TestEmail(string email, string test)
-        {
-            await _mailSender.SendUsingTemplate(email, "Test Email", EmailTemplate.ConfirmEmail, new {
-               link = test
-            });
-            return Ok();
         }
 
         [HttpGet("validateToken")]

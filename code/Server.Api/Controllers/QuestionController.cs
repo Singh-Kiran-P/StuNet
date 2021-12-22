@@ -25,13 +25,17 @@ namespace Server.Api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IHubContext<ChatHub> _hubContext;
 
-        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
+        private readonly IEmailSender _mailSender;
+
+        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, IEmailSender mailSender)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;
             _courseRepository = courseRepository;
             _userManager = userManager;
             _hubContext = hubContext;
+            _mailSender = mailSender;
+
         }
 
         // private static questionDto toDto(Question question, User user)

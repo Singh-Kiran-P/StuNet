@@ -27,5 +27,6 @@
     <PackageReference Include="FuzzySharp" Version="2.0.2"/>
     <PackageReference Include="FluentEmail.Razor" Version="*"/>
     <PackageReference Include="FluentEmail.Smtp" Version="*"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.0"/>
   </ItemGroup>
 </Project>
