@@ -27,7 +27,8 @@ namespace Server.Api.Repositories
         public async Task<ICollection<QuestionNotification>> getByUserId(string userId) {
 			return await _context.QuestionNotifications
                 .Include(n => n.question)
-                .Where(s => userId == s.userId).ToListAsync();
+                .Where(s => userId == s.userId)
+                .ToListAsync();
 		}
 
         public async Task<IEnumerable<QuestionNotification>> getAllAsync()
@@ -40,6 +41,7 @@ namespace Server.Api.Repositories
         public async Task<QuestionNotification> getAsync(int id)
         {
             return await _context.QuestionNotifications
+                .Include(n => n.question)
                 .Where(s => s.id == id)
                 .FirstOrDefaultAsync();
         }

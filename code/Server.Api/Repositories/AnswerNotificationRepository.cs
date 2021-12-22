@@ -25,7 +25,10 @@ namespace Server.Api.Repositories
         }
 
         public async Task<ICollection<AnswerNotification>> getByUserId(string userId) {
-			return await _context.AnswerNotifications.Where(s => userId == s.userId).ToListAsync();
+			return await _context.AnswerNotifications
+            .Include(n => n.answer)
+            .Where(s => userId == s.userId)
+            .ToListAsync();
 		}
 
         public async Task<IEnumerable<AnswerNotification>> getAllAsync()

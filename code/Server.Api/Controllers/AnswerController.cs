@@ -117,7 +117,7 @@ namespace Server.Api.Controllers
 					userId = userId,
 					answerId = answer.id,
                     answer = answer,
-					time = DateTime.UtcNow
+					time = answer.time
 				}));
 
 				await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);

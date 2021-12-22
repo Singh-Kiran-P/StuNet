@@ -24,17 +24,19 @@ namespace Server.Api.Controllers
         private readonly UserManager<User> _userManager;
 		private readonly IHubContext<ChatHub> _hubContext;
 		private readonly IQuestionNotificationRepository _notificationRepository;
-		private readonly ICourseSubscriptionRepository _subscriptionRepository;
+		private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
+		private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
 
-		public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, IQuestionNotificationRepository notificationRepository, ICourseSubscriptionRepository subscriptionRepository)
+		public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, IQuestionNotificationRepository notificationRepository, ICourseSubscriptionRepository subscriptionRepository, IQuestionSubscriptionRepository questionSubscriptionRepository)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;
             _courseRepository = courseRepository;
             _userManager = userManager;
 			_hubContext = hubContext;
-			_subscriptionRepository = subscriptionRepository;
+			_courseSubscriptionRepository = subscriptionRepository;
 			_notificationRepository = notificationRepository;
+			_questionSubscriptionRepository = questionSubscriptionRepository;
 		}
 
         // private static questionDto toDto(Question question, User user)
@@ -128,15 +130,25 @@ namespace Server.Api.Controllers
                 };
 
                 await _questionRepository.createAsync(question);
+
+				await _questionSubscriptionRepository.createAsync(new QuestionSubscription
+				{
+					userId = user.Id,
+					questionId = question.id,
+					dateTime = question.time
+				});
+
+                await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + question.id.ToString());
+
 				var ret = questionDto.convert(question, user);
 
-				IEnumerable<string> subscriberIds = (await _subscriptionRepository.getByCourseId(c.id)).Select(sub => sub.userId);
+				IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.getByCourseId(c.id)).Select(sub => sub.userId);
 				await _notificationRepository.createAllAync(subscriberIds.Select(userId => new QuestionNotification
 				{
 					userId = userId,
 					questionId = question.id,
                     question = question,
-					time = DateTime.UtcNow
+					time = question.time
 				}));
                 
 				await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
