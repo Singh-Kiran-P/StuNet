@@ -1,5 +1,3 @@
-// @Kiran
-
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -24,16 +22,19 @@ namespace Server.Api.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly ITokenManager _tokenManager;
+        private readonly IEmailSender _mailSender;
 
         //private readonly IUserRepository _userRepository;
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
-        public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenManager tokenGenerator)
+        public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenManager tokenGenerator, IEmailSender mailSender)
         {
             //_userRepository = userRepository;
             _fieldOfStudyRepository = fieldOfStudyRepository;
             _mapper = mapper;
             _userManager = userManager;
             _tokenManager = tokenGenerator;
+            _mailSender = mailSender;
+            
         }
 
         [HttpPost("register")]
@@ -127,7 +128,7 @@ namespace Server.Api.Controllers
             }
             else
             {
-                return base.Content("<div><p>Email confirmation failed, please contact stunetuh@gmail.com</p></div>", "text/html");
+                return base.Content("<div><p>Email confirmation failed, please contact stunetUH@gmail.com</p></div>", "text/html");
             }
         }
 
@@ -135,8 +136,20 @@ namespace Server.Api.Controllers
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "Auth", new { token, email = user.Email }, Request.Scheme);
-            EmailSender emailHelper = new EmailSender();
-            emailHelper.SendEmail(user.Email, "Confirmation Email", confirmationLink);
+            /* EmailSender emailHelper = new EmailSender();
+            emailHelper.SendEmail(user.Email, "Confirmation Email", confirmationLink); */
+            _mailSender.SendUsingTemplate(user.Email, "Confirmation Email", EmailTemplate.ConfirmEmail, new {
+               link = confirmationLink
+            });
+        }
+
+        [HttpPost("TestEmail")]
+        public async Task<IActionResult> TestEmail(string email, string test)
+        {
+            await _mailSender.SendUsingTemplate(email, "Test Email", EmailTemplate.ConfirmEmail, new {
+               link = test
+            });
+            return Ok();
         }
 
         [HttpGet("validateToken")]

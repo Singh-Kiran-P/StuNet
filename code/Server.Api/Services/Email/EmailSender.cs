@@ -3,11 +3,11 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
-using SendGrid;
 using SendGrid.Helpers.Mail;
-using Server.Api.Models; //for gmail integration
-using System.Net.Mail; //for gmail integration
+using Server.Api.Models;
+using System.Net.Mail;
 using System.Text;
+using SendGrid;
 
 namespace Server.Api.Services
 {
@@ -57,7 +57,7 @@ namespace Server.Api.Services
 
             StringBuilder template = new();
             template.AppendLine("Dear @Model.FirstName,");
-            template.AppendLine("<p>Tanks for purchasing @Model.name");
+            template.AppendLine("<p>Thanks for purchasing @Model.name");
             template.AppendLine("- StuNet Team");
 
             try

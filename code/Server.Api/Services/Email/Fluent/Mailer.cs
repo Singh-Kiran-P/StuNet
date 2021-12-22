@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using Server.Api.Models; //for gmail integration
-using System.Net.Mail; //for gmail integration
+using Server.Api.Models;
+using System.Net.Mail;
 using System.Text;
 using FluentEmail.Core;
 using Microsoft.Extensions.Logging;
@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Linq;
+
 // https://blog.zhaytam.com/2019/06/08/emailsender-service-fluent-email-razor-templates/
 
 // https://markscodingspot.com/send-html-emails-with-attachments-using-fluent-email-csharp-and-net-5/
@@ -24,30 +25,29 @@ namespace Server.Api.Services
     public class Mailer : IEmailSender
     {
 
-        private const string TemplatePath = "Server.Api.Services.Emails.Templates.{0}.cshtml";
+        private const string TemplatePath = "Server.Api.Services.Email.Templates.{0}.cshtml";
         private readonly IFluentEmail _email;
-        private readonly ILogger<EmailSender> _logger;
 
-        public Mailer(IFluentEmail email, ILogger<EmailSender> logger)
+        public Mailer(IFluentEmail email)
         {
             _email = email;
-            _logger = logger;
         }
 
         public async Task<bool> SendUsingTemplate(string to, string subject, EmailTemplate template, object model)
         {
+            Console.WriteLine(to);
+            Console.WriteLine(subject);
+            Console.WriteLine(template);
+            Console.WriteLine(model);
             var result = await _email.To(to)
                 .Subject(subject)
-                .UsingTemplateFromEmbedded(string.Format(TemplatePath, template), ToExpando(model), GetType().Assembly)
+                .UsingTemplateFromEmbedded("Server.Api.Services.Email.Templates.ConfirmEmail.cshtml", new { link = "sdqfqdsfsfob" }, 
+		TypeFromYourEmbeddedAssembly.GetType().GetTypeInfo().Assembly)
                 .SendAsync();
-
-            if (!result.Successful)
-            {
-                _logger.LogError("Failed to send an email.\n{Errors}", string.Join(Environment.NewLine, result.ErrorMessages));
-            }
-
+ 
             return result.Successful;
         }
+
         private static ExpandoObject ToExpando(object model)
         {
             if (model is ExpandoObject exp)

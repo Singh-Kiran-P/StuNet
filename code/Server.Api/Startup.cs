@@ -115,7 +115,7 @@ namespace Server.Api
             );
 
             // Email setup
-            services.AddTransient<IEmailSender, EmailSender>();
+            // services.AddTransient<IEmailSender, EmailSender>();
 
             // Email FluentMail
             setupFluentGmail(services);
@@ -170,7 +170,7 @@ namespace Server.Api
                 .AddRazorRenderer()
                 .AddSmtpSender(smtp);
 
-            services.TryAddScoped<IEmailSender, EmailSender>();
+            services.TryAddScoped<IEmailSender, Mailer>();
 
         }
 
