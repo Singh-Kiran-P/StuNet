@@ -10,7 +10,8 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
             setCourse(res.data);
             nav.setParams({ name: res.data.name });
         }).then(() => { 
-            axios.get('/CourseSubscription/ByUserAndCourseId/' + id).then(res => { setSubscribed(res.data.length > 0); nav.setParams({subscribe: res.data.length > 0}) })
+            axios.get('/CourseSubscription/ByUserAndCourseId/' + id)
+                .then(res => { setSubscribed(res.data.length > 0); nav.setParams({ subscribe: res.data.length > 0 }) })
         });
     }
 
