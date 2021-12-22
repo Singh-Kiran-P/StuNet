@@ -6,8 +6,6 @@ import { List } from 'react-native-paper';
 
 type ItemList = <T>(props: FlatListProps<T> & Props) => JSX.Element;
 
-// TODO indicatorstyle
-
 export default Object.assign(extend(FlatList, ({ refreshing, ...props }) => {
     if (refreshing) return <Spinner/>
     return <FlatList
