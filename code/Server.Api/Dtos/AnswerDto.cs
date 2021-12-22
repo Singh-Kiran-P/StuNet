@@ -13,6 +13,7 @@ namespace Server.Api.Dtos
         public string title { get; set; }
         public string body { get; set; }
         public DateTime time { get; set; }
+        public bool isAccepted { get; set; }
         public static ResponseAnswerDto convert(Answer answer, User user)
         {
             return new ResponseAnswerDto
@@ -23,7 +24,8 @@ namespace Server.Api.Dtos
                 // course = getOnlyCourseDto.convert(answer.question.course),
                 title = answer.title,
                 body = answer.body,
-                time = answer.time
+                time = answer.time,
+                isAccepted = answer.isAccepted
             };
         }
     }
