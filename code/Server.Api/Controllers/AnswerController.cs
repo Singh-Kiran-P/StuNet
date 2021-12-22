@@ -22,16 +22,16 @@ namespace Server.Api.Controllers
         private readonly UserManager<User> _userManager;
         // private readonly ITopicRepository _topicRepository;
         private readonly IQuestionRepository _questionRepository;
-		private readonly IHubContext<ChatHub> _hubContext;
-		public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext /*, ITopicRepository topicRepository*/ )
+        private readonly IHubContext<ChatHub> _hubContext;
+        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext /*, ITopicRepository topicRepository*/ )
         {
             _answerRepository = answerRepository;
             _userManager = userManager;
             _questionRepository = questionRepository;
-			_hubContext = hubContext;
-			// _topicRepository = topicRepository;
-			// _courseRepository = courseRepository;
-		}
+            _hubContext = hubContext;
+            // _topicRepository = topicRepository;
+            // _courseRepository = courseRepository;
+        }
 
         //[Authorize(Roles = "student")]
         [HttpGet]

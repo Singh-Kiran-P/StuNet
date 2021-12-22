@@ -1,5 +1,3 @@
-// @Kiran
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,36 +9,38 @@ namespace Server.Api.Services
 {
     public class StringMatcher
     {
-        private static int StringMatchPercent = 45;
-        public static IEnumerable<T> FuzzyMatchObject<T>(IEnumerable<T> obj, string searchString)
+        private static int maxItems = 100;
+        private static int matchPercent = 60;
+
+        private static Boolean Match(string target, string search)
+        {
+            if (search == null || search == "") return true;
+            var match = Fuzz.PartialRatio(target.ToLower(), search.ToLower());
+            return match >= matchPercent;
+        }
+
+        public static IEnumerable<T> FuzzyMatchObject<T>(IEnumerable<T> obj, string search)
         {
             Type t = typeof(T);
-            List<T> outList = new List<T>();
+            List<T> matches = new List<T>();
 
             foreach (T item in obj)
             {
+                if (matches.Count >= maxItems) break;
                 switch (item)
                 {
-                    case GetAllCourseDto dto:
-                        int match_ = 0;
-                        if (searchString == null)
-                            match_ = 100;
-                        else
-                            match_ = Fuzz.PartialRatio(dto.name, searchString);
-                        // match_ = match_ - (100 - Fuzz.Ratio (dto.name, searchString));
-
-                        Console.WriteLine($"{match_} - {searchString} - {dto.name}");
-                        if (match_ >= StringMatchPercent)
-                            outList.Add(item);
-
+                    case GetAllCourseDto course:
+                        if (Match(course.name, search)) matches.Add(item);
+                        else if (Match(course.description, search)) matches.Add(item);
                         break;
-                    default:
-                        // Handle this case.
-                        Console.WriteLine("I don't know what this type is.");
+                    case Question question:
+                        if (Match(question.title, search)) matches.Add(item);
+                        else if (Match(question.body, search)) matches.Add(item);
                         break;
+                    default: break;
                 }
             }
-            return outList;
+            return matches;
         }
     }
 }
