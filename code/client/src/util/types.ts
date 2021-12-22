@@ -1,3 +1,9 @@
+export type Notification = {
+    id: number;
+    notifierId: number;
+    time: string;
+}
+
 export type BaseCourse = {
     id: number;
     name: string;
