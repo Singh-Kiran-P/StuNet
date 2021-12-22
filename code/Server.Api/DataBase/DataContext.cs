@@ -257,7 +257,8 @@ namespace Server.Api.DataBase
                     questionId = questions[1].id,
                     title = "Answer 2",
                     body = "answer",
-                    time = DateTime.UtcNow.AddHours(-2)
+                    time = DateTime.UtcNow.AddHours(-2),
+                    isAccepted = true
                 },
                 new Answer {
                     id = 3,

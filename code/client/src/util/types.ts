@@ -66,6 +66,7 @@ export type BaseAnswer = {
     title: string;
     body: string;
     time: string;
+    isAccepted: boolean;
 }
 
 export type Answer = BaseAnswer & {
