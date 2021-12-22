@@ -1,15 +1,12 @@
 {
 	"folders": [
-		{
-			"path": "Server.UnitTests"
-		},
-		{
-			"path": "Server.Api"
-		},
-		{
-			"path": "client"
-		}
-	],
+        {
+            "path": "Server.UnitTests"
+        },
+        {
+            "path": "Server.Api"
+        }
+    ],
 	"settings": {
 		"terminal.integrated.cwd": "../",
 

@@ -10,7 +10,7 @@ namespace Server.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ChannelController: ControllerBase
+    public class ChannelController : ControllerBase
     {
         private readonly IChannelRepository _channelRepository;
         private readonly ICourseRepository _courseRepository;
@@ -27,45 +27,45 @@ namespace Server.Api.Controllers
             var channels = await _channelRepository.getAllAsync();
             return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));
         }
-    
+
         [HttpGet("GetChannelsByCourseId/{courseId}")]
         public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannelsByCourseId(int courseId)
         {
             var channels = await _channelRepository.getByCourseIdAsync(courseId);
             return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));
         }
-    
+
         [HttpGet("{id}")]
         public async Task<ActionResult<getChannelDto>> GetChannel(int id)
         {
             var channel = await _channelRepository.getAsync(id);
-            if(channel == null)
+            if (channel == null)
                 return NotFound();
 
-			return Ok(getChannelDto.convert(channel));
-		}
-    
+            return Ok(getChannelDto.convert(channel));
+        }
+
         [HttpPost]
         public async Task<ActionResult<getOnlyChannelDto>> CreateChannel(createChannelDto dto)
         {
-			TextChannel channel = new()
-			{
-				name = dto.name,
-				course = await _courseRepository.getAsync(dto.courseId),
-				messages = new List<Message>()
-		};
-    
+            TextChannel channel = new()
+            {
+                name = dto.name,
+                course = await _courseRepository.getAsync(dto.courseId),
+                messages = new List<Message>()
+            };
+
             await _channelRepository.createAsync(channel);
             return Ok(getOnlyChannelDto.convert(channel));
         }
-    
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteChannel(int id)
         {
             await _channelRepository.deleteAsync(id);
             return NoContent();
         }
-    
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateChannel(int id, createChannelDto dto)
         {
@@ -75,7 +75,7 @@ namespace Server.Api.Controllers
                 name = dto.name,
                 course = await _courseRepository.getAsync(dto.courseId)
             };
-    
+
             await _channelRepository.updateAsync(channel);
             return NoContent();
         }

@@ -18,7 +18,7 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Message>> getAllAsync(int channelId)
         {
             return await _context.Messages
-			.Where(m => m.channelId == channelId)
+            .Where(m => m.channelId == channelId)
             .ToListAsync();
         }
         public async Task createAsync(Message message)

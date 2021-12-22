@@ -17,7 +17,7 @@ namespace Server.Api.Repositories
         }
         public async Task<IEnumerable<Topic>> getAllAsync()
         {
-            return await _context.Topics            
+            return await _context.Topics
             .Include(t => t.questions)
             .ThenInclude(q => q.topics)
             .Include(t => t.course)
@@ -33,20 +33,20 @@ namespace Server.Api.Repositories
             var topicToRemove = await _context.Topics.FindAsync(topicId);
             if (topicToRemove == null)
                 throw new NullReferenceException();
-            
+
             _context.Topics.Remove(topicToRemove);
             await _context.SaveChangesAsync();
         }
         public async Task<Topic> getAsync(int id)
         {
-			return await _context.Topics
-            .Where(t => t.id == id)            
-			.Include(t => t.questions)
+            return await _context.Topics
+            .Where(t => t.id == id)
+            .Include(t => t.questions)
             .ThenInclude(q => q.topics)
-			.Include(t => t.course)
-			.FirstOrDefaultAsync();
+            .Include(t => t.course)
+            .FirstOrDefaultAsync();
 
-		}
+        }
 
         public async Task updateAsync(Topic topic)
         {

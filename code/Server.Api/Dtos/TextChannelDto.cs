@@ -11,16 +11,18 @@ namespace Server.Api.Dtos
         public int id { get; set; }
         public string name { get; set; }
 
-		public static getOnlyChannelDto convert(TextChannel channel) {
-			return new getOnlyChannelDto
-			{
-				id = channel.id,
-				name = channel.name
-			};
-		}
+        public static getOnlyChannelDto convert(TextChannel channel)
+        {
+            return new getOnlyChannelDto
+            {
+                id = channel.id,
+                name = channel.name
+            };
+        }
     }
 
-	public class getChannelDto {
+    public class getChannelDto
+    {
         public int id { get; set; }
         public string name { get; set; }
         public CourseDto course { get; set; }
@@ -37,9 +39,9 @@ namespace Server.Api.Dtos
 		}
 	}
 
-	public class createChannelDto
-	{
-		public string name { get; set; }
-		public int courseId { get; set; }
-	}
+    public class createChannelDto
+    {
+        public string name { get; set; }
+        public int courseId { get; set; }
+    }
 }

@@ -12,7 +12,7 @@ namespace Server.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class FieldOfStudyController: ControllerBase
+    public class FieldOfStudyController : ControllerBase
     {
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
         public FieldOfStudyController(IFieldOfStudyRepository fieldOfStudyRepository)
@@ -31,7 +31,7 @@ namespace Server.Api.Controllers
         public async Task<ActionResult<FieldOfStudy>> GetFieldOfStudy(int id)
         {
             var fieldOfStudy = await _fieldOfStudyRepository.getAsync(id);
-            if(fieldOfStudy == null)
+            if (fieldOfStudy == null)
                 return NotFound();
 
             return Ok(fieldOfStudy);
@@ -45,20 +45,23 @@ namespace Server.Api.Controllers
             //     _fullname = createFieldOfStudyDto.fullName;
             // }
             // else{
-            if(createFieldOfStudyDto.isBachelor){
-                _fullname = createFieldOfStudyDto.name+"-"+"BACH"+"-"+createFieldOfStudyDto.year;
-            } else {
-                _fullname = createFieldOfStudyDto.name+"-"+"MASTER"+"-"+createFieldOfStudyDto.year;
+            if (createFieldOfStudyDto.isBachelor)
+            {
+                _fullname = createFieldOfStudyDto.name + "-" + "BACH" + "-" + createFieldOfStudyDto.year;
+            }
+            else
+            {
+                _fullname = createFieldOfStudyDto.name + "-" + "MASTER" + "-" + createFieldOfStudyDto.year;
             }
             // }
 
             FieldOfStudy fieldOfStudy = new()
-                {
-                    fullName = _fullname,
-                    name = createFieldOfStudyDto.name,
-                    isBachelor = createFieldOfStudyDto.isBachelor,
-                    year = createFieldOfStudyDto.year,
-                };
+            {
+                fullName = _fullname,
+                name = createFieldOfStudyDto.name,
+                isBachelor = createFieldOfStudyDto.isBachelor,
+                year = createFieldOfStudyDto.year,
+            };
 
             await _fieldOfStudyRepository.createAsync(fieldOfStudy);
             return Ok();

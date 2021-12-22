@@ -5,7 +5,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-    public interface ITopicRepository: IInterfaceRepository<Topic>
+    public interface ITopicRepository : IInterfaceRepository<Topic>
     {
         //  Task<IEnumerable<Topic>> getAllAsync();
         //  Task<Topic> getAsync(int id);

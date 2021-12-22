@@ -41,7 +41,8 @@ namespace Server.Api.Controllers
             {
                 IEnumerable<Answer> answers = await _answerRepository.getAllAsync();
                 List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
-                foreach (var answer in answers) {
+                foreach (var answer in answers)
+                {
                     User user = await _userManager.FindByIdAsync(answer.userId);
                     res.Add(ResponseAnswerDto.convert(answer, user));
                 }
@@ -58,7 +59,8 @@ namespace Server.Api.Controllers
             {
                 IEnumerable<Answer> answers = await _answerRepository.getByQuestionId(questionId);
                 List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
-                foreach (var answer in answers) {
+                foreach (var answer in answers)
+                {
                     User user = await _userManager.FindByIdAsync(answer.userId);
                     res.Add(ResponseAnswerDto.convert(answer, user));
                 }
