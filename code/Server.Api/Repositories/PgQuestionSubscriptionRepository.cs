@@ -20,6 +20,10 @@ namespace Server.Api.Repositories
         public async Task<ICollection<QuestionSubscription>> getByUserId(string userId) {
 			return await _context.QuestionSubscriptions.Where(s => userId == s.userId).ToListAsync();
 		}
+        public async Task<ICollection<QuestionSubscription>> getByQuestionId(int id) {
+            return await _context.QuestionSubscriptions.Where(s => id == s.questionId).ToListAsync();
+        }
+
         public async Task<ICollection<QuestionSubscription>> getByUserIdAndQuestionIdAsync(string userId, int questionId)
         {
             return await _context.QuestionSubscriptions

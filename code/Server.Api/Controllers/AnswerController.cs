@@ -23,14 +23,16 @@ namespace Server.Api.Controllers
         // private readonly ITopicRepository _topicRepository;
         private readonly IQuestionRepository _questionRepository;
 		private readonly IHubContext<ChatHub> _hubContext;
-		public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext /*, ITopicRepository topicRepository*/ )
+		private readonly IAnswerNotificationRepository _notificationRepository;
+		private readonly IQuestionSubscriptionRepository _subscriptionRepository;
+		public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, IAnswerNotificationRepository notificationRepository, IQuestionSubscriptionRepository subscriptionRepository)
         {
             _answerRepository = answerRepository;
             _userManager = userManager;
             _questionRepository = questionRepository;
 			_hubContext = hubContext;
-			// _topicRepository = topicRepository;
-			// _courseRepository = courseRepository;
+			_notificationRepository = notificationRepository;
+			_subscriptionRepository = subscriptionRepository;
 		}
 
         //[Authorize(Roles = "student")]
@@ -108,6 +110,15 @@ namespace Server.Api.Controllers
 
                 await _answerRepository.createAsync(answer);
 				var ret = ResponseAnswerDto.convert(answer, user);
+
+                IEnumerable<string> subscriberIds = (await _subscriptionRepository.getByQuestionId(question.id)).Select(sub => sub.userId);
+				await _notificationRepository.createAllAync(subscriberIds.Select(userId => new AnswerNotification
+				{
+					userId = userId,
+					answerId = answer.id,
+					time = DateTime.UtcNow
+				}));
+
 				await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
                 return Ok(ret);
             }

@@ -10,16 +10,16 @@ namespace Server.Api.Dtos
 		public int notifierId { get; set; }
 		public DateTime time { get; set; }
 
-		public NotificationDto convert(CourseNotification notification) {
+		public static NotificationDto convert(AnswerNotification notification) {
 			return new NotificationDto
 			{
 				id = notification.id,
 				userId = notification.userId,
-				notifierId = notification.courseId,
+				notifierId = notification.answerId,
 				time = notification.time
 			};
 		}
-		public NotificationDto convert(QuestionNotification notification) {
+		public static NotificationDto convert(QuestionNotification notification) {
 			return new NotificationDto
 			{
 				id = notification.id,

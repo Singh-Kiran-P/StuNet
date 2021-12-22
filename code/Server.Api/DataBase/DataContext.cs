@@ -32,7 +32,8 @@ namespace Server.Api.DataBase
         public DbSet<Message> Messages { get; set; }
         public DbSet<CourseSubscription> CourseSubscriptions { get; set; } 
         public DbSet<QuestionSubscription> QuestionSubscriptions { get; set; } 
-        public DbSet<CourseNotification> CourseNotifications { get; set; } 
+        public DbSet<AnswerNotification> AnswerNotifications { get; set; } 
+        public DbSet<QuestionNotification> QuestionNotifications { get; set; } 
 
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

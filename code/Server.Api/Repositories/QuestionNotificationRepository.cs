@@ -11,14 +11,15 @@ namespace Server.Api.Repositories
 	public interface IQuestionNotificationRepository : IInterfaceRepository<QuestionNotification>
     {
 		Task<ICollection<QuestionNotification>> getByUserId(string userId);
+		Task createAllAync(IEnumerable<QuestionNotification> Notifications);
 
-    }
+	}
 
     public class PgQuestionNotificationRepository : IQuestionNotificationRepository
     {
         private readonly IDataContext _context;
 
-        public IQuestionNotificationRepository(IDataContext context)
+        public PgQuestionNotificationRepository(IDataContext context)
         {
             _context = context;
         }
@@ -51,6 +52,11 @@ namespace Server.Api.Repositories
             _context.QuestionNotifications.Add(questionNotification);
             await _context.SaveChangesAsync();
         }
+
+        public async Task createAllAync(IEnumerable<QuestionNotification> Notifications) {
+			_context.QuestionNotifications.AddRange(Notifications);
+			await _context.SaveChangesAsync();
+		}
 
         public async Task deleteAsync(int id)
         {

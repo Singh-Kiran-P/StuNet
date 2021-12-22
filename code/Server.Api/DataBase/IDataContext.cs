@@ -22,7 +22,8 @@ namespace Server.Api.DataBase
         DbSet<Message> Messages { get; set; }
         DbSet<CourseSubscription> CourseSubscriptions { get; set; } 
         DbSet<QuestionSubscription> QuestionSubscriptions { get; set; } 
-        DbSet<CourseNotification> CourseNotifications { get; set; } 
+        DbSet<AnswerNotification> AnswerNotifications { get; set; } 
+        DbSet<QuestionNotification> QuestionNotifications { get; set; }
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -19,100 +19,55 @@ namespace Server.Api.Controllers
     [Route("[controller]")]
     public class NotificationController : ControllerBase
     {
+        
         private readonly IQuestionNotificationRepository _questionNotificationRepository;
-        // private readonly ICourseNotificationRepository _courseNotificationRepository;
+        private readonly IAnswerNotificationRepository _answerNotificationRepository;
 
-		public CourseSubscriptionController(IQuestionNotificationRepository repository)
+		public NotificationController(IQuestionNotificationRepository questionNotificationRepository, IAnswerNotificationRepository answerNotificationRepository)
         {
-            _questionNotificationRepository = repository;
+            _questionNotificationRepository = questionNotificationRepository;
+			_answerNotificationRepository = answerNotificationRepository;
+		}
+
+        private async Task<IEnumerable<QuestionNotification>> _getQuestionNotifications(string userId) 
+        {
+            return await _questionNotificationRepository.getByUserId(userId);
+
+        }
+
+        private async Task<IEnumerable<AnswerNotification>> _getAnswerNotifications(string userId) 
+        {
+            return await _answerNotificationRepository.getByUserId(userId);
 		}
         
-        private async Task<IEnumerable<NotificationDto>> _getSubscriptions()
-        {
-            IEnumerable<QuestionNotification> notifications = await _questionNotificationRepository.getAllAsync();
-            IEnumerable<NotificationDto> getDtos = subscriptions.Select(subscription => NotificationDto.convert(notifications));
-            return getDtos;
-        }
-        
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<NotificationDto>>> getCourseSubscriptions()
-        {
-            IEnumerable<NotificationDto> getDtos = await _getSubscriptions();
-            return Ok(getDtos);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<NotificationDto>> GetSubscription(int id)
-        {
-            QuestionNotification notification = await _questionNotificationRepository.getAsync(id);
-            if (subscription == null)
-                return NotFound();
-
-            return Ok(NotificationDto.convert(notification));
-        }
-
-        [HttpGet("ByUserAndCourseId/{courseId}")]
-        public async Task<ActionResult<getByIdsCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
-        {
-            IEnumerable<CourseSubscription> notifications = await _questionNotificationRepository.getAllAsync();
-            ClaimsPrincipal currentUser = HttpContext.User;
-            string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-            User user = await _userManager.FindByEmailAsync(userEmail);
-
-            IEnumerable<getByIdsCourseSubscriptionDto> userSubscriptionDtos = subscriptions
-                .Where(subscription => subscription.courseId == courseId && subscription.userId == user.Id)
-                .Select(subscription => getByIdsCourseSubscriptionDto.convert(subscription));
-            return Ok(userSubscriptionDtos);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<createCourseSubscriptionDto>> createCourseSubscription(createCourseSubscriptionDto dto)
+        public async Task<ActionResult<(IEnumerable<NotificationDto>, IEnumerable<NotificationDto>)>> getNotifications()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
-            if (currentUser.HasClaim(c => c.Type == "username"))
-            {
-                string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-                User user = await _userManager.FindByEmailAsync(userEmail);
-                
-                CourseSubscription subscription = new()
-                {
-                    dateTime = DateTime.UtcNow,
-                    userId = user.Id,
-                    courseId = dto.courseId,
-                };
-				await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + subscription.courseId.ToString());
-				await _courseSubscriptionRepository.createAsync(subscription);
-                return Ok(subscription);
-            }
-            else
-            {
-                return Unauthorized();
-            }
-        }
+			if (currentUser.HasClaim(c => c.Type == "userref"))
+			{
+				string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
+				IEnumerable<QuestionNotification> qNotifs = await _getQuestionNotifications(userId);
+				IEnumerable<AnswerNotification> cNotifs = await _getAnswerNotifications(userId);
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCourseSubscription(int id)
-        {
-            try
-            {
-				CourseSubscription sub = await _courseSubscriptionRepository.getAsync(id);
-				ClaimsPrincipal currentUser = HttpContext.User;
-				if (currentUser.HasClaim(c => c.Type == "username"))
-				{
-					string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-					User user = await _userManager.FindByEmailAsync(userEmail);
-
-					await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + sub.courseId.ToString());
-					await _courseSubscriptionRepository.deleteAsync(id);
-				} else {
-                    return Unauthorized();
-                }
+				return Ok((qNotifs.Select(n => NotificationDto.convert(n)), cNotifs.Select(n => NotificationDto.convert(n))));
+			} else {
+				return Unauthorized();
 			}
-            catch (System.Exception)
-            {
-                return NotFound();
-            }
-            return NoContent();
-        }
+		}
+
+        // [HttpDelete("{id}")]
+        // public async Task<ActionResult> DeleteCourseNotification(int id)
+        // {
+        //     try
+        //     {
+        //         await _courseNotificationRepository.deleteAsync(id);
+		// 	}
+        //     catch (System.Exception)
+        //     {
+        //         return NotFound();
+        //     }
+        //     return NoContent();
+        // }
     }
 }
