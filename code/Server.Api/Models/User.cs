@@ -12,6 +12,6 @@ namespace Server.Api.Models
 
         // public string salt { get; set; }
         public ICollection<Answer> answers;
-        
+
     }
 }

@@ -67,7 +67,8 @@ namespace Server.Api.Controllers
             {
                 var questions = await _questionRepository.getAllAsync();
                 List<questionDto> res = new List<questionDto>();
-                foreach (var q in questions) {
+                foreach (var q in questions)
+                {
                     User user = await _userManager.FindByIdAsync(q.userId);
                     res.Add(questionDto.convert(q, user));
                 }
@@ -89,7 +90,7 @@ namespace Server.Api.Controllers
                 if (question == null)
                     return NotFound();
                 User user = await _userManager.FindByIdAsync(question.userId);
-            
+
                 return Ok(questionDto.convert(question, user));
             }
             catch { return BadRequest("Error finding question"); }
@@ -123,9 +124,9 @@ namespace Server.Api.Controllers
                 topics = dto.topicIds.Select(id => _topicRepository.getAsync(id)) //TODO: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
                                                 .Select(task => task.Result)
                                                 .ToList();
-                
-                if (c==null) {return BadRequest("Course does not exist");}
-                if (topics.Contains(null)) {return BadRequest("One of the topics does not exist");}
+
+                if (c == null) { return BadRequest("Course does not exist"); }
+                if (topics.Contains(null)) { return BadRequest("One of the topics does not exist"); }
                 Question question = new()
                 {
                     title = dto.title,
@@ -143,7 +144,7 @@ namespace Server.Api.Controllers
             }
             else
             {
-                return  Unauthorized();
+                return Unauthorized();
             }
         }
 

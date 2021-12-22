@@ -2,29 +2,34 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using ChatSample.Hubs;
+using FluentEmail.Core;
+using FluentEmail.Smtp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Server.Api.DataBase;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Services;
-using ChatSample.Hubs;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Server.Api
 {
@@ -86,9 +91,8 @@ namespace Server.Api
                     ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
                     ValidAudience = jwtSettings.GetSection("validAudience").Value,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSettings.GetSection("secretKey").Value))
+                Encoding.UTF8.GetBytes(jwtSettings.GetSection("secretKey").Value))
                 };
-
 
                 // event for signalR
                 options.Events = new JwtBearerEvents
@@ -102,20 +106,19 @@ namespace Server.Api
                 };
             });
 
-
-
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession();
 
             // Anti JSON looping
             services.AddControllers().AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+              options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
-
 
             // Email setup
             services.AddTransient<IEmailSender, EmailSender>();
 
+            // Email FluentMail
+            setupFluentGmail(services);
 
             // Custom
             services.AddSingleton<IConfiguration>(Configuration);
@@ -133,7 +136,7 @@ namespace Server.Api
             services.AddScoped<IQuestionSubscriptionRepository, PgQuestionSubscriptionRepository>();
             
 
-			services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server.Api", Version = "v1" });
             });
@@ -141,6 +144,33 @@ namespace Server.Api
             //signalR
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
+
+        }
+
+        private void setupFluentGmail(IServiceCollection services)
+        {
+            string from = Configuration.GetSection("Mail")["From"];
+            string senderEmail = Configuration.GetSection("Mail")["G-SenderEmail"];
+            string password = Configuration.GetSection("Mail")["G-password"];
+            string G_host = Configuration.GetSection("Mail")["G-host"];
+            int G_port = Convert.ToInt32(Configuration.GetSection("Mail")["G-port"]);
+
+            SmtpClient smtp = new SmtpClient
+            {
+                Host = G_host,
+                Port = G_port,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(senderEmail, password)
+            };
+
+            services
+                .AddFluentEmail(senderEmail, from)
+                .AddRazorRenderer()
+                .AddSmtpSender(smtp);
+
+            services.TryAddScoped<IEmailSender, EmailSender>();
 
         }
 
@@ -161,7 +191,7 @@ namespace Server.Api
                .AllowAnyMethod()
                .AllowAnyHeader()
                .SetIsOriginAllowed(origin => true) // allow any origin
-               .AllowCredentials());               // allow credentials
+               .AllowCredentials()); // allow credentials
 
             app.UseRouting();
             app.UseDefaultFiles();
@@ -177,8 +207,6 @@ namespace Server.Api
                 endpoints.MapHub<ChatHub>("/chat");
 
             });
-
-
 
         }
     }

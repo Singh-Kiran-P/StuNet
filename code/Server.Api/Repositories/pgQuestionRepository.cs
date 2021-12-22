@@ -19,10 +19,10 @@ namespace Server.Api.Repositories
 
         public async Task<IEnumerable<Question>> getAllAsync()
         {
-			return await _context.Questions
+            return await _context.Questions
             .Include(q => q.topics)
-            // .Include(q => q.user)          
-            .Include(q => q.course)          
+            // .Include(q => q.user)
+            .Include(q => q.course)
             .ToListAsync();
 		}
 
@@ -38,10 +38,10 @@ namespace Server.Api.Repositories
 
         public async Task<Question> getAsync(int id)
         {
-			return await _context.Questions
+            return await _context.Questions
             .Where(q => q.id == id)
             .Include(q => q.topics)
-            // .Include(q => q.user)          
+            // .Include(q => q.user)
             .Include(q => q.course)
             .FirstOrDefaultAsync();
 		}
@@ -57,7 +57,7 @@ namespace Server.Api.Repositories
             var questionToRemove = await _context.Questions.FindAsync(questionId);
             if (questionToRemove == null)
                 throw new NullReferenceException();
-            
+
             _context.Questions.Remove(questionToRemove);
             await _context.SaveChangesAsync();
         }
@@ -69,8 +69,8 @@ namespace Server.Api.Repositories
                 throw new NullReferenceException();
             questionToUpdate.title = question.title;
             questionToUpdate.body = question.body;
-			questionToUpdate.topics = question.topics;
-			questionToUpdate.time = DateTime.UtcNow;
+            questionToUpdate.topics = question.topics;
+            questionToUpdate.time = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
     }
