@@ -23,16 +23,16 @@ namespace Server.Api.Controllers
         private readonly ITopicRepository _topicRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly UserManager<User> _userManager;
-		private readonly IHubContext<ChatHub> _hubContext;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-		public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
+        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;
             _courseRepository = courseRepository;
             _userManager = userManager;
-			_hubContext = hubContext;
-		}
+            _hubContext = hubContext;
+        }
 
         // private static questionDto toDto(Question question, User user)
         // {
@@ -99,16 +99,17 @@ namespace Server.Api.Controllers
         [HttpGet("GetQuestionsByCourseId/search/{courseId}")]
         public async Task<ActionResult<GetCourseDto>> searchByName(int courseId, [FromQuery] string name)
         {
-                var questions = await _questionRepository.getByCourseIdAsync(courseId);
-                IEnumerable<Question> matches = StringMatcher.FuzzyMatchObject(questions, name);
-                List<questionDto> res = new List<questionDto>();
-                foreach (var q in matches) {
-                    User user = await _userManager.FindByIdAsync(q.userId);
-                    res.Add(questionDto.convert(q, user));
-                }
-                return Ok(res);
+            var questions = await _questionRepository.getByCourseIdAsync(courseId);
+            IEnumerable<Question> matches = StringMatcher.FuzzyMatchObject(questions, name);
+            List<questionDto> res = new List<questionDto>();
+            foreach (var q in matches)
+            {
+                User user = await _userManager.FindByIdAsync(q.userId);
+                res.Add(questionDto.convert(q, user));
+            }
+            return Ok(res);
         }
-    
+
         //[Authorize(Roles = "student")]
         [HttpPost]
         public async Task<ActionResult<questionDto>> CreateQuestion(createQuestionDto dto)
@@ -139,8 +140,8 @@ namespace Server.Api.Controllers
                 };
 
                 await _questionRepository.createAsync(question);
-				await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", question.id);
-				return Ok(questionDto.convert(question, user));
+                await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", question.id);
+                return Ok(questionDto.convert(question, user));
             }
             else
             {

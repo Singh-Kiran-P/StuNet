@@ -24,7 +24,7 @@ namespace Server.Api.Repositories
             // .Include(q => q.user)
             .Include(q => q.course)
             .ToListAsync();
-		}
+        }
 
         public async Task<IEnumerable<Question>> getByCourseIdAsync(int courseId)
         {
@@ -44,7 +44,7 @@ namespace Server.Api.Repositories
             // .Include(q => q.user)
             .Include(q => q.course)
             .FirstOrDefaultAsync();
-		}
+        }
 
         public async Task createAsync(Question question)
         {
