@@ -18,14 +18,14 @@ namespace Server.Api.Controllers
     {
         private readonly ICourseRepository _courseRepository;
         private readonly ITopicRepository _topicRepository;
-		private readonly ICourseSubscriptionRepository _subscriptionRepository;
+        private readonly ICourseSubscriptionRepository _subscriptionRepository;
 
-		public CourseController(ICourseRepository repository, ITopicRepository topicRepository, ICourseSubscriptionRepository subscriptionRepository)
+        public CourseController(ICourseRepository repository, ITopicRepository topicRepository, ICourseSubscriptionRepository subscriptionRepository)
         {
             _courseRepository = repository;
             _topicRepository = topicRepository;
-			_subscriptionRepository = subscriptionRepository;
-		}
+            _subscriptionRepository = subscriptionRepository;
+        }
 
         private async Task<IEnumerable<GetAllCourseDto>> _getCourseAsync()
         {
@@ -51,26 +51,26 @@ namespace Server.Api.Controllers
             return Ok(getDtos);
         }
 
-		[HttpGet("subscribed")]
-		public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getSubscribedCourses()
-		{
-			ClaimsPrincipal currentUser = HttpContext.User;
-			if (currentUser.HasClaim(c => c.Type == "userref"))
-			{
+        [HttpGet("subscribed")]
+        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getSubscribedCourses()
+        {
+            ClaimsPrincipal currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == "userref"))
+            {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 IEnumerable<CourseSubscription> subscriptions = await _subscriptionRepository.getByUserId(userId);
                 IEnumerable<int> subscribedCourseIds = subscriptions.Select(sub => sub.courseId);
                 IEnumerable<GetAllCourseDto> courses = await _getCourseAsync();
 
                 return Ok(courses.Where(course => subscribedCourseIds.Contains(course.id)));
-			}
-			else
-			{
-				return Unauthorized();
-			}
-		}
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
 
-		[HttpGet("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<GetCourseDto>> GetCourse(int id)
         {
             Course course = await _courseRepository.getAsync(id);
