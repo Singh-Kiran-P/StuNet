@@ -1,13 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Security;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Server.Api.Dtos;
 using Server.Api.Repositories;
@@ -158,13 +157,16 @@ namespace Server.Api.Services
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var _questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
+                var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
                 var questions = _questionRepository.getAllAsync().GetAwaiter().GetResult();
-                List<questionDto> res = new List<questionDto>();
-                foreach (var q in questions)
+
+                mailSender.SendEmail("kiran.singh@student.uhasselt.be", "Test sent email on Recieve email", EmailTemplate.ConfirmEmail, new
                 {
-                    Console.Write(q.title + '\n');
-                }
-                Console.WriteLine(message.HtmlBody); // TODO implement
+                    link = "Test sent email on Recieve email"
+                }).GetAwaiter();
+
+                Console.WriteLine("Email Sent"); // TODO implement
+
             }
         }
 
