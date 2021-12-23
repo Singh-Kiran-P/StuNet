@@ -3,18 +3,6 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public record createMessageDto
-    {
-        public int channelId { get; set; }
-        public string userMail { get; set; }
-        public string body { get; set; }
-
-        public static createMessageDto Convert(Message message)
-        {
-            throw new Exception("method not implement");
-        }
-    }
-
     public record MessageDto
     {
         public string userMail { get; set; }
@@ -29,6 +17,18 @@ namespace Server.Api.Dtos
                 body = message.body,
                 time = message.time
             };
+        }
+    }
+
+    public record CreateMessageDto
+    {
+        public int channelId { get; set; }
+        public string userMail { get; set; }
+        public string body { get; set; }
+
+        public static CreateMessageDto Convert(Message message)
+        {
+            throw new Exception("method not implement");
         }
     }
 }
