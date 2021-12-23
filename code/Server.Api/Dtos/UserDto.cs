@@ -33,7 +33,7 @@ namespace Server.Api.Dtos
         public string email { get; set; }
 
         //TODO: add subscribed courses, maybe answer and question ids?
-        public static ResponseUserDto convert(User user)
+        public static ResponseUserDto Convert(User user)
         {
             return new ResponseUserDto()
             {

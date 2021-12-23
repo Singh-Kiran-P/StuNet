@@ -19,7 +19,7 @@ namespace Server.Api.Dtos
             return new ResponseAnswerDto
             {
                 id = answer.id,
-                user = ResponseUserDto.convert(user),
+                user = ResponseUserDto.Convert(user),
                 question = questionDto.Convert(answer.question, user),
                 // course = getOnlyCourseDto.convert(answer.question.course),
                 title = answer.title,

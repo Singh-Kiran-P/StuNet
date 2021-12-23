@@ -53,7 +53,7 @@ namespace Server.Api.Dtos
             {
                 id = question.id,
                 title = question.title,
-                user = ResponseUserDto.convert(user),
+                user = ResponseUserDto.Convert(user),
                 body = question.body,
                 topics = question.topics.Select(topic => new getOnlyTopicDto
                 {
