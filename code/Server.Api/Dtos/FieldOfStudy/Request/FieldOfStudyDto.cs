@@ -10,4 +10,12 @@ namespace Server.Api.Dtos
         [Required()]
         public bool isBachelor { get; set; }
     }
+    
+    public record createFieldOfStudyDto
+    {
+        [Required()]
+        public string name { get; set; }
+        [Required()]
+        public bool isBachelor { get; set; }
+    }
 }
