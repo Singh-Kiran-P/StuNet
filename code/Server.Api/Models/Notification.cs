@@ -1,9 +1,7 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Api.Models
 {
-
 	public class Notification 
 	{
 		public int id { get; set; }
@@ -16,6 +14,7 @@ namespace Server.Api.Models
 		public int answerId { get; set; }
 		public Answer answer { get; set; }
 	}
+
     public class QuestionNotification : Notification
     {
 		public int questionId { get; set; }

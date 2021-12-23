@@ -1,4 +1,3 @@
-using System;
 
 namespace Server.Api.Models
 {

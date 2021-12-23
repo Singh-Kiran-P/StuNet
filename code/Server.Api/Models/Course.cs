@@ -1,6 +1,5 @@
-using System;
-using Server.Api.Models;
 using System.Collections.Generic;
+
 namespace Server.Api.Models
 {
     public class Course
