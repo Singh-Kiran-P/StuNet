@@ -27,7 +27,7 @@ namespace Server.Api.Controllers
                     name = topic.course.name,
                     number = topic.course.number,
                 },
-                questions = topic.questions.Select(question => onlyQuestionDto.Convert(question)).ToList()
+                questions = topic.questions.Select(question => OnlyQuestionDto.Convert(question)).ToList()
             };
         }
         

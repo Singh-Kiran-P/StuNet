@@ -43,16 +43,16 @@ namespace Server.Api.Controllers
 
         //[Authorize(Roles = "student")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<questionDto>>> GetQuestions()
+        public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetQuestions()
         {
             try
             {
                 var questions = await _questionRepository.getAllAsync();
-                List<questionDto> res = new List<questionDto>();
+                List<GetQuestionDto> res = new List<GetQuestionDto>();
                 foreach (var q in questions)
                 {
                     User user = await _userManager.FindByIdAsync(q.userId);
-                    res.Add(questionDto.Convert(q, user));
+                    res.Add(GetQuestionDto.Convert(q, user));
                 }
                 return Ok(res);
             }
@@ -63,7 +63,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("subscribed")]
-        public async Task<ActionResult<IEnumerable<questionDto>>> GetSubscribedQuestions()
+        public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetSubscribedQuestions()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
@@ -75,7 +75,7 @@ namespace Server.Api.Controllers
                                                                                     .Select(task => task.Result);
 
                 User user = await _userManager.FindByIdAsync(userId);
-                return Ok(subscribedQuestions.Select(q => questionDto.Convert(q, user)));
+                return Ok(subscribedQuestions.Select(q => GetQuestionDto.Convert(q, user)));
             }
             else
             {
@@ -84,7 +84,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<questionDto>> GetQuestion(int id)
+        public async Task<ActionResult<GetQuestionDto>> GetQuestion(int id)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace Server.Api.Controllers
                 }
                 User user = await _userManager.FindByIdAsync(question.userId);
 
-                return Ok(questionDto.Convert(question, user));
+                return Ok(GetQuestionDto.Convert(question, user));
             }
             catch
             {
@@ -108,18 +108,18 @@ namespace Server.Api.Controllers
         {
             var questions = await _questionRepository.getByCourseIdAsync(courseId);
             IEnumerable<Question> matches = StringMatcher.FuzzyMatchObject(questions, name);
-            List<questionDto> res = new List<questionDto>();
+            List<GetQuestionDto> res = new List<GetQuestionDto>();
             foreach (var q in matches)
             {
                 User user = await _userManager.FindByIdAsync(q.userId);
-                res.Add(questionDto.Convert(q, user));
+                res.Add(GetQuestionDto.Convert(q, user));
             }
             return Ok(res);
         }
 
         //[Authorize(Roles = "student")]
         [HttpPost]
-        public async Task<ActionResult<questionDto>> CreateQuestion(createQuestionDto dto)
+        public async Task<ActionResult<GetQuestionDto>> CreateQuestion(createQuestionDto dto)
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "username"))
@@ -171,7 +171,7 @@ namespace Server.Api.Controllers
                     time = question.time
                 }));
 
-                var ret = questionDto.Convert(question, user);
+                var ret = GetQuestionDto.Convert(question, user);
                 await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
                 return Ok(ret);
             }

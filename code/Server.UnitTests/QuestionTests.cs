@@ -94,8 +94,8 @@ namespace Server.UnitTests
             var result = await controller.GetQuestion(rand.Next());
 
             // Assert
-            ((result.Result as OkObjectResult).Value as questionDto).Should()
-            .BeEquivalentTo(question, options => options.ComparingByMembers<questionDto>().ExcludingMissingMembers());
+            ((result.Result as OkObjectResult).Value as GetQuestionDto).Should()
+            .BeEquivalentTo(question, options => options.ComparingByMembers<GetQuestionDto>().ExcludingMissingMembers());
         }
 
         [Fact]
@@ -160,7 +160,7 @@ namespace Server.UnitTests
             var result = await controller.CreateQuestion(questionToCreate);
 
 
-        	var createdQuestion = (result.Result as OkObjectResult).Value as questionDto;
+        	var createdQuestion = (result.Result as OkObjectResult).Value as GetQuestionDto;
         	questionToCreate.Should().BeEquivalentTo(
         		createdQuestion,
         		options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
