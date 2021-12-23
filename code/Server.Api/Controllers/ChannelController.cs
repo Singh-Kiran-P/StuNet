@@ -25,14 +25,14 @@ namespace Server.Api.Controllers
         public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannels()
         {
             var channels = await _channelRepository.getAllAsync();
-            return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));
+            return Ok(channels.Select(channel => getOnlyChannelDto.Convert(channel)));
         }
 
         [HttpGet("GetChannelsByCourseId/{courseId}")] //FIXME: Make route lower case
         public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannelsByCourseId(int courseId)
         {
             var channels = await _channelRepository.getByCourseIdAsync(courseId);
-            return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));
+            return Ok(channels.Select(channel => getOnlyChannelDto.Convert(channel)));
         }
 
         [HttpGet("{id}")]
@@ -42,7 +42,7 @@ namespace Server.Api.Controllers
             if (channel == null)
                 return NotFound();
 
-            return Ok(getChannelDto.convert(channel));
+            return Ok(getChannelDto.Convert(channel));
         }
 
         [HttpPost]
@@ -56,7 +56,7 @@ namespace Server.Api.Controllers
             };
 
             await _channelRepository.createAsync(channel);
-            return Ok(getOnlyChannelDto.convert(channel));
+            return Ok(getOnlyChannelDto.Convert(channel));
         }
 
         [HttpDelete("{id}")]

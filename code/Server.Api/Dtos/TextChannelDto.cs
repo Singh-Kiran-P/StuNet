@@ -9,7 +9,7 @@ namespace Server.Api.Dtos
         public int id { get; set; }
         public string name { get; set; }
 
-        public static getOnlyChannelDto convert(TextChannel channel)
+        public static getOnlyChannelDto Convert(TextChannel channel)
         {
             return new getOnlyChannelDto
             {
@@ -26,7 +26,7 @@ namespace Server.Api.Dtos
         public CourseDto course { get; set; }
         public ICollection<MessageDto> messages { get; set; }
 
-        public static getChannelDto convert(TextChannel channel)
+        public static getChannelDto Convert(TextChannel channel)
         {
             return new getChannelDto
             {
