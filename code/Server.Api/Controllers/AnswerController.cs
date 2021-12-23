@@ -99,7 +99,7 @@ namespace Server.Api.Controllers
 
         //[Authorize(Roles = "student")]
         [HttpPost]
-        public async Task<ActionResult<GetAnswerDto>> CreateAnswer(PostAnswerDto dto)
+        public async Task<ActionResult<GetAnswerDto>> CreateAnswer(CreateAnswerDto dto)
         {
 
             // Get user from token
@@ -158,7 +158,7 @@ namespace Server.Api.Controllers
 
         [Authorize(Roles = "prof")]
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAnswer(int id, PostAnswerDto dto)
+        public async Task<ActionResult> UpdateAnswer(int id, CreateAnswerDto dto)
         {
 
             Answer existingAnswer = await _answerRepository.getAsync(id);

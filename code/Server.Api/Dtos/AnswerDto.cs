@@ -30,14 +30,14 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record PostAnswerDto
+    public record CreateAnswerDto
     {
         public string userId { get; set; }
         public int questionId { get; set; }
         public string title { get; set; }
         public string body { get; set; }
 
-        public static PostAnswerDto Convert(Answer answer, User user)
+        public static CreateAnswerDto Convert(Answer answer, User user)
         {
             throw new System.Exception("method not implement");
         }
