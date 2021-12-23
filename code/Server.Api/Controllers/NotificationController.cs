@@ -34,7 +34,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<(IEnumerable<NotificationDto>, IEnumerable<NotificationDto>)>> getNotifications()
+        public async Task<ActionResult<(IEnumerable<NotificationDto>, IEnumerable<NotificationDto>)>> GetNotifications()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
