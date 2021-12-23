@@ -86,22 +86,22 @@ namespace Server.Api.Controllers
         [HttpGet("subscribed")]
 		public async Task<ActionResult<IEnumerable<questionDto>>> getSubscribedQuestions()
 		{
-			// ClaimsPrincipal currentUser = HttpContext.User;
-			// if (currentUser.HasClaim(c => c.Type == "userref"))
-			// {
-            //     string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                User user = await _userManager.FindByIdAsync("c1dae7b7-8094-4e40-b277-82768c5d08d7");
-                IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getByUserId("c1dae7b7-8094-4e40-b277-82768c5d08d7");
+			ClaimsPrincipal currentUser = HttpContext.User;
+			if (currentUser.HasClaim(c => c.Type == "userref"))
+			{
+                string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
+                IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getByUserId(userId);
                 IEnumerable<int> subscribedQuestionIds = subscriptions.Select(sub => sub.questionId);
 				IEnumerable<Question> subscribedQuestions = subscribedQuestionIds.Select(id => _questionRepository.getAsync(id))
                                                                                     .Select(task => task.Result);
 
+                User user = await _userManager.FindByIdAsync(userId);
 				return Ok(subscribedQuestions.Select(q => questionDto.convert(q, user)));
-			// }
-			// else
-			// {
-			// 	return Unauthorized();
-			// }
+			}
+			else
+			{
+				return Unauthorized();
+			}
 		}
 
         [HttpGet("{id}")]
