@@ -29,7 +29,7 @@ namespace Server.Api.Controllers
             _hubContext = hubContext;
         }
 
-        private async Task<IEnumerable<getCourseSubscriptionDto>> _getCourseSubscriptions()
+        private async Task<IEnumerable<getCourseSubscriptionDto>> _GetCourseSubscriptions()
         {
             IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.getAllAsync();
             IEnumerable<getCourseSubscriptionDto> getDtos = subscriptions.Select(subscription => getCourseSubscriptionDto.convert(subscription));
@@ -39,7 +39,7 @@ namespace Server.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<getCourseSubscriptionDto>>> getCourseSubscriptions()
         {
-            IEnumerable<getCourseSubscriptionDto> getDtos = await _getCourseSubscriptions();
+            IEnumerable<getCourseSubscriptionDto> getDtos = await _GetCourseSubscriptions();
             return Ok(getDtos);
         }
 
