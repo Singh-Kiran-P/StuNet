@@ -1,5 +1,4 @@
 ﻿// @Kiran
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -40,7 +39,6 @@ namespace Server.Api.Services
         {
             var key = Encoding.UTF8.GetBytes(_jwtSettings.GetSection("secretKey").Value);
             var secret = new SymmetricSecurityKey(key);
-
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
@@ -52,7 +50,6 @@ namespace Server.Api.Services
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_jwtSettings.GetSection("expiryInMinutes").Value)),
                 signingCredentials: signingCredentials);
-
             return tokenOptions;
         }
 
@@ -82,7 +79,6 @@ namespace Server.Api.Services
             {
                 var key = Encoding.UTF8.GetBytes(_jwtSettings.GetSection("secretKey").Value);
                 var secret = new SymmetricSecurityKey(key);
-
                 var tokenHandler = new JwtSecurityTokenHandler();
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
