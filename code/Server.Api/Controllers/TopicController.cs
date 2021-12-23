@@ -15,7 +15,7 @@ namespace Server.Api.Controllers
         private readonly ITopicRepository _topicRepository;
         private readonly ICourseRepository _courseRepository;
 
-        private static getTopicDto toDto(Topic topic)
+        private static getTopicDto ToDto(Topic topic)
         {
             return new getTopicDto
             {
@@ -30,6 +30,7 @@ namespace Server.Api.Controllers
                 questions = topic.questions.Select(question => onlyQuestionDto.convert(question)).ToList()
             };
         }
+        
         public TopicController(ITopicRepository topicRepository, ICourseRepository courseRepository)
         {
             _topicRepository = topicRepository;
@@ -40,7 +41,7 @@ namespace Server.Api.Controllers
         public async Task<ActionResult<IEnumerable<getTopicDto>>> GetTopics()
         {
             var topics = await _topicRepository.getAllAsync();
-            return Ok(topics.Select(topic => toDto(topic)));
+            return Ok(topics.Select(topic => ToDto(topic)));
         }
 
         [HttpGet("{id}")]
@@ -51,7 +52,7 @@ namespace Server.Api.Controllers
             {
                 return NotFound();
             }
-            return Ok(toDto(topic));
+            return Ok(ToDto(topic));
         }
 
         [HttpPost]
