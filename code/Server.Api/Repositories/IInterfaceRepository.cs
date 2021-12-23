@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Server.Api.Repositories
 {
-    public interface IInterfaceRepository<T>
+    public interface IRestfulRepository<T>
     {
         Task<T> getAsync(int id);
         Task<IEnumerable<T>> getAllAsync();

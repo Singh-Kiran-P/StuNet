@@ -4,7 +4,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-    public interface IChannelRepository : IInterfaceRepository<TextChannel>
+    public interface IChannelRepository : IRestfulRepository<TextChannel>
     {
         Task<ICollection<TextChannel>> getByCourseIdAsync(int courseId);
     }

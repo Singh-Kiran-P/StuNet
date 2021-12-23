@@ -9,7 +9,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-    public interface INotificationRepository<T> : IInterfaceRepository<T> where T : Notification
+    public interface INotificationRepository<T> : IRestfulRepository<T> where T : Notification
     {
         Task<ICollection<T>> getByUserId(string userId);
         Task createAllAync(IEnumerable<T> Notifications);

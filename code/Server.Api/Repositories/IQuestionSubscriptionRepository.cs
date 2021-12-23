@@ -4,7 +4,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-    public interface IQuestionSubscriptionRepository : IInterfaceRepository<QuestionSubscription>
+    public interface IQuestionSubscriptionRepository : IRestfulRepository<QuestionSubscription>
     {
         Task<ICollection<QuestionSubscription>> getByUserId(string userId);
         Task<ICollection<QuestionSubscription>> getByQuestionId(int id);

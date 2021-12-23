@@ -4,7 +4,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-    public interface IAnswerRepository : IInterfaceRepository<Answer>
+    public interface IAnswerRepository : IRestfulRepository<Answer>
     {
         Task<IEnumerable<Answer>> getByQuestionId(int questionId);
     }

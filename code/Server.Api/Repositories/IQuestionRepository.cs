@@ -4,7 +4,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-    public interface IQuestionRepository : IInterfaceRepository<Question>
+    public interface IQuestionRepository : IRestfulRepository<Question>
     {
         Task<IEnumerable<Question>> getByCourseIdAsync(int courseId);
     }
