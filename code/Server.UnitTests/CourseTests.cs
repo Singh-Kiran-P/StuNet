@@ -50,7 +50,7 @@ namespace Server.UnitTests
             //Then
             dto.Should().BeEquivalentTo(
                 course,
-                options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
+                options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
             );
             course.id.Should().NotBe(null);
         }
@@ -75,7 +75,7 @@ namespace Server.UnitTests
             //Then
             dto.Should().BeEquivalentTo(
                 course,
-                options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
+                options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
             );
             dto.topics.Should().NotBeNullOrEmpty();
         }

@@ -8,12 +8,12 @@ namespace Server.Api.Dtos
     public record GetQuestionDto
     {
         public int id { get; set; }
-        public ResponseUserDto user { get; set; }
-        public GetPartialCourseDto course { get; set; }
         public string title { get; set; }
         public string body { get; set; }
-        public ICollection<getOnlyTopicDto> topics { get; set; }
         public DateTime time { get; set; }
+        public ResponseUserDto user { get; set; }
+        public GetPartialCourseDto course { get; set; }
+        public ICollection<getOnlyTopicDto> topics { get; set; }
 
         public static GetQuestionDto Convert(Question question, User user)
         {
@@ -29,7 +29,7 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record OnlyQuestionDto
+    public record GetPartialQuestionDto
     {
         public int id { get; set; }
         public string title { get; set; }
@@ -37,9 +37,9 @@ namespace Server.Api.Dtos
         public DateTime time { get; set; }
         public ICollection<getOnlyTopicDto> topics { get; set; }
 
-        public static OnlyQuestionDto Convert(Question question)
+        public static GetPartialQuestionDto Convert(Question question)
         {
-            return new OnlyQuestionDto
+            return new GetPartialQuestionDto
             {
                 id = question.id,
                 title = question.title,
@@ -89,14 +89,14 @@ namespace Server.Api.Dtos
     //     }
     // }
     
-    public record createQuestionDto
+    public record CreateQuestionDto
     {
         public int courseId { get; set; }
         public string title { get; set; }
         public string body { get; set; }
         public ICollection<int> topicIds { get; set; }
 
-        public static createQuestionDto Convert(Question question, User user)
+        public static CreateQuestionDto Convert(Question question, User user)
         {
             throw new System.Exception("method not implement");
         }

@@ -119,7 +119,7 @@ namespace Server.Api.Controllers
 
         //[Authorize(Roles = "student")]
         [HttpPost]
-        public async Task<ActionResult<GetQuestionDto>> CreateQuestion(createQuestionDto dto)
+        public async Task<ActionResult<GetQuestionDto>> CreateQuestion(CreateQuestionDto dto)
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "username"))
@@ -194,7 +194,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateQuestion(int id, createQuestionDto dto)
+        public async Task<ActionResult> UpdateQuestion(int id, CreateQuestionDto dto)
         {
 
             var existingQuestion = await _questionRepository.getAsync(id);

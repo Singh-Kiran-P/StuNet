@@ -34,7 +34,7 @@ namespace Server.Api.Dtos
         public int id { get; set; }
         public string name { get; set; }
         public GetPartialCourseDto course { get; set; }
-        public ICollection<OnlyQuestionDto> questions { get; set; }
+        public ICollection<GetPartialQuestionDto> questions { get; set; }
 
         public static getTopicDto Convert(Topic topic)
         {

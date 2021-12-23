@@ -123,7 +123,7 @@ namespace Server.UnitTests
 			};
 			UserHandler.ConnectedIds[randomUser.Id] = "";
 
-			createQuestionDto questionToCreate = new()
+			CreateQuestionDto questionToCreate = new()
         	{
         		courseId = rand.Next(),
         		title = rand.Next().ToString(),
@@ -163,7 +163,7 @@ namespace Server.UnitTests
         	var createdQuestion = (result.Result as OkObjectResult).Value as GetQuestionDto;
         	questionToCreate.Should().BeEquivalentTo(
         		createdQuestion,
-        		options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
+        		options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
         	);
 
         	createdQuestion.id.Should().NotBe(null);
@@ -195,7 +195,7 @@ namespace Server.UnitTests
         public async Task UpdateQuestion_WithExistingItem_ReturnsNoContent()
         {
 
-            createQuestionDto randomQuestion = new()
+            CreateQuestionDto randomQuestion = new()
             {
                 courseId = rand.Next(),
                 title = rand.Next().ToString(),
