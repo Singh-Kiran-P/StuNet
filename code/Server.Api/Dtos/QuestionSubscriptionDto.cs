@@ -3,28 +3,29 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public record getByIdsQuestionSubscriptionDto
+    public record CreateQuestionSubscriptionDto
     {
-        public int id { get; set; }
-        public DateTime dateTime { get; set; }
-        public static getByIdsQuestionSubscriptionDto Convert(QuestionSubscription subscription)
+        public int questionId { get; set; }
+
+        public static GetQuestionSubscriptionDto Convert(QuestionSubscription subscription)
         {
-            return new getByIdsQuestionSubscriptionDto
+            return new GetQuestionSubscriptionDto
             {
-                id = subscription.id,
-                dateTime = subscription.dateTime,
+                userId = subscription.userId,
+                questionId = subscription.questionId,
             };
         }
     }
 
-    public record getQuestionSubscriptionDto
+    public record GetQuestionSubscriptionDto
     {
         public DateTime dateTime { get; set; }
         public string userId { get; set; }
         public int questionId { get; set; }
-        public static getQuestionSubscriptionDto Convert(QuestionSubscription subscription)
+
+        public static GetQuestionSubscriptionDto Convert(QuestionSubscription subscription)
         {
-            return new getQuestionSubscriptionDto
+            return new GetQuestionSubscriptionDto
             {
                 dateTime = subscription.dateTime,
                 userId = subscription.userId,
@@ -33,15 +34,17 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record createQuestionSubscriptionDto
+    public record GetByIdsQuestionSubscriptionDto
     {
-        public int questionId { get; set; }
-        public static getQuestionSubscriptionDto Convert(QuestionSubscription subscription)
+        public int id { get; set; }
+        public DateTime dateTime { get; set; }
+        
+        public static GetByIdsQuestionSubscriptionDto Convert(QuestionSubscription subscription)
         {
-            return new getQuestionSubscriptionDto
+            return new GetByIdsQuestionSubscriptionDto
             {
-                userId = subscription.userId,
-                questionId = subscription.questionId,
+                id = subscription.id,
+                dateTime = subscription.dateTime,
             };
         }
     }
