@@ -20,15 +20,15 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record CreateMessageDto
-    {
-        public int channelId { get; set; }
-        public string userMail { get; set; }
-        public string body { get; set; }
+    // public record CreateMessageDto
+    // {
+    //     public int channelId { get; set; }
+    //     public string userMail { get; set; }
+    //     public string body { get; set; }
 
-        public static CreateMessageDto Convert(Message message)
-        {
-            throw new Exception("method not implement");
-        }
-    }
+    //     public static CreateMessageDto Convert(Message message)
+    //     {
+    //         throw new Exception("method not implement");
+    //     }
+    // }
 }
