@@ -1,28 +1,20 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using ChatSample.Hubs;
-using FluentEmail.Core;
-using FluentEmail.Smtp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Server.Api.DataBase;
@@ -113,9 +105,6 @@ namespace Server.Api
               options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-            // Email FluentMail
-            setupFluentGmail(services);
-
             // Custom
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped<ITokenManager, JwtTokenManager>();
@@ -131,7 +120,6 @@ namespace Server.Api
             services.AddScoped<ICourseSubscriptionRepository, PgCourseSubscriptionRepository>();
             services.AddScoped<IQuestionSubscriptionRepository, PgQuestionSubscriptionRepository>();
 
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server.Api", Version = "v1" });
@@ -141,9 +129,14 @@ namespace Server.Api
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
+            // Email FluentMail
+            setupFluentEmail(services);
+
+            // Email MailKit
+            Receiver receiver = new(Configuration); // TODO inject??
         }
 
-        private void setupFluentGmail(IServiceCollection services)
+        private void setupFluentEmail(IServiceCollection services)
         {
             string from = Configuration.GetSection("Mail")["From"];
             string senderEmail = Configuration.GetSection("Mail")["G-SenderEmail"];
