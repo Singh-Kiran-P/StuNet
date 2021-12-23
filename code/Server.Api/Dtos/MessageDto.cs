@@ -16,7 +16,7 @@ namespace Server.Api.Dtos
         public string body { get; set; }
         public DateTime time { get; set; }
 
-        public static MessageDto convert(Message msg)
+        public static MessageDto Convert(Message msg)
         {
             return new()
             {
