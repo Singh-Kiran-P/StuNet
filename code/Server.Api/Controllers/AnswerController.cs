@@ -46,7 +46,7 @@ namespace Server.Api.Controllers
                 foreach (var answer in answers)
                 {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    res.Add(ResponseAnswerDto.convert(answer, user));
+                    res.Add(ResponseAnswerDto.Convert(answer, user));
                 }
                 return Ok(res);
             }
@@ -67,7 +67,7 @@ namespace Server.Api.Controllers
                 foreach (var answer in answers)
                 {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    res.Add(ResponseAnswerDto.convert(answer, user));
+                    res.Add(ResponseAnswerDto.Convert(answer, user));
                 }
                 return Ok(res);
             }
@@ -89,7 +89,7 @@ namespace Server.Api.Controllers
                     return NotFound();
                 }
 
-                return Ok(ResponseAnswerDto.convert(answer, user));
+                return Ok(ResponseAnswerDto.Convert(answer, user));
             }
             catch
             {
@@ -132,7 +132,7 @@ namespace Server.Api.Controllers
                     time = answer.time
                 }));
 
-                var ret = ResponseAnswerDto.convert(answer, user);
+                var ret = ResponseAnswerDto.Convert(answer, user);
                 await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
                 return Ok(ret);
             }

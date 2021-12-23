@@ -14,7 +14,7 @@ namespace Server.Api.Dtos
         public DateTime time { get; set; }
         public bool isAccepted { get; set; }
 
-        public static ResponseAnswerDto convert(Answer answer, User user)
+        public static ResponseAnswerDto Convert(Answer answer, User user)
         {
             return new ResponseAnswerDto
             {
