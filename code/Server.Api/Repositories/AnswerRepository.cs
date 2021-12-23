@@ -1,10 +1,10 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Api.DataBase;
 using Server.Api.Models;
-using System.Linq;
 
 namespace Server.Api.Repositories
 {
@@ -12,7 +12,7 @@ namespace Server.Api.Repositories
     {
         Task<IEnumerable<Answer>> getByQuestionId(int questionId);
     }
-    
+
     public class PgAnswerRepository : IAnswerRepository
     {
         private readonly IDataContext _context;
@@ -64,7 +64,9 @@ namespace Server.Api.Repositories
         {
             var answerToUpdate = await _context.Answers.FindAsync(answer.id);
             if (answerToUpdate == null)
+            {
                 throw new NullReferenceException();
+            }
             answerToUpdate.title = answer.title;
             answerToUpdate.body = answer.body;
             answerToUpdate.userId = answer.userId;

@@ -75,8 +75,9 @@ namespace Server.Api.Repositories
         {
             CourseSubscription coursesubscription = await _context.CourseSubscriptions.FindAsync(id);
             if (coursesubscription == null)
+            {
                 throw new NullReferenceException();
-
+            }
             _context.CourseSubscriptions.Remove(coursesubscription);
             await _context.SaveChangesAsync();
         }

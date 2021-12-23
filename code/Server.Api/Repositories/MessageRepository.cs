@@ -1,9 +1,9 @@
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Api.DataBase;
 using Server.Api.Models;
-using System.Linq;
 
 namespace Server.Api.Repositories
 {
@@ -19,8 +19,8 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Message>> getAllAsync(int channelId)
         {
             return await _context.Messages
-            .Where(m => m.channelId == channelId)
-            .ToListAsync();
+                .Where(m => m.channelId == channelId)
+                .ToListAsync();
         }
 
         public async Task createAsync(Message message)
