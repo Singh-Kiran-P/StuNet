@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using Server.Api.Models;
@@ -30,7 +29,7 @@ namespace Server.Api.Dtos
 
     public record ResponseUserDto
     {
-        //public string id {get;set;}
+        //public string id { get;set; }
         public string email { get; set; }
 
         //TODO: add subscribed courses, maybe answer and question ids?
@@ -43,5 +42,4 @@ namespace Server.Api.Dtos
             };
         }
     }
-
 }

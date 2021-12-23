@@ -22,6 +22,7 @@ namespace Server.Api.Dtos
                 time = notification.time
             };
         }
+        
         public static NotificationDto convert(QuestionNotification notification)
         {
             return new NotificationDto

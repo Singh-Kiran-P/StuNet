@@ -1,8 +1,5 @@
 using System;
-using Server.Api.Dtos;
 using Server.Api.Models;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Server.Api.Dtos
 {
@@ -11,7 +8,6 @@ namespace Server.Api.Dtos
         public int channelId { get; set; }
         public string userMail { get; set; }
         public string body { get; set; }
-
     }
 
     public class MessageDto
@@ -30,6 +26,4 @@ namespace Server.Api.Dtos
             };
         }
     }
-
-
 }

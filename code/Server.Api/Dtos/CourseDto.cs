@@ -1,8 +1,7 @@
-using System;
 using Server.Api.Models;
 using System.Collections.Generic;
 
-namespace Server.Api.Dtos // controllers?
+namespace Server.Api.Dtos
 {
     public record CourseDto
     {
@@ -20,7 +19,6 @@ namespace Server.Api.Dtos // controllers?
                 description = course.description
             };
         }
-
     }
 
     public record GetAllCourseDto
@@ -30,7 +28,6 @@ namespace Server.Api.Dtos // controllers?
         public string number { get; set; }
         public string description { get; set; }
         public ICollection<getOnlyTopicDto> topics;
-
     }
 
     public record GetCourseDto

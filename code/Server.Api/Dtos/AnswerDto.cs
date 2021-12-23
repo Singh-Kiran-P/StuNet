@@ -1,6 +1,5 @@
 using System;
 using Server.Api.Models;
-using System.Collections.Generic;
 
 namespace Server.Api.Dtos
 {
@@ -14,6 +13,7 @@ namespace Server.Api.Dtos
         public string body { get; set; }
         public DateTime time { get; set; }
         public bool isAccepted { get; set; }
+
         public static ResponseAnswerDto convert(Answer answer, User user)
         {
             return new ResponseAnswerDto
@@ -36,6 +36,5 @@ namespace Server.Api.Dtos
         public int questionId { get; set; }
         public string title { get; set; }
         public string body { get; set; }
-
     }
 }
