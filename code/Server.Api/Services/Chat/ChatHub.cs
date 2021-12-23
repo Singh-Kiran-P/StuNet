@@ -35,9 +35,7 @@ namespace ChatSample.Hubs
         public async Task SendMessageToChannel(string message, int channelId)
         {
             System.Console.WriteLine(Context.ConnectionId + " sent message to " + channelId.ToString());
-
             string userEmail = getCurrentUserEmail();
-
             Message m = new()
             {
                 userMail = userEmail,
@@ -45,15 +43,12 @@ namespace ChatSample.Hubs
                 body = message,
                 time = DateTime.UtcNow
             };
-
             await _messageRepository.createAsync(m);
-
             await Clients.Group("Channel " + channelId.ToString()).SendAsync("messageReceived", userEmail, message, DateTime.UtcNow);
         }
 
         public Task JoinChannel(int channelId)
         {
-
             System.Console.WriteLine(Context.ConnectionId + " joined Channel: " + channelId.ToString());
             return Groups.AddToGroupAsync(Context.ConnectionId, "Channel " + channelId.ToString());
         }
@@ -67,19 +62,16 @@ namespace ChatSample.Hubs
         public override async Task OnConnectedAsync()
         {
             // await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
-
-            System.Console.WriteLine("connect: " + Context.ConnectionId);
-
-			UserHandler.ConnectedIds[getCurrentUserId()] = Context.ConnectionId;
-			await AddUserToSubscribedGroups();
-			await base.OnConnectedAsync();
+            System.Console.WriteLine("connect: " + Context.ConnectionId); //TODO: remove line
+            UserHandler.ConnectedIds[getCurrentUserId()] = Context.ConnectionId;
+            await AddUserToSubscribedGroups();
+            await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             // await Clients.All.SendAsync("UserDisconnected", Context.ConnectionId);
-
-            System.Console.WriteLine(Context.ConnectionId + " disconnected");
+            System.Console.WriteLine(Context.ConnectionId + " disconnected"); //TODO: remove line
             UserHandler.ConnectedIds.Remove(getCurrentUserId());
             await base.OnDisconnectedAsync(exception);
         }
@@ -89,7 +81,6 @@ namespace ChatSample.Hubs
             string userId = getCurrentUserId();
             ICollection<CourseSubscription> subscribedCourses = await _courseSubscriptionRepository.getByUserId(userId);
             ICollection<QuestionSubscription> subscribedQuestions = await _questionSubscriptionRepository.getByUserId(userId);
-
             await Task.WhenAll(subscribedCourses.Select(sc => Groups.AddToGroupAsync(Context.ConnectionId, "Course " + sc.courseId.ToString())));
             await Task.WhenAll(subscribedQuestions.Select(sq => Groups.AddToGroupAsync(Context.ConnectionId, "Question " + sq.questionId.ToString())));
         }
