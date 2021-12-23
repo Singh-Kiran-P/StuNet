@@ -3,14 +3,14 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public class createMessageDto
+    public record createMessageDto
     {
         public int channelId { get; set; }
         public string userMail { get; set; }
         public string body { get; set; }
     }
 
-    public class MessageDto
+    public record MessageDto
     {
         public string userMail { get; set; }
         public string body { get; set; }

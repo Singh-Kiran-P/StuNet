@@ -3,7 +3,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public class getByIdsCourseSubscriptionDto
+    public record getByIdsCourseSubscriptionDto
     {
         public int id { get; set; }
         public DateTime dateTime { get; set; }
@@ -17,7 +17,7 @@ namespace Server.Api.Dtos
         }
     }
 
-    public class getCourseSubscriptionDto
+    public record getCourseSubscriptionDto
     {
         public DateTime dateTime { get; set; }
         public string userId { get; set; }
@@ -33,7 +33,7 @@ namespace Server.Api.Dtos
         }
     }
 
-    public class createCourseSubscriptionDto
+    public record createCourseSubscriptionDto
     {
         public int courseId { get; set; }
         public static getCourseSubscriptionDto convert(CourseSubscription subscription)

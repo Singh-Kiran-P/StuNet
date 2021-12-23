@@ -3,7 +3,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public class NotificationDto
+    public record NotificationDto
     {
         public int id { get; set; }
         public int notifierId { get; set; }
@@ -22,7 +22,7 @@ namespace Server.Api.Dtos
                 time = notification.time
             };
         }
-        
+
         public static NotificationDto convert(QuestionNotification notification)
         {
             return new NotificationDto

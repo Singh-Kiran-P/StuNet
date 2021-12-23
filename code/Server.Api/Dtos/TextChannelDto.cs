@@ -1,12 +1,10 @@
-using System;
-using Server.Api.Dtos;
 using Server.Api.Models;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Server.Api.Dtos
 {
-    public class getOnlyChannelDto
+    public record getOnlyChannelDto
     {
         public int id { get; set; }
         public string name { get; set; }
@@ -21,7 +19,7 @@ namespace Server.Api.Dtos
         }
     }
 
-    public class getChannelDto
+    public record getChannelDto
     {
         public int id { get; set; }
         public string name { get; set; }
@@ -40,7 +38,7 @@ namespace Server.Api.Dtos
         }
     }
 
-    public class createChannelDto
+    public record createChannelDto
     {
         public string name { get; set; }
         public int courseId { get; set; }
