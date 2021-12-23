@@ -7,7 +7,7 @@ namespace Server.Api.Dtos
     {
         public int id { get; set; }
         public DateTime dateTime { get; set; }
-        public static getByIdsCourseSubscriptionDto convert(CourseSubscription subscription)
+        public static getByIdsCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
             return new getByIdsCourseSubscriptionDto
             {
@@ -22,7 +22,7 @@ namespace Server.Api.Dtos
         public DateTime dateTime { get; set; }
         public string userId { get; set; }
         public int courseId { get; set; }
-        public static getCourseSubscriptionDto convert(CourseSubscription subscription)
+        public static getCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
             return new getCourseSubscriptionDto
             {
@@ -36,7 +36,7 @@ namespace Server.Api.Dtos
     public record createCourseSubscriptionDto
     {
         public int courseId { get; set; }
-        public static getCourseSubscriptionDto convert(CourseSubscription subscription)
+        public static getCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
             return new getCourseSubscriptionDto
             {
