@@ -23,6 +23,7 @@ namespace Server.Api.DataBase
         DbSet<QuestionSubscription> QuestionSubscriptions { get; set; } 
         DbSet<AnswerNotification> AnswerNotifications { get; set; } 
         DbSet<QuestionNotification> QuestionNotifications { get; set; }
+        
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
