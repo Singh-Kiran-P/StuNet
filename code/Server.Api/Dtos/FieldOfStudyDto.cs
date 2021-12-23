@@ -17,14 +17,14 @@ namespace Server.Api.Dtos
         }
     }
     
-    public record createFieldOfStudyDto
+    public record CreateFieldOfStudyDto
     {
         [Required()]
         public string name { get; set; }
         [Required()]
         public bool isBachelor { get; set; }
 
-        public static createFieldOfStudyDto Convert(FieldOfStudy fieldOfStudy)
+        public static CreateFieldOfStudyDto Convert(FieldOfStudy fieldOfStudy)
         {
             throw new System.Exception("method not implement");
         }

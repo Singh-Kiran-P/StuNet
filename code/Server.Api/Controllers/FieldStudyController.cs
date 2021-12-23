@@ -38,7 +38,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateFieldOfStudy(createFieldOfStudyDto createFieldOfStudyDto)
+        public async Task<ActionResult> CreateFieldOfStudy(CreateFieldOfStudyDto createFieldOfStudyDto)
         {
             string _fullname = createFieldOfStudyDto.name
                 + "-"
