@@ -23,9 +23,9 @@ namespace Server.Api.Controllers
         // private readonly ITopicRepository _topicRepository;
         private readonly IQuestionRepository _questionRepository;
 		private readonly IHubContext<ChatHub> _hubContext;
-		private readonly IAnswerNotificationRepository _notificationRepository;
+		private readonly INotificationRepository<AnswerNotification> _notificationRepository;
 		private readonly IQuestionSubscriptionRepository _subscriptionRepository;
-		public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, IAnswerNotificationRepository notificationRepository, IQuestionSubscriptionRepository subscriptionRepository)
+		public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, IQuestionSubscriptionRepository subscriptionRepository)
         {
             _answerRepository = answerRepository;
             _userManager = userManager;
@@ -178,7 +178,6 @@ namespace Server.Api.Controllers
         [HttpPut("SetAccepted/{id}")]
         public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
         {
-            System.Console.WriteLine(accepted);
             Answer existingAnswer = await _answerRepository.getAsync(id);
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref")) {

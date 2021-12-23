@@ -24,11 +24,11 @@ namespace Server.Api.Controllers
         private readonly ICourseRepository _courseRepository;
         private readonly UserManager<User> _userManager;
 		private readonly IHubContext<ChatHub> _hubContext;
-		private readonly IQuestionNotificationRepository _notificationRepository;
+		private readonly INotificationRepository<QuestionNotification> _notificationRepository;
 		private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
 		private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
 
-		public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, IQuestionNotificationRepository notificationRepository, ICourseSubscriptionRepository subscriptionRepository, IQuestionSubscriptionRepository questionSubscriptionRepository)
+		public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, INotificationRepository<QuestionNotification> notificationRepository, ICourseSubscriptionRepository subscriptionRepository, IQuestionSubscriptionRepository questionSubscriptionRepository)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;

@@ -20,10 +20,10 @@ namespace Server.Api.Controllers
     public class NotificationController : ControllerBase
     {
         
-        private readonly IQuestionNotificationRepository _questionNotificationRepository;
-        private readonly IAnswerNotificationRepository _answerNotificationRepository;
+        private readonly INotificationRepository<QuestionNotification> _questionNotificationRepository;
+        private readonly INotificationRepository<AnswerNotification> _answerNotificationRepository;
 
-		public NotificationController(IQuestionNotificationRepository questionNotificationRepository, IAnswerNotificationRepository answerNotificationRepository)
+		public NotificationController(INotificationRepository<QuestionNotification> questionNotificationRepository, INotificationRepository<AnswerNotification> answerNotificationRepository)
         {
             _questionNotificationRepository = questionNotificationRepository;
 			_answerNotificationRepository = answerNotificationRepository;
