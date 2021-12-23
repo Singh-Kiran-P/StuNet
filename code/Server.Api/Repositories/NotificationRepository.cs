@@ -9,12 +9,12 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-	public interface INotificationRepository<T> : IInterfaceRepository<T> where T : Notification
+    public interface INotificationRepository<T> : IInterfaceRepository<T> where T : Notification
     {
-		Task<ICollection<T>> getByUserId(string userId);
-		Task createAllAync(IEnumerable<T> Notifications);
+        Task<ICollection<T>> getByUserId(string userId);
+        Task createAllAync(IEnumerable<T> Notifications);
 
-	}
+    }
 
     public abstract class PgNotificationRepository<T, V> : INotificationRepository<T> where T : Notification
     {
@@ -25,14 +25,15 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-		protected abstract DbSet<T> getDbSet();
-		protected abstract IIncludableQueryable<T, V> getIncludes();
+        protected abstract DbSet<T> getDbSet();
+        protected abstract IIncludableQueryable<T, V> getIncludes();
 
-		public async Task<ICollection<T>> getByUserId(string userId) {
-			return await getIncludes()
+        public async Task<ICollection<T>> getByUserId(string userId)
+        {
+            return await getIncludes()
             .Where(s => userId == s.userId)
             .ToListAsync();
-		}
+        }
 
         public async Task<IEnumerable<T>> getAllAsync()
         {
@@ -58,10 +59,11 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-		public async Task createAllAync(IEnumerable<T> notifications) {
-			getDbSet().AddRange(notifications);
-			await _context.SaveChangesAsync();
-		}
+        public async Task createAllAync(IEnumerable<T> notifications)
+        {
+            getDbSet().AddRange(notifications);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task deleteAsync(int id)
         {

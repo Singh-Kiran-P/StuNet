@@ -10,18 +10,19 @@ using Server.Api.Models;
 namespace Server.Api.Repositories
 {
 
-	public class PgAnswerNotificationRepository : PgNotificationRepository<AnswerNotification, Answer>
-	{
+    public class PgAnswerNotificationRepository : PgNotificationRepository<AnswerNotification, Answer>
+    {
 
-        public PgAnswerNotificationRepository(IDataContext context) : base(context) {}
+        public PgAnswerNotificationRepository(IDataContext context) : base(context) { }
 
-		protected override DbSet<AnswerNotification> getDbSet()
-		{
-			return _context.AnswerNotifications;
-		}
+        protected override DbSet<AnswerNotification> getDbSet()
+        {
+            return _context.AnswerNotifications;
+        }
 
-        protected override IIncludableQueryable<AnswerNotification, Answer> getIncludes() {
-			return getDbSet().Include(n => n.answer);
-		}
-	}
+        protected override IIncludableQueryable<AnswerNotification, Answer> getIncludes()
+        {
+            return getDbSet().Include(n => n.answer);
+        }
+    }
 }
