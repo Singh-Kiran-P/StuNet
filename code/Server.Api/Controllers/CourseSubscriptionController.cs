@@ -37,7 +37,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<getCourseSubscriptionDto>>> getCourseSubscriptions()
+        public async Task<ActionResult<IEnumerable<getCourseSubscriptionDto>>> GetCourseSubscriptions()
         {
             IEnumerable<getCourseSubscriptionDto> getDtos = await _GetCourseSubscriptions();
             return Ok(getDtos);
@@ -76,7 +76,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<createCourseSubscriptionDto>> createCourseSubscription(createCourseSubscriptionDto dto)
+        public async Task<ActionResult<createCourseSubscriptionDto>> CreateCourseSubscription(createCourseSubscriptionDto dto)
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "username"))
