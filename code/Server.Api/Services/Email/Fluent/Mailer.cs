@@ -1,26 +1,17 @@
 using System;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Configuration;
-using SendGrid;
-using SendGrid.Helpers.Mail;
-using Server.Api.Models; //for gmail integration
-using System.Net.Mail; //for gmail integration
-using System.Text;
-using FluentEmail.Core;
-using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Dynamic;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Linq;
-// https://blog.zhaytam.com/2019/06/08/emailsender-service-fluent-email-razor-templates/
+using System.Threading.Tasks;
+using FluentEmail.Core;
+using Microsoft.Extensions.Logging;
 
-// https://markscodingspot.com/send-html-emails-with-attachments-using-fluent-email-csharp-and-net-5/
 namespace Server.Api.Services
 {
-
+    // https://blog.zhaytam.com/2019/06/08/emailsender-service-fluent-email-razor-templates/
+    // https://markscodingspot.com/send-html-emails-with-attachments-using-fluent-email-csharp-and-net-5/
     public class Mailer : IEmailSender
     {
 
@@ -48,6 +39,7 @@ namespace Server.Api.Services
 
             return result.Successful;
         }
+        
         private static ExpandoObject ToExpando(object model)
         {
             if (model is ExpandoObject exp)

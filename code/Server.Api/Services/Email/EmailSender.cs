@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -13,13 +12,13 @@ namespace Server.Api.Services
 {
     public class EmailSender : IEmailSender
     {
+        private string _ApiKey { get; } //set only via Secret Manager
+
         public EmailSender()
         {
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: false).Build();
             _ApiKey = config.GetValue<string>("SendGridKey");
         }
-
-        private string _ApiKey { get; } //set only via Secret Manager
 
         public void SendEmail(string email, string subject, string message)
         {
