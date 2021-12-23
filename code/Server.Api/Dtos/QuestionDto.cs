@@ -13,7 +13,7 @@ namespace Server.Api.Dtos
         public DateTime time { get; set; }
         public ResponseUserDto user { get; set; }
         public GetPartialCourseDto course { get; set; }
-        public ICollection<getOnlyTopicDto> topics { get; set; }
+        public ICollection<GetPartialTopicDto> topics { get; set; }
 
         public static GetQuestionDto Convert(Question question, User user)
         {
@@ -23,7 +23,7 @@ namespace Server.Api.Dtos
                 course = GetPartialCourseDto.Convert(question.course),
                 title = question.title,
                 body = question.body,
-                topics = question.topics.Select(topic => getOnlyTopicDto.Convert(topic)).ToList(),
+                topics = question.topics.Select(topic => GetPartialTopicDto.Convert(topic)).ToList(),
                 time = question.time
             };
         }
@@ -35,7 +35,7 @@ namespace Server.Api.Dtos
         public string title { get; set; }
         public string body { get; set; }
         public DateTime time { get; set; }
-        public ICollection<getOnlyTopicDto> topics { get; set; }
+        public ICollection<GetPartialTopicDto> topics { get; set; }
 
         public static GetPartialQuestionDto Convert(Question question)
         {
@@ -44,7 +44,7 @@ namespace Server.Api.Dtos
                 id = question.id,
                 title = question.title,
                 body = question.body,
-                topics = question.topics.Select(topic => getOnlyTopicDto.Convert(topic)).ToList(),
+                topics = question.topics.Select(topic => GetPartialTopicDto.Convert(topic)).ToList(),
                 time = question.time
             };
         }

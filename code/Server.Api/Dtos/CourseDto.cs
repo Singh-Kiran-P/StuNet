@@ -9,7 +9,7 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
-        public ICollection<getOnlyTopicDto> topics;
+        public ICollection<GetPartialTopicDto> topics;
 
         public static GetAllCourseDto Convert(Course course)
         {
@@ -23,7 +23,7 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
-        public ICollection<getOnlyTopicDto> topics;
+        public ICollection<GetPartialTopicDto> topics;
         public ICollection<GetPartialChannelDto> channels;
 
         public static GetCourseDto Convert(Course course)

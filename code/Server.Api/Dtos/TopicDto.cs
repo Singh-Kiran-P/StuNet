@@ -3,25 +3,27 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public record createTopicDto
+    public record GetTopicDto
     {
+        public int id { get; set; }
         public string name { get; set; }
-        public int courseId { get; set; }
+        public GetPartialCourseDto course { get; set; }
+        public ICollection<GetPartialQuestionDto> questions { get; set; }
 
-        public static createTopicDto Convert(Topic topic)
+        public static GetTopicDto Convert(Topic topic)
         {
             throw new System.Exception("method not implement");
         }
     }
 
-    public record getOnlyTopicDto
+    public record GetPartialTopicDto
     {
         public int id { get; set; }
         public string name { get; set; }
 
-        public static getOnlyTopicDto Convert(Topic topic)
+        public static GetPartialTopicDto Convert(Topic topic)
         {
-            return new getOnlyTopicDto
+            return new GetPartialTopicDto
                 {
                     id = topic.id,
                     name = topic.name
@@ -29,14 +31,12 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record getTopicDto
+    public record CreateTopicDto
     {
-        public int id { get; set; }
         public string name { get; set; }
-        public GetPartialCourseDto course { get; set; }
-        public ICollection<GetPartialQuestionDto> questions { get; set; }
+        public int courseId { get; set; }
 
-        public static getTopicDto Convert(Topic topic)
+        public static CreateTopicDto Convert(Topic topic)
         {
             throw new System.Exception("method not implement");
         }

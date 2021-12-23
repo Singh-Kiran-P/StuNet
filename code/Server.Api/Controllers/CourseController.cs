@@ -37,7 +37,7 @@ namespace Server.Api.Controllers
                    name = course.name,
                    number = course.number,
                    description = course.description,
-                   topics = course.topics.Select(topic => new getOnlyTopicDto() { name = topic.name, id = topic.id }).ToList()
+                   topics = course.topics.Select(topic => new GetPartialTopicDto() { name = topic.name, id = topic.id }).ToList()
                }
             );
             return getDtos;
@@ -84,7 +84,7 @@ namespace Server.Api.Controllers
                 name = course.name,
                 number = course.number,
                 description = course.description,
-                topics = course.topics.Select(topic => new getOnlyTopicDto(){ id = topic.id, name = topic.name }).ToList(),
+                topics = course.topics.Select(topic => new GetPartialTopicDto(){ id = topic.id, name = topic.name }).ToList(),
                 channels = course.channels.Select(channel => new GetPartialChannelDto(){ id = channel.id, name = channel.name }).ToList()
             };
             return Ok(getDto);

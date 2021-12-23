@@ -168,11 +168,11 @@ namespace Server.UnitTests
 
         	createdQuestion.id.Should().NotBe(null);
         	createdQuestion.topics.Should().NotBeNullOrEmpty();
-        	foreach (getOnlyTopicDto t in createdQuestion.topics)
+        	foreach (GetPartialTopicDto t in createdQuestion.topics)
         	{
         		t.Should().BeEquivalentTo(
         			randomTopic,
-        			options => options.ComparingByMembers<getOnlyTopicDto>().ExcludingMissingMembers()
+        			options => options.ComparingByMembers<GetPartialTopicDto>().ExcludingMissingMembers()
         		);
         	}
         	createdQuestion.time.Should().BeCloseTo(DateTime.UtcNow, new TimeSpan(0, 0, 0, 0, 500)); // 500ms
