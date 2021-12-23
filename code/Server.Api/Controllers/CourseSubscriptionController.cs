@@ -12,7 +12,6 @@ using Server.Api.Repositories;
 using Microsoft.AspNetCore.SignalR;
 using ChatSample.Hubs;
 
-
 namespace Server.Api.Controllers
 {
     [ApiController]
@@ -49,7 +48,9 @@ namespace Server.Api.Controllers
         {
             CourseSubscription subscription = await _courseSubscriptionRepository.getAsync(id);
             if (subscription == null)
+            {
                 return NotFound();
+            }
 
             getCourseSubscriptionDto getDto = new()
             {
@@ -57,7 +58,6 @@ namespace Server.Api.Controllers
                 userId = subscription.userId,
                 courseId = subscription.courseId,
             };
-
             return Ok(getDto);
         }
 
@@ -83,7 +83,6 @@ namespace Server.Api.Controllers
             {
                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 User user = await _userManager.FindByEmailAsync(userEmail);
-
                 CourseSubscription subscription = new()
                 {
                     dateTime = DateTime.UtcNow,
@@ -124,7 +123,7 @@ namespace Server.Api.Controllers
             {
                 return NotFound();
             }
-            return NoContent();
+            return NoContent(); //FIXME: this trailing return doesn't make sense, right?
         }
     }
 }

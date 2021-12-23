@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FuzzySharp;
+// using FuzzySharp;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
@@ -37,9 +37,7 @@ namespace Server.Api.Controllers
                    name = course.name,
                    number = course.number,
                    description = course.description,
-                   topics = course.topics.Select(topic =>
-                       new getOnlyTopicDto() { name = topic.name, id = topic.id }
-                        ).ToList(),
+                   topics = course.topics.Select(topic => new getOnlyTopicDto() { name = topic.name, id = topic.id }).ToList()
                }
             );
             return getDtos;
@@ -75,7 +73,9 @@ namespace Server.Api.Controllers
         {
             Course course = await _courseRepository.getAsync(id);
             if (course == null)
+            {
                 return NotFound();
+            }
 
             GetCourseDto getDto = new()
             {
@@ -83,14 +83,9 @@ namespace Server.Api.Controllers
                 name = course.name,
                 number = course.number,
                 description = course.description,
-                topics = course.topics.Select(topic =>
-                    new getOnlyTopicDto() { id = topic.id, name = topic.name }
-                ).ToList(),
-                channels = course.channels.Select(channel =>
-                    new getOnlyChannelDto() { id = channel.id, name = channel.name }
-                ).ToList()
+                topics = course.topics.Select(topic => new getOnlyTopicDto(){ id = topic.id, name = topic.name }).ToList(),
+                channels = course.channels.Select(channel => new getOnlyChannelDto(){ id = channel.id, name = channel.name }).ToList()
             };
-
             return Ok(getDto);
         }
 
@@ -99,14 +94,16 @@ namespace Server.Api.Controllers
         public async Task<ActionResult<GetCourseDto>> searchByName([FromQuery] string name)
         {
             IEnumerable<GetAllCourseDto> getDtos = await _getCourseAsync();
-
-
             IEnumerable<GetAllCourseDto> searchResults = StringMatcher.FuzzyMatchObject(getDtos, name);
 
             if (searchResults == null || !searchResults.Any())
+            {
                 return NoContent();
+            }
             else
+            {
                 return Ok(searchResults);
+            }
         }
 
         [HttpPost]
@@ -144,9 +141,8 @@ namespace Server.Api.Controllers
                 id = id,
                 name = courseDto.name,
                 number = courseDto.number,
-                description = courseDto.description,
+                description = courseDto.description
             };
-
             await _courseRepository.updateAsync(course);
             return NoContent();
         }

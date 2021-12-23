@@ -1,10 +1,10 @@
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
-using System.Linq;
 
 namespace Server.Api.Controllers
 {
@@ -48,8 +48,9 @@ namespace Server.Api.Controllers
         {
             var topic = await _topicRepository.getAsync(id);
             if (topic == null)
+            {
                 return NotFound();
-
+            }
             return Ok(toDto(topic));
         }
 
@@ -62,7 +63,6 @@ namespace Server.Api.Controllers
                 course = await _courseRepository.getAsync(dto.courseId),
                 questions = new List<Question>()
             };
-
             await _topicRepository.createAsync(topic);
             return Ok(topic);
         }
@@ -83,7 +83,6 @@ namespace Server.Api.Controllers
                 name = dto.name,
                 course = await _courseRepository.getAsync(dto.courseId)
             };
-
             await _topicRepository.updateAsync(topic);
             return NoContent();
         }

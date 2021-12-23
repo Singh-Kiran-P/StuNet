@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Security.Claims;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Services;
-using System.Linq;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using ChatSample.Hubs;
@@ -40,35 +39,12 @@ namespace Server.Api.Controllers
             _questionSubscriptionRepository = questionSubscriptionRepository;
         }
 
-        // private static questionDto toDto(Question question, User user)
-        // {
-        //     return new questionDto
-        //     {
-        //         id = question.id,
-        //         user = question.user,
-        //         course = new getOnlyCourseDto
-        //         {
-        //             id = question.course.id,
-        //             name = question.course.name,
-        //             number = question.course.number,
-        //         },
-        //         title = question.title,
-        //         body = question.body,
-        //         topics = question.topics.Select(topic => new getOnlyTopicDto
-        //         {
-        //             id = topic.id,
-        //             name = topic.name
-        //         }).ToList(),
-        //         time = question.time
-        //     };
-        // }
+        // FIXME: I removed commented questionDto of 3 weeks old here
 
         //[Authorize(Roles = "student")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<questionDto>>> GetQuestions()
         {
-            // var questions = await _questionRepository.getAllAsync();
-            // return Ok(questions.Select(question => questionDto.convert(question)));
             try
             {
                 var questions = await _questionRepository.getAllAsync();
@@ -80,7 +56,10 @@ namespace Server.Api.Controllers
                 }
                 return Ok(res);
             }
-            catch { return BadRequest("Error finding all questions"); }
+            catch
+            {
+                return BadRequest("Error finding all questions");
+            }
         }
 
         [HttpGet("subscribed")]
@@ -107,20 +86,21 @@ namespace Server.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<questionDto>> GetQuestion(int id)
         {
-            // var question = await _questionRepository.getAsync(id);
-            // if (question == null)
-            //     return NotFound();
-            // return Ok(toDto(question));
             try
             {
                 var question = await _questionRepository.getAsync(id);
                 if (question == null)
+                {
                     return NotFound();
+                }
                 User user = await _userManager.FindByIdAsync(question.userId);
 
                 return Ok(questionDto.convert(question, user));
             }
-            catch { return BadRequest("Error finding question"); }
+            catch
+            {
+                return BadRequest("Error finding question");
+            }
         }
 
         [HttpGet("GetQuestionsByCourseId/search/{courseId}")]
@@ -147,18 +127,23 @@ namespace Server.Api.Controllers
                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 User user = await _userManager.FindByEmailAsync(userEmail);
                 Course c = _courseRepository.getAsync(dto.courseId).Result;
+                ICollection<Topic> topics = dto.topicIds
+                    .Select(id => _topicRepository.getAsync(id)) //FIXME: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
+                    .Select(task => task.Result)
+                    .ToList();
 
-                ICollection<Topic> topics = new List<Topic>();
-                topics = dto.topicIds.Select(id => _topicRepository.getAsync(id)) //TODO: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
-                                                .Select(task => task.Result)
-                                                .ToList();
-
-                if (c == null) { return BadRequest("Course does not exist"); }
-                if (topics.Contains(null)) { return BadRequest("One of the topics does not exist"); }
+                if (c == null)
+                {
+                    return BadRequest("Course does not exist");
+                }
+                else if (topics.Contains(null))
+                {
+                    return BadRequest("One of the topics does not exist");
+                }
                 Question question = new()
                 {
                     title = dto.title,
-                    userId = user.Id, //TODO
+                    userId = user.Id, //TODO: do what?
                     course = c,
                     body = dto.body,
                     // files = createQuestionDto.files TODO
@@ -204,7 +189,6 @@ namespace Server.Api.Controllers
             {
                 return NotFound();
             }
-
             await _questionRepository.deleteAsync(id);
             return NoContent();
         }
@@ -231,7 +215,6 @@ namespace Server.Api.Controllers
                                                 .ToList(),
                 time = DateTime.UtcNow
             };
-
             await _questionRepository.updateAsync(updatedQuestion);
             return NoContent();
         }

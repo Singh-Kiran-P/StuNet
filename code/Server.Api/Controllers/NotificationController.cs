@@ -1,17 +1,12 @@
 // @Tijl @Melih
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
-using Microsoft.AspNetCore.SignalR;
-using ChatSample.Hubs;
-
 
 namespace Server.Api.Controllers
 {
@@ -19,7 +14,6 @@ namespace Server.Api.Controllers
     [Route("[controller]")]
     public class NotificationController : ControllerBase
     {
-
         private readonly INotificationRepository<QuestionNotification> _questionNotificationRepository;
         private readonly INotificationRepository<AnswerNotification> _answerNotificationRepository;
 
@@ -32,7 +26,6 @@ namespace Server.Api.Controllers
         private async Task<IEnumerable<QuestionNotification>> _getQuestionNotifications(string userId)
         {
             return await _questionNotificationRepository.getByUserId(userId);
-
         }
 
         private async Task<IEnumerable<AnswerNotification>> _getAnswerNotifications(string userId)
@@ -64,7 +57,7 @@ namespace Server.Api.Controllers
         //     try
         //     {
         //         await _courseNotificationRepository.deleteAsync(id);
-        // 	}
+        //     }
         //     catch (System.Exception)
         //     {
         //         return NotFound();

@@ -1,12 +1,10 @@
 // @Kiran
-
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
 using Server.Api.Dtos;
 using Server.Api.Enum;
 using Server.Api.Helpers;
@@ -20,16 +18,13 @@ namespace Server.Api.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
-
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly ITokenManager _tokenManager;
-
-        //private readonly IUserRepository _userRepository;
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
+
         public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenManager tokenGenerator)
         {
-            //_userRepository = userRepository;
             _fieldOfStudyRepository = fieldOfStudyRepository;
             _mapper = mapper;
             _userManager = userManager;
@@ -44,7 +39,10 @@ namespace Server.Api.Controllers
                 User _user = null;
                 string role = "";
 
-                if (dto.Password.Length < 6 || dto.ConfirmPassword.Length < 6) { return BadRequest("Password length should be at least 6"); }
+                if (dto.Password.Length < 6 || dto.ConfirmPassword.Length < 6)
+                {
+                    return BadRequest("Password length should be at least 6");
+                }
 
                 var hash = PasswordHelper.generateHashAndSalt(dto.Password).Item1;
 
@@ -55,7 +53,10 @@ namespace Server.Api.Controllers
                 {
                     //fieldOfStudy processing
                     FieldOfStudy fos = await _fieldOfStudyRepository.getByFullNameAsync(dto.fieldOfStudy);
-                    if (fos == null) { return BadRequest("Field Of Study does not exist"); }
+                    if (fos == null)
+                    {
+                        return BadRequest("Field Of Study does not exist");
+                    }
                     Student newStudent = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString(), FieldOfStudyId = fos.id };
 
                     _user = newStudent;
@@ -82,7 +83,11 @@ namespace Server.Api.Controllers
                 await _userManager.AddToRoleAsync(_user, role);
 
                 //send email confirmation link
-                try { sendConfirmationEmail(_user); } catch (Exception) { return BadRequest("Error sending confirmation email"); }
+                try
+                {
+                    sendConfirmationEmail(_user);
+                }
+                catch (Exception) { return BadRequest("Error sending confirmation email"); }
 
                 return StatusCode(201);
             }
@@ -98,15 +103,19 @@ namespace Server.Api.Controllers
             try
             {
                 var user = await _userManager.FindByEmailAsync(dto.Email);
-                if (!user.EmailConfirmed) { return Unauthorized("Please confirm your email adres before logging in!"); }
-                if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
+                if (!user.EmailConfirmed)
+                {
+                    return Unauthorized("Please confirm your email adres before logging in!");
+                }
+                else if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
                 {
                     var token = await _tokenManager.GetTokenAsync(user);
-
                     return Ok(token);
                 }
-
-                return Unauthorized("Invalid password or email");
+                else
+                {
+                    return Unauthorized("Invalid password or email");
+                }
             }
             catch (System.Exception)
             {
@@ -119,7 +128,10 @@ namespace Server.Api.Controllers
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
+            {
                 return base.Content("<div><p>This user does not exist</p></div>", "text/html");
+            }
+
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
@@ -143,9 +155,13 @@ namespace Server.Api.Controllers
         public IActionResult ValidateToken([FromQuery] string token)
         {
             if (_tokenManager.ValidateToken(token))
+            {
                 return Ok();
+            }
             else
+            {
                 return Unauthorized();
+            }
         }
     }
 }

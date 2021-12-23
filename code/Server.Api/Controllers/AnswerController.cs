@@ -24,6 +24,7 @@ namespace Server.Api.Controllers
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly INotificationRepository<AnswerNotification> _notificationRepository;
         private readonly IQuestionSubscriptionRepository _subscriptionRepository;
+
         public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, IQuestionSubscriptionRepository subscriptionRepository)
         {
             _answerRepository = answerRepository;
@@ -49,7 +50,10 @@ namespace Server.Api.Controllers
                 }
                 return Ok(res);
             }
-            catch { return BadRequest("Error finding all answers"); }
+            catch
+            {
+                return BadRequest("Error finding all answers");
+            }
         }
 
         //[Authorize(Roles = "student,prof")]
@@ -67,7 +71,10 @@ namespace Server.Api.Controllers
                 }
                 return Ok(res);
             }
-            catch { return BadRequest("Error finding all answers"); }
+            catch
+            {
+                return BadRequest("Error finding all answers");
+            }
         }
 
         [HttpGet("{id}")]
@@ -78,11 +85,16 @@ namespace Server.Api.Controllers
                 var answer = await _answerRepository.getAsync(id);
                 User user = await _userManager.FindByIdAsync(answer.userId);
                 if (answer == null)
+                {
                     return NotFound();
+                }
 
                 return Ok(ResponseAnswerDto.convert(answer, user));
             }
-            catch { return BadRequest("Error finding all answers"); }
+            catch
+            {
+                return BadRequest("Error finding all answers");
+            }
         }
 
         //[Authorize(Roles = "student")]

@@ -1,6 +1,4 @@
 // @Kiran @Senn
-
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -32,36 +30,24 @@ namespace Server.Api.Controllers
         {
             var fieldOfStudy = await _fieldOfStudyRepository.getAsync(id);
             if (fieldOfStudy == null)
+            {
                 return NotFound();
-
+            }
             return Ok(fieldOfStudy);
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateFieldOfStudy(createFieldOfStudyDto createFieldOfStudyDto)
         {
-            string _fullname = "";
-            // if (createFieldOfStudyDto.fullName != null) {
-            //     _fullname = createFieldOfStudyDto.fullName;
-            // }
-            // else{
-            if (createFieldOfStudyDto.isBachelor)
-            {
-                _fullname = createFieldOfStudyDto.name + "-" + "BACH";
-            }
-            else
-            {
-                _fullname = createFieldOfStudyDto.name + "-" + "MASTER";
-            }
-            // }
-
+            string _fullname = createFieldOfStudyDto.name
+                + "-"
+                + (createFieldOfStudyDto.isBachelor ? "BACH" : "MASTER");
             FieldOfStudy fieldOfStudy = new()
             {
                 fullName = _fullname,
                 name = createFieldOfStudyDto.name,
                 isBachelor = createFieldOfStudyDto.isBachelor
             };
-
             await _fieldOfStudyRepository.createAsync(fieldOfStudy);
             return Ok();
         }
@@ -83,7 +69,6 @@ namespace Server.Api.Controllers
                 name = updateFieldOfStudyDto.name,
                 isBachelor = updateFieldOfStudyDto.isBachelor
             };
-
             await _fieldOfStudyRepository.updateAsync(fieldOfStudy);
             return Ok();
         }
