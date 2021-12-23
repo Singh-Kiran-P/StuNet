@@ -85,7 +85,7 @@ namespace Server.Api.Controllers
                 //send email confirmation link
                 try
                 {
-                    sendConfirmationEmail(_user);
+                    SendConfirmationEmail(_user);
                 }
                 catch (Exception) { return BadRequest("Error sending confirmation email"); }
 
@@ -143,7 +143,7 @@ namespace Server.Api.Controllers
             }
         }
 
-        private async void sendConfirmationEmail(User user)
+        private async void SendConfirmationEmail(User user)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "Auth", new { token, email = user.Email }, Request.Scheme);
