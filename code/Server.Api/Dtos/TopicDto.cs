@@ -21,7 +21,11 @@ namespace Server.Api.Dtos
 
         public static getOnlyTopicDto Convert(Topic topic)
         {
-            throw new System.Exception("method not implement");
+            return new getOnlyTopicDto
+                {
+                    id = topic.id,
+                    name = topic.name
+                };
         }
     }
 
