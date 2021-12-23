@@ -6,6 +6,5 @@ namespace Server.Api.Repositories
     public interface ICourseRepository : IInterfaceRepository<Course>
     {
         Task<Course> getByNameAsync(string name);
-
     }
 }

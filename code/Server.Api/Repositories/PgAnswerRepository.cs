@@ -11,10 +11,12 @@ namespace Server.Api.Repositories
     public class PgAnswerRepository : IAnswerRepository
     {
         private readonly IDataContext _context;
+
         public PgAnswerRepository(IDataContext context)
         {
             _context = context;
         }
+
         public async Task<IEnumerable<Answer>> getAllAsync()
         {
             return await _context.Answers
@@ -25,6 +27,7 @@ namespace Server.Api.Repositories
             .Include(a => a.question.topics)
             .ToListAsync();
         }
+
         public async Task<Answer> getAsync(int id)
         {
             return await _context.Answers
@@ -41,6 +44,7 @@ namespace Server.Api.Repositories
             _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
         }
+
         public async Task deleteAsync(int answerId)
         {
             var answerToRemove = await _context.Answers.FindAsync(answerId);
@@ -67,16 +71,13 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Answer>> getByQuestionId(int questionId)
         {
             return await _context.Answers
-            // .Include(a => a.userId)
-            .Include(a => a.question)
-            // .Include(a => a.question.user)
-            .Include(a => a.question.course)
-            .Include(a => a.question.topics)
-            .Where(a => a.question.id == questionId)
-            .ToListAsync();
-            // var answers = _context.Answers.Select(x => x).Where(answer => answer.question.id == questionId);
-            // return answers.ToList();//_context.Answers.ToList().Where(answer => answer.question.id == questionId);
-            // return answers.ToList();
+                // .Include(a => a.userId)
+                .Include(a => a.question)
+                // .Include(a => a.question.user)
+                .Include(a => a.question.course)
+                .Include(a => a.question.topics)
+                .Where(a => a.question.id == questionId)
+                .ToListAsync();
         }
     }
 }

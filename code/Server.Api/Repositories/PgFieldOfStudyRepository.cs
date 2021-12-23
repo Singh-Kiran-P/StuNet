@@ -1,5 +1,4 @@
 // @Kiran @Senn
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,10 +11,12 @@ namespace Server.Api.Repositories
     public class PgFieldOfStudyRepository : IFieldOfStudyRepository
     {
         private readonly IDataContext _context;
+
         public PgFieldOfStudyRepository(IDataContext context)
         {
             _context = context;
         }
+        
         public async Task<IEnumerable<FieldOfStudy>> getAllAsync()
         {
             return await _context.FieldOfStudies.ToListAsync();
@@ -25,6 +26,7 @@ namespace Server.Api.Repositories
             _context.FieldOfStudies.Add(fieldOfStudy);
             await _context.SaveChangesAsync();
         }
+
         public async Task deleteAsync(int fieldOfStudyId)
         {
             var fieldOfStudyToRemove = await _context.FieldOfStudies.FindAsync(fieldOfStudyId);
@@ -34,6 +36,7 @@ namespace Server.Api.Repositories
             _context.FieldOfStudies.Remove(fieldOfStudyToRemove);
             await _context.SaveChangesAsync();
         }
+        
         public async Task<FieldOfStudy> getAsync(int id)
         {
             return await _context.FieldOfStudies.FindAsync(id);

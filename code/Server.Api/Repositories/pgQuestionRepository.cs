@@ -20,30 +20,30 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Question>> getAllAsync()
         {
             return await _context.Questions
-            .Include(q => q.topics)
-            // .Include(q => q.user)
-            .Include(q => q.course)
-            .ToListAsync();
+                .Include(q => q.topics)
+                // .Include(q => q.user)
+                .Include(q => q.course)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Question>> getByCourseIdAsync(int courseId)
         {
             return await _context.Questions
-            .Include(q => q.course)
-            .Where(q => q.course.id == courseId)
-            .Include(q => q.topics)
-            // .Include(q => q.user)
-            .ToListAsync();
+                .Include(q => q.course)
+                .Where(q => q.course.id == courseId)
+                .Include(q => q.topics)
+                // .Include(q => q.user)
+                .ToListAsync();
         }
 
         public async Task<Question> getAsync(int id)
         {
             return await _context.Questions
-            .Where(q => q.id == id)
-            .Include(q => q.topics)
-            // .Include(q => q.user)
-            .Include(q => q.course)
-            .FirstOrDefaultAsync();
+                .Where(q => q.id == id)
+                .Include(q => q.topics)
+                // .Include(q => q.user)
+                .Include(q => q.course)
+                .FirstOrDefaultAsync();
         }
 
         public async Task createAsync(Question question)
@@ -56,7 +56,9 @@ namespace Server.Api.Repositories
         {
             var questionToRemove = await _context.Questions.FindAsync(questionId);
             if (questionToRemove == null)
+            {
                 throw new NullReferenceException();
+            }
 
             _context.Questions.Remove(questionToRemove);
             await _context.SaveChangesAsync();
@@ -66,7 +68,9 @@ namespace Server.Api.Repositories
         {
             var questionToUpdate = await _context.Questions.FindAsync(question.id);
             if (questionToUpdate == null)
+            {
                 throw new NullReferenceException();
+            }
             questionToUpdate.title = question.title;
             questionToUpdate.body = question.body;
             questionToUpdate.topics = question.topics;

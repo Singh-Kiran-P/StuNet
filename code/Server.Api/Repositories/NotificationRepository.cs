@@ -26,18 +26,20 @@ namespace Server.Api.Repositories
         }
 
         protected abstract DbSet<T> getDbSet();
+
         protected abstract IIncludableQueryable<T, V> getIncludes();
 
         public async Task<ICollection<T>> getByUserId(string userId)
         {
             return await getIncludes()
-            .Where(s => userId == s.userId)
-            .ToListAsync();
+                .Where(s => userId == s.userId)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<T>> getAllAsync()
         {
-            return await getIncludes().ToListAsync();
+            return await getIncludes()
+                .ToListAsync();
         }
 
         public async Task<T> getAsync(int id)
@@ -69,8 +71,9 @@ namespace Server.Api.Repositories
         {
             T notification = await getDbSet().FindAsync(id);
             if (notification == null)
+            {
                 throw new NullReferenceException();
-
+            }
             getDbSet().Remove(notification);
             await _context.SaveChangesAsync();
         }

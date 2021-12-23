@@ -38,7 +38,9 @@ namespace Server.Api.Repositories
         {
             Course courseToUpdate = await _context.Courses.FindAsync(course.id);
             if (courseToUpdate == null)
+            {
                 throw new NullReferenceException();
+            }
             courseToUpdate.name = course.name;
             courseToUpdate.number = course.number;
             courseToUpdate.description = course.description;
@@ -56,8 +58,9 @@ namespace Server.Api.Repositories
         {
             Course course = await _context.Courses.FindAsync(id);
             if (course == null)
+            {
                 throw new NullReferenceException();
-
+            }
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
         }
@@ -65,10 +68,10 @@ namespace Server.Api.Repositories
         public async Task<Course> getByNameAsync(string name)
         {
             return await _context.Courses
-                        .Where(c => c.name == name)
-                        .Include(c => c.topics)
-                        .Include(c => c.channels)
-                        .FirstOrDefaultAsync();
+                .Where(c => c.name == name)
+                .Include(c => c.topics)
+                .Include(c => c.channels)
+                .FirstOrDefaultAsync();
         }
     }
 }
