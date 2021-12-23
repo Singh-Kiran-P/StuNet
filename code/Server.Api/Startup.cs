@@ -129,17 +129,11 @@ namespace Server.Api
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
-            // Email FluentMail
-            setupFluentEmail(services);
-
-            // Email MailKit
-            //services.AddSingleton<Receiver>();
-            //Receiver receiver = new(Configuration); // TODO inject??
-            //services.AddSingleton<IHostedService, HostedServices>();
-
+            // Email FluentMail & MailKit
+            setupEmail(services);
         }
 
-        private void setupFluentEmail(IServiceCollection services)
+        private void setupEmail(IServiceCollection services)
         {
             string from = Configuration.GetSection("Mail")["From"];
             string senderEmail = Configuration.GetSection("Mail")["G-SenderEmail"];
@@ -164,6 +158,7 @@ namespace Server.Api
 
             services.TryAddScoped<IEmailSender, Mailer>();
 
+            services.AddHostedService<MailListener>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
