@@ -29,7 +29,7 @@ namespace Server.Api.Controllers
             _hubContext = hubContext;
         }
 
-        private async Task<IEnumerable<getQuestionSubscriptionDto>> _getQuestionSubscriptions()
+        private async Task<IEnumerable<getQuestionSubscriptionDto>> _GetQuestionSubscriptions()
         {
             IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getAllAsync();
             IEnumerable<getQuestionSubscriptionDto> getDtos = subscriptions.Select(subscription => getQuestionSubscriptionDto.convert(subscription));
@@ -39,7 +39,7 @@ namespace Server.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<getQuestionSubscriptionDto>>> getQuestionSubscriptions()
         {
-            IEnumerable<getQuestionSubscriptionDto> getDtos = await _getQuestionSubscriptions();
+            IEnumerable<getQuestionSubscriptionDto> getDtos = await _GetQuestionSubscriptions();
             return Ok(getDtos);
         }
 
