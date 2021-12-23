@@ -9,7 +9,7 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
-        public static CourseDto convert(Course course)
+        public static CourseDto Convert(Course course)
         {
             return new CourseDto
             {
@@ -46,7 +46,7 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
-        public static getOnlyCourseDto convert(Course course)
+        public static getOnlyCourseDto Convert(Course course)
         {
             return new getOnlyCourseDto
             {

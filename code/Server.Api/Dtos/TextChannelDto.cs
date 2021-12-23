@@ -32,7 +32,7 @@ namespace Server.Api.Dtos
             {
                 id = channel.id,
                 name = channel.name,
-                course = CourseDto.convert(channel.course),
+                course = CourseDto.Convert(channel.course),
                 messages = channel.messages.Select(m => MessageDto.Convert(m)).ToList()
             };
         }
