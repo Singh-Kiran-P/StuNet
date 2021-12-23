@@ -23,22 +23,22 @@ namespace Server.Api.Controllers
         private readonly ITopicRepository _topicRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly UserManager<User> _userManager;
-		private readonly IHubContext<ChatHub> _hubContext;
-		private readonly INotificationRepository<QuestionNotification> _notificationRepository;
-		private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
-		private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
+        private readonly IHubContext<ChatHub> _hubContext;
+        private readonly INotificationRepository<QuestionNotification> _notificationRepository;
+        private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
+        private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
 
-		public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, INotificationRepository<QuestionNotification> notificationRepository, ICourseSubscriptionRepository subscriptionRepository, IQuestionSubscriptionRepository questionSubscriptionRepository)
+        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, INotificationRepository<QuestionNotification> notificationRepository, ICourseSubscriptionRepository subscriptionRepository, IQuestionSubscriptionRepository questionSubscriptionRepository)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;
             _courseRepository = courseRepository;
             _userManager = userManager;
-			_hubContext = hubContext;
-			_courseSubscriptionRepository = subscriptionRepository;
-			_notificationRepository = notificationRepository;
-			_questionSubscriptionRepository = questionSubscriptionRepository;
-		}
+            _hubContext = hubContext;
+            _courseSubscriptionRepository = subscriptionRepository;
+            _notificationRepository = notificationRepository;
+            _questionSubscriptionRepository = questionSubscriptionRepository;
+        }
 
         // private static questionDto toDto(Question question, User user)
         // {
@@ -84,25 +84,25 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("subscribed")]
-		public async Task<ActionResult<IEnumerable<questionDto>>> getSubscribedQuestions()
-		{
-			ClaimsPrincipal currentUser = HttpContext.User;
-			if (currentUser.HasClaim(c => c.Type == "userref"))
-			{
+        public async Task<ActionResult<IEnumerable<questionDto>>> getSubscribedQuestions()
+        {
+            ClaimsPrincipal currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == "userref"))
+            {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getByUserId(userId);
                 IEnumerable<int> subscribedQuestionIds = subscriptions.Select(sub => sub.questionId);
-				IEnumerable<Question> subscribedQuestions = subscribedQuestionIds.Select(id => _questionRepository.getAsync(id))
+                IEnumerable<Question> subscribedQuestions = subscribedQuestionIds.Select(id => _questionRepository.getAsync(id))
                                                                                     .Select(task => task.Result);
 
                 User user = await _userManager.FindByIdAsync(userId);
-				return Ok(subscribedQuestions.Select(q => questionDto.convert(q, user)));
-			}
-			else
-			{
-				return Unauthorized();
-			}
-		}
+                return Ok(subscribedQuestions.Select(q => questionDto.convert(q, user)));
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<questionDto>> GetQuestion(int id)
@@ -168,27 +168,27 @@ namespace Server.Api.Controllers
 
                 await _questionRepository.createAsync(question);
 
-				await _questionSubscriptionRepository.createAsync(new QuestionSubscription
-				{
-					userId = user.Id,
-					questionId = question.id,
-					dateTime = question.time
-				});
+                await _questionSubscriptionRepository.createAsync(new QuestionSubscription
+                {
+                    userId = user.Id,
+                    questionId = question.id,
+                    dateTime = question.time
+                });
 
                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + question.id.ToString());
 
-				IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.getByCourseId(c.id)).Select(sub => sub.userId);
-				await _notificationRepository.createAllAync(subscriberIds.Select(userId => new QuestionNotification
-				{
-					userId = userId,
-					questionId = question.id,
+                IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.getByCourseId(c.id)).Select(sub => sub.userId);
+                await _notificationRepository.createAllAync(subscriberIds.Select(userId => new QuestionNotification
+                {
+                    userId = userId,
+                    questionId = question.id,
                     question = question,
-					time = question.time
-				}));
-                
-				var ret = questionDto.convert(question, user);
-				await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
-				return Ok(ret);
+                    time = question.time
+                }));
+
+                var ret = questionDto.convert(question, user);
+                await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
+                return Ok(ret);
             }
             else
             {
