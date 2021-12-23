@@ -51,13 +51,13 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record createCourseDto
+    public record CreateCourseDto
     {
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
 
-        public static createCourseDto Convert(Course course)
+        public static CreateCourseDto Convert(Course course)
         {
             throw new System.Exception("method not implement");
         }

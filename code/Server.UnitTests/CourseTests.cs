@@ -36,7 +36,7 @@ namespace Server.UnitTests
         {
             //Given
             int count = random.Next(1, 50);
-            createCourseDto dto = new()
+            CreateCourseDto dto = new()
             {
                 name = randomName(),
                 number = randomInt().ToString(),
