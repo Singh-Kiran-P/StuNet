@@ -3,26 +3,31 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title></title>
-        <meta name="description" content="">
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
     </head>
 
-    <body>
-        A Person asked a question with title: @Model.title, in @Model.course.name <br/>
-        With the following topics:<br/>
-        <ul>
-        @foreach(var topic in Model.topics) {<li>@topic.name</li>} TODO: moet nog getest worden
-        </ul>
-        <br/>                    
-        @Model.body
+    <body style="font-size: 12px;">
+        @Model.email anonymously asked a question in @Model.course. <span style="display: none;">Question id: @Model.id</span>
         <br/>
-        Question asked at @Model.time<br/>
-        Please answer this question by replying to this mail or navigate to this question in the application<br/>
+        <br/>
+        @foreach(var topic in Model.topics) {
+            <span style="padding: 5px 10px; margin-right: 10px; border-radius: 100px; background-color: rgba(0, 0, 0, 0.26); color: '#000000';">
+                @topic.name
+            </span>
+        }
+        <br/>
+        <br/>
+        <span style="font-weight: bold; font-size: 1.5em;">
+            @Model.title
+        </span>
+        <br/>
+        <span style="white-space: pre;">@Model.body</span>
+        <br/>
+        <br/>
+        You can answer this question by replying to this email.
+        <br/>
         - Team StuNet
-        TODO html/css styling
     </body>
 </html>

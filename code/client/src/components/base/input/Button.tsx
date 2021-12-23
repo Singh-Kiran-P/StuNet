@@ -5,13 +5,13 @@ type Props = {
     toggled?: any;
 }
 
-export default extend<typeof Button, Props>(Button, ({ toggled, onPress, labelStyle, ...props }) => {
+export default extend<typeof Button, Props>(Button, ({ toggled, onPress, labelStyle, disabled, ...props }) => {
     let [theme] = useTheme();
     let toggle = toggled !== undefined;
-    let [disabled, setDisabled] = toggle ? useState(false) : [false, () => {}];
+    let [busy, setBusy] = toggle ? useState(false) : [false, () => {}];
 
     if (toggle) useEffect(() => {
-        if (disabled) setDisabled(false);
+        if (busy) setBusy(false);
     }, [toggled])
 
     const s = Style.create({
@@ -23,11 +23,11 @@ export default extend<typeof Button, Props>(Button, ({ toggled, onPress, labelSt
     return <Button
         mode='contained'
         onPress={() => {
-            if (toggle) setDisabled(true);
+            if (toggle) setBusy(true);
             if (onPress) onPress();
         }}
-        disabled={disabled}
         theme={paper(theme)}
+        disabled={disabled || busy}
         labelStyle={[s.color, labelStyle]}
         {...props}
     />

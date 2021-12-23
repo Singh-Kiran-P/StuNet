@@ -145,10 +145,15 @@ namespace Server.Api.Controllers
                 await _questionRepository.createAsync(question);
                 await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", question.id);
 
-                await _mailSender.SendEmail(c.courseEmail, "TODO Question Asked", EmailTemplate.QuestionAsked, new {
-                    // TODO email info
+                await _mailSender.SendEmail(c.courseEmail, "New question in " + c.name, EmailTemplate.QuestionAsked, new {
+                    topics = question.topics,
+                    title = question.title,
+                    body = question.body,
+                    email = userEmail,
+                    id = question.id,
+                    course= c.name
                 });
-                
+
                 return Ok(questionDto.convert(question, user));
             }
             else
