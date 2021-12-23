@@ -83,6 +83,27 @@ namespace Server.Api.Controllers
             catch { return BadRequest("Error finding all questions"); }
         }
 
+        [HttpGet("subscribed")]
+		public async Task<ActionResult<IEnumerable<questionDto>>> getSubscribedQuestions()
+		{
+			// ClaimsPrincipal currentUser = HttpContext.User;
+			// if (currentUser.HasClaim(c => c.Type == "userref"))
+			// {
+            //     string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
+                User user = await _userManager.FindByIdAsync("c1dae7b7-8094-4e40-b277-82768c5d08d7");
+                IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getByUserId("c1dae7b7-8094-4e40-b277-82768c5d08d7");
+                IEnumerable<int> subscribedQuestionIds = subscriptions.Select(sub => sub.questionId);
+				IEnumerable<Question> subscribedQuestions = subscribedQuestionIds.Select(id => _questionRepository.getAsync(id))
+                                                                                    .Select(task => task.Result);
+
+				return Ok(subscribedQuestions.Select(q => questionDto.convert(q, user)));
+			// }
+			// else
+			// {
+			// 	return Unauthorized();
+			// }
+		}
+
         [HttpGet("{id}")]
         public async Task<ActionResult<questionDto>> GetQuestion(int id)
         {
