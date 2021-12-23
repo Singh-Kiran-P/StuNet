@@ -32,7 +32,7 @@ namespace Server.Api.Controllers
         private async Task<IEnumerable<getQuestionSubscriptionDto>> _GetQuestionSubscriptions()
         {
             IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getAllAsync();
-            IEnumerable<getQuestionSubscriptionDto> getDtos = subscriptions.Select(subscription => getQuestionSubscriptionDto.convert(subscription));
+            IEnumerable<getQuestionSubscriptionDto> getDtos = subscriptions.Select(subscription => getQuestionSubscriptionDto.Convert(subscription));
             return getDtos;
         }
 
@@ -70,7 +70,7 @@ namespace Server.Api.Controllers
 
             IEnumerable<getByIdsQuestionSubscriptionDto> userSubscriptionDtos = subscriptions
                 .Where(subscription => subscription.questionId == questionId && subscription.userId == user.Id)
-                .Select(subscription => getByIdsQuestionSubscriptionDto.convert(subscription));
+                .Select(subscription => getByIdsQuestionSubscriptionDto.Convert(subscription));
             return Ok(userSubscriptionDtos);
         }
 
