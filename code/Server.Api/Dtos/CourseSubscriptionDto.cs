@@ -3,28 +3,15 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public record getByIdsCourseSubscriptionDto
-    {
-        public int id { get; set; }
-        public DateTime dateTime { get; set; }
-        public static getByIdsCourseSubscriptionDto Convert(CourseSubscription subscription)
-        {
-            return new getByIdsCourseSubscriptionDto
-            {
-                id = subscription.id,
-                dateTime = subscription.dateTime,
-            };
-        }
-    }
-
-    public record getCourseSubscriptionDto
+    public record GetCourseSubscriptionDto
     {
         public DateTime dateTime { get; set; }
         public string userId { get; set; }
         public int courseId { get; set; }
-        public static getCourseSubscriptionDto Convert(CourseSubscription subscription)
+        
+        public static GetCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
-            return new getCourseSubscriptionDto
+            return new GetCourseSubscriptionDto
             {
                 dateTime = subscription.dateTime,
                 userId = subscription.userId,
@@ -33,12 +20,28 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record createCourseSubscriptionDto
+    public record GetByIdsCourseSubscriptionDto
+    {
+        public int id { get; set; }
+        public DateTime dateTime { get; set; }
+
+        public static GetByIdsCourseSubscriptionDto Convert(CourseSubscription subscription)
+        {
+            return new GetByIdsCourseSubscriptionDto
+            {
+                id = subscription.id,
+                dateTime = subscription.dateTime,
+            };
+        }
+    }
+
+    public record CreateCourseSubscriptionDto
     {
         public int courseId { get; set; }
-        public static getCourseSubscriptionDto Convert(CourseSubscription subscription)
+
+        public static GetCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
-            return new getCourseSubscriptionDto
+            return new GetCourseSubscriptionDto
             {
                 userId = subscription.userId,
                 courseId = subscription.courseId,

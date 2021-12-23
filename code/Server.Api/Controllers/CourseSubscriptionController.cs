@@ -29,22 +29,22 @@ namespace Server.Api.Controllers
             _hubContext = hubContext;
         }
 
-        private async Task<IEnumerable<getCourseSubscriptionDto>> _GetCourseSubscriptions()
+        private async Task<IEnumerable<GetCourseSubscriptionDto>> _GetCourseSubscriptions()
         {
             IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.getAllAsync();
-            IEnumerable<getCourseSubscriptionDto> getDtos = subscriptions.Select(subscription => getCourseSubscriptionDto.Convert(subscription));
+            IEnumerable<GetCourseSubscriptionDto> getDtos = subscriptions.Select(subscription => GetCourseSubscriptionDto.Convert(subscription));
             return getDtos;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<getCourseSubscriptionDto>>> GetCourseSubscriptions()
+        public async Task<ActionResult<IEnumerable<GetCourseSubscriptionDto>>> GetCourseSubscriptions()
         {
-            IEnumerable<getCourseSubscriptionDto> getDtos = await _GetCourseSubscriptions();
+            IEnumerable<GetCourseSubscriptionDto> getDtos = await _GetCourseSubscriptions();
             return Ok(getDtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<getCourseSubscriptionDto>> GetCourseSubscription(int id)
+        public async Task<ActionResult<GetCourseSubscriptionDto>> GetCourseSubscription(int id)
         {
             CourseSubscription subscription = await _courseSubscriptionRepository.getAsync(id);
             if (subscription == null)
@@ -52,7 +52,7 @@ namespace Server.Api.Controllers
                 return NotFound();
             }
 
-            getCourseSubscriptionDto getDto = new()
+            GetCourseSubscriptionDto getDto = new()
             {
                 dateTime = subscription.dateTime,
                 userId = subscription.userId,
@@ -62,21 +62,21 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("ByUserAndCourseId/{courseId}")] //FIXME: Make route lower case
-        public async Task<ActionResult<getByIdsCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
+        public async Task<ActionResult<GetByIdsCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
         {
             IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.getAllAsync();
             ClaimsPrincipal currentUser = HttpContext.User;
             string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
             User user = await _userManager.FindByEmailAsync(userEmail);
 
-            IEnumerable<getByIdsCourseSubscriptionDto> userSubscriptionDtos = subscriptions
+            IEnumerable<GetByIdsCourseSubscriptionDto> userSubscriptionDtos = subscriptions
                 .Where(subscription => subscription.courseId == courseId && subscription.userId == user.Id)
-                .Select(subscription => getByIdsCourseSubscriptionDto.Convert(subscription));
+                .Select(subscription => GetByIdsCourseSubscriptionDto.Convert(subscription));
             return Ok(userSubscriptionDtos);
         }
 
         [HttpPost]
-        public async Task<ActionResult<createCourseSubscriptionDto>> CreateCourseSubscription(createCourseSubscriptionDto dto)
+        public async Task<ActionResult<CreateCourseSubscriptionDto>> CreateCourseSubscription(CreateCourseSubscriptionDto dto)
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "username"))
