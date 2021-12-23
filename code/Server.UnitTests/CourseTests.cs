@@ -45,7 +45,7 @@ namespace Server.UnitTests
             var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
 
             //When
-            Course course = ((await controller.createCourse(dto)).Result as OkObjectResult).Value as Course;
+            Course course = ((await controller.CreateCourse(dto)).Result as OkObjectResult).Value as Course;
 
             //Then
             dto.Should().BeEquivalentTo(
