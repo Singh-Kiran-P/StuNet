@@ -79,7 +79,6 @@ export type Answer = BaseAnswer & {
 export type Field = {
 	id: number;
 	name: string;
-	year: number;
 	fullName: string;
 	isBachelor: boolean;
 }
@@ -87,7 +86,6 @@ export type Field = {
 export type FOS = {
 	field: string;
 	degree: string;
-	year: string;
 }
 
 export const enum User {

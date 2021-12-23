@@ -10,7 +10,5 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         [Required()]
         public bool isBachelor { get; set; }
-        [Required()]
-        public int year { get; set; }
     }
 }

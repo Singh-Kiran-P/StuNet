@@ -10,7 +10,7 @@ export default ({ navigation }: Route) => {
 	const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-	const [FOS, setFOS] = useState<FOS>({ field: '', degree: '', year: '' });
+	const [FOS, setFOS] = useState<FOS>({ field: '', degree: '' });
 	const [fields, setFields] = useState<Fields>({});
 	const [error, setError] = useState('');
 	let [theme] = useTheme();
@@ -28,12 +28,11 @@ export default ({ navigation }: Route) => {
 	}
 
 	const degrees = (field: Fields[string]) => Object.keys(field || []).filter(degree => Object.values(field[degree]).length);
-	const years = (field: Fields[string], degree: string) => ((field || {})[degree] || []).map(degree => degree.toString());
 
 	const fetch = async () => {
 		return axios.get('/FieldOfStudy').then(res => {
 			setFields((res.data as Field[]).reduce((acc, cur) => ({ ...acc, [cur.name]: (o => {
-					return (o[Object.keys(o)[cur.isBachelor ? 0  : 1]].push(cur.year), o);
+					return (o[Object.keys(o)[cur.isBachelor ? 0  : 1]].push(-1), o);
 				})(acc[cur.name] || { Bachelor: [], Master: [] })
 			}), {} as Fields));
 		})
@@ -46,7 +45,7 @@ export default ({ navigation }: Route) => {
             Email: email,
             Password: password,
 			ConfirmPassword: confirmPassword,
-			FieldOfStudy: `${FOS.field}-${degree}-${FOS.year}`
+			FieldOfStudy: `${FOS.field}-${degree}`
         }).then(() => navigation.navigate('Login', { registered: email }), show(setError))
     }
 
@@ -62,15 +61,12 @@ export default ({ navigation }: Route) => {
 			<View type='row' margin hidden={type() != User.STUDENT}>
 				<Picker flex prompt='Field'
 					selectedValue={FOS.field} values={Object.keys(fields)}
-					onValueChange={v => setFOS({ field: v, degree: '', year: '' })}/>
+					onValueChange={v => setFOS({ field: v, degree: '' })}/>
 
 				<Picker  flex prompt='Degree' enabled={!!FOS.field}
 					selectedValue={FOS.degree} values={degrees(fields[FOS.field])}
-					onValueChange={v => setFOS({ ...FOS, degree: v, year: '' })}/>
+					onValueChange={v => setFOS({ ...FOS, degree: v })}/>
 
-				<Picker flex prompt='Year' enabled={!!FOS.degree}
-					selectedValue={FOS.year} values={years(fields[FOS.field], FOS.degree)}
-					onValueChange={v => setFOS({ ...FOS, year: v })}/>
 			</View>
 
 			<Text type='error' margin hidden={!error} children={error}/>

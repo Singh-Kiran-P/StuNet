@@ -126,10 +126,9 @@ namespace Server.Api.DataBase
             var fos1 = new FieldOfStudy()
             {
                 id = 1,
-                fullName = "INF-BACH-1",
+                fullName = "INF-BACH",
                 name = "INF",
-                isBachelor = true,
-                year = 1,
+                isBachelor = true
             };
             modelBuilder.Entity<FieldOfStudy>().HasData(fos1);
         }

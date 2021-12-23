@@ -47,11 +47,11 @@ namespace Server.Api.Controllers
             // else{
             if (createFieldOfStudyDto.isBachelor)
             {
-                _fullname = createFieldOfStudyDto.name + "-" + "BACH" + "-" + createFieldOfStudyDto.year;
+                _fullname = createFieldOfStudyDto.name + "-" + "BACH";
             }
             else
             {
-                _fullname = createFieldOfStudyDto.name + "-" + "MASTER" + "-" + createFieldOfStudyDto.year;
+                _fullname = createFieldOfStudyDto.name + "-" + "MASTER";
             }
             // }
 
@@ -59,8 +59,7 @@ namespace Server.Api.Controllers
             {
                 fullName = _fullname,
                 name = createFieldOfStudyDto.name,
-                isBachelor = createFieldOfStudyDto.isBachelor,
-                year = createFieldOfStudyDto.year,
+                isBachelor = createFieldOfStudyDto.isBachelor
             };
 
             await _fieldOfStudyRepository.createAsync(fieldOfStudy);
@@ -82,8 +81,7 @@ namespace Server.Api.Controllers
                 id = id,
                 fullName = updateFieldOfStudyDto.fullName,
                 name = updateFieldOfStudyDto.name,
-                isBachelor = updateFieldOfStudyDto.isBachelor,
-                year = updateFieldOfStudyDto.year,
+                isBachelor = updateFieldOfStudyDto.isBachelor
             };
 
             await _fieldOfStudyRepository.updateAsync(fieldOfStudy);

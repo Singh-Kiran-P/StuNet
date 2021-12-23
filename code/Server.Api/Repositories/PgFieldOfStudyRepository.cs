@@ -47,7 +47,6 @@ namespace Server.Api.Repositories
             fieldOfStudyToUpdate.fullName = fieldOfStudy.fullName;
             fieldOfStudyToUpdate.name = fieldOfStudy.name;
             fieldOfStudyToUpdate.isBachelor = fieldOfStudy.isBachelor;
-            fieldOfStudyToUpdate.year = fieldOfStudy.year;
             await _context.SaveChangesAsync();
         }
 
