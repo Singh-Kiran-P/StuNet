@@ -27,7 +27,7 @@ namespace Server.Api.Controllers
             _subscriptionRepository = subscriptionRepository;
         }
 
-        private async Task<IEnumerable<GetAllCourseDto>> _getCourseAsync()
+        private async Task<IEnumerable<GetAllCourseDto>> _GetCourseAsync()
         {
             IEnumerable<Course> courses = await _courseRepository.getAllAsync();
             IEnumerable<GetAllCourseDto> getDtos = courses.Select(course =>
@@ -45,7 +45,7 @@ namespace Server.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getCourses()
         {
-            IEnumerable<GetAllCourseDto> getDtos = await _getCourseAsync();
+            IEnumerable<GetAllCourseDto> getDtos = await _GetCourseAsync();
             return Ok(getDtos);
         }
 
@@ -58,7 +58,7 @@ namespace Server.Api.Controllers
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 IEnumerable<CourseSubscription> subscriptions = await _subscriptionRepository.getByUserId(userId);
                 IEnumerable<int> subscribedCourseIds = subscriptions.Select(sub => sub.courseId);
-                IEnumerable<GetAllCourseDto> courses = await _getCourseAsync();
+                IEnumerable<GetAllCourseDto> courses = await _GetCourseAsync();
 
                 return Ok(courses.Where(course => subscribedCourseIds.Contains(course.id)));
             }
@@ -93,7 +93,7 @@ namespace Server.Api.Controllers
         [HttpGet("search/")]
         public async Task<ActionResult<GetCourseDto>> searchByName([FromQuery] string name)
         {
-            IEnumerable<GetAllCourseDto> getDtos = await _getCourseAsync();
+            IEnumerable<GetAllCourseDto> getDtos = await _GetCourseAsync();
             IEnumerable<GetAllCourseDto> searchResults = StringMatcher.FuzzyMatchObject(getDtos, name);
 
             if (searchResults == null || !searchResults.Any())
