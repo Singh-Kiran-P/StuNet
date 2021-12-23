@@ -123,7 +123,7 @@ namespace Server.Api.Controllers
             }
         }
 
-        [HttpGet("ConfirmEmail")]
+        [HttpGet("ConfirmEmail")] //FIXME: Make route lower case
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);

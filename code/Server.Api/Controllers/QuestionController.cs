@@ -103,7 +103,7 @@ namespace Server.Api.Controllers
             }
         }
 
-        [HttpGet("GetQuestionsByCourseId/search/{courseId}")]
+        [HttpGet("GetQuestionsByCourseId/search/{courseId}")] //FIXME: Make route lower case
         public async Task<ActionResult<GetCourseDto>> searchByName(int courseId, [FromQuery] string name)
         {
             var questions = await _questionRepository.getByCourseIdAsync(courseId);

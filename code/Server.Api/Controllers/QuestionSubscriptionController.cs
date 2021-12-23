@@ -60,7 +60,7 @@ namespace Server.Api.Controllers
             return Ok(getDto);
         }
 
-        [HttpGet("ByUserAndQuestionId/{questionId}")]
+        [HttpGet("ByUserAndQuestionId/{questionId}")] //FIXME: Make route lower case
         public async Task<ActionResult<getByIdsQuestionSubscriptionDto>> GetQuestionSubscriptionByUserAndQuestionId(int questionId)
         {
             IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getAllAsync();

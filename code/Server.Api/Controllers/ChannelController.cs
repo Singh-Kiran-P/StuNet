@@ -28,7 +28,7 @@ namespace Server.Api.Controllers
             return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));
         }
 
-        [HttpGet("GetChannelsByCourseId/{courseId}")]
+        [HttpGet("GetChannelsByCourseId/{courseId}")] //FIXME: Make route lower case
         public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannelsByCourseId(int courseId)
         {
             var channels = await _channelRepository.getByCourseIdAsync(courseId);

@@ -57,7 +57,7 @@ namespace Server.Api.Controllers
         }
 
         //[Authorize(Roles = "student,prof")]
-        [HttpGet("GetAnswersByQuestionId/{questionId}")]
+        [HttpGet("GetAnswersByQuestionId/{questionId}")] //FIXME: Make route lower case
         public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
             try
@@ -186,7 +186,7 @@ namespace Server.Api.Controllers
         }
 
         // [Authorize(Roles = "prof")]
-        [HttpPut("SetAccepted/{id}")]
+        [HttpPut("SetAccepted/{id}")] //FIXME: Make route lower case
         public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
         {
             Answer existingAnswer = await _answerRepository.getAsync(id);
