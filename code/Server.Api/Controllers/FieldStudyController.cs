@@ -13,6 +13,7 @@ namespace Server.Api.Controllers
     public class FieldOfStudyController : ControllerBase
     {
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
+        
         public FieldOfStudyController(IFieldOfStudyRepository fieldOfStudyRepository)
         {
             _fieldOfStudyRepository = fieldOfStudyRepository;
