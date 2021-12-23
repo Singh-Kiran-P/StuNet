@@ -8,6 +8,11 @@ using System.Linq;
 
 namespace Server.Api.Repositories
 {
+    public interface IQuestionRepository : IRestfulRepository<Question>
+    {
+        Task<IEnumerable<Question>> getByCourseIdAsync(int courseId);
+    }
+
     public class PgQuestionRepository : IQuestionRepository
     {
         private readonly IDataContext _context;

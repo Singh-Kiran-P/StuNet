@@ -1,13 +1,18 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Server.Api.DataBase;
 using Server.Api.Models;
-using System.Linq;
 
 namespace Server.Api.Repositories
 {
+    public interface IChannelRepository : IRestfulRepository<TextChannel>
+    {
+        Task<ICollection<TextChannel>> getByCourseIdAsync(int courseId);
+    }
+    
     public class pgChannelRepository : IChannelRepository
     {
         private readonly IDataContext _context;
