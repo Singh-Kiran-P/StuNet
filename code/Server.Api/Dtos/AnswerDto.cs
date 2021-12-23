@@ -36,5 +36,10 @@ namespace Server.Api.Dtos
         public int questionId { get; set; }
         public string title { get; set; }
         public string body { get; set; }
+
+        public static PostAnswerDto Convert(Answer answer, User user)
+        {
+            throw new System.Exception("method not implement");
+        }
     }
 }

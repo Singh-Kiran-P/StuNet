@@ -9,6 +9,7 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
+
         public static CourseDto Convert(Course course)
         {
             return new CourseDto
@@ -28,6 +29,11 @@ namespace Server.Api.Dtos
         public string number { get; set; }
         public string description { get; set; }
         public ICollection<getOnlyTopicDto> topics;
+
+        public static GetAllCourseDto Convert(Course course)
+        {
+            throw new System.Exception("method not implement");
+        }
     }
 
     public record GetCourseDto
@@ -38,6 +44,11 @@ namespace Server.Api.Dtos
         public string description { get; set; }
         public ICollection<getOnlyTopicDto> topics;
         public ICollection<getOnlyChannelDto> channels;
+
+        public static GetCourseDto Convert(Course course)
+        {
+            throw new System.Exception("method not implement");
+        }
     }
 
     public record getOnlyCourseDto
@@ -46,6 +57,7 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
+
         public static getOnlyCourseDto Convert(Course course)
         {
             return new getOnlyCourseDto
@@ -62,5 +74,10 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
+
+        public static createCourseDto Convert(Course course)
+        {
+            throw new System.Exception("method not implement");
+        }
     }
 }

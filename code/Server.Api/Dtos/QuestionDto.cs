@@ -11,13 +11,18 @@ namespace Server.Api.Dtos
         public string title { get; set; }
         public string body { get; set; }
         public ICollection<int> topicIds { get; set; }
+
+        public static createQuestionDto Convert(Question question, User user)
+        {
+            throw new System.Exception("method not implement");
+        }
     }
 
     public record onlyQuestionDto
     {
         public int id { get; set; }
-        public String title { get; set; }
-        public String body { get; set; }
+        public string title { get; set; }
+        public string body { get; set; }
         public DateTime time { get; set; }
         public ICollection<getOnlyTopicDto> topics { get; set; }
 
@@ -41,9 +46,9 @@ namespace Server.Api.Dtos
     public record onlyQuestionUserDto
     {
         public int id { get; set; }
-        public String title { get; set; }
+        public string title { get; set; }
         public ResponseUserDto user { get; set; }
-        public String body { get; set; }
+        public string body { get; set; }
         public ICollection<getOnlyTopicDto> topics { get; set; }
         public DateTime time { get; set; }
 
@@ -106,5 +111,10 @@ namespace Server.Api.Dtos
         public string body { get; set; }
         public ICollection<getOnlyTopicDto> topics { get; set; }
         public DateTime time { get; set; }
+
+        public static questionAnonymousDto Convert(Question question, User user)
+        {
+            throw new System.Exception("method not implement");
+        }
     }
 }

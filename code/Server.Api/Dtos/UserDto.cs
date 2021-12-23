@@ -10,6 +10,11 @@ namespace Server.Api.Dtos
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+
+        public static LoginUserDto Convert(User user)
+        {
+            throw new System.Exception("method not implemented");
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -25,6 +30,11 @@ namespace Server.Api.Dtos
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
         public string fieldOfStudy { get; set; }
+
+        public static RegisterUserDto Convert(User user)
+        {
+            throw new System.Exception("method not implemented");
+        }
     }
 
     public record ResponseUserDto

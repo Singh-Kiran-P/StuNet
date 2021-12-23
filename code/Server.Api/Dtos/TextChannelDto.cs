@@ -42,5 +42,10 @@ namespace Server.Api.Dtos
     {
         public string name { get; set; }
         public int courseId { get; set; }
+
+        public static createChannelDto Convert(TextChannel channel, User user)
+        {
+            throw new System.Exception("method not implement");
+        }
     }
 }
