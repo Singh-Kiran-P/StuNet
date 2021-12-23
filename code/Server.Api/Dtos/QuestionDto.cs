@@ -74,7 +74,7 @@ namespace Server.Api.Dtos
     {
         public int id { get; set; }
         public ResponseUserDto user { get; set; }
-        public getOnlyCourseDto course { get; set; }
+        public GetPartialCourseDto course { get; set; }
         public string title { get; set; }
         public string body { get; set; }
         public ICollection<getOnlyTopicDto> topics { get; set; }
@@ -85,7 +85,7 @@ namespace Server.Api.Dtos
             return new questionDto
             {
                 id = question.id,
-                course = new getOnlyCourseDto
+                course = new GetPartialCourseDto
                 {
                     id = question.course.id,
                     name = question.course.name,

@@ -3,25 +3,6 @@ using System.Collections.Generic;
 
 namespace Server.Api.Dtos
 {
-    public record CourseDto
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string number { get; set; }
-        public string description { get; set; }
-
-        public static CourseDto Convert(Course course)
-        {
-            return new CourseDto
-            {
-                id = course.id,
-                name = course.name,
-                number = course.number,
-                description = course.description
-            };
-        }
-    }
-
     public record GetAllCourseDto
     {
         public int id { get; set; }
@@ -51,20 +32,21 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record getOnlyCourseDto
+    public record GetPartialCourseDto
     {
         public int id { get; set; }
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
 
-        public static getOnlyCourseDto Convert(Course course)
+        public static GetPartialCourseDto Convert(Course course)
         {
-            return new getOnlyCourseDto
+            return new GetPartialCourseDto
             {
                 id = course.id,
                 name = course.name,
-                number = course.number
+                number = course.number,
+                description = course.description
             };
         }
     }

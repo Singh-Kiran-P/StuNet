@@ -21,7 +21,7 @@ namespace Server.Api.Controllers
             {
                 id = topic.id,
                 name = topic.name,
-                course = new getOnlyCourseDto
+                course = new GetPartialCourseDto
                 {
                     id = topic.course.id,
                     name = topic.course.name,

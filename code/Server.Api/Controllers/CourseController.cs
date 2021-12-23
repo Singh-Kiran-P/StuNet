@@ -135,7 +135,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCourse(int id, CourseDto courseDto)
+        public async Task<ActionResult> UpdateCourse(int id, GetPartialCourseDto courseDto)
         {
             Course course = new()
             {

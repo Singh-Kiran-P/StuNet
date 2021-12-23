@@ -23,7 +23,7 @@ namespace Server.Api.Dtos
     {
         public int id { get; set; }
         public string name { get; set; }
-        public CourseDto course { get; set; }
+        public GetPartialCourseDto course { get; set; }
         public ICollection<MessageDto> messages { get; set; }
 
         public static getChannelDto Convert(TextChannel channel)
@@ -32,7 +32,7 @@ namespace Server.Api.Dtos
             {
                 id = channel.id,
                 name = channel.name,
-                course = CourseDto.Convert(channel.course),
+                course = GetPartialCourseDto.Convert(channel.course),
                 messages = channel.messages.Select(m => MessageDto.Convert(m)).ToList()
             };
         }

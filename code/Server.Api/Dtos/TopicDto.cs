@@ -29,7 +29,7 @@ namespace Server.Api.Dtos
     {
         public int id { get; set; }
         public string name { get; set; }
-        public getOnlyCourseDto course { get; set; }
+        public GetPartialCourseDto course { get; set; }
         public ICollection<onlyQuestionDto> questions { get; set; }
 
         public static getTopicDto Convert(Topic topic)
