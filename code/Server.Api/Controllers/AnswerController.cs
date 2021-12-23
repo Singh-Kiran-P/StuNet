@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
-using Microsoft.AspNetCore.SignalR;
 using ChatSample.Hubs;
 
 namespace Server.Api.Controllers
@@ -20,20 +20,19 @@ namespace Server.Api.Controllers
     {
         private readonly IAnswerRepository _answerRepository;
         private readonly UserManager<User> _userManager;
-        // private readonly ITopicRepository _topicRepository;
         private readonly IQuestionRepository _questionRepository;
-		private readonly IHubContext<ChatHub> _hubContext;
-		private readonly INotificationRepository<AnswerNotification> _notificationRepository;
-		private readonly IQuestionSubscriptionRepository _subscriptionRepository;
-		public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, IQuestionSubscriptionRepository subscriptionRepository)
+        private readonly IHubContext<ChatHub> _hubContext;
+        private readonly INotificationRepository<AnswerNotification> _notificationRepository;
+        private readonly IQuestionSubscriptionRepository _subscriptionRepository;
+        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, IQuestionSubscriptionRepository subscriptionRepository)
         {
             _answerRepository = answerRepository;
             _userManager = userManager;
             _questionRepository = questionRepository;
-			_hubContext = hubContext;
-			_notificationRepository = notificationRepository;
-			_subscriptionRepository = subscriptionRepository;
-		}
+            _hubContext = hubContext;
+            _notificationRepository = notificationRepository;
+            _subscriptionRepository = subscriptionRepository;
+        }
 
         //[Authorize(Roles = "student")]
         [HttpGet]
@@ -113,16 +112,16 @@ namespace Server.Api.Controllers
                 await _answerRepository.createAsync(answer);
 
                 IEnumerable<string> subscriberIds = (await _subscriptionRepository.getByQuestionId(question.id)).Select(sub => sub.userId);
-				await _notificationRepository.createAllAync(subscriberIds.Select(userId => new AnswerNotification
-				{
-					userId = userId,
-					answerId = answer.id,
+                await _notificationRepository.createAllAync(subscriberIds.Select(userId => new AnswerNotification
+                {
+                    userId = userId,
+                    answerId = answer.id,
                     answer = answer,
-					time = answer.time
-				}));
+                    time = answer.time
+                }));
 
-				var ret = ResponseAnswerDto.convert(answer, user);
-				await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
+                var ret = ResponseAnswerDto.convert(answer, user);
+                await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
                 return Ok(ret);
             }
             else
@@ -180,14 +179,16 @@ namespace Server.Api.Controllers
         {
             Answer existingAnswer = await _answerRepository.getAsync(id);
             ClaimsPrincipal currentUser = HttpContext.User;
-            if (currentUser.HasClaim(c => c.Type == "userref")) {
+            if (currentUser.HasClaim(c => c.Type == "userref"))
+            {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 Question question = await _questionRepository.getAsync(existingAnswer.questionId);
-                if (question.userId == userId) {
+                if (question.userId == userId)
+                {
                     existingAnswer.isAccepted = accepted;
                     await _answerRepository.updateAsync(existingAnswer);
                     return NoContent();
-                }                
+                }
             }
             return Unauthorized();
         }
