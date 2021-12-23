@@ -20,7 +20,7 @@ namespace Server.Api.Dtos
             {
                 id = answer.id,
                 user = ResponseUserDto.convert(user),
-                question = questionDto.convert(answer.question, user),
+                question = questionDto.Convert(answer.question, user),
                 // course = getOnlyCourseDto.convert(answer.question.course),
                 title = answer.title,
                 body = answer.body,

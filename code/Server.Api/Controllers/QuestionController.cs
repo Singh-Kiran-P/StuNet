@@ -52,7 +52,7 @@ namespace Server.Api.Controllers
                 foreach (var q in questions)
                 {
                     User user = await _userManager.FindByIdAsync(q.userId);
-                    res.Add(questionDto.convert(q, user));
+                    res.Add(questionDto.Convert(q, user));
                 }
                 return Ok(res);
             }
@@ -75,7 +75,7 @@ namespace Server.Api.Controllers
                                                                                     .Select(task => task.Result);
 
                 User user = await _userManager.FindByIdAsync(userId);
-                return Ok(subscribedQuestions.Select(q => questionDto.convert(q, user)));
+                return Ok(subscribedQuestions.Select(q => questionDto.Convert(q, user)));
             }
             else
             {
@@ -95,7 +95,7 @@ namespace Server.Api.Controllers
                 }
                 User user = await _userManager.FindByIdAsync(question.userId);
 
-                return Ok(questionDto.convert(question, user));
+                return Ok(questionDto.Convert(question, user));
             }
             catch
             {
@@ -112,7 +112,7 @@ namespace Server.Api.Controllers
             foreach (var q in matches)
             {
                 User user = await _userManager.FindByIdAsync(q.userId);
-                res.Add(questionDto.convert(q, user));
+                res.Add(questionDto.Convert(q, user));
             }
             return Ok(res);
         }
@@ -171,7 +171,7 @@ namespace Server.Api.Controllers
                     time = question.time
                 }));
 
-                var ret = questionDto.convert(question, user);
+                var ret = questionDto.Convert(question, user);
                 await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
                 return Ok(ret);
             }

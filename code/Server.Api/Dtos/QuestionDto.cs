@@ -21,7 +21,7 @@ namespace Server.Api.Dtos
         public DateTime time { get; set; }
         public ICollection<getOnlyTopicDto> topics { get; set; }
 
-        public static onlyQuestionDto convert(Question question)
+        public static onlyQuestionDto Convert(Question question)
         {
             return new onlyQuestionDto
             {
@@ -47,7 +47,7 @@ namespace Server.Api.Dtos
         public ICollection<getOnlyTopicDto> topics { get; set; }
         public DateTime time { get; set; }
 
-        public static onlyQuestionUserDto convert(Question question, User user)
+        public static onlyQuestionUserDto Convert(Question question, User user)
         {
             return new onlyQuestionUserDto
             {
@@ -75,7 +75,7 @@ namespace Server.Api.Dtos
         public ICollection<getOnlyTopicDto> topics { get; set; }
         public DateTime time { get; set; }
 
-        public static questionDto convert(Question question, User user)
+        public static questionDto Convert(Question question, User user)
         {
             return new questionDto
             {
