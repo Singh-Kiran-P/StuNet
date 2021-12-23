@@ -19,6 +19,7 @@ namespace Server.UnitTests
 
         private readonly Mock<ITopicRepository> _topicRepositoryStub = new();
         private readonly Mock<ICourseRepository> _courseRepositoryStub = new();
+        private readonly Mock<ICourseSubscriptionRepository> _courseSubscriptionRepositoryStub = new();
 
         private string randomName()
         {
@@ -41,7 +42,7 @@ namespace Server.UnitTests
                 number = randomInt().ToString(),
                 description = randomName()
             };
-            var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object);
+            var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
 
             //When
             Course course = ((await controller.createCourse(dto)).Result as OkObjectResult).Value as Course;
@@ -68,7 +69,7 @@ namespace Server.UnitTests
             };
             _courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);
-            var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object);
+            var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
             //When
             GetCourseDto dto = ((await controller.GetCourse(randomInt())).Result as OkObjectResult).Value as GetCourseDto;
             //Then
