@@ -42,15 +42,16 @@ namespace Server.Api.Controllers
             );
             return getDtos;
         }
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getCourses()
+        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> GetCourses()
         {
             IEnumerable<GetAllCourseDto> getDtos = await _GetCourseAsync();
             return Ok(getDtos);
         }
 
         [HttpGet("subscribed")]
-        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getSubscribedCourses()
+        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> GetSubscribedCourses()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
@@ -91,7 +92,7 @@ namespace Server.Api.Controllers
 
 
         [HttpGet("search/")]
-        public async Task<ActionResult<GetCourseDto>> searchByName([FromQuery] string name)
+        public async Task<ActionResult<GetCourseDto>> SearchByName([FromQuery] string name)
         {
             IEnumerable<GetAllCourseDto> getDtos = await _GetCourseAsync();
             IEnumerable<GetAllCourseDto> searchResults = StringMatcher.FuzzyMatchObject(getDtos, name);
@@ -107,7 +108,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Course>> createCourse(createCourseDto dto)
+        public async Task<ActionResult<Course>> CreateCourse(createCourseDto dto)
         {
             Course course = new()
             {
