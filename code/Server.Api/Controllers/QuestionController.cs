@@ -63,7 +63,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("subscribed")]
-        public async Task<ActionResult<IEnumerable<questionDto>>> getSubscribedQuestions()
+        public async Task<ActionResult<IEnumerable<questionDto>>> GetSubscribedQuestions()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
@@ -104,7 +104,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("GetQuestionsByCourseId/search/{courseId}")] //FIXME: Make route lower case
-        public async Task<ActionResult<GetCourseDto>> searchByName(int courseId, [FromQuery] string name)
+        public async Task<ActionResult<GetCourseDto>> SearchByName(int courseId, [FromQuery] string name)
         {
             var questions = await _questionRepository.getByCourseIdAsync(courseId);
             IEnumerable<Question> matches = StringMatcher.FuzzyMatchObject(questions, name);
