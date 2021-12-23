@@ -109,7 +109,8 @@ export const s = screens({
 
 
     Notifications: {
-        screenTitle: 'Your Notifications'
+        screenTitle: 'Your Notifications',
+        scroll: false
     },
 
 

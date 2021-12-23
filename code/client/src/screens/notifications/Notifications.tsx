@@ -1,5 +1,6 @@
 import React, { Screen, useState, Notification, axios, BaseQuestion, BaseAnswer, extend } from '@/.';
 import { View, Text, Loader, List, CompactQuestion, CompactAnswer } from '@/components';
+import { isEqualIcon } from 'react-native-paper/lib/typescript/components/Icon';
 
 type Props = {
     notif: BaseQuestion | BaseAnswer,
@@ -7,7 +8,7 @@ type Props = {
 }
 
 
-const CompactNotificatio = extend<typeof View, Props>(View, ({ notif, isQuestion, ...props }) => {
+const CompactNotification = extend<typeof View, Props>(View, ({ notif, isQuestion, ...props }) => {
     const s = isQuestion ? 'A question has been asked:' : 'An answer has been given:'
 
     return (
@@ -43,7 +44,12 @@ export default Screen('Notifications', ({ nav }) => {
 
     return (
         <Loader load={fetch}>
-            {Notifications.map(([notif, isQuestion], i) => <CompactNotificatio notif={notif} isQuestion={isQuestion} key={i} />)}
+            <List data={Notifications} ListEmptyComponent={
+                <Text type='hint' style={{alignSelf: 'center'}}>You don't have any notifications yet.</Text>
+            } renderItem={({ item, index }) => {
+                let [notif, isQuestion] = item;
+                return <CompactNotification notif={notif} isQuestion={isQuestion} key={index} />
+            }} />
         </Loader>
     )
 })
