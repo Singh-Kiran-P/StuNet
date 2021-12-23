@@ -1,37 +1,47 @@
 using System;
-using MailKit;
-using MailKit.Net.Imap;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 
-namespace Server.Api.Services {
-	public class Receiver
-	{
-        private ImapClient _client;
-        private IdleClient _idleClient;
+using MailKit;
+using MailKit.Net.Imap;
+using MailKit.Security;
 
-        public Receiver(IConfiguration configuration) {
-            _client = new ImapClient();
-            _client.Connect("imap.gmail.com", 993, true);
-            _client.Authenticate(configuration.GetSection("Mail")["G-SenderEmail"], configuration.GetSection("Mail")["G-password"]);
-            Receive();
+using Server.Api.Repositories;
+using Server.Api.Dtos;
+
+namespace Server.Api.Services {
+
+    public class Receiver
+    {
+	private readonly IQuestionRepository _questionRepository;
+	private readonly IConfiguration _configuration;
+    
+        public Receiver(IConfiguration configuration, IQuestionRepository questionRepository)
+        {
+			_questionRepository = questionRepository;
+            _configuration = configuration;
+            Console.Write("Running email reciever");
+            // tester();   
         }
 
-		public void Receive()
-		{
-            var inbox = _client.Inbox;
-            inbox.Open(FolderAccess.ReadOnly);
-
-            _client.
-
-            Console.WriteLine("Total messages: {0}", inbox.Count);
-            Console.WriteLine("Recent messages: {0}", inbox.Recent);
-
-            for (int i = 0; i < inbox.Count; i++) {
-                var message = inbox.GetMessage (i);
-                Console.WriteLine("Subject: {0}", message.Subject);
+        public async Task Run(){
+            string pass = _configuration.GetSection("Mail")["G-password"];
+            string email = _configuration.GetSection("Mail")["G-SenderEmail"];
+            var client = new IdleClient("imap.gmail.com", 993, SecureSocketOptions.Auto, email, pass);
+            await client.Run();
+			// idle.GetAwaiter().GetResult();
+            
+        }
+        public async void tester() {
+            var questions = await _questionRepository.getAllAsync();
+            List<questionDto> res = new List<questionDto>();
+            foreach (var q in questions)
+            {
+            	Console.Write(q.title + '\n');
             }
-
-            _client.Disconnect(true);
-		}
-	}
+        }
+    }
 }

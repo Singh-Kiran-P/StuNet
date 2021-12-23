@@ -133,7 +133,10 @@ namespace Server.Api
             setupFluentEmail(services);
 
             // Email MailKit
-            Receiver receiver = new(Configuration); // TODO inject??
+            //services.AddSingleton<Receiver>();
+            //Receiver receiver = new(Configuration); // TODO inject??
+            //services.AddSingleton<IHostedService, HostedServices>();
+
         }
 
         private void setupFluentEmail(IServiceCollection services)
