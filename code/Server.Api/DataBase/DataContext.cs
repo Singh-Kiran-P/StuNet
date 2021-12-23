@@ -42,12 +42,12 @@ namespace Server.Api.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            createFieldOfStudy(modelBuilder);
-            createUsers(modelBuilder);
-            createCourse(modelBuilder);
+            CreateFieldOfStudy(modelBuilder);
+            CreateUsers(modelBuilder);
+            CreateCourse(modelBuilder);
         }
 
-        private void createUsers(ModelBuilder modelBuilder)
+        private void CreateUsers(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
@@ -103,7 +103,7 @@ namespace Server.Api.DataBase
             modelBuilder.Entity<Professor>().HasData(defaultProf);
         }
 
-        private void createFieldOfStudy(ModelBuilder modelBuilder)
+        private void CreateFieldOfStudy(ModelBuilder modelBuilder)
         {
             var fos1 = new FieldOfStudy()
             {
@@ -115,7 +115,7 @@ namespace Server.Api.DataBase
             modelBuilder.Entity<FieldOfStudy>().HasData(fos1);
         }
 
-        private void createCourse(ModelBuilder modelBuilder)
+        private void CreateCourse(ModelBuilder modelBuilder)
         {
             var courses = new List<Course>
             {
