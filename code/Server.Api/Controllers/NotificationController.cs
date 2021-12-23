@@ -43,7 +43,7 @@ namespace Server.Api.Controllers
                 IEnumerable<QuestionNotification> qNotifs = await _GetQuestionNotifications(userId);
                 IEnumerable<AnswerNotification> cNotifs = await _GetAnswerNotifications(userId);
 
-                return Ok((qNotifs.Select(n => NotificationDto.convert(n)), cNotifs.Select(n => NotificationDto.convert(n))));
+                return Ok((qNotifs.Select(n => NotificationDto.Convert(n)), cNotifs.Select(n => NotificationDto.Convert(n))));
             }
             else
             {

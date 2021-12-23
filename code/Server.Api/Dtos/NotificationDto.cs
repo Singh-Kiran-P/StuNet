@@ -11,7 +11,7 @@ namespace Server.Api.Dtos
         public string body { get; set; }
         public DateTime time { get; set; }
 
-        public static NotificationDto convert(AnswerNotification notification)
+        public static NotificationDto Convert(AnswerNotification notification)
         {
             return new NotificationDto
             {
@@ -23,7 +23,7 @@ namespace Server.Api.Dtos
             };
         }
 
-        public static NotificationDto convert(QuestionNotification notification)
+        public static NotificationDto Convert(QuestionNotification notification)
         {
             return new NotificationDto
             {
