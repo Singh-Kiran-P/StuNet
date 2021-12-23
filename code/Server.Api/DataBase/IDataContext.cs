@@ -12,7 +12,6 @@ namespace Server.Api.DataBase
         DbSet<User> Users { get; set; }
         DbSet<Topic> Topics { get; set; }
         DbSet<Question> Questions { get; set; }
-
         DbSet<IdentityUserRole<string>> Roles { get; set; }
         DbSet<Student> Students { get; set; }
         DbSet<Professor> Professors { get; set; }
