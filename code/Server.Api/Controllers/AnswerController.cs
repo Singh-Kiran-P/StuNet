@@ -37,16 +37,16 @@ namespace Server.Api.Controllers
 
         //[Authorize(Roles = "student")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswers()
+        public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetAnswers()
         {
             try
             {
                 IEnumerable<Answer> answers = await _answerRepository.getAllAsync();
-                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                List<GetAnswerDto> res = new List<GetAnswerDto>();
                 foreach (var answer in answers)
                 {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    res.Add(ResponseAnswerDto.Convert(answer, user));
+                    res.Add(GetAnswerDto.Convert(answer, user));
                 }
                 return Ok(res);
             }
@@ -58,16 +58,16 @@ namespace Server.Api.Controllers
 
         //[Authorize(Roles = "student,prof")]
         [HttpGet("GetAnswersByQuestionId/{questionId}")] //FIXME: Make route lower case
-        public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswersByQuestionId(int questionId)
+        public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
             try
             {
                 IEnumerable<Answer> answers = await _answerRepository.getByQuestionId(questionId);
-                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                List<GetAnswerDto> res = new List<GetAnswerDto>();
                 foreach (var answer in answers)
                 {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    res.Add(ResponseAnswerDto.Convert(answer, user));
+                    res.Add(GetAnswerDto.Convert(answer, user));
                 }
                 return Ok(res);
             }
@@ -78,7 +78,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResponseAnswerDto>> GetAnswer(int id)
+        public async Task<ActionResult<GetAnswerDto>> GetAnswer(int id)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace Server.Api.Controllers
                     return NotFound();
                 }
 
-                return Ok(ResponseAnswerDto.Convert(answer, user));
+                return Ok(GetAnswerDto.Convert(answer, user));
             }
             catch
             {
@@ -99,7 +99,7 @@ namespace Server.Api.Controllers
 
         //[Authorize(Roles = "student")]
         [HttpPost]
-        public async Task<ActionResult<ResponseAnswerDto>> CreateAnswer(PostAnswerDto dto)
+        public async Task<ActionResult<GetAnswerDto>> CreateAnswer(PostAnswerDto dto)
         {
 
             // Get user from token
@@ -132,7 +132,7 @@ namespace Server.Api.Controllers
                     time = answer.time
                 }));
 
-                var ret = ResponseAnswerDto.Convert(answer, user);
+                var ret = GetAnswerDto.Convert(answer, user);
                 await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
                 return Ok(ret);
             }

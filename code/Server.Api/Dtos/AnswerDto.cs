@@ -3,7 +3,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public record ResponseAnswerDto
+    public record GetAnswerDto
     {
         public int id { get; set; }
         public ResponseUserDto user { get; set; }
@@ -14,9 +14,9 @@ namespace Server.Api.Dtos
         public DateTime time { get; set; }
         public bool isAccepted { get; set; }
 
-        public static ResponseAnswerDto Convert(Answer answer, User user)
+        public static GetAnswerDto Convert(Answer answer, User user)
         {
-            return new ResponseAnswerDto
+            return new GetAnswerDto
             {
                 id = answer.id,
                 user = ResponseUserDto.Convert(user),
