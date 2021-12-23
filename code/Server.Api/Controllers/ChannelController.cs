@@ -22,31 +22,31 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannels()
+        public async Task<ActionResult<IEnumerable<GetPartialChannelDto>>> GetChannels()
         {
             var channels = await _channelRepository.getAllAsync();
-            return Ok(channels.Select(channel => getOnlyChannelDto.Convert(channel)));
+            return Ok(channels.Select(channel => GetPartialChannelDto.Convert(channel)));
         }
 
         [HttpGet("GetChannelsByCourseId/{courseId}")] //FIXME: Make route lower case
-        public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannelsByCourseId(int courseId)
+        public async Task<ActionResult<IEnumerable<GetPartialChannelDto>>> GetChannelsByCourseId(int courseId)
         {
             var channels = await _channelRepository.getByCourseIdAsync(courseId);
-            return Ok(channels.Select(channel => getOnlyChannelDto.Convert(channel)));
+            return Ok(channels.Select(channel => GetPartialChannelDto.Convert(channel)));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<getChannelDto>> GetChannel(int id)
+        public async Task<ActionResult<GetChannelDto>> GetChannel(int id)
         {
             var channel = await _channelRepository.getAsync(id);
             if (channel == null)
                 return NotFound();
 
-            return Ok(getChannelDto.Convert(channel));
+            return Ok(GetChannelDto.Convert(channel));
         }
 
         [HttpPost]
-        public async Task<ActionResult<getOnlyChannelDto>> CreateChannel(createChannelDto dto)
+        public async Task<ActionResult<GetPartialChannelDto>> CreateChannel(CreateChannelDto dto)
         {
             TextChannel channel = new()
             {
@@ -56,7 +56,7 @@ namespace Server.Api.Controllers
             };
 
             await _channelRepository.createAsync(channel);
-            return Ok(getOnlyChannelDto.Convert(channel));
+            return Ok(GetPartialChannelDto.Convert(channel));
         }
 
         [HttpDelete("{id}")]
@@ -67,7 +67,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateChannel(int id, createChannelDto dto)
+        public async Task<ActionResult> UpdateChannel(int id, CreateChannelDto dto)
         {
             TextChannel channel = new()
             {

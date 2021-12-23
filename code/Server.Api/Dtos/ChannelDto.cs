@@ -4,31 +4,16 @@ using System.Linq;
 
 namespace Server.Api.Dtos
 {
-    public record getOnlyChannelDto
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-
-        public static getOnlyChannelDto Convert(TextChannel channel)
-        {
-            return new getOnlyChannelDto
-            {
-                id = channel.id,
-                name = channel.name
-            };
-        }
-    }
-
-    public record getChannelDto
+    public record GetChannelDto
     {
         public int id { get; set; }
         public string name { get; set; }
         public GetPartialCourseDto course { get; set; }
         public ICollection<MessageDto> messages { get; set; }
 
-        public static getChannelDto Convert(TextChannel channel)
+        public static GetChannelDto Convert(TextChannel channel)
         {
-            return new getChannelDto
+            return new GetChannelDto
             {
                 id = channel.id,
                 name = channel.name,
@@ -38,12 +23,27 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record createChannelDto
+    public record GetPartialChannelDto
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+
+        public static GetPartialChannelDto Convert(TextChannel channel)
+        {
+            return new GetPartialChannelDto
+            {
+                id = channel.id,
+                name = channel.name
+            };
+        }
+    }
+
+    public record CreateChannelDto
     {
         public string name { get; set; }
         public int courseId { get; set; }
 
-        public static createChannelDto Convert(TextChannel channel, User user)
+        public static CreateChannelDto Convert(TextChannel channel, User user)
         {
             throw new System.Exception("method not implement");
         }

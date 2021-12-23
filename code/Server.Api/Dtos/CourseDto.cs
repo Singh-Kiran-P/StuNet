@@ -24,7 +24,7 @@ namespace Server.Api.Dtos
         public string number { get; set; }
         public string description { get; set; }
         public ICollection<getOnlyTopicDto> topics;
-        public ICollection<getOnlyChannelDto> channels;
+        public ICollection<GetPartialChannelDto> channels;
 
         public static GetCourseDto Convert(Course course)
         {
