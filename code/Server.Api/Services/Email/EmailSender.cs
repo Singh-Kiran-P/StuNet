@@ -83,7 +83,7 @@ namespace Server.Api.Services
             }
         }
 
-        public void sendQuestionEmailToProf(Question question)
+        public void SendQuestionEmailToProf(Question question)
         {
             throw new NotImplementedException();
         }
@@ -93,7 +93,7 @@ namespace Server.Api.Services
             throw new NotImplementedException();
         }
 
-        private async Task recieveMail()
+        private async Task RecieveMail()
         { //Probably use some sort of webhooks since al mailing clients are paid
             throw new NotImplementedException();
         }
