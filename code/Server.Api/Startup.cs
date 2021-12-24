@@ -131,7 +131,7 @@ namespace Server.Api
             services.AddScoped<IFieldOfStudyRepository, PgFieldOfStudyRepository>();
             services.AddScoped<ICourseRepository, PgCourseRepository>();
             services.AddScoped<IChannelRepository, PgChannelRepository>();
-            services.AddScoped<PgMessageRepository, PgMessageRepository>();
+            services.AddScoped<IMessageRepository, PgMessageRepository>();
             services.AddScoped<ICourseSubscriptionRepository, PgCourseSubscriptionRepository>();
             services.AddScoped<IQuestionSubscriptionRepository, PgQuestionSubscriptionRepository>();
             services.AddScoped<INotificationRepository<AnswerNotification>, PgAnswerNotificationRepository>();
