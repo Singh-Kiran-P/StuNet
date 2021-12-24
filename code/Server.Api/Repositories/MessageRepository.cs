@@ -7,6 +7,12 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
+    public interface IMessageRepository //: IRestfulRepository<FieldOfStudy>
+    {
+        Task<IEnumerable<Message>> GetAllAsync(int channelId);
+        Task CreateAsync(Message message);
+    }
+
     public class pgMessageRepository
     {
         private readonly IDataContext _context;
