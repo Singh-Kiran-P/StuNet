@@ -79,7 +79,7 @@ namespace ChatSample.Hubs
         public async Task AddUserToSubscribedGroups()
         {
             string userId = getCurrentUserId();
-            ICollection<CourseSubscription> subscribedCourses = await _courseSubscriptionRepository.getByUserId(userId);
+            ICollection<CourseSubscription> subscribedCourses = await _courseSubscriptionRepository.GetByUserId(userId);
             ICollection<QuestionSubscription> subscribedQuestions = await _questionSubscriptionRepository.getByUserId(userId);
             await Task.WhenAll(subscribedCourses.Select(sc => Groups.AddToGroupAsync(Context.ConnectionId, "Course " + sc.courseId.ToString())));
             await Task.WhenAll(subscribedQuestions.Select(sq => Groups.AddToGroupAsync(Context.ConnectionId, "Question " + sq.questionId.ToString())));

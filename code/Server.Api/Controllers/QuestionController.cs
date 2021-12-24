@@ -162,7 +162,7 @@ namespace Server.Api.Controllers
 
                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + question.id.ToString());
 
-                IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.getByCourseId(c.id)).Select(sub => sub.userId);
+                IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.GetByCourseId(c.id)).Select(sub => sub.userId);
                 await _notificationRepository.createAllAync(subscriberIds.Select(userId => new QuestionNotification
                 {
                     userId = userId,

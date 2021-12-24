@@ -10,10 +10,10 @@ namespace Server.Api.Repositories
 {
     public interface ICourseSubscriptionRepository : IRestfulRepository<CourseSubscription>
     {
-        Task<ICollection<CourseSubscription>> getByUserId(string userId);
-        Task<ICollection<CourseSubscription>> getByCourseId(int id);
-        Task<ICollection<CourseSubscription>> getByUserIdAndCourseIdAsync(string userId, int courseId);
-        Task<CourseSubscription> getSingleByUserIdAndCourseIdAsync(string userId, int courseId);
+        Task<ICollection<CourseSubscription>> GetByUserId(string userId);
+        Task<ICollection<CourseSubscription>> GetByCourseId(int id);
+        Task<ICollection<CourseSubscription>> GetByUserIdAndCourseIdAsync(string userId, int courseId);
+        Task<CourseSubscription> GetSingleByUserIdAndCourseIdAsync(string userId, int courseId);
     }
 
     public class PgCourseSubscriptionRepository : ICourseSubscriptionRepository
@@ -25,25 +25,25 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        public async Task<ICollection<CourseSubscription>> getByUserId(string userId)
+        public async Task<ICollection<CourseSubscription>> GetByUserId(string userId)
         {
             return await _context.CourseSubscriptions.Where(s => userId == s.userId).ToListAsync();
         }
 
-        public async Task<ICollection<CourseSubscription>> getByCourseId(int id)
+        public async Task<ICollection<CourseSubscription>> GetByCourseId(int id)
         {
             return await _context.CourseSubscriptions.Where(s => id == s.courseId).ToListAsync();
         }
 
-        public async Task<ICollection<CourseSubscription>> getByUserIdAndCourseIdAsync(string userId, int courseId)
+        public async Task<ICollection<CourseSubscription>> GetByUserIdAndCourseIdAsync(string userId, int courseId)
         {
             return await _context.CourseSubscriptions
                 .Where(s => s.userId == userId && s.courseId == courseId).ToListAsync();
         }
 
-        public async Task<CourseSubscription> getSingleByUserIdAndCourseIdAsync(string userId, int courseId)
+        public async Task<CourseSubscription> GetSingleByUserIdAndCourseIdAsync(string userId, int courseId)
         {
-            return (await getByUserIdAndCourseIdAsync(userId, courseId)).FirstOrDefault(null);
+            return (await GetByUserIdAndCourseIdAsync(userId, courseId)).FirstOrDefault(null);
         }
 
         public async Task<IEnumerable<CourseSubscription>> GetAllAsync()

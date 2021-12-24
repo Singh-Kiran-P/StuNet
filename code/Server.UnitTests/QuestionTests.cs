@@ -141,7 +141,7 @@ namespace Server.UnitTests
 			MockManager.Setup(repo => repo.FindByEmailAsync(It.IsAny<string>()))
         		.ReturnsAsync(randomUser);
 
-            _courseSubscriptionRepositoryStub.Setup(repo => repo.getByCourseId(It.IsAny<int>()))
+            _courseSubscriptionRepositoryStub.Setup(repo => repo.GetByCourseId(It.IsAny<int>()))
                 .ReturnsAsync(new CourseSubscription[0]);
 
 			_hubContextStub.Setup(c => c.Groups.AddToGroupAsync(It.IsAny<string>(), It.IsAny<string>(), CancellationToken.None)).
