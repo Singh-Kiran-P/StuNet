@@ -10,7 +10,7 @@ namespace Server.Api.Repositories
 {
     public interface ICourseRepository : IRestfulRepository<Course>
     {
-        Task<Course> getByNameAsync(string name);
+        Task<Course> GetByNameAsync(string name);
     }
 
     public class PgCourseRepository : ICourseRepository
@@ -70,7 +70,7 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Course> getByNameAsync(string name)
+        public async Task<Course> GetByNameAsync(string name)
         {
             return await _context.Courses
                 .Where(c => c.name == name)
