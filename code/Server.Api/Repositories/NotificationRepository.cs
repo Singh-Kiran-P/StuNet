@@ -13,7 +13,6 @@ namespace Server.Api.Repositories
     {
         Task<ICollection<T>> getByUserId(string userId);
         Task createAllAync(IEnumerable<T> Notifications);
-
     }
 
     public abstract class PgNotificationRepository<T, V> : INotificationRepository<T> where T : Notification
@@ -25,26 +24,26 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        protected abstract DbSet<T> getDbSet();
+        protected abstract DbSet<T> GetDbSet();
 
-        protected abstract IIncludableQueryable<T, V> getIncludes();
+        protected abstract IIncludableQueryable<T, V> GetIncludes();
 
         public async Task<ICollection<T>> getByUserId(string userId)
         {
-            return await getIncludes()
+            return await GetIncludes()
                 .Where(s => userId == s.userId)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await getIncludes()
+            return await GetIncludes()
                 .ToListAsync();
         }
 
         public async Task<T> GetAsync(int id)
         {
-            return await getIncludes()
+            return await GetIncludes()
                 .Where(s => s.id == id)
                 .FirstOrDefaultAsync();
         }
@@ -57,24 +56,24 @@ namespace Server.Api.Repositories
 
         public async Task CreateAsync(T notification)
         {
-            getDbSet().Add(notification);
+            GetDbSet().Add(notification);
             await _context.SaveChangesAsync();
         }
 
         public async Task createAllAync(IEnumerable<T> notifications)
         {
-            getDbSet().AddRange(notifications);
+            GetDbSet().AddRange(notifications);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            T notification = await getDbSet().FindAsync(id);
+            T notification = await GetDbSet().FindAsync(id);
             if (notification == null)
             {
                 throw new NullReferenceException();
             }
-            getDbSet().Remove(notification);
+            GetDbSet().Remove(notification);
             await _context.SaveChangesAsync();
         }
     }
