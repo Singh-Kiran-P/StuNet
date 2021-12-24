@@ -160,6 +160,7 @@ namespace Server.Api.Services
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
                 var questions = _questionRepository.getAllAsync().GetAwaiter().GetResult();
 
+
                 mailSender.SendEmail("kiran.singh@student.uhasselt.be", "Test sent email on Recieve email", EmailTemplate.ConfirmEmail, new
                 {
                     link = "Test sent email on Recieve email"
