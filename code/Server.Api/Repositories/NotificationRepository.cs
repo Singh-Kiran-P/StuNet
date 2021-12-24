@@ -11,8 +11,8 @@ namespace Server.Api.Repositories
 {
     public interface INotificationRepository<T> : IRestfulRepository<T> where T : Notification
     {
-        Task<ICollection<T>> getByUserId(string userId);
-        Task createAllAync(IEnumerable<T> Notifications);
+        Task<ICollection<T>> GetByUserId(string userId);
+        Task CreateAllAync(IEnumerable<T> Notifications);
     }
 
     public abstract class PgNotificationRepository<T, V> : INotificationRepository<T> where T : Notification
@@ -28,7 +28,7 @@ namespace Server.Api.Repositories
 
         protected abstract IIncludableQueryable<T, V> GetIncludes();
 
-        public async Task<ICollection<T>> getByUserId(string userId)
+        public async Task<ICollection<T>> GetByUserId(string userId)
         {
             return await GetIncludes()
                 .Where(s => userId == s.userId)
@@ -60,7 +60,7 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task createAllAync(IEnumerable<T> notifications)
+        public async Task CreateAllAync(IEnumerable<T> notifications)
         {
             GetDbSet().AddRange(notifications);
             await _context.SaveChangesAsync();

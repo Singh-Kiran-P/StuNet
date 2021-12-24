@@ -124,7 +124,7 @@ namespace Server.Api.Controllers
                 await _answerRepository.CreateAsync(answer);
 
                 IEnumerable<string> subscriberIds = (await _subscriptionRepository.getByQuestionId(question.id)).Select(sub => sub.userId);
-                await _notificationRepository.createAllAync(subscriberIds.Select(userId => new AnswerNotification
+                await _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new AnswerNotification
                 {
                     userId = userId,
                     answerId = answer.id,

@@ -25,12 +25,12 @@ namespace Server.Api.Controllers
 
         private async Task<IEnumerable<QuestionNotification>> _GetQuestionNotifications(string userId)
         {
-            return await _questionNotificationRepository.getByUserId(userId);
+            return await _questionNotificationRepository.GetByUserId(userId);
         }
 
         private async Task<IEnumerable<AnswerNotification>> _GetAnswerNotifications(string userId)
         {
-            return await _answerNotificationRepository.getByUserId(userId);
+            return await _answerNotificationRepository.GetByUserId(userId);
         }
 
         [HttpGet]
