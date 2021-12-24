@@ -22,7 +22,7 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Topic>> getAllAsync()
+        public async Task<IEnumerable<Topic>> GetAllAsync()
         {
             return await _context.Topics
                 .Include(t => t.questions)
@@ -31,13 +31,13 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task createAsync(Topic topic)
+        public async Task CreateAsync(Topic topic)
         {
             _context.Topics.Add(topic);
             await _context.SaveChangesAsync();
         }
 
-        public async Task deleteAsync(int topicId)
+        public async Task DeleteAsync(int topicId)
         {
             var topicToRemove = await _context.Topics.FindAsync(topicId);
             if (topicToRemove == null)
@@ -49,7 +49,7 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Topic> getAsync(int id)
+        public async Task<Topic> GetAsync(int id)
         {
             return await _context.Topics
                 .Where(t => t.id == id)
@@ -60,7 +60,7 @@ namespace Server.Api.Repositories
 
         }
 
-        public async Task updateAsync(Topic topic)
+        public async Task UpdateAsync(Topic topic)
         {
             var topicToUpdate = await _context.Topics.FindAsync(topic.id);
             if (topicToUpdate == null)

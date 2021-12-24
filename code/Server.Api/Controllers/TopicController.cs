@@ -40,14 +40,14 @@ namespace Server.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetTopicDto>>> GetTopics()
         {
-            var topics = await _topicRepository.getAllAsync();
+            var topics = await _topicRepository.GetAllAsync();
             return Ok(topics.Select(topic => ToDto(topic)));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetTopicDto>> GetTopic(int id)
         {
-            var topic = await _topicRepository.getAsync(id);
+            var topic = await _topicRepository.GetAsync(id);
             if (topic == null)
             {
                 return NotFound();
@@ -61,17 +61,17 @@ namespace Server.Api.Controllers
             Topic topic = new()
             {
                 name = dto.name,
-                course = await _courseRepository.getAsync(dto.courseId),
+                course = await _courseRepository.GetAsync(dto.courseId),
                 questions = new List<Question>()
             };
-            await _topicRepository.createAsync(topic);
+            await _topicRepository.CreateAsync(topic);
             return Ok(topic);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTopic(int id)
         {
-            await _topicRepository.deleteAsync(id);
+            await _topicRepository.DeleteAsync(id);
             return NoContent();
         }
 
@@ -82,9 +82,9 @@ namespace Server.Api.Controllers
             {
                 id = id,
                 name = dto.name,
-                course = await _courseRepository.getAsync(dto.courseId)
+                course = await _courseRepository.GetAsync(dto.courseId)
             };
-            await _topicRepository.updateAsync(topic);
+            await _topicRepository.UpdateAsync(topic);
             return NoContent();
         }
     }

@@ -41,7 +41,7 @@ namespace Server.Api.Controllers
         {
             try
             {
-                IEnumerable<Answer> answers = await _answerRepository.getAllAsync();
+                IEnumerable<Answer> answers = await _answerRepository.GetAllAsync();
                 List<GetAnswerDto> res = new List<GetAnswerDto>();
                 foreach (var answer in answers)
                 {
@@ -82,7 +82,7 @@ namespace Server.Api.Controllers
         {
             try
             {
-                var answer = await _answerRepository.getAsync(id);
+                var answer = await _answerRepository.GetAsync(id);
                 User user = await _userManager.FindByIdAsync(answer.userId);
                 if (answer == null)
                 {
@@ -109,7 +109,7 @@ namespace Server.Api.Controllers
                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 User user = await _userManager.FindByEmailAsync(userEmail);
 
-                Question question = await _questionRepository.getAsync(dto.questionId);
+                Question question = await _questionRepository.GetAsync(dto.questionId);
                 if (user == null || question == null) { return BadRequest("User or Question related to answer not found"); }
                 Answer answer = new()
                 {
@@ -121,7 +121,7 @@ namespace Server.Api.Controllers
                     time = DateTime.UtcNow
                 };
 
-                await _answerRepository.createAsync(answer);
+                await _answerRepository.CreateAsync(answer);
 
                 IEnumerable<string> subscriberIds = (await _subscriptionRepository.getByQuestionId(question.id)).Select(sub => sub.userId);
                 await _notificationRepository.createAllAync(subscriberIds.Select(userId => new AnswerNotification
@@ -146,13 +146,13 @@ namespace Server.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAnswer(int id)
         {
-            var existingAnswer = await _answerRepository.getAsync(id);
+            var existingAnswer = await _answerRepository.GetAsync(id);
             if (existingAnswer is null)
             {
                 return NotFound();
             }
 
-            await _answerRepository.deleteAsync(id);
+            await _answerRepository.DeleteAsync(id);
             return NoContent();
         }
 
@@ -161,9 +161,9 @@ namespace Server.Api.Controllers
         public async Task<ActionResult> UpdateAnswer(int id, CreateAnswerDto dto)
         {
 
-            Answer existingAnswer = await _answerRepository.getAsync(id);
+            Answer existingAnswer = await _answerRepository.GetAsync(id);
             User user = await _userManager.FindByIdAsync(dto.userId); //TODO: kunnen we dit miscchien uit de jwt van request halen?
-            Question question = await _questionRepository.getAsync(dto.questionId);
+            Question question = await _questionRepository.GetAsync(dto.questionId);
             if (existingAnswer == null || user == null || question == null)
             {
                 return NotFound();
@@ -181,7 +181,7 @@ namespace Server.Api.Controllers
                 isAccepted = existingAnswer.isAccepted
             };
 
-            await _answerRepository.updateAsync(updatedAnswer);
+            await _answerRepository.UpdateAsync(updatedAnswer);
             return NoContent();
         }
 
@@ -189,16 +189,16 @@ namespace Server.Api.Controllers
         [HttpPut("SetAccepted/{id}")] //FIXME: Make route lower case
         public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
         {
-            Answer existingAnswer = await _answerRepository.getAsync(id);
+            Answer existingAnswer = await _answerRepository.GetAsync(id);
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                Question question = await _questionRepository.getAsync(existingAnswer.questionId);
+                Question question = await _questionRepository.GetAsync(existingAnswer.questionId);
                 if (question.userId == userId)
                 {
                     existingAnswer.isAccepted = accepted;
-                    await _answerRepository.updateAsync(existingAnswer);
+                    await _answerRepository.UpdateAsync(existingAnswer);
                     return NoContent();
                 }
             }

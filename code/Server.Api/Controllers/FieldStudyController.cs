@@ -22,14 +22,14 @@ namespace Server.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FieldOfStudy>>> GetFieldOfStudies()
         {
-            var fieldOfStudies = await _fieldOfStudyRepository.getAllAsync();
+            var fieldOfStudies = await _fieldOfStudyRepository.GetAllAsync();
             return Ok(fieldOfStudies);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<FieldOfStudy>> GetFieldOfStudy(int id)
         {
-            var fieldOfStudy = await _fieldOfStudyRepository.getAsync(id);
+            var fieldOfStudy = await _fieldOfStudyRepository.GetAsync(id);
             if (fieldOfStudy == null)
             {
                 return NotFound();
@@ -49,14 +49,14 @@ namespace Server.Api.Controllers
                 name = createFieldOfStudyDto.name,
                 isBachelor = createFieldOfStudyDto.isBachelor
             };
-            await _fieldOfStudyRepository.createAsync(fieldOfStudy);
+            await _fieldOfStudyRepository.CreateAsync(fieldOfStudy);
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFieldOfStudy(int id)
         {
-            await _fieldOfStudyRepository.deleteAsync(id);
+            await _fieldOfStudyRepository.DeleteAsync(id);
             return Ok();
         }
 
@@ -70,7 +70,7 @@ namespace Server.Api.Controllers
                 name = updateFieldOfStudyDto.name,
                 isBachelor = updateFieldOfStudyDto.isBachelor
             };
-            await _fieldOfStudyRepository.updateAsync(fieldOfStudy);
+            await _fieldOfStudyRepository.UpdateAsync(fieldOfStudy);
             return Ok();
         }
     }

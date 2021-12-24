@@ -66,7 +66,7 @@ namespace Server.UnitTests
         public async Task GetQuestion_InvalidId_ReturnsNotFound() {
 
             // Arrange
-            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
         	var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, GetMockUserManager().Object, _hubContextStub.Object, _notificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object);
@@ -85,7 +85,7 @@ namespace Server.UnitTests
             // Arrange
             Question question = createRandomQuestion();
 
-            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(question);
 
         	var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, GetMockUserManager().Object, _hubContextStub.Object, _notificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object);
@@ -131,10 +131,10 @@ namespace Server.UnitTests
         		topicIds = Enumerable.Range(1, 10).Select(_ => rand.Next()).ToList<int>()
         	};
 
-            _topicRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            _topicRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(randomTopic);
 
-        	_courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+        	_courseRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
         		.ReturnsAsync(randomCourse);
 
 			var MockManager = GetMockUserManager();
@@ -181,7 +181,7 @@ namespace Server.UnitTests
         [Fact]
         public async Task UpdateQuestion_InvalidId_ReturnsNotFound()
         {
-            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
             var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, GetMockUserManager().Object, _hubContextStub.Object, _notificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object);
@@ -203,7 +203,7 @@ namespace Server.UnitTests
                 topicIds = Enumerable.Range(1, 10).OrderBy(_ => rand.Next()).ToList<int>()
             };
 
-            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)createRandomQuestion());
 
         	var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, GetMockUserManager().Object, _hubContextStub.Object, _notificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object);
@@ -217,7 +217,7 @@ namespace Server.UnitTests
         [Fact]
         public async Task DeleteQuestion_InvalidId_ReturnsNotFound()
         {
-            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
             var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, GetMockUserManager().Object, _hubContextStub.Object, _notificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object);
@@ -231,7 +231,7 @@ namespace Server.UnitTests
         public async Task DeleteQuestion_WithExistingItem_ReturnsNoContent()
         {
 
-            _questionRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)createRandomQuestion());
 
         	var controller = new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, GetMockUserManager().Object, _hubContextStub.Object, _notificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object);

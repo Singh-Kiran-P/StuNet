@@ -5,10 +5,10 @@ namespace Server.Api.Repositories
 {
     public interface IRestfulRepository<T>
     {
-        Task<T> getAsync(int id);
-        Task<IEnumerable<T>> getAllAsync();
-        Task createAsync(T item);
-        Task updateAsync(T item);
-        Task deleteAsync(int id);
+        Task<T> GetAsync(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task CreateAsync(T item);
+        Task UpdateAsync(T item);
+        Task DeleteAsync(int id);
     }
 }

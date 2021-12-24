@@ -29,7 +29,7 @@ namespace Server.Api.Controllers
 
         private async Task<IEnumerable<GetAllCourseDto>> _GetCourseAsync()
         {
-            IEnumerable<Course> courses = await _courseRepository.getAllAsync();
+            IEnumerable<Course> courses = await _courseRepository.GetAllAsync();
             IEnumerable<GetAllCourseDto> getDtos = courses.Select(course =>
                new GetAllCourseDto()
                {
@@ -72,7 +72,7 @@ namespace Server.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCourseDto>> GetCourse(int id)
         {
-            Course course = await _courseRepository.getAsync(id);
+            Course course = await _courseRepository.GetAsync(id);
             if (course == null)
             {
                 return NotFound();
@@ -116,7 +116,7 @@ namespace Server.Api.Controllers
                 number = dto.number,
                 description = dto.description
             };
-            await _courseRepository.createAsync(course);
+            await _courseRepository.CreateAsync(course);
             return Ok(course);
         }
 
@@ -125,7 +125,7 @@ namespace Server.Api.Controllers
         {
             try
             {
-                await _courseRepository.deleteAsync(id);
+                await _courseRepository.DeleteAsync(id);
             }
             catch (System.Exception)
             {
@@ -144,7 +144,7 @@ namespace Server.Api.Controllers
                 number = courseDto.number,
                 description = courseDto.description
             };
-            await _courseRepository.updateAsync(course);
+            await _courseRepository.UpdateAsync(course);
             return NoContent();
         }
     }

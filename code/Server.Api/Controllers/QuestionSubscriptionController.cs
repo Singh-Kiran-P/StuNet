@@ -31,7 +31,7 @@ namespace Server.Api.Controllers
 
         private async Task<IEnumerable<GetQuestionSubscriptionDto>> _GetQuestionSubscriptions()
         {
-            IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getAllAsync();
+            IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.GetAllAsync();
             IEnumerable<GetQuestionSubscriptionDto> getDtos = subscriptions.Select(subscription => GetQuestionSubscriptionDto.Convert(subscription));
             return getDtos;
         }
@@ -46,7 +46,7 @@ namespace Server.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetQuestionSubscriptionDto>> GetQuestionSubscription(int id)
         {
-            QuestionSubscription subscription = await _questionSubscriptionRepository.getAsync(id);
+            QuestionSubscription subscription = await _questionSubscriptionRepository.GetAsync(id);
             if (subscription == null)
                 return NotFound();
 
@@ -63,7 +63,7 @@ namespace Server.Api.Controllers
         [HttpGet("ByUserAndQuestionId/{questionId}")] //FIXME: Make route lower case
         public async Task<ActionResult<GetByIdsQuestionSubscriptionDto>> GetQuestionSubscriptionByUserAndQuestionId(int questionId)
         {
-            IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getAllAsync();
+            IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.GetAllAsync();
             ClaimsPrincipal currentUser = HttpContext.User;
             string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
             User user = await _userManager.FindByEmailAsync(userEmail);
@@ -90,7 +90,7 @@ namespace Server.Api.Controllers
                     questionId = dto.questionId,
                 };
                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + subscription.questionId.ToString());
-                await _questionSubscriptionRepository.createAsync(subscription);
+                await _questionSubscriptionRepository.CreateAsync(subscription);
                 return Ok(subscription);
             }
             else
@@ -104,7 +104,7 @@ namespace Server.Api.Controllers
         {
             try
             {
-                QuestionSubscription sub = await _questionSubscriptionRepository.getAsync(id);
+                QuestionSubscription sub = await _questionSubscriptionRepository.GetAsync(id);
                 ClaimsPrincipal currentUser = HttpContext.User;
                 if (currentUser.HasClaim(c => c.Type == "username"))
                 {
@@ -112,7 +112,7 @@ namespace Server.Api.Controllers
                     User user = await _userManager.FindByEmailAsync(userEmail);
 
                     await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + sub.questionId.ToString());
-                    await _questionSubscriptionRepository.deleteAsync(id);
+                    await _questionSubscriptionRepository.DeleteAsync(id);
                 }
                 else
                 {

@@ -24,7 +24,7 @@ namespace Server.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPartialChannelDto>>> GetChannels()
         {
-            var channels = await _channelRepository.getAllAsync();
+            var channels = await _channelRepository.GetAllAsync();
             return Ok(channels.Select(channel => GetPartialChannelDto.Convert(channel)));
         }
 
@@ -38,7 +38,7 @@ namespace Server.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetChannelDto>> GetChannel(int id)
         {
-            var channel = await _channelRepository.getAsync(id);
+            var channel = await _channelRepository.GetAsync(id);
             if (channel == null)
                 return NotFound();
 
@@ -51,18 +51,18 @@ namespace Server.Api.Controllers
             TextChannel channel = new()
             {
                 name = dto.name,
-                course = await _courseRepository.getAsync(dto.courseId),
+                course = await _courseRepository.GetAsync(dto.courseId),
                 messages = new List<Message>()
             };
 
-            await _channelRepository.createAsync(channel);
+            await _channelRepository.CreateAsync(channel);
             return Ok(GetPartialChannelDto.Convert(channel));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteChannel(int id)
         {
-            await _channelRepository.deleteAsync(id);
+            await _channelRepository.DeleteAsync(id);
             return NoContent();
         }
 
@@ -73,10 +73,10 @@ namespace Server.Api.Controllers
             {
                 id = id,
                 name = dto.name,
-                course = await _courseRepository.getAsync(dto.courseId)
+                course = await _courseRepository.GetAsync(dto.courseId)
             };
 
-            await _channelRepository.updateAsync(channel);
+            await _channelRepository.UpdateAsync(channel);
             return NoContent();
         }
     }

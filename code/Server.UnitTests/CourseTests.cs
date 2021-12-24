@@ -67,7 +67,7 @@ namespace Server.UnitTests
                 topics = new List<Topic> { new Topic() { name = randomName(), id = randomInt() } },
                 channels = new List<TextChannel> { new TextChannel() { name = randomName(), id = randomInt() } }
             };
-            _courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+            _courseRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);
             var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
             //When

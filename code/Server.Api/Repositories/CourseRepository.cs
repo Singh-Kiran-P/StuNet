@@ -22,7 +22,7 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Course>> getAllAsync()
+        public async Task<IEnumerable<Course>> GetAllAsync()
         {
             return await _context.Courses
                 .Include(c => c.topics)
@@ -30,7 +30,7 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Course> getAsync(int id)
+        public async Task<Course> GetAsync(int id)
         {
             return await _context.Courses
                 .Where(c => c.id == id)
@@ -39,7 +39,7 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task updateAsync(Course course)
+        public async Task UpdateAsync(Course course)
         {
             Course courseToUpdate = await _context.Courses.FindAsync(course.id);
             if (courseToUpdate == null)
@@ -53,13 +53,13 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task createAsync(Course course)
+        public async Task CreateAsync(Course course)
         {
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
         }
 
-        public async Task deleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             Course course = await _context.Courses.FindAsync(id);
             if (course == null)

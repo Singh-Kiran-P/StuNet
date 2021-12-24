@@ -36,26 +36,26 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> getAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await getIncludes()
                 .ToListAsync();
         }
 
-        public async Task<T> getAsync(int id)
+        public async Task<T> GetAsync(int id)
         {
             return await getIncludes()
                 .Where(s => s.id == id)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task updateAsync(T notification)
+        public async Task UpdateAsync(T notification)
         {
             //FIXME: this method doesn't belong here...
             await _context.SaveChangesAsync();
         }
 
-        public async Task createAsync(T notification)
+        public async Task CreateAsync(T notification)
         {
             getDbSet().Add(notification);
             await _context.SaveChangesAsync();
@@ -67,7 +67,7 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task deleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             T notification = await getDbSet().FindAsync(id);
             if (notification == null)
