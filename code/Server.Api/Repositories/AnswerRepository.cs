@@ -10,7 +10,7 @@ namespace Server.Api.Repositories
 {
     public interface IAnswerRepository : IRestfulRepository<Answer>
     {
-        Task<IEnumerable<Answer>> getByQuestionId(int questionId);
+        Task<IEnumerable<Answer>> GetByQuestionId(int questionId);
     }
 
     public class PgAnswerRepository : IAnswerRepository
@@ -75,7 +75,7 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Answer>> getByQuestionId(int questionId)
+        public async Task<IEnumerable<Answer>> GetByQuestionId(int questionId)
         {
             return await _context.Answers
                 // .Include(a => a.userId)

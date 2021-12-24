@@ -62,7 +62,7 @@ namespace Server.Api.Controllers
         {
             try
             {
-                IEnumerable<Answer> answers = await _answerRepository.getByQuestionId(questionId);
+                IEnumerable<Answer> answers = await _answerRepository.GetByQuestionId(questionId);
                 List<GetAnswerDto> res = new List<GetAnswerDto>();
                 foreach (var answer in answers)
                 {
