@@ -10,10 +10,10 @@ namespace Server.Api.Repositories
 {
     public interface IQuestionSubscriptionRepository : IRestfulRepository<QuestionSubscription>
     {
-        Task<ICollection<QuestionSubscription>> getByUserId(string userId);
-        Task<ICollection<QuestionSubscription>> getByQuestionId(int id);
-        Task<ICollection<QuestionSubscription>> getByUserIdAndQuestionIdAsync(string userId, int questionId);
-        Task<QuestionSubscription> getSingleByUserIdAndQuestionIdAsync(string userId, int questionId);
+        Task<ICollection<QuestionSubscription>> GetByUserId(string userId);
+        Task<ICollection<QuestionSubscription>> GetByQuestionId(int id);
+        Task<ICollection<QuestionSubscription>> GetByUserIdAndQuestionIdAsync(string userId, int questionId);
+        Task<QuestionSubscription> GetSingleByUserIdAndQuestionIdAsync(string userId, int questionId);
     }
     
     public class PgQuestionSubscriptionRepository : IQuestionSubscriptionRepository
@@ -25,30 +25,30 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        public async Task<ICollection<QuestionSubscription>> getByUserId(string userId)
+        public async Task<ICollection<QuestionSubscription>> GetByUserId(string userId)
         {
             return await _context.QuestionSubscriptions
                 .Where(s => userId == s.userId)
                 .ToListAsync();
         }
 
-        public async Task<ICollection<QuestionSubscription>> getByQuestionId(int id)
+        public async Task<ICollection<QuestionSubscription>> GetByQuestionId(int id)
         {
             return await _context.QuestionSubscriptions
                 .Where(s => id == s.questionId)
                 .ToListAsync();
         }
 
-        public async Task<ICollection<QuestionSubscription>> getByUserIdAndQuestionIdAsync(string userId, int questionId)
+        public async Task<ICollection<QuestionSubscription>> GetByUserIdAndQuestionIdAsync(string userId, int questionId)
         {
             return await _context.QuestionSubscriptions
                 .Where(subscription => subscription.userId == userId && subscription.questionId == questionId)
                 .ToListAsync();
         }
 
-        public async Task<QuestionSubscription> getSingleByUserIdAndQuestionIdAsync(string userId, int questionId)
+        public async Task<QuestionSubscription> GetSingleByUserIdAndQuestionIdAsync(string userId, int questionId)
         {
-            return (await getByUserIdAndQuestionIdAsync(userId, questionId))
+            return (await GetByUserIdAndQuestionIdAsync(userId, questionId))
                 .FirstOrDefault(null);
         }
 

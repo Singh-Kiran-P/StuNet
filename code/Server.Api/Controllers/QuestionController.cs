@@ -69,7 +69,7 @@ namespace Server.Api.Controllers
             if (currentUser.HasClaim(c => c.Type == "userref"))
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getByUserId(userId);
+                IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.GetByUserId(userId);
                 IEnumerable<int> subscribedQuestionIds = subscriptions.Select(sub => sub.questionId);
                 IEnumerable<Question> subscribedQuestions = subscribedQuestionIds.Select(id => _questionRepository.GetAsync(id))
                                                                                     .Select(task => task.Result);
