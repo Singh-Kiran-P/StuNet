@@ -39,6 +39,21 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Course> GetByNameAsync(string name)
+        {
+            return await _context.Courses
+                .Where(c => c.name == name)
+                .Include(c => c.topics)
+                .Include(c => c.channels)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task CreateAsync(Course course)
+        {
+            _context.Courses.Add(course);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(Course course)
         {
             Course courseToUpdate = await _context.Courses.FindAsync(course.id);
@@ -53,12 +68,6 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateAsync(Course course)
-        {
-            _context.Courses.Add(course);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task DeleteAsync(int id)
         {
             Course course = await _context.Courses.FindAsync(id);
@@ -68,15 +77,6 @@ namespace Server.Api.Repositories
             }
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<Course> GetByNameAsync(string name)
-        {
-            return await _context.Courses
-                .Where(c => c.name == name)
-                .Include(c => c.topics)
-                .Include(c => c.channels)
-                .FirstOrDefaultAsync();
         }
     }
 }

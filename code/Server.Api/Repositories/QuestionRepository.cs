@@ -31,16 +31,6 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Question>> GetByCourseIdAsync(int courseId)
-        {
-            return await _context.Questions
-                .Include(q => q.course)
-                .Where(q => q.course.id == courseId)
-                .Include(q => q.topics)
-                // .Include(q => q.user)
-                .ToListAsync();
-        }
-
         public async Task<Question> GetAsync(int id)
         {
             return await _context.Questions
@@ -51,21 +41,19 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<Question>> GetByCourseIdAsync(int courseId)
+        {
+            return await _context.Questions
+                .Include(q => q.course)
+                .Where(q => q.course.id == courseId)
+                .Include(q => q.topics)
+                // .Include(q => q.user)
+                .ToListAsync();
+        }
+
         public async Task CreateAsync(Question question)
         {
             _context.Questions.Add(question);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(int questionId)
-        {
-            var questionToRemove = await _context.Questions.FindAsync(questionId);
-            if (questionToRemove == null)
-            {
-                throw new NullReferenceException();
-            }
-
-            _context.Questions.Remove(questionToRemove);
             await _context.SaveChangesAsync();
         }
 
@@ -80,6 +68,18 @@ namespace Server.Api.Repositories
             questionToUpdate.body = question.body;
             questionToUpdate.topics = question.topics;
             questionToUpdate.time = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int questionId)
+        {
+            var questionToRemove = await _context.Questions.FindAsync(questionId);
+            if (questionToRemove == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            _context.Questions.Remove(questionToRemove);
             await _context.SaveChangesAsync();
         }
     }

@@ -28,13 +28,6 @@ namespace Server.Api.Repositories
 
         protected abstract IIncludableQueryable<T, V> GetIncludes();
 
-        public async Task<ICollection<T>> GetByUserId(string userId)
-        {
-            return await GetIncludes()
-                .Where(s => userId == s.userId)
-                .ToListAsync();
-        }
-
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await GetIncludes()
@@ -48,10 +41,11 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(T notification)
+        public async Task<ICollection<T>> GetByUserId(string userId)
         {
-            //FIXME: this method doesn't belong here...
-            await _context.SaveChangesAsync();
+            return await GetIncludes()
+                .Where(s => userId == s.userId)
+                .ToListAsync();
         }
 
         public async Task CreateAsync(T notification)
@@ -63,6 +57,12 @@ namespace Server.Api.Repositories
         public async Task CreateAllAync(IEnumerable<T> notifications)
         {
             GetDbSet().AddRange(notifications);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(T notification)
+        {
+            //FIXME: this method doesn't belong here...
             await _context.SaveChangesAsync();
         }
 

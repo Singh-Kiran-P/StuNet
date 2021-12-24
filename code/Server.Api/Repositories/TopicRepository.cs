@@ -31,24 +31,6 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task CreateAsync(Topic topic)
-        {
-            _context.Topics.Add(topic);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(int topicId)
-        {
-            var topicToRemove = await _context.Topics.FindAsync(topicId);
-            if (topicToRemove == null)
-            {
-                throw new NullReferenceException();
-            }
-
-            _context.Topics.Remove(topicToRemove);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<Topic> GetAsync(int id)
         {
             return await _context.Topics
@@ -57,7 +39,12 @@ namespace Server.Api.Repositories
                 .ThenInclude(q => q.topics)
                 .Include(t => t.course)
                 .FirstOrDefaultAsync();
+        }
 
+        public async Task CreateAsync(Topic topic)
+        {
+            _context.Topics.Add(topic);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Topic topic)
@@ -70,6 +57,18 @@ namespace Server.Api.Repositories
             topicToUpdate.name = topic.name;
             topicToUpdate.course = topic.course;
             topicToUpdate.questions = topic.questions;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int topicId)
+        {
+            var topicToRemove = await _context.Topics.FindAsync(topicId);
+            if (topicToRemove == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            _context.Topics.Remove(topicToRemove);
             await _context.SaveChangesAsync();
         }
     }

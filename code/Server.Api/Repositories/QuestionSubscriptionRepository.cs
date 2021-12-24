@@ -25,6 +25,19 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<QuestionSubscription>> GetAllAsync()
+        {
+            return await _context.QuestionSubscriptions
+                .ToListAsync();
+        }
+
+        public async Task<QuestionSubscription> GetAsync(int id)
+        {
+            return await _context.QuestionSubscriptions
+                .Where(s => s.id == id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<ICollection<QuestionSubscription>> GetByUserId(string userId)
         {
             return await _context.QuestionSubscriptions
@@ -52,28 +65,15 @@ namespace Server.Api.Repositories
                 .FirstOrDefault(null);
         }
 
-        public async Task<IEnumerable<QuestionSubscription>> GetAllAsync()
+        public async Task CreateAsync(QuestionSubscription questionsubscription)
         {
-            return await _context.QuestionSubscriptions
-                .ToListAsync();
-        }
-
-        public async Task<QuestionSubscription> GetAsync(int id)
-        {
-            return await _context.QuestionSubscriptions
-                .Where(s => s.id == id)
-                .FirstOrDefaultAsync();
+            _context.QuestionSubscriptions.Add(questionsubscription);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(QuestionSubscription questionsubscription)
         {
             //FIXME: this method doesn't belong here...
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task CreateAsync(QuestionSubscription questionsubscription)
-        {
-            _context.QuestionSubscriptions.Add(questionsubscription);
             await _context.SaveChangesAsync();
         }
 

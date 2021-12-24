@@ -25,6 +25,19 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<CourseSubscription>> GetAllAsync()
+        {
+            return await _context.CourseSubscriptions
+                .ToListAsync();
+        }
+
+        public async Task<CourseSubscription> GetAsync(int id)
+        {
+            return await _context.CourseSubscriptions
+                .Where(s => s.id == id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<ICollection<CourseSubscription>> GetByUserId(string userId)
         {
             return await _context.CourseSubscriptions.Where(s => userId == s.userId).ToListAsync();
@@ -46,28 +59,15 @@ namespace Server.Api.Repositories
             return (await GetByUserIdAndCourseIdAsync(userId, courseId)).FirstOrDefault(null);
         }
 
-        public async Task<IEnumerable<CourseSubscription>> GetAllAsync()
+        public async Task CreateAsync(CourseSubscription coursesubscription)
         {
-            return await _context.CourseSubscriptions
-                .ToListAsync();
-        }
-
-        public async Task<CourseSubscription> GetAsync(int id)
-        {
-            return await _context.CourseSubscriptions
-                .Where(s => s.id == id)
-                .FirstOrDefaultAsync();
+            _context.CourseSubscriptions.Add(coursesubscription);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(CourseSubscription coursesubscription)
         {
             //FIXME: this method doesn't belong here...
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task CreateAsync(CourseSubscription coursesubscription)
-        {
-            _context.CourseSubscriptions.Add(coursesubscription);
             await _context.SaveChangesAsync();
         }
 

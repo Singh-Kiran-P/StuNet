@@ -50,16 +50,6 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int answerId)
-        {
-            var answerToRemove = await _context.Answers.FindAsync(answerId);
-            if (answerToRemove == null)
-                throw new NullReferenceException();
-
-            _context.Answers.Remove(answerToRemove);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task UpdateAsync(Answer answer)
         {
             var answerToUpdate = await _context.Answers.FindAsync(answer.id);
@@ -85,6 +75,16 @@ namespace Server.Api.Repositories
                 .Include(a => a.question.topics)
                 .Where(a => a.question.id == questionId)
                 .ToListAsync();
+        }
+
+        public async Task DeleteAsync(int answerId)
+        {
+            var answerToRemove = await _context.Answers.FindAsync(answerId);
+            if (answerToRemove == null)
+                throw new NullReferenceException();
+
+            _context.Answers.Remove(answerToRemove);
+            await _context.SaveChangesAsync();
         }
     }
 }

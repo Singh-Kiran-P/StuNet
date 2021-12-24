@@ -30,24 +30,6 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task CreateAsync(TextChannel channel)
-        {
-            _context.Channels.Add(channel);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(int channelId)
-        {
-            var channelToRemove = await _context.Channels.FindAsync(channelId);
-            if (channelToRemove == null)
-            {
-                throw new NullReferenceException();
-            }
-
-            _context.Channels.Remove(channelToRemove);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<TextChannel> GetAsync(int id)
         {
             return await _context.Channels
@@ -65,6 +47,12 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
+        public async Task CreateAsync(TextChannel channel)
+        {
+            _context.Channels.Add(channel);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(TextChannel channel)
         {
             var channelToUpdate = await _context.Channels.FindAsync(channel.id);
@@ -75,6 +63,18 @@ namespace Server.Api.Repositories
             channelToUpdate.name = channel.name;
             channelToUpdate.course = channel.course;
             channelToUpdate.messages = channel.messages;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int channelId)
+        {
+            var channelToRemove = await _context.Channels.FindAsync(channelId);
+            if (channelToRemove == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            _context.Channels.Remove(channelToRemove);
             await _context.SaveChangesAsync();
         }
     }
