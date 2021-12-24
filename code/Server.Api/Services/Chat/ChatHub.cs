@@ -19,12 +19,12 @@ namespace ChatSample.Hubs
     [Authorize]
     public class ChatHub : Hub
     {
-        private readonly pgMessageRepository _messageRepository;
+        private readonly PgMessageRepository _messageRepository;
         private readonly UserManager<User> _userManager;
         private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
         private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
 
-        public ChatHub(pgMessageRepository messageRepository, UserManager<User> userManager, IQuestionSubscriptionRepository questionSubscriptionRepository, ICourseSubscriptionRepository courseSubscriptionRepository)
+        public ChatHub(PgMessageRepository messageRepository, UserManager<User> userManager, IQuestionSubscriptionRepository questionSubscriptionRepository, ICourseSubscriptionRepository courseSubscriptionRepository)
         {
             _messageRepository = messageRepository;
             _userManager = userManager;

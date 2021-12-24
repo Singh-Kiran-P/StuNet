@@ -13,11 +13,11 @@ namespace Server.Api.Repositories
         Task CreateAsync(Message message);
     }
 
-    public class pgMessageRepository : IMessageRepository
+    public class PgMessageRepository : IMessageRepository
     {
         private readonly IDataContext _context;
 
-        public pgMessageRepository(IDataContext context)
+        public PgMessageRepository(IDataContext context)
         {
             _context = context;
         }

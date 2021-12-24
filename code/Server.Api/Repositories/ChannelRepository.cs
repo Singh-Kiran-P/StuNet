@@ -13,11 +13,11 @@ namespace Server.Api.Repositories
         Task<ICollection<TextChannel>> GetByCourseIdAsync(int courseId);
     }
     
-    public class pgChannelRepository : IChannelRepository
+    public class PgChannelRepository : IChannelRepository
     {
         private readonly IDataContext _context;
 
-        public pgChannelRepository(IDataContext context)
+        public PgChannelRepository(IDataContext context)
         {
             _context = context;
         }
