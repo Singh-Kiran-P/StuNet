@@ -3,7 +3,7 @@
 **Meeting Date/Time:** meeting_date, meeting_time  
 **Meeting Purpose:** meeting_purpose  
 **Meeting Location:** meeting_location  
-**Meeting Organizer:** Kiran Singh  
+**Meeting Organizer:** meeting_organizer  
 **Note Taker:** note_taker  
 
 ## Attendees
