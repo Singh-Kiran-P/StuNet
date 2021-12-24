@@ -10,7 +10,7 @@ namespace Server.Api.Repositories
 {
     public interface IChannelRepository : IRestfulRepository<TextChannel>
     {
-        Task<ICollection<TextChannel>> getByCourseIdAsync(int courseId);
+        Task<ICollection<TextChannel>> GetByCourseIdAsync(int courseId);
     }
     
     public class pgChannelRepository : IChannelRepository
@@ -57,7 +57,7 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<ICollection<TextChannel>> getByCourseIdAsync(int courseId)
+        public async Task<ICollection<TextChannel>> GetByCourseIdAsync(int courseId)
         {
             return await _context.Channels
                 .Where(c => c.course.id == courseId)
