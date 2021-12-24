@@ -10,7 +10,7 @@ namespace Server.Api.Repositories
 {
     public interface IQuestionRepository : IRestfulRepository<Question>
     {
-        Task<IEnumerable<Question>> getByCourseIdAsync(int courseId);
+        Task<IEnumerable<Question>> GetByCourseIdAsync(int courseId);
     }
 
     public class PgQuestionRepository : IQuestionRepository
@@ -31,7 +31,7 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Question>> getByCourseIdAsync(int courseId)
+        public async Task<IEnumerable<Question>> GetByCourseIdAsync(int courseId)
         {
             return await _context.Questions
                 .Include(q => q.course)

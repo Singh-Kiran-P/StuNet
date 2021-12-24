@@ -106,7 +106,7 @@ namespace Server.Api.Controllers
         [HttpGet("GetQuestionsByCourseId/search/{courseId}")] //FIXME: Make route lower case
         public async Task<ActionResult<GetCourseDto>> SearchByName(int courseId, [FromQuery] string name)
         {
-            var questions = await _questionRepository.getByCourseIdAsync(courseId);
+            var questions = await _questionRepository.GetByCourseIdAsync(courseId);
             IEnumerable<Question> matches = StringMatcher.FuzzyMatchObject(questions, name);
             List<GetQuestionDto> res = new List<GetQuestionDto>();
             foreach (var q in matches)
