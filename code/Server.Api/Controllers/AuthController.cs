@@ -52,7 +52,7 @@ namespace Server.Api.Controllers
                 if (regStudent.IsMatch(dto.Email))
                 {
                     //fieldOfStudy processing
-                    FieldOfStudy fos = await _fieldOfStudyRepository.getByFullNameAsync(dto.fieldOfStudy);
+                    FieldOfStudy fos = await _fieldOfStudyRepository.GetByFullNameAsync(dto.fieldOfStudy);
                     if (fos == null)
                     {
                         return BadRequest("Field Of Study does not exist");

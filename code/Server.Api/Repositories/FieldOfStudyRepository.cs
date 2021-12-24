@@ -10,7 +10,7 @@ namespace Server.Api.Repositories
 {
     public interface IFieldOfStudyRepository : IRestfulRepository<FieldOfStudy>
     {
-        Task<FieldOfStudy> getByFullNameAsync(string fullName);
+        Task<FieldOfStudy> GetByFullNameAsync(string fullName);
     }
 
     public class PgFieldOfStudyRepository : IFieldOfStudyRepository
@@ -62,7 +62,7 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<FieldOfStudy> getByFullNameAsync(string fullName)
+        public async Task<FieldOfStudy> GetByFullNameAsync(string fullName)
         {
             return await _context.FieldOfStudies.SingleOrDefaultAsync(fos => fos.fullName == fullName);
         }
