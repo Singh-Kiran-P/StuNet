@@ -13,7 +13,7 @@ namespace Server.Api.Repositories
         Task CreateAsync(Message message);
     }
 
-    public class pgMessageRepository
+    public class pgMessageRepository : IMessageRepository
     {
         private readonly IDataContext _context;
 
@@ -22,14 +22,14 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Message>> getAllAsync(int channelId)
+        public async Task<IEnumerable<Message>> GetAllAsync(int channelId)
         {
             return await _context.Messages
                 .Where(m => m.channelId == channelId)
                 .ToListAsync();
         }
 
-        public async Task createAsync(Message message)
+        public async Task CreateAsync(Message message)
         {
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();

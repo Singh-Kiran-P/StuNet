@@ -43,7 +43,7 @@ namespace ChatSample.Hubs
                 body = message,
                 time = DateTime.UtcNow
             };
-            await _messageRepository.createAsync(m);
+            await _messageRepository.CreateAsync(m);
             await Clients.Group("Channel " + channelId.ToString()).SendAsync("messageReceived", userEmail, message, DateTime.UtcNow);
         }
 
