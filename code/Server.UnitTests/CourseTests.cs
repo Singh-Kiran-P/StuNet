@@ -13,39 +13,27 @@ using Server.Api.Dtos;
 
 namespace Server.UnitTests
 {
-    public class CourseTests
+    public class CourseTests : UnitTest
     {
-        public readonly Random random = new();
 
-        private readonly Mock<ITopicRepository> _topicRepositoryStub = new();
-        private readonly Mock<ICourseRepository> _courseRepositoryStub = new();
-        private readonly Mock<ICourseSubscriptionRepository> _courseSubscriptionRepositoryStub = new();
-
-        private string randomName()
-        {
-            return "random" + random.Next().ToString();
-        }
-
-        private int randomInt()
-        {
-            return random.Next();
+        private CourseController createController() {
+            return new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
         }
 
         [Fact]
         public async Task createCourse_WithValidCourseDto_Ok()
         {
             //Given
-            int count = random.Next(1, 50);
             createCourseDto dto = new()
             {
-                name = randomName(),
-                number = randomInt().ToString(),
-                description = randomName()
+                name = rand.Next().ToString(),
+                number = rand.Next().ToString(),
+                description = rand.Next().ToString()
             };
-            var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
+			var controller = createController();
 
-            //When
-            Course course = ((await controller.createCourse(dto)).Result as OkObjectResult).Value as Course;
+			//When
+			Course course = ((await controller.createCourse(dto)).Result as OkObjectResult).Value as Course;
 
             //Then
             dto.Should().BeEquivalentTo(
@@ -58,20 +46,13 @@ namespace Server.UnitTests
         [Fact]
         public async Task getCourse_WithValidId_CourseDto()
         {
-            //Given
-            Course course = new()
-            {
-                name = "random" + random.Next().ToString(),
-                number = random.Next().ToString(),
-                description = random.Next().ToString(),
-                topics = new List<Topic> { new Topic() { name = randomName(), id = randomInt() } },
-                channels = new List<TextChannel> { new TextChannel() { name = randomName(), id = randomInt() } }
-            };
-            _courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+			//Given
+			Course course = createRandomCourse();
+			_courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);
-            var controller = new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
+            var controller = createController();
             //When
-            GetCourseDto dto = ((await controller.GetCourse(randomInt())).Result as OkObjectResult).Value as GetCourseDto;
+            GetCourseDto dto = ((await controller.GetCourse(rand.Next())).Result as OkObjectResult).Value as GetCourseDto;
             //Then
             dto.Should().BeEquivalentTo(
                 course,
