@@ -3,7 +3,7 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public record NotificationDto
+    public record GetNotificationDto
     {
         public int id { get; set; }
         public int notifierId { get; set; }
@@ -11,9 +11,9 @@ namespace Server.Api.Dtos
         public string body { get; set; }
         public DateTime time { get; set; }
 
-        public static NotificationDto convert(AnswerNotification notification)
+        public static GetNotificationDto Convert(AnswerNotification notification)
         {
-            return new NotificationDto
+            return new GetNotificationDto
             {
                 id = notification.id,
                 notifierId = notification.answerId,
@@ -23,9 +23,9 @@ namespace Server.Api.Dtos
             };
         }
 
-        public static NotificationDto convert(QuestionNotification notification)
+        public static GetNotificationDto Convert(QuestionNotification notification)
         {
-            return new NotificationDto
+            return new GetNotificationDto
             {
                 id = notification.id,
                 notifierId = notification.questionId,

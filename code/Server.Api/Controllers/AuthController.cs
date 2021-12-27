@@ -52,7 +52,7 @@ namespace Server.Api.Controllers
                 if (regStudent.IsMatch(dto.Email))
                 {
                     //fieldOfStudy processing
-                    FieldOfStudy fos = await _fieldOfStudyRepository.getByFullNameAsync(dto.fieldOfStudy);
+                    FieldOfStudy fos = await _fieldOfStudyRepository.GetByFullNameAsync(dto.fieldOfStudy);
                     if (fos == null)
                     {
                         return BadRequest("Field Of Study does not exist");
@@ -85,7 +85,7 @@ namespace Server.Api.Controllers
                 //send email confirmation link
                 try
                 {
-                    sendConfirmationEmail(_user);
+                    SendConfirmationEmail(_user);
                 }
                 catch (Exception) { return BadRequest("Error sending confirmation email"); }
 
@@ -123,7 +123,7 @@ namespace Server.Api.Controllers
             }
         }
 
-        [HttpGet("ConfirmEmail")]
+        [HttpGet("ConfirmEmail")] //FIXME: Make route lower case
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -143,7 +143,7 @@ namespace Server.Api.Controllers
             }
         }
 
-        private async void sendConfirmationEmail(User user)
+        private async void SendConfirmationEmail(User user)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "Auth", new { token, email = user.Email }, Request.Scheme);

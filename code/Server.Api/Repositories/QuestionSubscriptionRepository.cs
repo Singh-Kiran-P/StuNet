@@ -10,10 +10,10 @@ namespace Server.Api.Repositories
 {
     public interface IQuestionSubscriptionRepository : IRestfulRepository<QuestionSubscription>
     {
-        Task<ICollection<QuestionSubscription>> getByUserId(string userId);
-        Task<ICollection<QuestionSubscription>> getByQuestionId(int id);
-        Task<ICollection<QuestionSubscription>> getByUserIdAndQuestionIdAsync(string userId, int questionId);
-        Task<QuestionSubscription> getSingleByUserIdAndQuestionIdAsync(string userId, int questionId);
+        Task<ICollection<QuestionSubscription>> GetByUserId(string userId);
+        Task<ICollection<QuestionSubscription>> GetByQuestionId(int id);
+        Task<ICollection<QuestionSubscription>> GetByUserIdAndQuestionIdAsync(string userId, int questionId);
+        Task<QuestionSubscription> GetSingleByUserIdAndQuestionIdAsync(string userId, int questionId);
     }
     
     public class PgQuestionSubscriptionRepository : IQuestionSubscriptionRepository
@@ -25,59 +25,59 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        public async Task<ICollection<QuestionSubscription>> getByUserId(string userId)
-        {
-            return await _context.QuestionSubscriptions
-                .Where(s => userId == s.userId)
-                .ToListAsync();
-        }
-
-        public async Task<ICollection<QuestionSubscription>> getByQuestionId(int id)
-        {
-            return await _context.QuestionSubscriptions
-                .Where(s => id == s.questionId)
-                .ToListAsync();
-        }
-
-        public async Task<ICollection<QuestionSubscription>> getByUserIdAndQuestionIdAsync(string userId, int questionId)
-        {
-            return await _context.QuestionSubscriptions
-                .Where(subscription => subscription.userId == userId && subscription.questionId == questionId)
-                .ToListAsync();
-        }
-
-        public async Task<QuestionSubscription> getSingleByUserIdAndQuestionIdAsync(string userId, int questionId)
-        {
-            return (await getByUserIdAndQuestionIdAsync(userId, questionId))
-                .FirstOrDefault(null);
-        }
-
-        public async Task<IEnumerable<QuestionSubscription>> getAllAsync()
+        public async Task<IEnumerable<QuestionSubscription>> GetAllAsync()
         {
             return await _context.QuestionSubscriptions
                 .ToListAsync();
         }
 
-        public async Task<QuestionSubscription> getAsync(int id)
+        public async Task<QuestionSubscription> GetAsync(int id)
         {
             return await _context.QuestionSubscriptions
                 .Where(s => s.id == id)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task updateAsync(QuestionSubscription questionsubscription)
+        public async Task<ICollection<QuestionSubscription>> GetByUserId(string userId)
         {
-            //FIXME: this method doesn't belong here...
-            await _context.SaveChangesAsync();
+            return await _context.QuestionSubscriptions
+                .Where(s => userId == s.userId)
+                .ToListAsync();
         }
 
-        public async Task createAsync(QuestionSubscription questionsubscription)
+        public async Task<ICollection<QuestionSubscription>> GetByQuestionId(int id)
+        {
+            return await _context.QuestionSubscriptions
+                .Where(s => id == s.questionId)
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<QuestionSubscription>> GetByUserIdAndQuestionIdAsync(string userId, int questionId)
+        {
+            return await _context.QuestionSubscriptions
+                .Where(subscription => subscription.userId == userId && subscription.questionId == questionId)
+                .ToListAsync();
+        }
+
+        public async Task<QuestionSubscription> GetSingleByUserIdAndQuestionIdAsync(string userId, int questionId)
+        {
+            return (await GetByUserIdAndQuestionIdAsync(userId, questionId))
+                .FirstOrDefault(null);
+        }
+
+        public async Task CreateAsync(QuestionSubscription questionsubscription)
         {
             _context.QuestionSubscriptions.Add(questionsubscription);
             await _context.SaveChangesAsync();
         }
 
-        public async Task deleteAsync(int id)
+        public async Task UpdateAsync(QuestionSubscription questionsubscription)
+        {
+            //FIXME: this method doesn't belong here...
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
         {
             QuestionSubscription questionsubscription = await _context.QuestionSubscriptions.FindAsync(id);
             if (questionsubscription == null)

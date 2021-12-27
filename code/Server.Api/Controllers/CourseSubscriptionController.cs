@@ -29,30 +29,30 @@ namespace Server.Api.Controllers
             _hubContext = hubContext;
         }
 
-        private async Task<IEnumerable<getCourseSubscriptionDto>> _getCourseSubscriptions()
+        private async Task<IEnumerable<GetCourseSubscriptionDto>> _GetCourseSubscriptions()
         {
-            IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.getAllAsync();
-            IEnumerable<getCourseSubscriptionDto> getDtos = subscriptions.Select(subscription => getCourseSubscriptionDto.convert(subscription));
+            IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.GetAllAsync();
+            IEnumerable<GetCourseSubscriptionDto> getDtos = subscriptions.Select(subscription => GetCourseSubscriptionDto.Convert(subscription));
             return getDtos;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<getCourseSubscriptionDto>>> getCourseSubscriptions()
+        public async Task<ActionResult<IEnumerable<GetCourseSubscriptionDto>>> GetCourseSubscriptions()
         {
-            IEnumerable<getCourseSubscriptionDto> getDtos = await _getCourseSubscriptions();
+            IEnumerable<GetCourseSubscriptionDto> getDtos = await _GetCourseSubscriptions();
             return Ok(getDtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<getCourseSubscriptionDto>> GetCourseSubscription(int id)
+        public async Task<ActionResult<GetCourseSubscriptionDto>> GetCourseSubscription(int id)
         {
-            CourseSubscription subscription = await _courseSubscriptionRepository.getAsync(id);
+            CourseSubscription subscription = await _courseSubscriptionRepository.GetAsync(id);
             if (subscription == null)
             {
                 return NotFound();
             }
 
-            getCourseSubscriptionDto getDto = new()
+            GetCourseSubscriptionDto getDto = new()
             {
                 dateTime = subscription.dateTime,
                 userId = subscription.userId,
@@ -61,22 +61,22 @@ namespace Server.Api.Controllers
             return Ok(getDto);
         }
 
-        [HttpGet("ByUserAndCourseId/{courseId}")]
-        public async Task<ActionResult<getByIdsCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
+        [HttpGet("ByUserAndCourseId/{courseId}")] //FIXME: Make route lower case
+        public async Task<ActionResult<GetByIdsCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
         {
-            IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.getAllAsync();
+            IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.GetAllAsync();
             ClaimsPrincipal currentUser = HttpContext.User;
             string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
             User user = await _userManager.FindByEmailAsync(userEmail);
 
-            IEnumerable<getByIdsCourseSubscriptionDto> userSubscriptionDtos = subscriptions
+            IEnumerable<GetByIdsCourseSubscriptionDto> userSubscriptionDtos = subscriptions
                 .Where(subscription => subscription.courseId == courseId && subscription.userId == user.Id)
-                .Select(subscription => getByIdsCourseSubscriptionDto.convert(subscription));
+                .Select(subscription => GetByIdsCourseSubscriptionDto.Convert(subscription));
             return Ok(userSubscriptionDtos);
         }
 
         [HttpPost]
-        public async Task<ActionResult<createCourseSubscriptionDto>> createCourseSubscription(createCourseSubscriptionDto dto)
+        public async Task<ActionResult<CreateCourseSubscriptionDto>> CreateCourseSubscription(CreateCourseSubscriptionDto dto)
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "username"))
@@ -90,7 +90,7 @@ namespace Server.Api.Controllers
                     courseId = dto.courseId,
                 };
                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + subscription.courseId.ToString());
-                await _courseSubscriptionRepository.createAsync(subscription);
+                await _courseSubscriptionRepository.CreateAsync(subscription);
                 return Ok(subscription);
             }
             else
@@ -104,7 +104,7 @@ namespace Server.Api.Controllers
         {
             try
             {
-                CourseSubscription sub = await _courseSubscriptionRepository.getAsync(id);
+                CourseSubscription sub = await _courseSubscriptionRepository.GetAsync(id);
                 ClaimsPrincipal currentUser = HttpContext.User;
                 if (currentUser.HasClaim(c => c.Type == "username"))
                 {
@@ -112,7 +112,7 @@ namespace Server.Api.Controllers
                     User user = await _userManager.FindByEmailAsync(userEmail);
 
                     await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + sub.courseId.ToString());
-                    await _courseSubscriptionRepository.deleteAsync(id);
+                    await _courseSubscriptionRepository.DeleteAsync(id);
                 }
                 else
                 {

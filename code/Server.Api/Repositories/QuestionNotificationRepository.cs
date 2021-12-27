@@ -9,14 +9,14 @@ namespace Server.Api.Repositories
     {
         public PgQuestionNotificationRepository(IDataContext context) : base(context) { }
 
-        protected override DbSet<QuestionNotification> getDbSet()
+        protected override DbSet<QuestionNotification> GetDbSet()
         {
             return _context.QuestionNotifications;
         }
 
-        protected override IIncludableQueryable<QuestionNotification, Question> getIncludes()
+        protected override IIncludableQueryable<QuestionNotification, Question> GetIncludes()
         {
-            return getDbSet().Include(n => n.question);
+            return GetDbSet().Include(n => n.question);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Server.Api.Repositories
 {
     public interface IQuestionRepository : IRestfulRepository<Question>
     {
-        Task<IEnumerable<Question>> getByCourseIdAsync(int courseId);
+        Task<IEnumerable<Question>> GetByCourseIdAsync(int courseId);
     }
 
     public class PgQuestionRepository : IQuestionRepository
@@ -22,7 +22,7 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Question>> getAllAsync()
+        public async Task<IEnumerable<Question>> GetAllAsync()
         {
             return await _context.Questions
                 .Include(q => q.topics)
@@ -31,17 +31,7 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Question>> getByCourseIdAsync(int courseId)
-        {
-            return await _context.Questions
-                .Include(q => q.course)
-                .Where(q => q.course.id == courseId)
-                .Include(q => q.topics)
-                // .Include(q => q.user)
-                .ToListAsync();
-        }
-
-        public async Task<Question> getAsync(int id)
+        public async Task<Question> GetAsync(int id)
         {
             return await _context.Questions
                 .Where(q => q.id == id)
@@ -51,25 +41,23 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task createAsync(Question question)
+        public async Task<IEnumerable<Question>> GetByCourseIdAsync(int courseId)
+        {
+            return await _context.Questions
+                .Include(q => q.course)
+                .Where(q => q.course.id == courseId)
+                .Include(q => q.topics)
+                // .Include(q => q.user)
+                .ToListAsync();
+        }
+
+        public async Task CreateAsync(Question question)
         {
             _context.Questions.Add(question);
             await _context.SaveChangesAsync();
         }
 
-        public async Task deleteAsync(int questionId)
-        {
-            var questionToRemove = await _context.Questions.FindAsync(questionId);
-            if (questionToRemove == null)
-            {
-                throw new NullReferenceException();
-            }
-
-            _context.Questions.Remove(questionToRemove);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task updateAsync(Question question)
+        public async Task UpdateAsync(Question question)
         {
             var questionToUpdate = await _context.Questions.FindAsync(question.id);
             if (questionToUpdate == null)
@@ -80,6 +68,18 @@ namespace Server.Api.Repositories
             questionToUpdate.body = question.body;
             questionToUpdate.topics = question.topics;
             questionToUpdate.time = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int questionId)
+        {
+            var questionToRemove = await _context.Questions.FindAsync(questionId);
+            if (questionToRemove == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            _context.Questions.Remove(questionToRemove);
             await _context.SaveChangesAsync();
         }
     }

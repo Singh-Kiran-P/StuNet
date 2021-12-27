@@ -3,15 +3,45 @@ using System.Collections.Generic;
 
 namespace Server.Api.Dtos
 {
-    public record CourseDto
+    public record GetAllCourseDto
     {
         public int id { get; set; }
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
-        public static CourseDto convert(Course course)
+        public ICollection<GetPartialTopicDto> topics;
+
+        public static GetAllCourseDto Convert(Course course)
         {
-            return new CourseDto
+            throw new System.Exception("method not implement");
+        }
+    }
+
+    public record GetCourseDto
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string number { get; set; }
+        public string description { get; set; }
+        public ICollection<GetPartialTopicDto> topics;
+        public ICollection<GetPartialChannelDto> channels;
+
+        public static GetCourseDto Convert(Course course)
+        {
+            throw new System.Exception("method not implement");
+        }
+    }
+
+    public record GetPartialCourseDto
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string number { get; set; }
+        public string description { get; set; }
+
+        public static GetPartialCourseDto Convert(Course course)
+        {
+            return new GetPartialCourseDto
             {
                 id = course.id,
                 name = course.name,
@@ -21,46 +51,15 @@ namespace Server.Api.Dtos
         }
     }
 
-    public record GetAllCourseDto
+    public record CreateCourseDto
     {
-        public int id { get; set; }
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
-        public ICollection<getOnlyTopicDto> topics;
-    }
 
-    public record GetCourseDto
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string number { get; set; }
-        public string description { get; set; }
-        public ICollection<getOnlyTopicDto> topics;
-        public ICollection<getOnlyChannelDto> channels;
-    }
-
-    public record getOnlyCourseDto
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string number { get; set; }
-        public string description { get; set; }
-        public static getOnlyCourseDto convert(Course course)
+        public static CreateCourseDto Convert(Course course)
         {
-            return new getOnlyCourseDto
-            {
-                id = course.id,
-                name = course.name,
-                number = course.number
-            };
+            throw new System.Exception("method not implement");
         }
-    }
-
-    public record createCourseDto
-    {
-        public string name { get; set; }
-        public string number { get; set; }
-        public string description { get; set; }
     }
 }

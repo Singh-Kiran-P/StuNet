@@ -13,14 +13,14 @@ namespace Server.Api.Repositories
 
         }
 
-        protected override DbSet<AnswerNotification> getDbSet()
+        protected override DbSet<AnswerNotification> GetDbSet()
         {
             return _context.AnswerNotifications;
         }
 
-        protected override IIncludableQueryable<AnswerNotification, Answer> getIncludes()
+        protected override IIncludableQueryable<AnswerNotification, Answer> GetIncludes()
         {
-            return getDbSet().Include(n => n.answer);
+            return GetDbSet().Include(n => n.answer);
         }
     }
 }

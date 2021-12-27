@@ -23,27 +23,27 @@ namespace Server.Api.Controllers
             _answerNotificationRepository = answerNotificationRepository;
         }
 
-        private async Task<IEnumerable<QuestionNotification>> _getQuestionNotifications(string userId)
+        private async Task<IEnumerable<QuestionNotification>> _GetQuestionNotifications(string userId)
         {
-            return await _questionNotificationRepository.getByUserId(userId);
+            return await _questionNotificationRepository.GetByUserId(userId);
         }
 
-        private async Task<IEnumerable<AnswerNotification>> _getAnswerNotifications(string userId)
+        private async Task<IEnumerable<AnswerNotification>> _GetAnswerNotifications(string userId)
         {
-            return await _answerNotificationRepository.getByUserId(userId);
+            return await _answerNotificationRepository.GetByUserId(userId);
         }
 
         [HttpGet]
-        public async Task<ActionResult<(IEnumerable<NotificationDto>, IEnumerable<NotificationDto>)>> getNotifications()
+        public async Task<ActionResult<(IEnumerable<GetNotificationDto>, IEnumerable<GetNotificationDto>)>> GetNotifications()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                IEnumerable<QuestionNotification> qNotifs = await _getQuestionNotifications(userId);
-                IEnumerable<AnswerNotification> cNotifs = await _getAnswerNotifications(userId);
+                IEnumerable<QuestionNotification> qNotifs = await _GetQuestionNotifications(userId);
+                IEnumerable<AnswerNotification> cNotifs = await _GetAnswerNotifications(userId);
 
-                return Ok((qNotifs.Select(n => NotificationDto.convert(n)), cNotifs.Select(n => NotificationDto.convert(n))));
+                return Ok((qNotifs.Select(n => GetNotificationDto.Convert(n)), cNotifs.Select(n => GetNotificationDto.Convert(n))));
             }
             else
             {

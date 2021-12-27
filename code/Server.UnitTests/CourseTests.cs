@@ -16,47 +16,47 @@ namespace Server.UnitTests
     public class CourseTests : UnitTest
     {
 
-        private CourseController createController() {
+        private CourseController CreateController() {
             return new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
         }
 
         [Fact]
-        public async Task createCourse_WithValidCourseDto_Ok()
+        public async Task CreateCourse_WithValidCourseDto_Ok()
         {
             //Given
-            createCourseDto dto = new()
+            CreateCourseDto dto = new()
             {
                 name = rand.Next().ToString(),
                 number = rand.Next().ToString(),
                 description = rand.Next().ToString()
             };
-			var controller = createController();
+			var controller = CreateController();
 
 			//When
-			Course course = ((await controller.createCourse(dto)).Result as OkObjectResult).Value as Course;
+			Course course = ((await controller.CreateCourse(dto)).Result as OkObjectResult).Value as Course;
 
             //Then
             dto.Should().BeEquivalentTo(
                 course,
-                options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
+                options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
             );
             course.id.Should().NotBe(null);
         }
 
         [Fact]
-        public async Task getCourse_WithValidId_CourseDto()
+        public async Task GetCourse_WithValidId_CourseDto()
         {
 			//Given
 			Course course = createRandomCourse();
-			_courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+			_courseRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);
-            var controller = createController();
+            var controller = CreateController();
             //When
             GetCourseDto dto = ((await controller.GetCourse(rand.Next())).Result as OkObjectResult).Value as GetCourseDto;
             //Then
             dto.Should().BeEquivalentTo(
                 course,
-                options => options.ComparingByMembers<createQuestionDto>().ExcludingMissingMembers()
+                options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
             );
             dto.topics.Should().NotBeNullOrEmpty();
         }

@@ -27,9 +27,9 @@ namespace Server.Api.Controllers
             _subscriptionRepository = subscriptionRepository;
         }
 
-        private async Task<IEnumerable<GetAllCourseDto>> _getCourseAsync()
+        private async Task<IEnumerable<GetAllCourseDto>> _GetCourseAsync()
         {
-            IEnumerable<Course> courses = await _courseRepository.getAllAsync();
+            IEnumerable<Course> courses = await _courseRepository.GetAllAsync();
             IEnumerable<GetAllCourseDto> getDtos = courses.Select(course =>
                new GetAllCourseDto()
                {
@@ -37,28 +37,29 @@ namespace Server.Api.Controllers
                    name = course.name,
                    number = course.number,
                    description = course.description,
-                   topics = course.topics.Select(topic => new getOnlyTopicDto() { name = topic.name, id = topic.id }).ToList()
+                   topics = course.topics.Select(topic => new GetPartialTopicDto() { name = topic.name, id = topic.id }).ToList()
                }
             );
             return getDtos;
         }
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getCourses()
+        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> GetCourses()
         {
-            IEnumerable<GetAllCourseDto> getDtos = await _getCourseAsync();
+            IEnumerable<GetAllCourseDto> getDtos = await _GetCourseAsync();
             return Ok(getDtos);
         }
 
         [HttpGet("subscribed")]
-        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> getSubscribedCourses()
+        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> GetSubscribedCourses()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                IEnumerable<CourseSubscription> subscriptions = await _subscriptionRepository.getByUserId(userId);
+                IEnumerable<CourseSubscription> subscriptions = await _subscriptionRepository.GetByUserId(userId);
                 IEnumerable<int> subscribedCourseIds = subscriptions.Select(sub => sub.courseId);
-                IEnumerable<GetAllCourseDto> courses = await _getCourseAsync();
+                IEnumerable<GetAllCourseDto> courses = await _GetCourseAsync();
 
                 return Ok(courses.Where(course => subscribedCourseIds.Contains(course.id)));
             }
@@ -71,7 +72,7 @@ namespace Server.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCourseDto>> GetCourse(int id)
         {
-            Course course = await _courseRepository.getAsync(id);
+            Course course = await _courseRepository.GetAsync(id);
             if (course == null)
             {
                 return NotFound();
@@ -83,17 +84,17 @@ namespace Server.Api.Controllers
                 name = course.name,
                 number = course.number,
                 description = course.description,
-                topics = course.topics.Select(topic => new getOnlyTopicDto(){ id = topic.id, name = topic.name }).ToList(),
-                channels = course.channels.Select(channel => new getOnlyChannelDto(){ id = channel.id, name = channel.name }).ToList()
+                topics = course.topics.Select(topic => new GetPartialTopicDto(){ id = topic.id, name = topic.name }).ToList(),
+                channels = course.channels.Select(channel => new GetPartialChannelDto(){ id = channel.id, name = channel.name }).ToList()
             };
             return Ok(getDto);
         }
 
 
         [HttpGet("search/")]
-        public async Task<ActionResult<GetCourseDto>> searchByName([FromQuery] string name)
+        public async Task<ActionResult<GetCourseDto>> SearchByName([FromQuery] string name)
         {
-            IEnumerable<GetAllCourseDto> getDtos = await _getCourseAsync();
+            IEnumerable<GetAllCourseDto> getDtos = await _GetCourseAsync();
             IEnumerable<GetAllCourseDto> searchResults = StringMatcher.FuzzyMatchObject(getDtos, name);
 
             if (searchResults == null || !searchResults.Any())
@@ -107,7 +108,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Course>> createCourse(createCourseDto dto)
+        public async Task<ActionResult<Course>> CreateCourse(CreateCourseDto dto)
         {
             Course course = new()
             {
@@ -115,7 +116,7 @@ namespace Server.Api.Controllers
                 number = dto.number,
                 description = dto.description
             };
-            await _courseRepository.createAsync(course);
+            await _courseRepository.CreateAsync(course);
             return Ok(course);
         }
 
@@ -124,7 +125,7 @@ namespace Server.Api.Controllers
         {
             try
             {
-                await _courseRepository.deleteAsync(id);
+                await _courseRepository.DeleteAsync(id);
             }
             catch (System.Exception)
             {
@@ -134,7 +135,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCourse(int id, CourseDto courseDto)
+        public async Task<ActionResult> UpdateCourse(int id, GetPartialCourseDto courseDto)
         {
             Course course = new()
             {
@@ -143,7 +144,7 @@ namespace Server.Api.Controllers
                 number = courseDto.number,
                 description = courseDto.description
             };
-            await _courseRepository.updateAsync(course);
+            await _courseRepository.UpdateAsync(course);
             return NoContent();
         }
     }

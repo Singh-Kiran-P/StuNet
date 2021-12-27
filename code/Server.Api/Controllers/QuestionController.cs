@@ -43,16 +43,16 @@ namespace Server.Api.Controllers
 
         //[Authorize(Roles = "student")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<questionDto>>> GetQuestions()
+        public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetQuestions()
         {
             try
             {
-                var questions = await _questionRepository.getAllAsync();
-                List<questionDto> res = new List<questionDto>();
+                var questions = await _questionRepository.GetAllAsync();
+                List<GetQuestionDto> res = new List<GetQuestionDto>();
                 foreach (var q in questions)
                 {
                     User user = await _userManager.FindByIdAsync(q.userId);
-                    res.Add(questionDto.convert(q, user));
+                    res.Add(GetQuestionDto.Convert(q, user));
                 }
                 return Ok(res);
             }
@@ -63,19 +63,19 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("subscribed")]
-        public async Task<ActionResult<IEnumerable<questionDto>>> getSubscribedQuestions()
+        public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetSubscribedQuestions()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.getByUserId(userId);
+                IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.GetByUserId(userId);
                 IEnumerable<int> subscribedQuestionIds = subscriptions.Select(sub => sub.questionId);
-                IEnumerable<Question> subscribedQuestions = subscribedQuestionIds.Select(id => _questionRepository.getAsync(id))
+                IEnumerable<Question> subscribedQuestions = subscribedQuestionIds.Select(id => _questionRepository.GetAsync(id))
                                                                                     .Select(task => task.Result);
 
                 User user = await _userManager.FindByIdAsync(userId);
-                return Ok(subscribedQuestions.Select(q => questionDto.convert(q, user)));
+                return Ok(subscribedQuestions.Select(q => GetQuestionDto.Convert(q, user)));
             }
             else
             {
@@ -84,18 +84,18 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<questionDto>> GetQuestion(int id)
+        public async Task<ActionResult<GetQuestionDto>> GetQuestion(int id)
         {
             try
             {
-                var question = await _questionRepository.getAsync(id);
+                var question = await _questionRepository.GetAsync(id);
                 if (question == null)
                 {
                     return NotFound();
                 }
                 User user = await _userManager.FindByIdAsync(question.userId);
 
-                return Ok(questionDto.convert(question, user));
+                return Ok(GetQuestionDto.Convert(question, user));
             }
             catch
             {
@@ -103,32 +103,32 @@ namespace Server.Api.Controllers
             }
         }
 
-        [HttpGet("GetQuestionsByCourseId/search/{courseId}")]
-        public async Task<ActionResult<GetCourseDto>> searchByName(int courseId, [FromQuery] string name)
+        [HttpGet("GetQuestionsByCourseId/search/{courseId}")] //FIXME: Make route lower case
+        public async Task<ActionResult<GetCourseDto>> SearchByName(int courseId, [FromQuery] string name)
         {
-            var questions = await _questionRepository.getByCourseIdAsync(courseId);
+            var questions = await _questionRepository.GetByCourseIdAsync(courseId);
             IEnumerable<Question> matches = StringMatcher.FuzzyMatchObject(questions, name);
-            List<questionDto> res = new List<questionDto>();
+            List<GetQuestionDto> res = new List<GetQuestionDto>();
             foreach (var q in matches)
             {
                 User user = await _userManager.FindByIdAsync(q.userId);
-                res.Add(questionDto.convert(q, user));
+                res.Add(GetQuestionDto.Convert(q, user));
             }
             return Ok(res);
         }
 
         //[Authorize(Roles = "student")]
         [HttpPost]
-        public async Task<ActionResult<questionDto>> CreateQuestion(createQuestionDto dto)
+        public async Task<ActionResult<GetQuestionDto>> CreateQuestion(CreateQuestionDto dto)
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "username"))
             {
                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 User user = await _userManager.FindByEmailAsync(userEmail);
-                Course c = _courseRepository.getAsync(dto.courseId).Result;
+                Course c = _courseRepository.GetAsync(dto.courseId).Result;
                 ICollection<Topic> topics = dto.topicIds
-                    .Select(id => _topicRepository.getAsync(id)) //FIXME: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
+                    .Select(id => _topicRepository.GetAsync(id)) //FIXME: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
                     .Select(task => task.Result)
                     .ToList();
 
@@ -151,9 +151,9 @@ namespace Server.Api.Controllers
                     time = DateTime.UtcNow
                 };
 
-                await _questionRepository.createAsync(question);
+                await _questionRepository.CreateAsync(question);
 
-                await _questionSubscriptionRepository.createAsync(new QuestionSubscription
+                await _questionSubscriptionRepository.CreateAsync(new QuestionSubscription
                 {
                     userId = user.Id,
                     questionId = question.id,
@@ -162,8 +162,8 @@ namespace Server.Api.Controllers
 
                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + question.id.ToString());
 
-                IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.getByCourseId(c.id)).Select(sub => sub.userId);
-                await _notificationRepository.createAllAync(subscriberIds.Select(userId => new QuestionNotification
+                IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.GetByCourseId(c.id)).Select(sub => sub.userId);
+                await _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new QuestionNotification
                 {
                     userId = userId,
                     questionId = question.id,
@@ -171,7 +171,7 @@ namespace Server.Api.Controllers
                     time = question.time
                 }));
 
-                var ret = questionDto.convert(question, user);
+                var ret = GetQuestionDto.Convert(question, user);
                 await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
                 return Ok(ret);
             }
@@ -184,20 +184,20 @@ namespace Server.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteQuestion(int id)
         {
-            var existingQuestion = await _questionRepository.getAsync(id);
+            var existingQuestion = await _questionRepository.GetAsync(id);
             if (existingQuestion is null)
             {
                 return NotFound();
             }
-            await _questionRepository.deleteAsync(id);
+            await _questionRepository.DeleteAsync(id);
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateQuestion(int id, createQuestionDto dto)
+        public async Task<ActionResult> UpdateQuestion(int id, CreateQuestionDto dto)
         {
 
-            var existingQuestion = await _questionRepository.getAsync(id);
+            var existingQuestion = await _questionRepository.GetAsync(id);
             if (existingQuestion is null)
             {
                 return NotFound();
@@ -207,15 +207,15 @@ namespace Server.Api.Controllers
             {
                 title = dto.title,
                 // user = updateQuestionDto.user,
-                course = _courseRepository.getAsync(dto.courseId).Result,
+                course = _courseRepository.GetAsync(dto.courseId).Result,
                 body = dto.body,
                 // files = updateQuestionDto.files
-                topics = dto.topicIds.Select(id => _topicRepository.getAsync(id))
+                topics = dto.topicIds.Select(id => _topicRepository.GetAsync(id))
                                                 .Select(task => task.Result)
                                                 .ToList(),
                 time = DateTime.UtcNow
             };
-            await _questionRepository.updateAsync(updatedQuestion);
+            await _questionRepository.UpdateAsync(updatedQuestion);
             return NoContent();
         }
     }

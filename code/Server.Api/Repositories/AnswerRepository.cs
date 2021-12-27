@@ -10,7 +10,7 @@ namespace Server.Api.Repositories
 {
     public interface IAnswerRepository : IRestfulRepository<Answer>
     {
-        Task<IEnumerable<Answer>> getByQuestionId(int questionId);
+        Task<IEnumerable<Answer>> GetByQuestionId(int questionId);
     }
 
     public class PgAnswerRepository : IAnswerRepository
@@ -22,45 +22,35 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Answer>> getAllAsync()
+        public async Task<IEnumerable<Answer>> GetAllAsync()
         {
             return await _context.Answers
-            // .Include(a => a.userId)
-            .Include(a => a.question)
-            // .Include(a => a.question.user)
-            .Include(a => a.question.course)
-            .Include(a => a.question.topics)
-            .ToListAsync();
+                // .Include(a => a.userId)
+                .Include(a => a.question)
+                // .Include(a => a.question.user)
+                .Include(a => a.question.course)
+                .Include(a => a.question.topics)
+                .ToListAsync();
         }
 
-        public async Task<Answer> getAsync(int id)
+        public async Task<Answer> GetAsync(int id)
         {
             return await _context.Answers
-            .Where(a => a.id == id)
-            // .Include(a => a.userId)
-            .Include(a => a.question)
-            // .Include(a => a.question.user)
-            .Include(a => a.question.course)
-            .Include(a => a.question.topics)
-            .FirstOrDefaultAsync();
+                .Where(a => a.id == id)
+                // .Include(a => a.userId)
+                .Include(a => a.question)
+                // .Include(a => a.question.user)
+                .Include(a => a.question.course)
+                .Include(a => a.question.topics)
+                .FirstOrDefaultAsync();
         }
-        public async Task createAsync(Answer answer)
+        public async Task CreateAsync(Answer answer)
         {
             _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
         }
 
-        public async Task deleteAsync(int answerId)
-        {
-            var answerToRemove = await _context.Answers.FindAsync(answerId);
-            if (answerToRemove == null)
-                throw new NullReferenceException();
-
-            _context.Answers.Remove(answerToRemove);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task updateAsync(Answer answer)
+        public async Task UpdateAsync(Answer answer)
         {
             var answerToUpdate = await _context.Answers.FindAsync(answer.id);
             if (answerToUpdate == null)
@@ -75,7 +65,7 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Answer>> getByQuestionId(int questionId)
+        public async Task<IEnumerable<Answer>> GetByQuestionId(int questionId)
         {
             return await _context.Answers
                 // .Include(a => a.userId)
@@ -85,6 +75,16 @@ namespace Server.Api.Repositories
                 .Include(a => a.question.topics)
                 .Where(a => a.question.id == questionId)
                 .ToListAsync();
+        }
+
+        public async Task DeleteAsync(int answerId)
+        {
+            var answerToRemove = await _context.Answers.FindAsync(answerId);
+            if (answerToRemove == null)
+                throw new NullReferenceException();
+
+            _context.Answers.Remove(answerToRemove);
+            await _context.SaveChangesAsync();
         }
     }
 }
