@@ -21,11 +21,14 @@ using ChatSample.Hubs;
 namespace Server.UnitTests
 {
 	public class UnitTest {
+        protected readonly Mock<IFieldOfStudyRepository> _FOSRepositoryStub = new();
+		protected readonly Mock<IAnswerRepository> _answerRepositoryStub = new();
 		protected readonly Mock<IQuestionRepository> _questionRepositoryStub = new();
         protected readonly Mock<ITopicRepository> _topicRepositoryStub = new();
         protected readonly Mock<ICourseRepository> _courseRepositoryStub = new();
         protected readonly Mock<IHubContext<ChatHub>> _hubContextStub = new();
-		protected readonly Mock<INotificationRepository<QuestionNotification>> _notificationRepositoryStub = new();
+		protected readonly Mock<INotificationRepository<QuestionNotification>> _questionNotificationRepositoryStub = new();
+		protected readonly Mock<INotificationRepository<AnswerNotification>> _answerNotificationRepositoryStub = new();
 		protected readonly Mock<ICourseSubscriptionRepository> _courseSubscriptionRepositoryStub = new();
 		protected readonly Mock<IQuestionSubscriptionRepository> _questionSubscriptionRepositoryStub = new();
 		protected static Random rand = new();
@@ -84,6 +87,31 @@ namespace Server.UnitTests
 					name = rand.Next().ToString()
 				}).ToList(),
 				time = randomPassedDate()
+			};
+		}
+
+		public static Answer createRandomAnswer() {
+			Question question = createRandomQuestion();
+			return new()
+			{
+				id = rand.Next(),
+				userId = rand.Next().ToString(),
+				questionId = question.id,
+				question = question,
+				title = rand.Next().ToString(),
+				body = rand.Next().ToString(),
+				time = randomPassedDate(),
+				isAccepted = rand.Next(2) == 0,
+			};
+		}
+
+		public static FieldOfStudy createRandomFieldOfStudy() {
+			return new()
+			{
+				id = rand.Next(),
+				fullName = rand.Next().ToString(),
+				name = rand.Next().ToString(),
+				isBachelor = rand.Next(2) == 0
 			};
 		}
 

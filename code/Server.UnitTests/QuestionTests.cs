@@ -26,7 +26,7 @@ namespace Server.UnitTests
 
         private QuestionController CreateController(UserManager<User> userManager = null) 
         {
-            return new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, userManager, _hubContextStub.Object, _notificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object);
+            return new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, userManager, _hubContextStub.Object, _questionNotificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object);
         }
 
         [Fact]

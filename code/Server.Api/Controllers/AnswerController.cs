@@ -163,7 +163,7 @@ namespace Server.Api.Controllers
 
             Answer existingAnswer = await _answerRepository.GetAsync(id);
             User user = await _userManager.FindByIdAsync(dto.userId); //TODO: kunnen we dit miscchien uit de jwt van request halen?
-            Question question = await _questionRepository.GetAsync(dto.questionId);
+            Question question = existingAnswer.question;
             if (existingAnswer == null || user == null || question == null)
             {
                 return NotFound();
@@ -190,12 +190,16 @@ namespace Server.Api.Controllers
         public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
         {
             Answer existingAnswer = await _answerRepository.GetAsync(id);
+            if (existingAnswer == null) 
+            {
+                return NotFound();
+            }
+
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                Question question = await _questionRepository.GetAsync(existingAnswer.questionId);
-                if (question.userId == userId)
+                if (existingAnswer.question.userId == userId)
                 {
                     existingAnswer.isAccepted = accepted;
                     await _answerRepository.UpdateAsync(existingAnswer);
