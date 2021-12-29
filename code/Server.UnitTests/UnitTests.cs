@@ -21,6 +21,7 @@ using ChatSample.Hubs;
 namespace Server.UnitTests
 {
 	public class UnitTest {
+        protected readonly Mock<IFieldOfStudyRepository> _FOSRepositoryStub = new();
 		protected readonly Mock<IAnswerRepository> _answerRepositoryStub = new();
 		protected readonly Mock<IQuestionRepository> _questionRepositoryStub = new();
         protected readonly Mock<ITopicRepository> _topicRepositoryStub = new();
@@ -101,6 +102,16 @@ namespace Server.UnitTests
 				body = rand.Next().ToString(),
 				time = randomPassedDate(),
 				isAccepted = rand.Next(2) == 0,
+			};
+		}
+
+		public static FieldOfStudy createRandomFieldOfStudy() {
+			return new()
+			{
+				id = rand.Next(),
+				fullName = rand.Next().ToString(),
+				name = rand.Next().ToString(),
+				isBachelor = rand.Next(2) == 0
 			};
 		}
 
