@@ -1,10 +1,11 @@
-import React, { Screen, Answer, EmptyQuestion, QuestionSubscription, useState, useEffect, axios, dateString } from '@/.';
+import React, { Screen, Answer, EmptyQuestion, useState, useEffect, axios, show, dateString } from '@/.';
 import { View, Text, Chip, List, Icon, Loader, Button, CompactAnswer } from '@/components';
 
 export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
+    let [subscribed, setSubscribed] = useState<null | number>(null);
     let [question, setQuestion] = useState(EmptyQuestion);
     let [answers, setAnswers] = useState<Answer[]>([]);
-    let [subscribed, setSubscribed] = useState<boolean>(subscribe);
+    let [error, setError] = useState('');
 
     const info = async () => {
         return axios.get('/Question/' + id).then(res => {
@@ -19,39 +20,33 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
         })
     }
 
-    const infoNotification = async () => {
-        axios.get('/QuestionSubscription/ByUserAndQuestionId/' + id)
-            .then(res => { setSubscribed(res.data.length > 0); nav.setParams({subscribe: res.data.length > 0}) })
-            .catch(error => console.error(error));
+    const subscription = async () => {
+        axios.get('/QuestionSubscription/ByUserAndQuestionId/' + id).then(res => {
+            setSubscribed(res.data.length ? res.data[0].id : NaN);
+            nav.setParams({ subscribe: res.data.length > 0 });
+        })
     }
-    const fetch = async () => Promise.all([info(), questions(), infoNotification()]);
 
-    //TODO: Move this functionality to the server side
-    function toggleNotificationSubcription(data: QuestionSubscription[]): void {
-        if (data.length === 0) {
-            axios.post('/QuestionSubscription/', { questionId: id } as QuestionSubscription)
-            .then(_ => setSubscribed(true))
-            .catch(error => console.error(error, subscribed));
-        }
-        else {
-            axios.delete('/QuestionSubscription/' + data[0].id)
-            .then(_ => setSubscribed(false))
-            .catch(error => console.error(error, subscribed));
-        }
-        
-    }
+    const fetch = async () => Promise.all([info(), questions(), subscription()]);
 
     useEffect(() => {
         if (subscribe === null) return;
-        if (subscribe === subscribed) return;
-        axios.get('/QuestionSubscription/ByUserAndQuestionId/' + id) // TODO test
-            .then(response => toggleNotificationSubcription(response.data))
-            .catch(error => console.error(error));
-    }, [subscribe]);
+        if (subscribed === null) return;
+        if (subscribe === !isNaN(subscribed)) return;
+        if (subscribe) axios.post('/QuestionSubscription/', { questionId: id }).then(
+            res => setSubscribed(res.data.id),
+            show(setError)
+        )
+        else axios.delete('/QuestionSubscription/' + subscribed).then(
+            () => setSubscribed(NaN),
+            show(setError)
+        )
+    }, [subscribe, subscribed]);
 
     return (
         <Loader load={fetch}>
             <View pad='top'>
+                <Text type='error' margin='bottom' hidden={!error} children={error}/>
                 <View type='header' hidden={!question.topics?.length} children={question.topics?.map((topic, i) => (
                     <Chip margin='bottom,right-0.5' key={i} children={topic.name}/>
                 ))}/>

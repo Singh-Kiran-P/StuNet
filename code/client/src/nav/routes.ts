@@ -82,6 +82,7 @@ export const s = screens({
     },
 
 
+
     Question: {
         screenTitle: '{course}',
         padding: false,
@@ -110,7 +111,9 @@ export const s = screens({
 
     Notifications: {
         screenTitle: 'Your Notifications',
-        scroll: false
+        padding: false,
+        scroll: false,
+        tabs: true
     },
 
 

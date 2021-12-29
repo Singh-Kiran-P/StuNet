@@ -1,11 +1,11 @@
-import React, { Screen, EmptyAnswer, useState, useTheme, axios, dateString } from '@/.';
-import { View, Text, Button, Icon, Loader, CompactQuestion } from '@/components';
-
-import { FAB } from "react-native-paper";
+import React, { Screen, EmptyAnswer, useState, useTheme, Style, axios, show, dateString } from '@/.';
+import { View, Text, Icon, Loader, CompactQuestion } from '@/components';
+import { FAB } from 'react-native-paper'; // TODO in header?
 
 export default Screen('Answer', ({ nav, params: { id } }) => {
     let [answer, setAnswer] = useState(EmptyAnswer);
-    let theme = useTheme()[0];
+    let [error, setError] = useState('');
+    let [theme] = useTheme();
 
     const fetch = async () => {
         return axios.get('/Answer/' + id).then(res => {
@@ -14,14 +14,25 @@ export default Screen('Answer', ({ nav, params: { id } }) => {
         })
     }
 
-    const accept = (): void => {
-        axios.put('/Answer/SetAccepted/' + id + '?accepted=' + !answer.isAccepted)
-            .then(() => setAnswer({...answer, isAccepted: !answer.isAccepted}))
-            .catch(e => console.error(e));
+    const accept = () => {
+        axios.put('/Answer/SetAccepted/' + id + '?accepted=' + !answer.isAccepted).then(
+            () => setAnswer({ ...answer, isAccepted: !answer.isAccepted }),
+            show(setError)
+        )
     }
+
+    const s = Style.create({
+        fab: {
+            backgroundColor: answer.isAccepted ? theme.error : theme.accent,
+            position: 'absolute',
+            bottom: 0,
+            right: 0
+        }
+    })
 
     return (
         <Loader load={fetch}>
+            <Text type='error' margin='bottom' hidden={!error} children={error}/>
             <CompactQuestion question={answer.question}/>
             <View type='header' margin>
                 <Text type='header' children={answer.title}/>
@@ -34,11 +45,7 @@ export default Screen('Answer', ({ nav, params: { id } }) => {
                     Download 3 Attachments
                 </Text>
             </View>
-            <FAB
-                style={{ position: 'absolute', margin: 16, right: 0, bottom: 0, backgroundColor: !answer.isAccepted ? 'green' : 'red' }}
-                icon={!answer.isAccepted ? 'check' : 'close'}
-                onPress={ () => accept() }
-            />
+            <FAB style={s.fab} icon={answer.isAccepted ? 'close' : 'check'} color={theme.bright} onPress={accept}/>
         </Loader>
     )
 })
