@@ -96,9 +96,8 @@ namespace Server.UnitTests
             var result = await controller.CreateAnswer(answerToCreate);
 
             // Then
-            result.Result.Should().BeOfType<OkObjectResult>();
-
-            GetAnswerDto createdAnswer = (result.Result as OkObjectResult).Value as GetAnswerDto;
+            result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetAnswerDto>();;
+            var createdAnswer = (result.Result as OkObjectResult).Value as GetAnswerDto;
 
             answerToCreate.Should().BeEquivalentTo(
                 createdAnswer,

@@ -85,7 +85,7 @@ namespace Server.UnitTests
             // Given
             RegisterUserDto registerDto = new()
             {
-                Email = rand.Next().ToString(),
+                Email = email,
                 Password = password,
                 ConfirmPassword = password,
                 fieldOfStudy = rand.Next().ToString()
