@@ -1,5 +1,5 @@
 @model dynamic
- 
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,7 +9,7 @@
     </head>
 
     <body style="font-size: 12px;">
-        @Model.email anonymously asked a question in @Model.course. <span style="display: none;">Question id: @Model.id</span>
+        @Model.email anonymously asked a question in @Model.course. <span style="display: none;">@Model.id</span>
         <br/>
         <br/>
         @foreach(var topic in Model.topics) {
