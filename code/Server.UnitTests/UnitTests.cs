@@ -29,8 +29,8 @@ namespace Server.UnitTests
         protected readonly Mock<IHubContext<ChatHub>> _hubContextStub = new();
 		protected readonly Mock<INotificationRepository<QuestionNotification>> _questionNotificationRepositoryStub = new();
 		protected readonly Mock<INotificationRepository<AnswerNotification>> _answerNotificationRepositoryStub = new();
-		protected readonly Mock<ICourseSubscriptionRepository> _courseSubscriptionRepositoryStub = new();
-		protected readonly Mock<IQuestionSubscriptionRepository> _questionSubscriptionRepositoryStub = new();
+		protected readonly Mock<ISubscriptionRepository<CourseSubscription>> _courseSubscriptionRepositoryStub = new();
+		protected readonly Mock<ISubscriptionRepository<QuestionSubscription>> _questionSubscriptionRepositoryStub = new();
 		protected static Random rand = new();
 
 		public static DateTime randomPassedDate() {

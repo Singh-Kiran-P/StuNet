@@ -27,12 +27,6 @@ namespace Server.UnitTests
         private AuthController createController(UserManager<User> userManager = null)
         {
             var configuration = new ConfigurationBuilder()
-                // .AddInMemoryCollection(new Dictionary<string, string>
-                //     {
-                //         {"Key1", "Value1"},
-                //         {"Nested:Key1", "NestedValue1"},
-                //         {"Nested:Key2", "NestedValue2"}
-                //     })
                 .Build();
 
             Mock<JwtTokenManager> tokenManager = new(userManager, configuration);
@@ -85,7 +79,7 @@ namespace Server.UnitTests
             // Given
             RegisterUserDto registerDto = new()
             {
-                Email = rand.Next().ToString(),
+                Email = email,
                 Password = password,
                 ConfirmPassword = password,
                 fieldOfStudy = rand.Next().ToString()

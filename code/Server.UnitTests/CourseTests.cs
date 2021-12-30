@@ -33,14 +33,17 @@ namespace Server.UnitTests
 			var controller = CreateController();
 
 			//When
-			Course course = ((await controller.CreateCourse(dto)).Result as OkObjectResult).Value as Course;
+			var result = await controller.CreateCourse(dto);
 
             //Then
-            dto.Should().BeEquivalentTo(
-                course,
+            result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<Course>();
+            var createdCourse = (result.Result as OkObjectResult).Value as Course;
+
+            createdCourse.Should().BeEquivalentTo(
+                dto,
                 options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
             );
-            course.id.Should().NotBe(null);
+            createdCourse.id.Should().NotBe(null);
         }
 
         [Fact]
@@ -51,14 +54,19 @@ namespace Server.UnitTests
 			_courseRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);
             var controller = CreateController();
+            
             //When
-            GetCourseDto dto = ((await controller.GetCourse(rand.Next())).Result as OkObjectResult).Value as GetCourseDto;
+			var result = await controller.GetCourse(rand.Next());
+
             //Then
-            dto.Should().BeEquivalentTo(
+            result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetCourseDto>();
+            var createdCourse = (result.Result as OkObjectResult).Value as GetCourseDto;
+
+            createdCourse.Should().BeEquivalentTo(
                 course,
                 options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
             );
-            dto.topics.Should().NotBeNullOrEmpty();
+            createdCourse.topics.Should().NotBeNullOrEmpty();
         }
     }
 }

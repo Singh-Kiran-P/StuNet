@@ -132,8 +132,8 @@ namespace Server.Api
             services.AddScoped<ICourseRepository, PgCourseRepository>();
             services.AddScoped<IChannelRepository, PgChannelRepository>();
             services.AddScoped<IMessageRepository, PgMessageRepository>();
-            services.AddScoped<ICourseSubscriptionRepository, PgCourseSubscriptionRepository>();
-            services.AddScoped<IQuestionSubscriptionRepository, PgQuestionSubscriptionRepository>();
+            services.AddScoped<ISubscriptionRepository<CourseSubscription>, PgCourseSubscriptionRepository>();
+            services.AddScoped<ISubscriptionRepository<QuestionSubscription>, PgQuestionSubscriptionRepository>();
             services.AddScoped<INotificationRepository<AnswerNotification>, PgAnswerNotificationRepository>();
             services.AddScoped<INotificationRepository<QuestionNotification>, PgQuestionNotificationRepository>();
             
