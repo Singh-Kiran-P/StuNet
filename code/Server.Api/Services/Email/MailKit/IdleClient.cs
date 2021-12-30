@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using ChatSample.Hubs;
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Security;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Server.Api.Dtos;
+using Server.Api.Models;
 using Server.Api.Repositories;
 
 // https://github.com/jstedfast/MailKit/blob/master/Documentation/Examples/ImapIdleExample.cs
@@ -157,7 +161,10 @@ namespace Server.Api.Services
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var _questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
+                var _answerRepository = scope.ServiceProvider.GetRequiredService<IAnswerRepository>();
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
+                var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var _hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<ChatHub>>();
                 var questions = _questionRepository.getAllAsync().GetAwaiter().GetResult();
 
 
@@ -167,10 +174,48 @@ namespace Server.Api.Services
                 }).GetAwaiter();
 
                 Console.WriteLine("Email Sent"); // TODO implement
+                Console.WriteLine(message.ToString());
+
+
+                (int questionId, string courseMail, string title, string body) = _parseEmail(message);
+
+                User user = _userManager.FindByEmailAsync(courseMail).GetAwaiter().GetResult();
+
+                Question question = _questionRepository.getAsync(questionId).GetAwaiter().GetResult();
+                if (user == null || question == null) { return; }
+                Answer answer = new()
+                {
+                    userId = user.Id,
+                    question = question,
+                    title = title,
+                    body = body,
+                    // files = createAnswerDto.files
+                    time = DateTime.UtcNow
+                };
+                try
+                {
+                     _answerRepository.createAsync(answer).GetAwaiter().GetResult();
+                }
+                catch (System.Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", answer.id).GetAwaiter().GetResult();
 
             }
         }
 
+        private (int, string, string, string) _parseEmail(IMessageSummary message){
+            int questionId = 2;
+            string courseMail = "prof@uhasselt.be";
+            string title = "Answer 2 from Prof";
+            string body = "Test 2";
+
+            // courseMail = message.Envelope.From.Mailboxes[0] 
+
+
+            return (questionId, courseMail, title, body); 
+        }
         public void Exit()
         {
             cancel.Cancel();
