@@ -5,9 +5,9 @@ participant DataAccessObject
 database DataStore
 
 alt Request as student
--> Student: register(email, password, study)
+-> Student: register(email, password,confirmPassword, study)
 activate Student
-    Student -> DataAccessObject: createAccount(email, password, study)
+    Student -> DataAccessObject: RegisterJwtUser(email, password, confirmPassword, study)
     activate DataAccessObject
         DataAccessObject -> DataStore: save()
             activate DataStore
@@ -23,10 +23,10 @@ deactivate Student
 end
 
 alt Request as Prof
--> Prof: register(email, password)
+-> Prof: register(email, password, confirmPassword)
 activate Prof
 
-    Prof -> DataAccessObject: createAccount(email, password)
+    Prof -> DataAccessObject: RegisterJwtUser(email, password, confirmPassword)
     activate DataAccessObject
         DataAccessObject -> DataStore: save()
             activate DataStore
