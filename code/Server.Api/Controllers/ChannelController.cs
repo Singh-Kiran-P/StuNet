@@ -22,61 +22,61 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannels()
+        public async Task<ActionResult<IEnumerable<GetPartialChannelDto>>> GetChannels()
         {
-            var channels = await _channelRepository.getAllAsync();
-            return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));
+            var channels = await _channelRepository.GetAllAsync();
+            return Ok(channels.Select(channel => GetPartialChannelDto.Convert(channel)));
         }
 
-        [HttpGet("GetChannelsByCourseId/{courseId}")]
-        public async Task<ActionResult<IEnumerable<getOnlyChannelDto>>> GetChannelsByCourseId(int courseId)
+        [HttpGet("GetChannelsByCourseId/{courseId}")] //FIXME: Make route lower case
+        public async Task<ActionResult<IEnumerable<GetPartialChannelDto>>> GetChannelsByCourseId(int courseId)
         {
-            var channels = await _channelRepository.getByCourseIdAsync(courseId);
-            return Ok(channels.Select(channel => getOnlyChannelDto.convert(channel)));
+            var channels = await _channelRepository.GetByCourseIdAsync(courseId);
+            return Ok(channels.Select(channel => GetPartialChannelDto.Convert(channel)));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<getChannelDto>> GetChannel(int id)
+        public async Task<ActionResult<GetChannelDto>> GetChannel(int id)
         {
-            var channel = await _channelRepository.getAsync(id);
+            var channel = await _channelRepository.GetAsync(id);
             if (channel == null)
                 return NotFound();
 
-            return Ok(getChannelDto.convert(channel));
+            return Ok(GetChannelDto.Convert(channel));
         }
 
         [HttpPost]
-        public async Task<ActionResult<getOnlyChannelDto>> CreateChannel(createChannelDto dto)
+        public async Task<ActionResult<GetPartialChannelDto>> CreateChannel(CreateChannelDto dto)
         {
             TextChannel channel = new()
             {
                 name = dto.name,
-                course = await _courseRepository.getAsync(dto.courseId),
+                course = await _courseRepository.GetAsync(dto.courseId),
                 messages = new List<Message>()
             };
 
-            await _channelRepository.createAsync(channel);
-            return Ok(getOnlyChannelDto.convert(channel));
+            await _channelRepository.CreateAsync(channel);
+            return Ok(GetPartialChannelDto.Convert(channel));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteChannel(int id)
         {
-            await _channelRepository.deleteAsync(id);
+            await _channelRepository.DeleteAsync(id);
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateChannel(int id, createChannelDto dto)
+        public async Task<ActionResult> UpdateChannel(int id, CreateChannelDto dto)
         {
             TextChannel channel = new()
             {
                 id = id,
                 name = dto.name,
-                course = await _courseRepository.getAsync(dto.courseId)
+                course = await _courseRepository.GetAsync(dto.courseId)
             };
 
-            await _channelRepository.updateAsync(channel);
+            await _channelRepository.UpdateAsync(channel);
             return NoContent();
         }
     }

@@ -1,6 +1,4 @@
 // @Kiran @Senn
-
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +13,7 @@ namespace Server.Api.Controllers
     public class FieldOfStudyController : ControllerBase
     {
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
+        
         public FieldOfStudyController(IFieldOfStudyRepository fieldOfStudyRepository)
         {
             _fieldOfStudyRepository = fieldOfStudyRepository;
@@ -23,54 +22,41 @@ namespace Server.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FieldOfStudy>>> GetFieldOfStudies()
         {
-            var fieldOfStudies = await _fieldOfStudyRepository.getAllAsync();
+            var fieldOfStudies = await _fieldOfStudyRepository.GetAllAsync();
             return Ok(fieldOfStudies);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<FieldOfStudy>> GetFieldOfStudy(int id)
         {
-            var fieldOfStudy = await _fieldOfStudyRepository.getAsync(id);
+            var fieldOfStudy = await _fieldOfStudyRepository.GetAsync(id);
             if (fieldOfStudy == null)
+            {
                 return NotFound();
-
+            }
             return Ok(fieldOfStudy);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateFieldOfStudy(createFieldOfStudyDto createFieldOfStudyDto)
+        public async Task<ActionResult> CreateFieldOfStudy(CreateFieldOfStudyDto createFieldOfStudyDto)
         {
-            string _fullname = "";
-            // if (createFieldOfStudyDto.fullName != null) {
-            //     _fullname = createFieldOfStudyDto.fullName;
-            // }
-            // else{
-            if (createFieldOfStudyDto.isBachelor)
-            {
-                _fullname = createFieldOfStudyDto.name + "-" + "BACH" + "-" + createFieldOfStudyDto.year;
-            }
-            else
-            {
-                _fullname = createFieldOfStudyDto.name + "-" + "MASTER" + "-" + createFieldOfStudyDto.year;
-            }
-            // }
-
+            string _fullname = createFieldOfStudyDto.name
+                + "-"
+                + (createFieldOfStudyDto.isBachelor ? "BACH" : "MASTER");
             FieldOfStudy fieldOfStudy = new()
             {
                 fullName = _fullname,
                 name = createFieldOfStudyDto.name,
-                isBachelor = createFieldOfStudyDto.isBachelor,
-                year = createFieldOfStudyDto.year,
+                isBachelor = createFieldOfStudyDto.isBachelor
             };
-
-            await _fieldOfStudyRepository.createAsync(fieldOfStudy);
+            await _fieldOfStudyRepository.CreateAsync(fieldOfStudy);
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFieldOfStudy(int id)
         {
-            await _fieldOfStudyRepository.deleteAsync(id);
+            await _fieldOfStudyRepository.DeleteAsync(id);
             return Ok();
         }
 
@@ -82,11 +68,9 @@ namespace Server.Api.Controllers
                 id = id,
                 fullName = updateFieldOfStudyDto.fullName,
                 name = updateFieldOfStudyDto.name,
-                isBachelor = updateFieldOfStudyDto.isBachelor,
-                year = updateFieldOfStudyDto.year,
+                isBachelor = updateFieldOfStudyDto.isBachelor
             };
-
-            await _fieldOfStudyRepository.updateAsync(fieldOfStudy);
+            await _fieldOfStudyRepository.UpdateAsync(fieldOfStudy);
             return Ok();
         }
     }

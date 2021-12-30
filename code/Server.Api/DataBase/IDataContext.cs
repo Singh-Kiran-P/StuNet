@@ -12,7 +12,6 @@ namespace Server.Api.DataBase
         DbSet<User> Users { get; set; }
         DbSet<Topic> Topics { get; set; }
         DbSet<Question> Questions { get; set; }
-
         DbSet<IdentityUserRole<string>> Roles { get; set; }
         DbSet<Student> Students { get; set; }
         DbSet<Professor> Professors { get; set; }
@@ -20,8 +19,11 @@ namespace Server.Api.DataBase
         DbSet<Course> Courses { get; set; }
         DbSet<TextChannel> Channels { get; set; }
         DbSet<Message> Messages { get; set; }
-        DbSet<CourseSubscription> CourseSubscriptions { get; set; }
-        DbSet<QuestionSubscription> QuestionSubscriptions { get; set; }
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        DbSet<CourseSubscription> CourseSubscriptions { get; set; } 
+        DbSet<QuestionSubscription> QuestionSubscriptions { get; set; } 
+        DbSet<AnswerNotification> AnswerNotifications { get; set; } 
+        DbSet<QuestionNotification> QuestionNotifications { get; set; }
+        
+		Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

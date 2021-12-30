@@ -117,10 +117,13 @@ namespace Server.Api
             services.AddScoped<IQuestionRepository, PgQuestionRepository>();
             services.AddScoped<IFieldOfStudyRepository, PgFieldOfStudyRepository>();
             services.AddScoped<ICourseRepository, PgCourseRepository>();
-            services.AddScoped<IChannelRepository, pgChannelRepository>();
-            services.AddScoped<pgMessageRepository, pgMessageRepository>();
-            services.AddScoped<ICourseSubscriptionRepository, PgCourseSubscriptionRepository>();
-            services.AddScoped<IQuestionSubscriptionRepository, PgQuestionSubscriptionRepository>();
+            services.AddScoped<IChannelRepository, PgChannelRepository>();
+            services.AddScoped<IMessageRepository, PgMessageRepository>();
+            services.AddScoped<ISubscriptionRepository<CourseSubscription>, PgCourseSubscriptionRepository>();
+            services.AddScoped<ISubscriptionRepository<QuestionSubscription>, PgQuestionSubscriptionRepository>();
+            services.AddScoped<INotificationRepository<AnswerNotification>, PgAnswerNotificationRepository>();
+            services.AddScoped<INotificationRepository<QuestionNotification>, PgQuestionNotificationRepository>();
+            
 
             services.AddSwaggerGen(c =>
             {

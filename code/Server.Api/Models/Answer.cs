@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Api.Models
 {
@@ -13,5 +12,6 @@ namespace Server.Api.Models
         public string body { get; set; }
         // public File[] files { get; set; }
         public DateTime time { get; set; }
+        public bool isAccepted { get; set; } = false;
     }
 }

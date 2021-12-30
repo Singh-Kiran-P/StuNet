@@ -3,45 +3,47 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public class getByIdsQuestionSubscriptionDto
+    public record GetQuestionSubscriptionDto
+    {
+        public DateTime dateTime { get; set; }
+        public string userId { get; set; }
+        public int questionId { get; set; }
+
+        public static GetQuestionSubscriptionDto Convert(QuestionSubscription subscription)
+        {
+            return new GetQuestionSubscriptionDto
+            {
+                dateTime = subscription.dateTime,
+                userId = subscription.userId,
+                questionId = subscription.subscribedItemId,
+            };
+        }
+    }
+
+    public record GetByIdsQuestionSubscriptionDto
     {
         public int id { get; set; }
         public DateTime dateTime { get; set; }
-        public static getByIdsQuestionSubscriptionDto convert(QuestionSubscription subscription)
+        
+        public static GetByIdsQuestionSubscriptionDto Convert(QuestionSubscription subscription)
         {
-            return new getByIdsQuestionSubscriptionDto
+            return new GetByIdsQuestionSubscriptionDto
             {
                 id = subscription.id,
                 dateTime = subscription.dateTime,
             };
         }
     }
-
-    public class getQuestionSubscriptionDto
-    {
-        public DateTime dateTime { get; set; }
-        public string userId { get; set; }
-        public int questionId { get; set; }
-        public static getQuestionSubscriptionDto convert(QuestionSubscription subscription)
-        {
-            return new getQuestionSubscriptionDto
-            {
-                dateTime = subscription.dateTime,
-                userId = subscription.userId,
-                questionId = subscription.questionId,
-            };
-        }
-    }
-
-    public class createQuestionSubscriptionDto
+    public record CreateQuestionSubscriptionDto
     {
         public int questionId { get; set; }
-        public static getQuestionSubscriptionDto convert(QuestionSubscription subscription)
+
+        public static GetQuestionSubscriptionDto Convert(QuestionSubscription subscription)
         {
-            return new getQuestionSubscriptionDto
+            return new GetQuestionSubscriptionDto
             {
                 userId = subscription.userId,
-                questionId = subscription.questionId,
+                questionId = subscription.subscribedItemId,
             };
         }
     }

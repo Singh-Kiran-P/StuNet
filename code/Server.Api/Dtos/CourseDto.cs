@@ -1,31 +1,9 @@
-using System;
 using Server.Api.Models;
+using System.Linq;
 using System.Collections.Generic;
 
-namespace Server.Api.Dtos // controllers?
+namespace Server.Api.Dtos
 {
-    public record CourseDto
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string number { get; set; }
-        public string description { get; set; }
-        public string courseEmail { get; set; }
-        public string profEmail { get; set; }
-        public static CourseDto convert(Course course)
-        {
-            return new CourseDto
-            {
-                id = course.id,
-                name = course.name,
-                number = course.number,
-                description = course.description,
-                courseEmail = course.courseEmail,
-                profEmail = course.profEmail
-            };
-        }
-    }
-
     public record GetAllCourseDto
     {
         public int id { get; set; }
@@ -34,8 +12,21 @@ namespace Server.Api.Dtos // controllers?
         public string description { get; set; }
         public string courseEmail { get; set; }
         public string profEmail { get; set; }
-        public ICollection<getOnlyTopicDto> topics;
+        public ICollection<GetPartialTopicDto> topics;
 
+        public static GetAllCourseDto Convert(Course course)
+        {
+            return new GetAllCourseDto()
+            {
+                id = course.id,
+                name = course.name,
+                number = course.number,
+                description = course.description,
+                courseEmail = course.courseEmail,
+                profEmail = course.profEmail,
+                topics = course.topics.Select(topic => new GetPartialTopicDto() { name = topic.name, id = topic.id }).ToList()
+            };
+        }
     }
 
     public record GetCourseDto
@@ -46,11 +37,26 @@ namespace Server.Api.Dtos // controllers?
         public string description { get; set; }
         public string courseEmail { get; set; }
         public string profEmail { get; set; }
-        public ICollection<getOnlyTopicDto> topics;
-        public ICollection<getOnlyChannelDto> channels;
+        public ICollection<GetPartialTopicDto> topics;
+        public ICollection<GetPartialChannelDto> channels;
+
+        public static GetCourseDto Convert(Course course)
+        {
+            return new()
+            {
+                id = course.id,
+                name = course.name,
+                number = course.number,
+                description = course.description,
+                courseEmail = course.courseEmail,
+                profEmail = course.profEmail,
+                topics = course.topics.Select(topic => new GetPartialTopicDto(){ id = topic.id, name = topic.name }).ToList(),
+                channels = course.channels.Select(channel => new GetPartialChannelDto(){ id = channel.id, name = channel.name }).ToList()
+            };
+        }
     }
 
-    public record getOnlyCourseDto
+    public record GetPartialCourseDto
     {
         public int id { get; set; }
         public string name { get; set; }
@@ -58,26 +64,31 @@ namespace Server.Api.Dtos // controllers?
         public string description { get; set; }
         public string courseEmail { get; set; }
         public string profEmail { get; set; }
-        public static getOnlyCourseDto convert(Course course)
+        public static GetPartialCourseDto Convert(Course course)
         {
-            return new getOnlyCourseDto
+            return new GetPartialCourseDto
             {
                 id = course.id,
                 name = course.name,
                 number = course.number,
                 description = course.description,
                 courseEmail = course.courseEmail,
-                profEmail = course.profEmail
+                profEmail = course.profEmail,
             };
         }
     }
 
-    public record createCourseDto
+    public record CreateCourseDto
     {
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
         public string courseEmail { get; set; }
         public string profEmail { get; set; }
+
+        public static CreateCourseDto Convert(Course course)
+        {
+            throw new System.Exception("method not implement");
+        }
     }
 }

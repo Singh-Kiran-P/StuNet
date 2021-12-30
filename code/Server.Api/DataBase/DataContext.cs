@@ -1,22 +1,16 @@
-// https://henriquesd.medium.com/entity-framework-core-relationships-with-fluent-api-8f741c57b881
-// https://www.learnentityframeworkcore.com/configuration/one-to-many-relationship-configuration
-// https://code-maze.com/migrations-and-seed-data-efcore/
-// https://dejanstojanovic.net/aspnet/2020/july/seeding-data-with-entity-framework-core-using-migrations/
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Server.Api.Models;
 using Server.Api.Config;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-
-
 
 namespace Server.Api.DataBase
 {
+    // https://henriquesd.medium.com/entity-framework-core-relationships-with-fluent-api-8f741c57b881
+    // https://www.learnentityframeworkcore.com/configuration/one-to-many-relationship-configuration
+    // https://code-maze.com/migrations-and-seed-data-efcore/
+    // https://dejanstojanovic.net/aspnet/2020/july/seeding-data-with-entity-framework-core-using-migrations/
     public class DataContext : DbContext, IDataContext
     {
         public DbSet<Answer> Answers { get; set; }
@@ -32,11 +26,14 @@ namespace Server.Api.DataBase
         public DbSet<Message> Messages { get; set; }
         public DbSet<CourseSubscription> CourseSubscriptions { get; set; }
         public DbSet<QuestionSubscription> QuestionSubscriptions { get; set; }
+        public DbSet<AnswerNotification> AnswerNotifications { get; set; }
+        public DbSet<QuestionNotification> QuestionNotifications { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
@@ -45,18 +42,12 @@ namespace Server.Api.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<Answer>()
-            // .HasOne(a => a.user)
-            // .WithMany(u => u.answers)
-            // .HasForeignKey(a => a.userId);
-
-            createFieldOfStudy(modelBuilder);
-            createUsers(modelBuilder);
-            createCourse(modelBuilder);
+            CreateFieldOfStudy(modelBuilder);
+            CreateUsers(modelBuilder);
+            CreateCourse(modelBuilder);
         }
 
-
-        private void createUsers(ModelBuilder modelBuilder)
+        private void CreateUsers(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
@@ -64,7 +55,6 @@ namespace Server.Api.DataBase
 
             var defaultUser = new User()
             {
-
                 Email = "xxxx@example.com",
                 NormalizedEmail = "XXXX@EXAMPLE.COM",
                 UserName = "Owner",
@@ -108,48 +98,27 @@ namespace Server.Api.DataBase
             };
 
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<User>().HasData(
-                defaultUser
-             );
-            modelBuilder.Entity<Student>().HasData(
-                defaultStudent
-            );
-            modelBuilder.Entity<Professor>().HasData(
-                defaultProf
-            );
+            modelBuilder.Entity<User>().HasData(defaultUser);
+            modelBuilder.Entity<Student>().HasData(defaultStudent);
+            modelBuilder.Entity<Professor>().HasData(defaultProf);
         }
 
-        private void createFieldOfStudy(ModelBuilder modelBuilder)
+        private void CreateFieldOfStudy(ModelBuilder modelBuilder)
         {
             var fos1 = new FieldOfStudy()
             {
                 id = 1,
-                fullName = "INF-BACH-1",
+                fullName = "INF-BACH",
                 name = "INF",
-                isBachelor = true,
-                year = 1,
+                isBachelor = true
             };
             modelBuilder.Entity<FieldOfStudy>().HasData(fos1);
         }
 
-        private void createCourse(ModelBuilder modelBuilder)
+        private void CreateCourse(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<Topic>()
-            //     .HasOne(t => t.course)
-            //     .WithMany(c => c.topics)
-            //     .HasForeignKey(t => t.courseId);
-
-            // modelBuilder.Entity<Question>()
-            // 	.HasOne(q => q.course)
-            // 	.WithMany(c => c.questions)
-            // 	.HasForeignKey(q => q.courseId);
-
-            // modelBuilder.Entity<TextChannel>()
-            //     .HasOne(c => c.course)
-            //     .WithMany(c => c.channels)
-            //     .HasForeignKey(c => c.courseId);
-
-            var courses = new List<Course> {
+            var courses = new List<Course>
+            {
                 new Course() {
                     id = 1,
                     name = "Course 1",
@@ -168,36 +137,44 @@ namespace Server.Api.DataBase
                 }
             };
 
-            var topics = new List<Topic> {
-                new Topic {
+            var topics = new List<Topic>
+            {
+                new Topic
+                {
                     id = 1,
                     name = "Topic 1",
                     courseId = courses[0].id,
                 },
-                new Topic {
+                new Topic
+                {
                     id = 2,
                     name = "Topic 2",
                     courseId = courses[0].id,
                 },
-                new Topic {
+                new Topic
+                {
                     id = 3,
                     name = "Topic 3",
                     courseId = courses[0].id,
                 },
-                new Topic {
+                new Topic
+                {
                     id = 4,
                     name = "Topic 4",
                     courseId = courses[1].id,
                 },
-                new Topic {
+                new Topic
+                {
                     id = 5,
                     name = "Topic 5",
                     courseId = courses[1].id,
                 }
             };
 
-            var questions = new List<Question> {
-                new Question {
+            var questions = new List<Question>
+            {
+                new Question
+                {
                     id = 1,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
@@ -206,7 +183,8 @@ namespace Server.Api.DataBase
 					// topics = topics.Where(t => t.courseId == courses[0].id).ToList(),
 					time = DateTime.UtcNow.AddDays(-1)
                 },
-                new Question {
+                new Question
+                {
                     id = 2,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
@@ -215,7 +193,8 @@ namespace Server.Api.DataBase
 					// topics = new List<Topic> {topics[0]},
 					time = DateTime.UtcNow.AddMonths(-1)
                 },
-                new Question {
+                new Question
+                {
                     id = 3,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[1].id,
@@ -244,8 +223,10 @@ namespace Server.Api.DataBase
                     }
                 );
 
-            var answers = new List<Answer> {
-                new Answer {
+            var answers = new List<Answer>
+            {
+                new Answer
+                {
                     id = 1,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     questionId = questions[0].id,
@@ -253,15 +234,18 @@ namespace Server.Api.DataBase
                     body = "answer",
                     time = DateTime.UtcNow.AddHours(-5)
                 },
-                new Answer {
+                new Answer
+                {
                     id = 2,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     questionId = questions[1].id,
                     title = "Answer 2",
                     body = "answer",
-                    time = DateTime.UtcNow.AddHours(-2)
+                    time = DateTime.UtcNow.AddHours(-2),
+                    isAccepted = true
                 },
-                new Answer {
+                new Answer
+                {
                     id = 3,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     questionId = questions[1].id,
@@ -269,7 +253,8 @@ namespace Server.Api.DataBase
                     body = "answer",
                     time = DateTime.UtcNow.AddDays(-18)
                 },
-                new Answer {
+                new Answer
+                {
                     id = 4,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     questionId = questions[2].id,
@@ -286,15 +271,18 @@ namespace Server.Api.DataBase
                 courseId = courses[0].id,
             };
 
-            var messages = new List<Message> {
-                new Message {
+            var messages = new List<Message>
+            {
+                new Message
+                {
                     id = 1,
                     channelId = channel.id,
                     userMail = "student@student.uhasselt.be",
                     body = "Message",
                     time = DateTime.UtcNow.AddDays(-1)
                 },
-                new Message {
+                new Message
+                {
                     id = 2,
                     channelId = channel.id,
                     userMail = "prof@uhasselt.be",
@@ -303,12 +291,11 @@ namespace Server.Api.DataBase
                 }
             };
 
-
             modelBuilder.Entity<Course>().HasData(courses);
-            modelBuilder.Entity<Topic>().HasData(topics);
-            modelBuilder.Entity<Question>().HasData(questions);
+            modelBuilder.Entity<Topic>().HasData(topics);        //.HasOne(t => t.course).WithMany(c => c.topics).HasForeignKey(t => t.courseId);
+            modelBuilder.Entity<Question>().HasData(questions);  //.HasOne(q => q.course).WithMany(c => c.questions).HasForeignKey(q => q.courseId);
             modelBuilder.Entity<Answer>().HasData(answers);
-            modelBuilder.Entity<TextChannel>().HasData(channel);
+            modelBuilder.Entity<TextChannel>().HasData(channel); //.HasOne(c => c.course).WithMany(c => c.channels).HasForeignKey(c => c.courseId);
             modelBuilder.Entity<Message>().HasData(messages);
         }
     }

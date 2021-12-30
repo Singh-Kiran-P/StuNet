@@ -25,7 +25,6 @@ namespace Server.Api.Config
                     NormalizedName = RolesEnum.student_NORM
                 }
             );
-
         }
     }
 }

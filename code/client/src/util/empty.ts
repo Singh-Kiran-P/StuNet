@@ -4,13 +4,16 @@ export const EmptyCourse: T.Course = {
     id: 0,
     name: '',
     number: '',
+    description: '',
     topics: [],
-    questions: []
+    questions: [],
+    channels: []
 }
 
 export const EmptyChannel: T.Channel = {
     id: 0,
-    name: ''
+    name: '',
+    course: EmptyCourse
 }
 
 export const EmptyTopic: T.Topic = {
@@ -38,6 +41,7 @@ export const EmptyAnswer: T.Answer = {
     title: '',
     body: '',
     time: '',
+    isAccepted: false,
     question: EmptyQuestion,
     user: {
         email: ''
@@ -47,7 +51,6 @@ export const EmptyAnswer: T.Answer = {
 export const EmptyField: T.Field = {
 	id: 0,
 	name: '',
-	year: 0,
 	fullName: '',
 	isBachelor: false
 }

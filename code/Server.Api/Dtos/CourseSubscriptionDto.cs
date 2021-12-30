@@ -3,13 +3,31 @@ using Server.Api.Models;
 
 namespace Server.Api.Dtos
 {
-    public class getByIdsCourseSubscriptionDto
+    public record GetCourseSubscriptionDto
+    {
+        public DateTime dateTime { get; set; }
+        public string userId { get; set; }
+        public int courseId { get; set; }
+        
+        public static GetCourseSubscriptionDto Convert(CourseSubscription subscription)
+        {
+            return new GetCourseSubscriptionDto
+            {
+                dateTime = subscription.dateTime,
+                userId = subscription.userId,
+                courseId = subscription.subscribedItemId,
+            };
+        }
+    }
+
+    public record GetByIdsCourseSubscriptionDto
     {
         public int id { get; set; }
         public DateTime dateTime { get; set; }
-        public static getByIdsCourseSubscriptionDto convert(CourseSubscription subscription)
+
+        public static GetByIdsCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
-            return new getByIdsCourseSubscriptionDto
+            return new GetByIdsCourseSubscriptionDto
             {
                 id = subscription.id,
                 dateTime = subscription.dateTime,
@@ -17,31 +35,16 @@ namespace Server.Api.Dtos
         }
     }
 
-    public class getCourseSubscriptionDto
+    public record CreateCourseSubscriptionDto
     {
-        public DateTime dateTime { get; set; }
-        public string userId { get; set; }
         public int courseId { get; set; }
-        public static getCourseSubscriptionDto convert(CourseSubscription subscription)
-        {
-            return new getCourseSubscriptionDto
-            {
-                dateTime = subscription.dateTime,
-                userId = subscription.userId,
-                courseId = subscription.courseId,
-            };
-        }
-    }
 
-    public class createCourseSubscriptionDto
-    {
-        public int courseId { get; set; }
-        public static getCourseSubscriptionDto convert(CourseSubscription subscription)
+        public static GetCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
-            return new getCourseSubscriptionDto
+            return new GetCourseSubscriptionDto
             {
                 userId = subscription.userId,
-                courseId = subscription.courseId,
+                courseId = subscription.subscribedItemId,
             };
         }
     }

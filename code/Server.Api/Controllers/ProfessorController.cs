@@ -1,9 +1,9 @@
-using System;
+// using System;
 
-namespace Server.Api.Controllers
-{
-    public class ProfessorController
-    {
+// namespace Server.Api.Controllers
+// {
+//     public class ProfessorController
+//     {
 
-    }
-}
+//     }
+// }

@@ -1,10 +1,12 @@
-import React, { Component, useTheme, paper, Style } from '@/.';
+import React, { Component, useToken, useTheme, paper, Style } from '@/.';
 import { Appbar } from 'react-native-paper';
 import { SearchBar } from '@/components';
 import { replace } from '@/util/alg';
 
-export default Component(({ nav, params, params: { screenTitle, search, subscribe } }) => {
+export default Component(({ nav, params, params: { screenTitle, search, subscribe, logout } }) => {
+    let [_, setToken] = logout ? useToken() : ['', () => {}];
     let [theme] = useTheme();
+
     let title = replace(screenTitle, params) || 'Loading...';
 
     const s = Style.create({
@@ -30,6 +32,10 @@ export default Component(({ nav, params, params: { screenTitle, search, subscrib
             {subscribe !== undefined && <Appbar.Action
                 icon={subscribe ? 'bell-ring' : 'bell-outline'}
                 onPress={() => nav.setParams({ subscribe: !subscribe })}
+            />}
+            {logout && <Appbar.Action
+                icon='logout'
+                onPress={() => setToken('')}
             />}
         </Appbar.Header>
     )

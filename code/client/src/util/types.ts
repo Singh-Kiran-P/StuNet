@@ -1,3 +1,11 @@
+export type Notification = {
+    id: number;
+    notifierId: number;
+    title: string,
+    body: string,
+    time: string;
+}
+
 export type BaseCourse = {
     id: number;
     name: string;
@@ -58,6 +66,7 @@ export type BaseAnswer = {
     title: string;
     body: string;
     time: string;
+    isAccepted: boolean;
 }
 
 export type Answer = BaseAnswer & {
@@ -70,7 +79,6 @@ export type Answer = BaseAnswer & {
 export type Field = {
 	id: number;
 	name: string;
-	year: number;
 	fullName: string;
 	isBachelor: boolean;
 }
@@ -78,24 +86,9 @@ export type Field = {
 export type FOS = {
 	field: string;
 	degree: string;
-	year: string;
 }
 
 export const enum User {
 	PROF,
 	STUDENT
-}
-
-export type CourseSubscription = {
-    id: number;
-    userId: string;
-    courseId: number;
-    dateTime: string;
-}
-
-export type QuestionSubscription = {
-    id: number;
-    userId: string;
-    questionId: number;
-    dateTime: string;
 }

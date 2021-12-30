@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Security.Claims;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Services;
-using System.Linq;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using ChatSample.Hubs;
@@ -26,7 +25,11 @@ namespace Server.Api.Controllers
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly IEmailSender _mailSender;
 
-        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, IEmailSender mailSender)
+        private readonly INotificationRepository<QuestionNotification> _notificationRepository;
+        private readonly ISubscriptionRepository<CourseSubscription> _courseSubscriptionRepository;
+        private readonly ISubscriptionRepository<QuestionSubscription> _questionSubscriptionRepository;
+
+        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, INotificationRepository<QuestionNotification> notificationRepository, ISubscriptionRepository<CourseSubscription> subscriptionRepository, ISubscriptionRepository<QuestionSubscription> questionSubscriptionRepository, IEmailSender mailSender)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;
@@ -35,106 +38,114 @@ namespace Server.Api.Controllers
             _hubContext = hubContext;
             _mailSender = mailSender;
 
+            _courseSubscriptionRepository = subscriptionRepository;
+            _notificationRepository = notificationRepository;
+            _questionSubscriptionRepository = questionSubscriptionRepository;
         }
 
-        // private static questionDto toDto(Question question, User user)
-        // {
-        //     return new questionDto
-        //     {
-        //         id = question.id,
-        //         user = question.user,
-        //         course = new getOnlyCourseDto
-        //         {
-        //             id = question.course.id,
-        //             name = question.course.name,
-        //             number = question.course.number,
-        //         },
-        //         title = question.title,
-        //         body = question.body,
-        //         topics = question.topics.Select(topic => new getOnlyTopicDto
-        //         {
-        //             id = topic.id,
-        //             name = topic.name
-        //         }).ToList(),
-        //         time = question.time
-        //     };
-        // }
+        // FIXME: I removed commented questionDto of 3 weeks old here
 
         //[Authorize(Roles = "student")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<questionDto>>> GetQuestions()
+        public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetQuestions()
         {
-            // var questions = await _questionRepository.getAllAsync();
-            // return Ok(questions.Select(question => questionDto.convert(question)));
             try
             {
-                var questions = await _questionRepository.getAllAsync();
-                List<questionDto> res = new List<questionDto>();
+                var questions = await _questionRepository.GetAllAsync();
+                List<GetQuestionDto> res = new List<GetQuestionDto>();
                 foreach (var q in questions)
                 {
                     User user = await _userManager.FindByIdAsync(q.userId);
-                    res.Add(questionDto.convert(q, user));
+                    res.Add(GetQuestionDto.Convert(q, user));
                 }
                 return Ok(res);
             }
-            catch { return BadRequest("Error finding all questions"); }
+            catch
+            {
+                return BadRequest("Error finding all questions");
+            }
+        }
+
+        [HttpGet("subscribed")]
+        public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetSubscribedQuestions()
+        {
+            ClaimsPrincipal currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == "userref"))
+            {
+                string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
+                IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.GetByUserId(userId);
+                IEnumerable<Question> subscribedQuestions = subscriptions.Select(sub => sub.subscribedItem);
+
+                User user = await _userManager.FindByIdAsync(userId);
+                return Ok(subscribedQuestions.Select(q => GetQuestionDto.Convert(q, user)));
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<questionDto>> GetQuestion(int id)
+        public async Task<ActionResult<GetQuestionDto>> GetQuestion(int id)
         {
-            // var question = await _questionRepository.getAsync(id);
-            // if (question == null)
-            //     return NotFound();
-            // return Ok(toDto(question));
             try
             {
-                var question = await _questionRepository.getAsync(id);
+                var question = await _questionRepository.GetAsync(id);
                 if (question == null)
+                {
                     return NotFound();
+                }
                 User user = await _userManager.FindByIdAsync(question.userId);
 
-                return Ok(questionDto.convert(question, user));
+                return Ok(GetQuestionDto.Convert(question, user));
             }
-            catch { return BadRequest("Error finding question"); }
+            catch
+            {
+                return BadRequest("Error finding question");
+            }
         }
 
-        [HttpGet("GetQuestionsByCourseId/search/{courseId}")]
-        public async Task<ActionResult<GetCourseDto>> searchByName(int courseId, [FromQuery] string name)
+        [HttpGet("GetQuestionsByCourseId/search/{courseId}")] //FIXME: Make route lower case
+        public async Task<ActionResult<GetCourseDto>> SearchByName(int courseId, [FromQuery] string name)
         {
-            var questions = await _questionRepository.getByCourseIdAsync(courseId);
+            var questions = await _questionRepository.GetByCourseIdAsync(courseId);
             IEnumerable<Question> matches = StringMatcher.FuzzyMatchObject(questions, name);
-            List<questionDto> res = new List<questionDto>();
+            List<GetQuestionDto> res = new List<GetQuestionDto>();
             foreach (var q in matches)
             {
                 User user = await _userManager.FindByIdAsync(q.userId);
-                res.Add(questionDto.convert(q, user));
+                res.Add(GetQuestionDto.Convert(q, user));
             }
             return Ok(res);
         }
 
         //[Authorize(Roles = "student")]
         [HttpPost]
-        public async Task<ActionResult<questionDto>> CreateQuestion(createQuestionDto dto)
+        public async Task<ActionResult<GetQuestionDto>> CreateQuestion(CreateQuestionDto dto)
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "username"))
             {
                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 User user = await _userManager.FindByEmailAsync(userEmail);
-                Course c = _courseRepository.getAsync(dto.courseId).Result;
+                Course c = _courseRepository.GetAsync(dto.courseId).Result;
+                ICollection<Topic> topics = dto.topicIds
+                    .Select(id => _topicRepository.GetAsync(id)) //FIXME: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
+                    .Select(task => task.Result)
+                    .ToList();
 
-                ICollection<Topic> topics = new List<Topic>();
-                topics = dto.topicIds.Select(id => _topicRepository.getAsync(id)) //TODO: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
-                                                .Select(task => task.Result)
-                                                .ToList();
-
-                if (c == null) { return BadRequest("Course does not exist"); }
-                if (topics.Contains(null)) { return BadRequest("One of the topics does not exist"); }
+                if (c == null)
+                {
+                    return BadRequest("Course does not exist");
+                }
+                else if (topics.Contains(null))
+                {
+                    return BadRequest("One of the topics does not exist");
+                }
                 Question question = new()
                 {
                     title = dto.title,
-                    userId = user.Id, //TODO
+                    userId = user.Id, //TODO: do what?
                     course = c,
                     body = dto.body,
                     // files = createQuestionDto.files TODO
@@ -142,19 +153,40 @@ namespace Server.Api.Controllers
                     time = DateTime.UtcNow
                 };
 
-                await _questionRepository.createAsync(question);
-                await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", question.id);
+                await _questionRepository.CreateAsync(question);
 
-                await _mailSender.SendEmail(c.courseEmail, "New question in " + c.name, EmailTemplate.QuestionAsked, new {
+                await _questionSubscriptionRepository.CreateAsync(new QuestionSubscription
+                {
+                    userId = user.Id,
+                    subscribedItemId = question.id,
+                    dateTime = question.time
+                });
+
+                await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + question.id.ToString());
+
+                IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.GetBySubscribedId(c.id)).Select(sub => sub.userId);
+                await _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new QuestionNotification
+                {
+                    userId = userId,
+                    questionId = question.id,
+                    question = question,
+                    time = question.time
+                }));
+
+                var ret = GetQuestionDto.Convert(question, user);
+                await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
+
+                await _mailSender.SendEmail(c.courseEmail, "New question in " + c.name, EmailTemplate.QuestionAsked, new
+                {
                     topics = question.topics,
                     title = question.title,
                     body = question.body,
                     email = userEmail,
                     id = question.id,
-                    course= c.name
+                    course = c.name
                 });
 
-                return Ok(questionDto.convert(question, user));
+                return Ok(ret);
             }
             else
             {
@@ -165,21 +197,20 @@ namespace Server.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteQuestion(int id)
         {
-            var existingQuestion = await _questionRepository.getAsync(id);
+            var existingQuestion = await _questionRepository.GetAsync(id);
             if (existingQuestion is null)
             {
                 return NotFound();
             }
-
-            await _questionRepository.deleteAsync(id);
+            await _questionRepository.DeleteAsync(id);
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateQuestion(int id, createQuestionDto dto)
+        public async Task<ActionResult> UpdateQuestion(int id, CreateQuestionDto dto)
         {
 
-            var existingQuestion = await _questionRepository.getAsync(id);
+            var existingQuestion = await _questionRepository.GetAsync(id);
             if (existingQuestion is null)
             {
                 return NotFound();
@@ -189,16 +220,15 @@ namespace Server.Api.Controllers
             {
                 title = dto.title,
                 // user = updateQuestionDto.user,
-                course = _courseRepository.getAsync(dto.courseId).Result,
+                course = _courseRepository.GetAsync(dto.courseId).Result,
                 body = dto.body,
                 // files = updateQuestionDto.files
-                topics = dto.topicIds.Select(id => _topicRepository.getAsync(id))
+                topics = dto.topicIds.Select(id => _topicRepository.GetAsync(id))
                                                 .Select(task => task.Result)
                                                 .ToList(),
                 time = DateTime.UtcNow
             };
-
-            await _questionRepository.updateAsync(updatedQuestion);
+            await _questionRepository.UpdateAsync(updatedQuestion);
             return NoContent();
         }
     }

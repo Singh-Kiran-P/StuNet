@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
-using Microsoft.AspNetCore.SignalR;
 using ChatSample.Hubs;
 
 namespace Server.Api.Controllers
@@ -20,73 +20,86 @@ namespace Server.Api.Controllers
     {
         private readonly IAnswerRepository _answerRepository;
         private readonly UserManager<User> _userManager;
-        // private readonly ITopicRepository _topicRepository;
         private readonly IQuestionRepository _questionRepository;
         private readonly IHubContext<ChatHub> _hubContext;
-        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext /*, ITopicRepository topicRepository*/ )
+        private readonly INotificationRepository<AnswerNotification> _notificationRepository;
+        private readonly ISubscriptionRepository<QuestionSubscription> _subscriptionRepository;
+
+        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, ISubscriptionRepository<QuestionSubscription> subscriptionRepository)
         {
             _answerRepository = answerRepository;
             _userManager = userManager;
             _questionRepository = questionRepository;
             _hubContext = hubContext;
-            // _topicRepository = topicRepository;
-            // _courseRepository = courseRepository;
+            _notificationRepository = notificationRepository;
+            _subscriptionRepository = subscriptionRepository;
         }
 
         //[Authorize(Roles = "student")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswers()
+        public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetAnswers()
         {
             try
             {
-                IEnumerable<Answer> answers = await _answerRepository.getAllAsync();
-                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                IEnumerable<Answer> answers = await _answerRepository.GetAllAsync();
+                List<GetAnswerDto> res = new List<GetAnswerDto>();
                 foreach (var answer in answers)
                 {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    res.Add(ResponseAnswerDto.convert(answer, user));
+                    res.Add(GetAnswerDto.Convert(answer, user));
                 }
                 return Ok(res);
             }
-            catch { return BadRequest("Error finding all answers"); }
+            catch
+            {
+                return BadRequest("Error finding all answers");
+            }
         }
 
         //[Authorize(Roles = "student,prof")]
-        [HttpGet("GetAnswersByQuestionId/{questionId}")]
-        public async Task<ActionResult<IEnumerable<ResponseAnswerDto>>> GetAnswersByQuestionId(int questionId)
+        [HttpGet("GetAnswersByQuestionId/{questionId}")] //FIXME: Make route lower case
+        public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
             try
             {
-                IEnumerable<Answer> answers = await _answerRepository.getByQuestionId(questionId);
-                List<ResponseAnswerDto> res = new List<ResponseAnswerDto>();
+                IEnumerable<Answer> answers = await _answerRepository.GetByQuestionId(questionId);
+                List<GetAnswerDto> res = new List<GetAnswerDto>();
                 foreach (var answer in answers)
                 {
                     User user = await _userManager.FindByIdAsync(answer.userId);
-                    res.Add(ResponseAnswerDto.convert(answer, user));
+                    res.Add(GetAnswerDto.Convert(answer, user));
                 }
                 return Ok(res);
             }
-            catch { return BadRequest("Error finding all answers"); }
+            catch
+            {
+                return BadRequest("Error finding all answers");
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResponseAnswerDto>> GetAnswer(int id)
+        public async Task<ActionResult<GetAnswerDto>> GetAnswer(int id)
         {
             try
             {
-                var answer = await _answerRepository.getAsync(id);
+                var answer = await _answerRepository.GetAsync(id);
                 User user = await _userManager.FindByIdAsync(answer.userId);
                 if (answer == null)
+                {
                     return NotFound();
+                }
 
-                return Ok(ResponseAnswerDto.convert(answer, user));
+                return Ok(GetAnswerDto.Convert(answer, user));
             }
-            catch { return BadRequest("Error finding all answers"); }
+            catch
+            {
+                return BadRequest("Error finding all answers");
+            }
         }
 
         //[Authorize(Roles = "student")]
         [HttpPost]
-        public async Task<ActionResult<ResponseAnswerDto>> CreateAnswer(PostAnswerDto dto)
+        public async Task<ActionResult<GetAnswerDto>> CreateAnswer(CreateAnswerDto dto)
         {
 
             // Get user from token
@@ -96,7 +109,7 @@ namespace Server.Api.Controllers
                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 User user = await _userManager.FindByEmailAsync(userEmail);
 
-                Question question = await _questionRepository.getAsync(dto.questionId);
+                Question question = await _questionRepository.GetAsync(dto.questionId);
                 if (user == null || question == null) { return BadRequest("User or Question related to answer not found"); }
                 Answer answer = new()
                 {
@@ -108,40 +121,49 @@ namespace Server.Api.Controllers
                     time = DateTime.UtcNow
                 };
 
-                await _answerRepository.createAsync(answer);
-                await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", answer.id);
-                return Ok(ResponseAnswerDto.convert(answer, user));
+                await _answerRepository.CreateAsync(answer);
+
+                IEnumerable<string> subscriberIds = (await _subscriptionRepository.GetBySubscribedId(question.id)).Select(sub => sub.userId);
+                await _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new AnswerNotification
+                {
+                    userId = userId,
+                    answerId = answer.id,
+                    answer = answer,
+                    time = answer.time
+                }));
+
+                var ret = GetAnswerDto.Convert(answer, user);
+                await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
+                return Ok(ret);
             }
             else
             {
                 return Unauthorized();
             }
-
-
         }
 
         [Authorize(Roles = "prof")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAnswer(int id)
         {
-            var existingAnswer = await _answerRepository.getAsync(id);
+            var existingAnswer = await _answerRepository.GetAsync(id);
             if (existingAnswer is null)
             {
                 return NotFound();
             }
 
-            await _answerRepository.deleteAsync(id);
+            await _answerRepository.DeleteAsync(id);
             return NoContent();
         }
 
         [Authorize(Roles = "prof")]
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAnswer(int id, PostAnswerDto dto)
+        public async Task<ActionResult> UpdateAnswer(int id, CreateAnswerDto dto)
         {
 
-            Answer existingAnswer = await _answerRepository.getAsync(id);
+            Answer existingAnswer = await _answerRepository.GetAsync(id);
             User user = await _userManager.FindByIdAsync(dto.userId); //TODO: kunnen we dit miscchien uit de jwt van request halen?
-            Question question = await _questionRepository.getAsync(dto.questionId);
+            Question question = existingAnswer.question;
             if (existingAnswer == null || user == null || question == null)
             {
                 return NotFound();
@@ -149,16 +171,42 @@ namespace Server.Api.Controllers
 
             Answer updatedAnswer = new()
             {
+                id = existingAnswer.id,
                 userId = user.Id,
                 question = question,
                 title = dto.title,
                 body = dto.body,
                 // files = createAnswerDto.files
-                time = DateTime.UtcNow
+                time = DateTime.UtcNow,
+                isAccepted = existingAnswer.isAccepted
             };
 
-            await _answerRepository.updateAsync(updatedAnswer);
+            await _answerRepository.UpdateAsync(updatedAnswer);
             return NoContent();
+        }
+
+        // [Authorize(Roles = "prof")]
+        [HttpPut("SetAccepted/{id}")] //FIXME: Make route lower case
+        public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
+        {
+            Answer existingAnswer = await _answerRepository.GetAsync(id);
+            if (existingAnswer == null) 
+            {
+                return NotFound();
+            }
+
+            ClaimsPrincipal currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == "userref"))
+            {
+                string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
+                if (existingAnswer.question.userId == userId)
+                {
+                    existingAnswer.isAccepted = accepted;
+                    await _answerRepository.UpdateAsync(existingAnswer);
+                    return NoContent();
+                }
+            }
+            return Unauthorized();
         }
     }
 }

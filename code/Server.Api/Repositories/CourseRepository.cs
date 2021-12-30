@@ -8,6 +8,11 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
+    public interface ICourseRepository : IRestfulRepository<Course>
+    {
+        Task<Course> GetByNameAsync(string name);
+    }
+
     public class PgCourseRepository : ICourseRepository
     {
         private readonly IDataContext _context;
@@ -17,7 +22,7 @@ namespace Server.Api.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Course>> getAllAsync()
+        public async Task<IEnumerable<Course>> GetAllAsync()
         {
             return await _context.Courses
                 .Include(c => c.topics)
@@ -25,7 +30,7 @@ namespace Server.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Course> getAsync(int id)
+        public async Task<Course> GetAsync(int id)
         {
             return await _context.Courses
                 .Where(c => c.id == id)
@@ -34,11 +39,28 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task updateAsync(Course course)
+        public async Task<Course> GetByNameAsync(string name)
+        {
+            return await _context.Courses
+                .Where(c => c.name == name)
+                .Include(c => c.topics)
+                .Include(c => c.channels)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task CreateAsync(Course course)
+        {
+            _context.Courses.Add(course);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Course course)
         {
             Course courseToUpdate = await _context.Courses.FindAsync(course.id);
             if (courseToUpdate == null)
+            {
                 throw new NullReferenceException();
+            }
             courseToUpdate.name = course.name;
             courseToUpdate.number = course.number;
             courseToUpdate.description = course.description;
@@ -46,21 +68,17 @@ namespace Server.Api.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task createAsync(Course course)
-        {
-            _context.Courses.Add(course);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task deleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             Course course = await _context.Courses.FindAsync(id);
             if (course == null)
+            {
                 throw new NullReferenceException();
-
+            }
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
         }
+<<<<<<< HEAD:code/Server.Api/Repositories/PgCourseRepository.cs
 
         public async Task<Course> getByNameAsync(string name)
         {
@@ -79,5 +97,7 @@ namespace Server.Api.Repositories
                         .Include(c => c.channels)
                         .FirstOrDefaultAsync();
         }
+=======
+>>>>>>> main:code/Server.Api/Repositories/CourseRepository.cs
     }
 }

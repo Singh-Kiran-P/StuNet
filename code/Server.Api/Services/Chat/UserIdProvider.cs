@@ -1,4 +1,3 @@
-// @kiran
 using Microsoft.AspNetCore.SignalR;
 
 public class UserIdProvider : IUserIdProvider

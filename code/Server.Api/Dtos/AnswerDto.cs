@@ -1,39 +1,45 @@
 using System;
 using Server.Api.Models;
-using System.Collections.Generic;
 
 namespace Server.Api.Dtos
 {
-    public record ResponseAnswerDto
+    public record GetAnswerDto
     {
         public int id { get; set; }
         public ResponseUserDto user { get; set; }
-        public questionDto question { get; set; }
+        public GetQuestionDto question { get; set; }
         // public getOnlyCourseDto course { get; set; }
         public string title { get; set; }
         public string body { get; set; }
         public DateTime time { get; set; }
-        public static ResponseAnswerDto convert(Answer answer, User user)
+        public bool isAccepted { get; set; }
+
+        public static GetAnswerDto Convert(Answer answer, User user)
         {
-            return new ResponseAnswerDto
+            return new GetAnswerDto
             {
                 id = answer.id,
-                user = ResponseUserDto.convert(user),
-                question = questionDto.convert(answer.question, user),
+                user = ResponseUserDto.Convert(user),
+                question = GetQuestionDto.Convert(answer.question, user),
                 // course = getOnlyCourseDto.convert(answer.question.course),
                 title = answer.title,
                 body = answer.body,
-                time = answer.time
+                time = answer.time,
+                isAccepted = answer.isAccepted
             };
         }
     }
 
-    public record PostAnswerDto
+    public record CreateAnswerDto
     {
         public string userId { get; set; }
         public int questionId { get; set; }
         public string title { get; set; }
         public string body { get; set; }
 
+        public static CreateAnswerDto Convert(Answer answer, User user)
+        {
+            throw new System.Exception("method not implement");
+        }
     }
 }

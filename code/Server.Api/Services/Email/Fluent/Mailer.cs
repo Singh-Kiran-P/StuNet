@@ -6,7 +6,8 @@ using System.IO;
 
 namespace Server.Api.Services
 {
-
+    // https://blog.zhaytam.com/2019/06/08/emailsender-service-fluent-email-razor-templates/
+    // https://markscodingspot.com/send-html-emails-with-attachments-using-fluent-email-csharp-and-net-5/
     public class Mailer : IEmailSender
     {
         private readonly IFluentEmail _email;
