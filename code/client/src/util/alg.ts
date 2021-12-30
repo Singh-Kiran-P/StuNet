@@ -10,6 +10,7 @@ const r = (s: string, o: { [key: string]: any }): string => {
         if (!(names[0] in o)) return s.slice(0, j) + rec();
         o = o[names.shift() || ''];
     }
+    if (!o) return '';
     return s.slice(0, i) + o + rec();
 }
 
