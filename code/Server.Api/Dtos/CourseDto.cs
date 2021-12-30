@@ -1,4 +1,5 @@
 using Server.Api.Models;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Server.Api.Dtos
@@ -13,7 +14,14 @@ namespace Server.Api.Dtos
 
         public static GetAllCourseDto Convert(Course course)
         {
-            throw new System.Exception("method not implement");
+            return new GetAllCourseDto()
+            {
+                id = course.id,
+                name = course.name,
+                number = course.number,
+                description = course.description,
+                topics = course.topics.Select(topic => new GetPartialTopicDto() { name = topic.name, id = topic.id }).ToList()
+            };
         }
     }
 
@@ -28,7 +36,15 @@ namespace Server.Api.Dtos
 
         public static GetCourseDto Convert(Course course)
         {
-            throw new System.Exception("method not implement");
+            return new()
+            {
+                id = course.id,
+                name = course.name,
+                number = course.number,
+                description = course.description,
+                topics = course.topics.Select(topic => new GetPartialTopicDto(){ id = topic.id, name = topic.name }).ToList(),
+                channels = course.channels.Select(channel => new GetPartialChannelDto(){ id = channel.id, name = channel.name }).ToList()
+            };
         }
     }
 

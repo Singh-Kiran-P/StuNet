@@ -52,13 +52,7 @@ namespace Server.Api.Controllers
                 return NotFound();
             }
 
-            GetCourseSubscriptionDto getDto = new()
-            {
-                dateTime = subscription.dateTime,
-                userId = subscription.userId,
-                courseId = subscription.subscribedItemId,
-            };
-            return Ok(getDto);
+            return Ok(GetCourseSubscriptionDto.Convert(subscription));
         }
 
         [HttpGet("ByUserAndCourseId/{courseId}")] //FIXME: Make route lower case

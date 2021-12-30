@@ -50,14 +50,7 @@ namespace Server.Api.Controllers
             if (subscription == null)
                 return NotFound();
 
-            GetQuestionSubscriptionDto getDto = new()
-            {
-                dateTime = subscription.dateTime,
-                userId = subscription.userId,
-                questionId = subscription.subscribedItemId,
-            };
-
-            return Ok(getDto);
+            return Ok(GetQuestionSubscriptionDto.Convert(subscription));
         }
 
         [HttpGet("ByUserAndQuestionId/{questionId}")] //FIXME: Make route lower case

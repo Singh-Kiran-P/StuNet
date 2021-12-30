@@ -30,17 +30,7 @@ namespace Server.Api.Controllers
         private async Task<IEnumerable<GetAllCourseDto>> _GetCourseAsync()
         {
             IEnumerable<Course> courses = await _courseRepository.GetAllAsync();
-            IEnumerable<GetAllCourseDto> getDtos = courses.Select(course =>
-               new GetAllCourseDto()
-               {
-                   id = course.id,
-                   name = course.name,
-                   number = course.number,
-                   description = course.description,
-                   topics = course.topics.Select(topic => new GetPartialTopicDto() { name = topic.name, id = topic.id }).ToList()
-               }
-            );
-            return getDtos;
+            return courses.Select(c => GetAllCourseDto.Convert(c));
         }
 
         [HttpGet]
@@ -58,10 +48,9 @@ namespace Server.Api.Controllers
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 IEnumerable<CourseSubscription> subscriptions = await _subscriptionRepository.GetByUserId(userId);
-                IEnumerable<int> subscribedCourseIds = subscriptions.Select(sub => sub.subscribedItemId);
-                IEnumerable<GetAllCourseDto> courses = await _GetCourseAsync();
+                IEnumerable<Course> subscribedCourses = subscriptions.Select(sub => sub.subscribedItem);
 
-                return Ok(courses.Where(course => subscribedCourseIds.Contains(course.id)));
+                return Ok(subscribedCourses.Select(c => GetAllCourseDto.Convert(c)));
             }
             else
             {
@@ -78,16 +67,7 @@ namespace Server.Api.Controllers
                 return NotFound();
             }
 
-            GetCourseDto getDto = new()
-            {
-                id = course.id,
-                name = course.name,
-                number = course.number,
-                description = course.description,
-                topics = course.topics.Select(topic => new GetPartialTopicDto(){ id = topic.id, name = topic.name }).ToList(),
-                channels = course.channels.Select(channel => new GetPartialChannelDto(){ id = channel.id, name = channel.name }).ToList()
-            };
-            return Ok(getDto);
+            return Ok(GetCourseDto.Convert(course));
         }
 
 

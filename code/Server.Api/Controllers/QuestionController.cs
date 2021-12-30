@@ -70,9 +70,7 @@ namespace Server.Api.Controllers
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.GetByUserId(userId);
-                IEnumerable<int> subscribedQuestionIds = subscriptions.Select(sub => sub.subscribedItemId);
-                IEnumerable<Question> subscribedQuestions = subscribedQuestionIds.Select(id => _questionRepository.GetAsync(id))
-                                                                                    .Select(task => task.Result);
+                IEnumerable<Question> subscribedQuestions = subscriptions.Select(sub => sub.subscribedItem);
 
                 User user = await _userManager.FindByIdAsync(userId);
                 return Ok(subscribedQuestions.Select(q => GetQuestionDto.Convert(q, user)));
