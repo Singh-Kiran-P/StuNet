@@ -1,5 +1,5 @@
 import React, { Screen, EmptyCourse, useState, useEffect, axios, show } from '@/.';
-import { Text, Button, Loader, ScrollView, CompactChannel } from '@/components';
+import { Text, Fab, Button, Loader, ScrollView, CompactChannel } from '@/components';
 
 export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     let [subscribed, setSubscribed] = useState<null | number>(null);
@@ -44,7 +44,7 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
             <ScrollView inner padding flex children={course.channels?.map((channel, i) =>
                 <CompactChannel margin='bottom' key={i} channel={channel}/>)}
             />
-            <Button align='bottom' pad='bottom' icon='pencil' children='Edit course' onPress={() => nav.push('EditCourse', { course })}/>
+            <Fab pad='bottom' icon='pencil' onPress={() => nav.push('EditCourse', { course })}/>
         </Loader>
     )
 })

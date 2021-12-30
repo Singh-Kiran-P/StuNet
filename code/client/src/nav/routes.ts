@@ -120,6 +120,7 @@ export const s = screens({
 
     Profile: {
         screenTitle: 'Your Profile',
+        logout: true,
         tabs: true
     }
 

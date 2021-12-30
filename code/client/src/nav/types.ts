@@ -15,6 +15,7 @@ type BaseScreens = {
 
         search?: string;
         subscribe?: boolean | null;
+        logout?: boolean;
 
         update?: number;
     }

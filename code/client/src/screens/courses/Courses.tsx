@@ -1,5 +1,5 @@
 import React, { Screen, Course, useState, useEffect, axios, show } from '@/.';
-import { View, Text, List, Button, CompactCourse } from '@/components';
+import { View, Text, Fab, List, CompactCourse } from '@/components';
 
 export default Screen('Courses', ({ nav, params: { search, update } }) => {
     let [courses, setCourses] = useState<Course[]>([]);
@@ -21,7 +21,7 @@ export default Screen('Courses', ({ nav, params: { search, update } }) => {
             <List inner padding data={courses} refreshing={refresh} renderItem={course =>
                 <CompactCourse margin={!!course.index} course={course.item}/>}
             />
-            <Button align='bottom' pad='bottom' icon='book-plus' children='Create Course' onPress={() => nav.push('CreateCourse')}/>
+            <Fab pad='bottom' icon='book-plus' onPress={() => nav.push('CreateCourse')}/>
         </View>
     )
 })

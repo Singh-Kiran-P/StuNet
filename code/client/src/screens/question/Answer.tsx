@@ -1,11 +1,9 @@
-import React, { Screen, EmptyAnswer, useState, useTheme, Style, axios, show, dateString } from '@/.';
-import { View, Text, Icon, Loader, CompactQuestion } from '@/components';
-import { FAB } from 'react-native-paper'; // TODO in header?
+import React, { Screen, EmptyAnswer, useState, axios, show, dateString } from '@/.';
+import { View, Text, Icon, Fab, Loader, CompactQuestion } from '@/components';
 
 export default Screen('Answer', ({ nav, params: { id } }) => {
     let [answer, setAnswer] = useState(EmptyAnswer);
     let [error, setError] = useState('');
-    let [theme] = useTheme();
 
     const fetch = async () => {
         return axios.get('/Answer/' + id).then(res => {
@@ -20,15 +18,6 @@ export default Screen('Answer', ({ nav, params: { id } }) => {
             show(setError)
         )
     }
-
-    const s = Style.create({
-        fab: {
-            backgroundColor: answer.isAccepted ? theme.error : theme.accent,
-            position: 'absolute',
-            bottom: 0,
-            right: 0
-        }
-    })
 
     return (
         <Loader load={fetch}>
@@ -45,7 +34,7 @@ export default Screen('Answer', ({ nav, params: { id } }) => {
                     Download 3 Attachments
                 </Text>
             </View>
-            <FAB style={s.fab} icon={answer.isAccepted ? 'close' : 'check'} color={theme.bright} onPress={accept}/>
+            <Fab background={answer.isAccepted && 'error'} icon={answer.isAccepted ? 'close' : 'check'} onPress={accept}/>
         </Loader>
     )
 })
