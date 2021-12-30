@@ -5,6 +5,10 @@ using System.Linq;
 using Xunit;
 using Moq;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Repositories;
 using Server.Api.Controllers;
@@ -20,21 +24,25 @@ namespace Server.UnitTests
             return new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
         }
 
-        // TODO inloggen bij tests???
-
-        /* [Fact]
-        public async Task createCourse_WithValidCourseDto_Ok()
+        [Fact]
+        public async Task CreateCourse_WithValidCourseDto_Ok()
         {
             //Given
+            string profEmail = rand.Next().ToString();
             CreateCourseDto dto = new()
             {
-                name = randomName(),
-                number = randomInt().ToString(),
-                description = randomName(),
-                courseEmail = "random" + random.Next().ToString() + "@gmail.com",
-                profEmail = "random" + random.Next().ToString() + "@uhasselt.be",
+                name = rand.Next().ToString(),
+                number = rand.Next().ToString(),
+                description = rand.Next().ToString(),
+                courseEmail = rand.Next().ToString(),
+                profEmail = profEmail
             };
+            var httpContext = new DefaultHttpContext();
+            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("username", profEmail) }, "TestAuthType"));
+
+
 			var controller = CreateController();
+			controller.ControllerContext.HttpContext = httpContext;
 
 			//When
 			var result = await controller.CreateCourse(dto);
@@ -45,7 +53,7 @@ namespace Server.UnitTests
 
             createdCourse.Should().BeEquivalentTo(
                 dto,
-                options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
+                options => options.ComparingByMembers<CreateCourseDto>().ExcludingMissingMembers()
             );
             createdCourse.id.Should().NotBe(null);
         }
@@ -53,21 +61,12 @@ namespace Server.UnitTests
         [Fact]
         public async Task GetCourse_WithValidId_CourseDto()
         {
-            //Given
-            Course course = new()
-            {
-                name = "random" + random.Next().ToString(),
-                number = random.Next().ToString(),
-                description = random.Next().ToString(),
-                courseEmail = "random" + random.Next().ToString() + "@gmail.com",
-                profEmail = "random" + random.Next().ToString() + "@uhasselt.be",
-                topics = new List<Topic> { new Topic() { name = randomName(), id = randomInt() } },
-                channels = new List<TextChannel> { new TextChannel() { name = randomName(), id = randomInt() } }
-            };
-            _courseRepositoryStub.Setup(repo => repo.getAsync(It.IsAny<int>()))
+			//Given
+			Course course = createRandomCourse();
+			_courseRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);
             var controller = CreateController();
-
+            
             //When
 			var result = await controller.GetCourse(rand.Next());
 
@@ -79,7 +78,7 @@ namespace Server.UnitTests
                 course,
                 options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
             );
-            dto.topics.Should().NotBeNullOrEmpty();
-        } */
+            createdCourse.topics.Should().NotBeNullOrEmpty();
+        }
     }
 }
