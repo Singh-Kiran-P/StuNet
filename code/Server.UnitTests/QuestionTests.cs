@@ -100,7 +100,7 @@ namespace Server.UnitTests
         		topicIds = Enumerable.Range(1, 10).Select(_ => rand.Next()).ToList<int>()
         	};
 
-            _courseSubscriptionRepositoryStub.Setup(repo => repo.GetByCourseId(It.IsAny<int>()))
+            _courseSubscriptionRepositoryStub.Setup(repo => repo.GetBySubscribedId(It.IsAny<int>()))
                 .ReturnsAsync(new CourseSubscription[0]);
 
 			_hubContextStub.Setup(c => c.Groups.AddToGroupAsync(It.IsAny<string>(), It.IsAny<string>(), CancellationToken.None)).

@@ -18,9 +18,9 @@ namespace Server.Api.Controllers
     {
         private readonly ICourseRepository _courseRepository;
         private readonly ITopicRepository _topicRepository;
-        private readonly ICourseSubscriptionRepository _subscriptionRepository;
+        private readonly ISubscriptionRepository<CourseSubscription> _subscriptionRepository;
 
-        public CourseController(ICourseRepository repository, ITopicRepository topicRepository, ICourseSubscriptionRepository subscriptionRepository)
+        public CourseController(ICourseRepository repository, ITopicRepository topicRepository, ISubscriptionRepository<CourseSubscription> subscriptionRepository)
         {
             _courseRepository = repository;
             _topicRepository = topicRepository;
@@ -58,7 +58,7 @@ namespace Server.Api.Controllers
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 IEnumerable<CourseSubscription> subscriptions = await _subscriptionRepository.GetByUserId(userId);
-                IEnumerable<int> subscribedCourseIds = subscriptions.Select(sub => sub.courseId);
+                IEnumerable<int> subscribedCourseIds = subscriptions.Select(sub => sub.subscribedItemId);
                 IEnumerable<GetAllCourseDto> courses = await _GetCourseAsync();
 
                 return Ok(courses.Where(course => subscribedCourseIds.Contains(course.id)));

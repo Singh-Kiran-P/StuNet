@@ -27,12 +27,6 @@ namespace Server.UnitTests
         private AuthController createController(UserManager<User> userManager = null)
         {
             var configuration = new ConfigurationBuilder()
-                // .AddInMemoryCollection(new Dictionary<string, string>
-                //     {
-                //         {"Key1", "Value1"},
-                //         {"Nested:Key1", "NestedValue1"},
-                //         {"Nested:Key2", "NestedValue2"}
-                //     })
                 .Build();
 
             Mock<JwtTokenManager> tokenManager = new(userManager, configuration);

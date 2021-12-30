@@ -24,10 +24,10 @@ namespace Server.Api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly INotificationRepository<QuestionNotification> _notificationRepository;
-        private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
-        private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
+        private readonly ISubscriptionRepository<CourseSubscription> _courseSubscriptionRepository;
+        private readonly ISubscriptionRepository<QuestionSubscription> _questionSubscriptionRepository;
 
-        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, INotificationRepository<QuestionNotification> notificationRepository, ICourseSubscriptionRepository subscriptionRepository, IQuestionSubscriptionRepository questionSubscriptionRepository)
+        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, INotificationRepository<QuestionNotification> notificationRepository, ISubscriptionRepository<CourseSubscription> subscriptionRepository, ISubscriptionRepository<QuestionSubscription> questionSubscriptionRepository)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;
@@ -70,7 +70,7 @@ namespace Server.Api.Controllers
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.GetByUserId(userId);
-                IEnumerable<int> subscribedQuestionIds = subscriptions.Select(sub => sub.questionId);
+                IEnumerable<int> subscribedQuestionIds = subscriptions.Select(sub => sub.subscribedItemId);
                 IEnumerable<Question> subscribedQuestions = subscribedQuestionIds.Select(id => _questionRepository.GetAsync(id))
                                                                                     .Select(task => task.Result);
 
@@ -156,13 +156,13 @@ namespace Server.Api.Controllers
                 await _questionSubscriptionRepository.CreateAsync(new QuestionSubscription
                 {
                     userId = user.Id,
-                    questionId = question.id,
+                    subscribedItemId = question.id,
                     dateTime = question.time
                 });
 
                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + question.id.ToString());
 
-                IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.GetByCourseId(c.id)).Select(sub => sub.userId);
+                IEnumerable<string> subscriberIds = (await _courseSubscriptionRepository.GetBySubscribedId(c.id)).Select(sub => sub.userId);
                 await _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new QuestionNotification
                 {
                     userId = userId,

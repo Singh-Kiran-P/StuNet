@@ -83,7 +83,7 @@ namespace Server.UnitTests
             _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(randomQuestion);
 
-            _questionSubscriptionRepositoryStub.Setup(repo => repo.GetByQuestionId(It.IsAny<int>()))
+            _questionSubscriptionRepositoryStub.Setup(repo => repo.GetBySubscribedId(It.IsAny<int>()))
                 .ReturnsAsync(new QuestionSubscription[0]);
 
             _hubContextStub.Setup(c => c.Clients.Group(It.IsAny<string>()).SendCoreAsync(It.IsAny<string>(), It.IsAny<object[]>(), CancellationToken.None))
