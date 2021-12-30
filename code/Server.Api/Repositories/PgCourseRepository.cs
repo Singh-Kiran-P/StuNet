@@ -70,5 +70,14 @@ namespace Server.Api.Repositories
                         .Include(c => c.channels)
                         .FirstOrDefaultAsync();
         }
+
+        public async Task<Course> getByCourseMail(string courseMail)
+        {
+            return await _context.Courses
+                        .Where(c => c.courseEmail == courseMail)
+                        .Include(c => c.topics)
+                        .Include(c => c.channels)
+                        .FirstOrDefaultAsync();
+        }
     }
 }

@@ -162,6 +162,7 @@ namespace Server.Api.Services
             {
                 var _questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
                 var _answerRepository = scope.ServiceProvider.GetRequiredService<IAnswerRepository>();
+                var _courseRepository = scope.ServiceProvider.GetRequiredService<ICourseRepository>();
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
                 var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var _hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<ChatHub>>();
@@ -179,7 +180,11 @@ namespace Server.Api.Services
 
                 (int questionId, string courseMail, string title, string body) = _parseEmail(message);
 
-                User user = _userManager.FindByEmailAsync(courseMail).GetAwaiter().GetResult();
+                Course course = _courseRepository.getByCourseMail(courseMail).GetAwaiter().GetResult();
+
+                if(course == null) return;
+
+                User user = _userManager.FindByEmailAsync(course.profEmail).GetAwaiter().GetResult();
 
                 Question question = _questionRepository.getAsync(questionId).GetAwaiter().GetResult();
                 if (user == null || question == null) { return; }
@@ -207,7 +212,7 @@ namespace Server.Api.Services
 
         private (int, string, string, string) _parseEmail(IMessageSummary message){
             int questionId = 2;
-            string courseMail = "prof@uhasselt.be";
+            string courseMail = "senn.robyns@student.uhasselt.be";
             string title = "Answer 2 from Prof";
             string body = "Test 2";
 
