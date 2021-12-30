@@ -11,6 +11,8 @@ namespace Server.Api.Repositories
     public interface ICourseRepository : IRestfulRepository<Course>
     {
         Task<Course> GetByNameAsync(string name);
+        Task<Course> getByCourseMail(string courseMail);
+
     }
 
     public class PgCourseRepository : ICourseRepository
@@ -48,6 +50,15 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Course> getByCourseMail(string courseMail)
+        {
+            return await _context.Courses
+                        .Where(c => c.courseEmail == courseMail)
+                        .Include(c => c.topics)
+                        .Include(c => c.channels)
+                        .FirstOrDefaultAsync();
+        }
+
         public async Task CreateAsync(Course course)
         {
             _context.Courses.Add(course);
@@ -78,26 +89,7 @@ namespace Server.Api.Repositories
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
         }
-<<<<<<< HEAD:code/Server.Api/Repositories/PgCourseRepository.cs
 
-        public async Task<Course> getByNameAsync(string name)
-        {
-            return await _context.Courses
-                        .Where(c => c.name == name)
-                        .Include(c => c.topics)
-                        .Include(c => c.channels)
-                        .FirstOrDefaultAsync();
-        }
 
-        public async Task<Course> getByCourseMail(string courseMail)
-        {
-            return await _context.Courses
-                        .Where(c => c.courseEmail == courseMail)
-                        .Include(c => c.topics)
-                        .Include(c => c.channels)
-                        .FirstOrDefaultAsync();
-        }
-=======
->>>>>>> main:code/Server.Api/Repositories/CourseRepository.cs
     }
 }

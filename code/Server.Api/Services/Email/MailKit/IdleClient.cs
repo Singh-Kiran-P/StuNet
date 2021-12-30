@@ -170,7 +170,7 @@ namespace Server.Api.Services
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
                 var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var _hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<ChatHub>>();
-                var questions = _questionRepository.getAllAsync().GetAwaiter().GetResult();
+                var questions = _questionRepository.GetAllAsync().GetAwaiter().GetResult();
 
                 Console.WriteLine("Email Sent"); // TODO implement
                 Console.WriteLine(message.ToString());
@@ -183,7 +183,7 @@ namespace Server.Api.Services
 
                 User user = _userManager.FindByEmailAsync(course.profEmail).GetAwaiter().GetResult();
 
-                Question _question = _questionRepository.getAsync(questionId).GetAwaiter().GetResult();
+                Question _question = _questionRepository.GetAsync(questionId).GetAwaiter().GetResult();
                 if (user == null || _question == null) { return; }
                 Answer answer = new()
                 {
@@ -196,7 +196,7 @@ namespace Server.Api.Services
                 };
                 try
                 {
-                    _answerRepository.createAsync(answer).GetAwaiter().GetResult();
+                    _answerRepository.CreateAsync(answer).GetAwaiter().GetResult();
                 }
                 catch (System.Exception e)
                 {

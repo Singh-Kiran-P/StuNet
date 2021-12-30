@@ -102,7 +102,7 @@ namespace Server.Api.Controllers
                     courseEmail = dto.courseEmail,
                     profEmail = userEmail
                 };
-                await _courseRepository.createAsync(course);
+                await _courseRepository.CreateAsync(course);
                 return Ok(course);
             } else {
                 return Unauthorized();
