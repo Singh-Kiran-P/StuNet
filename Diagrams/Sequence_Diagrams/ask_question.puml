@@ -1,98 +1,72 @@
 @startuml Ask Question
-participant Question
-participant User
-participant Course
-participant Topic
-participant File
-participant FileSystem
-participant DataAccessObject
-database DataStore
+participant QuestionController
+participant UserManager
+participant CourseRepository
+participant TopicRepository
+participant QuestionRepository
+participant QuestionSubscriptionRepository
 
-DataAccessObject-[hidden]->DataAccessObject
+
+DataContext-[hidden]->DataContext
 
 title Reference: Contract SubmitQuestion()
 
--> Question: askQuestion(userID, title, body, files, courseID, topicIDs)
-activate Question
-Question -> User: validateUser(userID)
-activate User
-User -> DataAccessObject: getUser(userID)
-activate DataAccessObject
-DataAccessObject -> DataStore: load()
-activate DataStore
-DataStore -> DataStore: query()
-DataStore --> DataAccessObject: User
-deactivate DataStore
-User <-- DataAccessObject: User | null
-deactivate DataAccessObject
-Question <-- User: User | null
-deactivate User
+-> QuestionController: CreateQuestion(createQuestionDto)
+activate QuestionController
 alt Valid user
-	Question -> Course: getCourse(courseID)
-	activate Course
-	Course -> DataAccessObject: getCourse(courseID)
-	activate DataAccessObject
-	DataAccessObject -> DataStore: load()
-	activate DataStore
-	DataStore -> DataStore: query()
-	DataStore --> DataAccessObject: Course
-	deactivate DataStore
-	DataAccessObject --> Course: Course
-	deactivate DataAccessObject
-	Course --> Question: Course
-	deactivate Course
-	Question -> DataAccessObject: saveQuestion(User, title, body, Course)
-	activate DataAccessObject
-	DataAccessObject -> DataStore: save()
-	activate DataStore
-	DataStore -> DataStore: query()
-	DataStore --> DataAccessObject: Question
-	deactivate DataStore
-	DataAccessObject --> Question: Question
-	deactivate DataAccessObject
-	opt Link topics
-		loop Link topic
-			Question -> Topic: linkTopic(Question, topicID)
-			activate Topic
-			Topic -> DataAccessObject: linkTopic(Question, topicID)
-			activate DataAccessObject
-			DataAccessObject -> DataStore: save()
-			activate DataStore
-			DataStore -> DataStore: query()
-			DataStore --> DataAccessObject: Topic
-			deactivate DataStore
-			DataAccessObject --> Topic: Topic
-			deactivate DataAccessObject
-			Topic --> Question: Topic
-			deactivate Topic
-		end
-	end
-	opt Link files
-		loop Link file
-			Question -> File: linkFile(Question, file)
-			activate File
-			File -> FileSystem: saveFile(file)
-			activate FileSystem
-			FileSystem -> FileSystem: save()
-			File <-- FileSystem: fileName
-			deactivate FileSystem
-			File -> DataAccessObject: linkFile(Question, fileName)
-			activate DataAccessObject
-			DataAccessObject -> DataStore: save()
-			activate DataStore
-			DataStore -> DataStore: query()
-			DataStore --> DataAccessObject: File
-			deactivate DataStore
-			DataAccessObject --> File: File
-			deactivate DataAccessObject
-			File --> Question: File
-			deactivate File
-		end
-	end
-	<-- Question: Question
-	deactivate Question
-else Invalid user
-	<-- Question: null
-end
+	QuestionController -> UserManager: FindByEmailAsync(userEmail)
+	activate UserManager
+	QuestionController <-- UserManager: User
+	' TO-ASK: User|null of gewoon User?
+	deactivate UserManager
 
+	QuestionController -> CourseRepository: GetAsync(createQuestionDto.courseId)
+	activate CourseRepository
+	CourseRepository --> QuestionController: Course | null
+	deactivate CourseRepository
+	
+	loop
+		QuestionController -> TopicRepository: GetAsync(id)
+		activate TopicRepository
+		TopicRepository --> QuestionController: Topic | null
+		deactivate TopicRepository
+	end
+
+	QuestionController -> Question **:create(dto.title, user.Id, course, dto.body, topics, DateTime.UtcNow)
+	'Question -> QuestionController: question
+
+	QuestionController -> QuestionRepository: CreateAsync(question)
+	activate QuestionRepository
+	QuestionRepository --> QuestionController: void
+	deactivate QuestionRepository
+
+	QuestionController -> QuestionSubscription **:create(user.Id, question.id, question.time)
+	'Question -> QuestionController: question
+	QuestionController -> QuestionSubscriptionRepository: CreateAsync(questionSubscription)
+	activate QuestionSubscriptionRepository
+	QuestionSubscriptionRepository -> QuestionController: void
+	deactivate QuestionSubscriptionRepository
+
+	loop
+		QuestionController -> CourseSubscriptionRepository: GetByCourseId(course.id)
+		activate CourseSubscriptionRepository
+		CourseSubscriptionRepository --> QuestionController: SubscriberId
+		deactivate CourseSubscriptionRepository
+	end
+
+participant CourseSubscriptionRepository
+
+
+participant NotificationRepository
+	loop 
+		QuestionController -> QuestionNotification**: create(userId, question.id, question, question.time)
+	end
+
+	QuestionController -> NotificationRepository: CreateAllAync(questionNotifications)
+	activate NotificationRepository
+	NotificationRepository --> QuestionController: void
+	deactivate NotificationRepository
+
+	QuestionController -> returnDto**: create(question, user)
+	<-- QuestionController: returnDto
 @enduml
