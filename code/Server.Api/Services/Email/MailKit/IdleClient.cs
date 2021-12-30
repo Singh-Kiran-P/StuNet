@@ -172,30 +172,23 @@ namespace Server.Api.Services
                 var _hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<ChatHub>>();
                 var questions = _questionRepository.getAllAsync().GetAwaiter().GetResult();
 
-                mailSender.SendEmail("kiran.singh@student.uhasselt.be", "Test sent email on Recieve email", EmailTemplate.ConfirmEmail, new
-                {
-                    link = "Test sent email on Recieve email"
-                }).GetAwaiter();
-
                 Console.WriteLine("Email Sent"); // TODO implement
                 Console.WriteLine(message.ToString());
 
                 (int questionId, string courseMail, string title, string body) = _parseEmail(message);
 
-                User user = _userManager.FindByEmailAsync(courseMail).GetAwaiter().GetResult();
-
                 Course course = _courseRepository.getByCourseMail(courseMail).GetAwaiter().GetResult();
 
-                if(course == null) return;
+                if (course == null) return;
 
                 User user = _userManager.FindByEmailAsync(course.profEmail).GetAwaiter().GetResult();
 
-                Question question = _questionRepository.getAsync(questionId).GetAwaiter().GetResult();
-                if (user == null || question == null) { return; }
+                Question _question = _questionRepository.getAsync(questionId).GetAwaiter().GetResult();
+                if (user == null || _question == null) { return; }
                 Answer answer = new()
                 {
                     userId = user.Id,
-                    question = question,
+                    question = _question,
                     title = title,
                     body = body,
                     // files = createAnswerDto.files
@@ -209,7 +202,7 @@ namespace Server.Api.Services
                 {
                     Console.WriteLine(e);
                 }
-                _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", answer.id).GetAwaiter().GetResult();
+                _hubContext.Clients.Group("Question " + _question.id).SendAsync("AnswerNotification", answer.id).GetAwaiter().GetResult();
 
             }
         }
@@ -217,11 +210,10 @@ namespace Server.Api.Services
         private (int, string, string, string) _parseEmail(IMessageSummary message)
         {
             int questionId = 2;
-            string courseMail = "senn.robyns@student.uhasselt.be";
-            string title = "Answer 2 from Prof";
+            string title = "Answer from Prof";
 
             // courseMail = message.Envelope.From.Mailboxes[0]
-            string mail = message.Envelope.From.Mailboxes.First().Address;
+            string courseMail = message.Envelope.From.Mailboxes.First().Address;
             string name = message.Envelope.From.Mailboxes.First().Name;
 
             // IMessageSummary.TextBody is a convenience property that finds the 'text/plain' body part for us
