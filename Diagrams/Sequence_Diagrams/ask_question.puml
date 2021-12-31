@@ -7,7 +7,7 @@ participant QuestionRepository
 participant QuestionSubscriptionRepository
 
 
-DataContext-[hidden]->DataContext
+' DataContext-[hidden]->DataContext
 
 title Reference: Contract SubmitQuestion()
 
@@ -25,14 +25,14 @@ alt Valid user
 	CourseRepository --> QuestionController: Course | null
 	deactivate CourseRepository
 	
-	loop
+	loop createQuestionDto.topicIds
 		QuestionController -> TopicRepository: GetAsync(id)
 		activate TopicRepository
 		TopicRepository --> QuestionController: Topic | null
 		deactivate TopicRepository
 	end
 
-	QuestionController -> Question **:create(dto.title, user.Id, course, dto.body, topics, DateTime.UtcNow)
+	QuestionController -> ":Question" **:create(createQuestionDto.title, user.Id, course, createQuestionDto.body, topics, DateTime.UtcNow)
 	'Question -> QuestionController: question
 
 	QuestionController -> QuestionRepository: CreateAsync(question)
