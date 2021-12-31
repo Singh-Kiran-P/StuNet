@@ -18,12 +18,14 @@ namespace Server.Api.Controllers
     public class CourseSubscriptionController : ControllerBase
     {
         private readonly ISubscriptionRepository<CourseSubscription> _courseSubscriptionRepository;
+        private readonly ICourseRepository _courseRepository;
         private readonly UserManager<User> _userManager;
         private readonly IHubContext<ChatHub> _hubContext;
 
-        public CourseSubscriptionController(ISubscriptionRepository<CourseSubscription> repository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
+        public CourseSubscriptionController(ISubscriptionRepository<CourseSubscription> subscriptionRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
         {
-            _courseSubscriptionRepository = repository;
+            _courseSubscriptionRepository = subscriptionRepository;
+            _courseRepository = courseRepository;
             _userManager = userManager;
             _hubContext = hubContext;
         }
@@ -80,8 +82,9 @@ namespace Server.Api.Controllers
                 {
                     dateTime = DateTime.UtcNow,
                     userId = user.Id,
-                    subscribedItemId = dto.courseId,
+                    subscribedItem = await _courseRepository.GetAsync(dto.courseId),
                 };
+
                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + subscription.subscribedItemId.ToString());
                 await _courseSubscriptionRepository.CreateAsync(subscription);
                 return Ok(subscription);

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Server.Api.DataBase;
 using Server.Api.Models;
 
@@ -16,7 +17,7 @@ namespace Server.Api.Repositories
         Task<T> GetSingleByUserIdAndSubscribedIdAsync(string userId, int SubscribedId);
     }
 
-    public abstract class PgSubscriptionRepository<T> : ISubscriptionRepository<T> where T : Subscription
+    public abstract class PgSubscriptionRepository<T, V> : ISubscriptionRepository<T> where T : Subscription
     {
         protected readonly IDataContext _context;
 
@@ -26,37 +27,39 @@ namespace Server.Api.Repositories
         }
 
         protected abstract DbSet<T> GetDbSet();
+        
+        protected abstract IIncludableQueryable<T, V> GetIncludes();
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await GetDbSet()
+            return await GetIncludes()
                 .ToListAsync();
         }
 
         public async Task<T> GetAsync(int id)
         {
-            return await GetDbSet()
+            return await GetIncludes()
                 .Where(s => s.id == id)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<ICollection<T>> GetByUserId(string userId)
         {
-            return await GetDbSet()
+            return await GetIncludes()
                 .Where(s => userId == s.userId)
                 .ToListAsync();
         }
 
         public async Task<ICollection<T>> GetBySubscribedId(int subscribedId) 
         {
-            return await GetDbSet()
+            return await GetIncludes()
                 .Where(s => subscribedId == s.subscribedItemId)
                 .ToListAsync();
         }
 
         public async Task<ICollection<T>> GetByUserIdAndSubscribedIdAsync(string userId, int subscribedId)
         {
-            return await GetDbSet()
+            return await GetIncludes()
                 .Where(s => subscribedId == s.subscribedItemId && s.userId == userId)
                 .ToListAsync();
         }

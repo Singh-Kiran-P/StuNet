@@ -27,6 +27,7 @@ namespace Server.UnitTests
         protected readonly Mock<ITopicRepository> _topicRepositoryStub = new();
         protected readonly Mock<ICourseRepository> _courseRepositoryStub = new();
         protected readonly Mock<IHubContext<ChatHub>> _hubContextStub = new();
+        protected readonly Mock<IEmailSender> _emailSenderStub = new();
 		protected readonly Mock<INotificationRepository<QuestionNotification>> _questionNotificationRepositoryStub = new();
 		protected readonly Mock<INotificationRepository<AnswerNotification>> _answerNotificationRepositoryStub = new();
 		protected readonly Mock<ISubscriptionRepository<CourseSubscription>> _courseSubscriptionRepositoryStub = new();
@@ -37,7 +38,7 @@ namespace Server.UnitTests
 			DateTime start = new DateTime(1995, 1, 1);
 			return start.AddDays(rand.Next((DateTime.Today - start).Days));
 		}
-		
+
 		public static Course createRandomCourse() {
 			return new()
             {

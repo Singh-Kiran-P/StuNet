@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 
-namespace Server.UnitTests 
+namespace Server.UnitTests
 {
     public class AuthTests : UnitTest
     {
@@ -30,7 +30,7 @@ namespace Server.UnitTests
                 .Build();
 
             Mock<JwtTokenManager> tokenManager = new(userManager, configuration);
-            return new AuthController(_FOSRepositoryStub.Object, null, userManager, tokenManager.Object);
+            return new AuthController(_FOSRepositoryStub.Object, null, userManager, tokenManager.Object, _emailSenderStub.Object);
         }
 
         [Theory]
@@ -60,12 +60,12 @@ namespace Server.UnitTests
 
             MockManager.Setup(repo => repo.GenerateEmailConfirmationTokenAsync(It.IsAny<User>()))
                 .ReturnsAsync(rand.Next().ToString());
-        
+
             var controller = createController(MockManager.Object);
 
             // When
             var result = await controller.RegisterJWTUser(registerDto);
-        
+
             // Then
             result.Should().BeOfType<StatusCodeResult>().Which.StatusCode.Should().Be(201);
         }
@@ -94,12 +94,12 @@ namespace Server.UnitTests
 
             MockManager.Setup(repo => repo.GenerateEmailConfirmationTokenAsync(It.IsAny<User>()))
                 .ReturnsAsync(rand.Next().ToString());
-        
+
             var controller = createController(MockManager.Object);
-        
+
             // When
             var result = await controller.RegisterJWTUser(registerDto);
-        
+
             // Then
             result.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().Be(expectedError);
         }

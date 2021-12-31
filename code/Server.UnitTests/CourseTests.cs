@@ -5,6 +5,10 @@ using System.Linq;
 using Xunit;
 using Moq;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Repositories;
 using Server.Api.Controllers;
@@ -24,13 +28,21 @@ namespace Server.UnitTests
         public async Task CreateCourse_WithValidCourseDto_Ok()
         {
             //Given
+            string profEmail = rand.Next().ToString();
             CreateCourseDto dto = new()
             {
                 name = rand.Next().ToString(),
                 number = rand.Next().ToString(),
-                description = rand.Next().ToString()
+                description = rand.Next().ToString(),
+                courseEmail = rand.Next().ToString(),
+                profEmail = profEmail
             };
+            var httpContext = new DefaultHttpContext();
+            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("username", profEmail) }, "TestAuthType"));
+
+
 			var controller = CreateController();
+			controller.ControllerContext.HttpContext = httpContext;
 
 			//When
 			var result = await controller.CreateCourse(dto);
@@ -41,7 +53,7 @@ namespace Server.UnitTests
 
             createdCourse.Should().BeEquivalentTo(
                 dto,
-                options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
+                options => options.ComparingByMembers<CreateCourseDto>().ExcludingMissingMembers()
             );
             createdCourse.id.Should().NotBe(null);
         }

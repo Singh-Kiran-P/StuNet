@@ -1,5 +1,5 @@
-public enum EmailTemplate //TOASK: Move to namespace?
+public enum EmailTemplate
 {
-    EmailConfirmation,
-    ChangeEmail
+    QuestionAsked,
+    ConfirmEmail
 }

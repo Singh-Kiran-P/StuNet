@@ -1,0 +1,33 @@
+@model dynamic
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+    <body style="font-size: 12px;">
+        @Model.email anonymously asked a question in @Model.course. <span style="display: none;">@Model.id</span>
+        <br/>
+        <br/>
+        @foreach(var topic in Model.topics) {
+            <span style="padding: 5px 10px; margin-right: 10px; border-radius: 100px; background-color: rgba(0, 0, 0, 0.26); color: '#000000';">
+                @topic.name
+            </span>
+        }
+        <br/>
+        <br/>
+        <span style="font-weight: bold; font-size: 1.5em;">
+            @Model.title
+        </span>
+        <br/>
+        <span style="white-space: pre;">@Model.body</span>
+        <br/>
+        <br/>
+        You can answer this question by replying to this email.
+        <br/>
+        - Team StuNet
+    </body>
+</html>

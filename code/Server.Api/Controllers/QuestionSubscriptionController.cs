@@ -18,12 +18,14 @@ namespace Server.Api.Controllers
     public class QuestionSubscriptionController : ControllerBase
     {
         private readonly ISubscriptionRepository<QuestionSubscription> _questionSubscriptionRepository;
+        private readonly IQuestionRepository _questionRepository;
         private readonly UserManager<User> _userManager;
         private readonly IHubContext<ChatHub> _hubContext;
 
-        public QuestionSubscriptionController(ISubscriptionRepository<QuestionSubscription> repository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
+        public QuestionSubscriptionController(ISubscriptionRepository<QuestionSubscription> subscriptionRepository, IQuestionRepository questionRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext)
         {
-            _questionSubscriptionRepository = repository;
+            _questionSubscriptionRepository = subscriptionRepository;
+            _questionRepository = questionRepository;
             _userManager = userManager;
             _hubContext = hubContext;
         }
@@ -79,8 +81,9 @@ namespace Server.Api.Controllers
                 {
                     dateTime = DateTime.UtcNow,
                     userId = user.Id,
-                    subscribedItemId = dto.questionId,
+                    subscribedItem = await _questionRepository.GetAsync(dto.questionId),
                 };
+
                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + subscription.subscribedItemId.ToString());
                 await _questionSubscriptionRepository.CreateAsync(subscription);
                 return Ok(subscription);

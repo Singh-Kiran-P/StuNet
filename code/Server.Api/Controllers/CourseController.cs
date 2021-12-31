@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
@@ -88,14 +89,23 @@ namespace Server.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Course>> CreateCourse(CreateCourseDto dto)
         {
-            Course course = new()
+            ClaimsPrincipal currentUser = HttpContext.User;
+            if (currentUser.HasClaim(c => c.Type == "username"))
             {
-                name = dto.name,
-                number = dto.number,
-                description = dto.description
-            };
-            await _courseRepository.CreateAsync(course);
-            return Ok(course);
+                string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+                Course course = new()
+                {
+                    name = dto.name,
+                    number = dto.number,
+                    description = dto.description,
+                    courseEmail = dto.courseEmail,
+                    profEmail = userEmail
+                };
+                await _courseRepository.CreateAsync(course);
+                return Ok(course);
+            } else {
+                return Unauthorized();
+            }
         }
 
         [HttpDelete("{id}")]
@@ -120,7 +130,9 @@ namespace Server.Api.Controllers
                 id = id,
                 name = courseDto.name,
                 number = courseDto.number,
-                description = courseDto.description
+                description = courseDto.description,
+                courseEmail = courseDto.courseEmail,
+                profEmail = courseDto.profEmail
             };
             await _courseRepository.UpdateAsync(course);
             return NoContent();

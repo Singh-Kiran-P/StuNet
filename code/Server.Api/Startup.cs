@@ -1,28 +1,20 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using ChatSample.Hubs;
-using FluentEmail.Core;
-using FluentEmail.Smtp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Server.Api.DataBase;
@@ -113,12 +105,6 @@ namespace Server.Api
               options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-            // Email setup
-            services.AddTransient<IEmailSender, EmailSender>();
-
-            // Email FluentMail
-            setupFluentGmail(services);
-
             // Custom
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped<ITokenManager, JwtTokenManager>();
@@ -137,7 +123,6 @@ namespace Server.Api
             services.AddScoped<INotificationRepository<QuestionNotification>, PgQuestionNotificationRepository>();
             
 
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server.Api", Version = "v1" });
@@ -147,9 +132,11 @@ namespace Server.Api
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
+            // Email FluentMail & MailKit
+            setupEmail(services);
         }
 
-        private void setupFluentGmail(IServiceCollection services)
+        private void setupEmail(IServiceCollection services)
         {
             string from = Configuration.GetSection("Mail")["From"];
             string senderEmail = Configuration.GetSection("Mail")["G-SenderEmail"];
@@ -172,8 +159,9 @@ namespace Server.Api
                 .AddRazorRenderer()
                 .AddSmtpSender(smtp);
 
-            services.TryAddScoped<IEmailSender, EmailSender>();
+            services.TryAddScoped<IEmailSender, Mailer>();
 
+            services.AddHostedService<MailListener>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

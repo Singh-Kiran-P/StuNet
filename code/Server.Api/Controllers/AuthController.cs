@@ -20,14 +20,18 @@ namespace Server.Api.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly ITokenManager _tokenManager;
-        private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
+        private readonly IEmailSender _mailSender;
 
-        public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenManager tokenGenerator)
+        //private readonly IUserRepository _userRepository;
+        private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
+        public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenManager tokenGenerator, IEmailSender mailSender)
         {
             _fieldOfStudyRepository = fieldOfStudyRepository;
             _mapper = mapper;
             _userManager = userManager;
             _tokenManager = tokenGenerator;
+            _mailSender = mailSender;
+
         }
 
         [HttpPost("register")]
@@ -130,7 +134,7 @@ namespace Server.Api.Controllers
             }
             else
             {
-                return base.Content("<div><p>Email confirmation failed, please contact stunetuh@gmail.com</p></div>", "text/html");
+                return base.Content("<div><p>Email confirmation failed, please contact stunetUH@gmail.com</p></div>", "text/html");
             }
         }
 
@@ -138,8 +142,9 @@ namespace Server.Api.Controllers
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "Auth", new { token, email = user.Email }, Request.Scheme);
-            EmailSender emailHelper = new EmailSender();
-            emailHelper.SendEmail(user.Email, "Confirmation Email", confirmationLink);
+            await _mailSender.SendEmail(user.Email, "Confirmation Email", EmailTemplate.ConfirmEmail, new {
+               link = confirmationLink
+            });
         }
 
         [HttpGet("validateToken")]

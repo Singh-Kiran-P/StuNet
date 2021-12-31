@@ -23,17 +23,21 @@ namespace Server.Api.Controllers
         private readonly ICourseRepository _courseRepository;
         private readonly UserManager<User> _userManager;
         private readonly IHubContext<ChatHub> _hubContext;
+        private readonly IEmailSender _mailSender;
+
         private readonly INotificationRepository<QuestionNotification> _notificationRepository;
         private readonly ISubscriptionRepository<CourseSubscription> _courseSubscriptionRepository;
         private readonly ISubscriptionRepository<QuestionSubscription> _questionSubscriptionRepository;
 
-        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, INotificationRepository<QuestionNotification> notificationRepository, ISubscriptionRepository<CourseSubscription> subscriptionRepository, ISubscriptionRepository<QuestionSubscription> questionSubscriptionRepository)
+        public QuestionController(IQuestionRepository questionRepository, ITopicRepository topicRepository, ICourseRepository courseRepository, UserManager<User> userManager, IHubContext<ChatHub> hubContext, INotificationRepository<QuestionNotification> notificationRepository, ISubscriptionRepository<CourseSubscription> subscriptionRepository, ISubscriptionRepository<QuestionSubscription> questionSubscriptionRepository, IEmailSender mailSender)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;
             _courseRepository = courseRepository;
             _userManager = userManager;
             _hubContext = hubContext;
+            _mailSender = mailSender;
+
             _courseSubscriptionRepository = subscriptionRepository;
             _notificationRepository = notificationRepository;
             _questionSubscriptionRepository = questionSubscriptionRepository;
@@ -171,6 +175,17 @@ namespace Server.Api.Controllers
 
                 var ret = GetQuestionDto.Convert(question, user);
                 await _hubContext.Clients.Group("Course " + c.id).SendAsync("QuestionNotification", ret);
+
+                await _mailSender.SendEmail(c.courseEmail, "New question in " + c.name, EmailTemplate.QuestionAsked, new
+                {
+                    topics = question.topics,
+                    title = question.title,
+                    body = question.body,
+                    email = userEmail,
+                    id = question.id,
+                    course = c.name
+                });
+
                 return Ok(ret);
             }
             else

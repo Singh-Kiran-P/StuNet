@@ -123,13 +123,17 @@ namespace Server.Api.DataBase
                     id = 1,
                     name = "Course 1",
                     number = "Course 1 number",
-                    description = "Course 1 description"
+                    description = "Course 1 description",
+                    courseEmail = "lander.moors@student.uhasselt.be",
+                    profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
                     id = 2,
                     name = "Course 2",
                     number = "Course 2 number",
-                    description = "Course 2 description"
+                    description = "Course 2 description",
+                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    profEmail = "prof@uhasselt.be"
                 }
             };
 

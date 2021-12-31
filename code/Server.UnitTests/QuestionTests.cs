@@ -24,13 +24,13 @@ namespace Server.UnitTests
     public class QuestionTests : UnitTest
     {
 
-        private QuestionController CreateController(UserManager<User> userManager = null) 
+        private QuestionController CreateController(UserManager<User> userManager = null)
         {
-            return new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, userManager, _hubContextStub.Object, _questionNotificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object);
+            return new QuestionController(_questionRepositoryStub.Object, _topicRepositoryStub.Object, _courseRepositoryStub.Object, userManager, _hubContextStub.Object, _questionNotificationRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, _questionSubscriptionRepositoryStub.Object, _emailSenderStub.Object);
         }
 
         [Fact]
-        public async Task GetQuestion_InvalidId_ReturnsNotFound() 
+        public async Task GetQuestion_InvalidId_ReturnsNotFound()
         {
             // Arrange
             _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
@@ -121,7 +121,7 @@ namespace Server.UnitTests
 
         	result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetQuestionDto>();
             var createdQuestion = (result.Result as OkObjectResult).Value as GetQuestionDto;
-            
+
             createdQuestion.Should().BeEquivalentTo(
         		questionToCreate,
         		options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
