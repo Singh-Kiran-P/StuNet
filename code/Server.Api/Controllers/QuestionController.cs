@@ -9,7 +9,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 namespace Server.Api.Controllers
@@ -94,8 +94,9 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("getFile/{id}")]
-        public async Task<ActionResult<questionDto>> GetFile(int id)
+        public async Task<ActionResult> GetFile(int id)
         {
+            System.Console.WriteLine("In GetFile");
             // var question = await _questionRepository.getAsync(id);
             // if (question == null)
             //     return NotFound();
@@ -105,11 +106,26 @@ namespace Server.Api.Controllers
                 var question = await _questionRepository.getAsync(id);
                 if (question == null)
                     return NotFound();
-                User user = await _userManager.FindByIdAsync(question.userId);
-            
-                return Ok(questionDto.convert(question, user));
+                List<FileContentResult> files = new List<FileContentResult>();
+                var provider = new FileExtensionContentTypeProvider();
+                foreach(var fileName in question.filepaths)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+                    if(!provider.TryGetContentType(filePath, out var contentType))
+                    {
+                        contentType = "application/octet-stream";
+                    }
+                    var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                    files.Add(File(bytes, contentType, getCorrectFileName(Path.GetFileName(filePath))));
+                }
+                return files[0];
             }
             catch { return BadRequest("Error finding question"); }
+        }
+
+        private string getCorrectFileName(string fileName){
+            var pieces = fileName.Split(new[] { '_' }, 2);
+            return pieces[1];
         }
     
         // [HttpPost("UploadFile")]
