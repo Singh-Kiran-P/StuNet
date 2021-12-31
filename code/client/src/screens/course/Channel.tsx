@@ -1,4 +1,4 @@
-import React, { Screen, Message, useEffect, useState, useToken, jwt_decode, axios, display, timeDiff } from '@/.';
+import React, { Screen, Message, useEffect, useState, useUser, axios, display, timeDiff } from '@/.';
 import { Text, List, Loader, SearchBar, CompactMessage } from '@/components';
 import { useConnection } from '@/connection';
 
@@ -7,15 +7,23 @@ export default Screen('Channel', ({ nav, params: { id, name } }) => {
 	let [error, setError] = useState('');
 
 	const connection = useConnection();
-	let email = (jwt_decode(useToken()[0]) as any).username as string;
+	let email: string = useUser().username;
+
+	let first = (current: Message, previous?: Message) => {
+		if (previous?.userMail !== current.userMail) return true;
+		let time = lastTime;
+		let first = !!previous && last(previous, current);
+		lastTime = time;
+		return first;
+	}
 
 	let lastTime = '';
-	let time = (current: Message, previous?: Message) => {
-		let user = previous?.userMail !== current.userMail;
+	let last = (current: Message, next?: Message) => {
+		let user = next?.userMail !== current.userMail;
 		let diff = timeDiff(lastTime, current.time) >= 60 * 5;
-		let time = user || diff;
-		if (time) lastTime = current.time;
-		return time;
+		let last = user || diff;
+		if (last) lastTime = current.time;
+		return last;
 	}
 
 	useEffect(() => {
@@ -49,7 +57,8 @@ export default Screen('Channel', ({ nav, params: { id, name } }) => {
 		<Loader load={fetch}>
 			<List flex inner padding inverted data={messages} renderItem={({ item, index }) => (
 				<CompactMessage margin='bottom' message={item} sender={item.userMail === email}
-					time={time(item, messages[index - 1])}
+					last={last(item, messages[index - 1])}
+					first={first(item, messages[index + 1])}
 				/>
 			)}/>
 			<Text type='error' pad margin='bottom' hidden={!error} children={error}/>

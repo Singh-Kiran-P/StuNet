@@ -1,5 +1,3 @@
-// @Kiran
-
 namespace Server.Api.Dtos
 {
     public record LoginJwtDto

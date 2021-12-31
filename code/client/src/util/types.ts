@@ -1,22 +1,24 @@
 export type Notification = {
     id: number;
-    notifierId: number;
-    title: string,
-    body: string,
     time: string;
+    body: string;
+    title: string;
+    notifierId: number;
 }
 
 export type BaseCourse = {
     id: number;
     name: string;
     number: string;
+    profEmail: string;
+    courseEmail: string;
     description: string;
 }
 
 export type Course = BaseCourse & {
     topics: Topic[];
-    questions: Question[];
     channels: Channel[];
+    questions: Question[];
 }
 
 export type BaseChannel = {
@@ -25,13 +27,13 @@ export type BaseChannel = {
 }
 
 export type Channel = BaseChannel & {
-    course: BaseCourse
+    course: BaseCourse;
 }
 
 export type BaseMessage = {
-	userMail: string,
-	body: string,
-	time: string
+	userMail: string;
+	body: string;
+	time: string;
 }
 
 export type Message = BaseMessage & {}
@@ -63,9 +65,9 @@ export type Question = BaseQuestion & {
 
 export type BaseAnswer = {
     id: number;
-    title: string;
-    body: string;
     time: string;
+    body: string;
+    title: string;
     isAccepted: boolean;
 }
 
@@ -86,9 +88,4 @@ export type Field = {
 export type FOS = {
 	field: string;
 	degree: string;
-}
-
-export const enum User {
-	PROF,
-	STUDENT
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo, useContext, createContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Store from 'react-native-encrypted-storage';
+import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
 import ThemeProvider, { Theme } from '@/css';
@@ -14,6 +15,7 @@ const Stack = createNativeStackNavigator();
 const key = 'token';
 type Context = [string, (token: string) => void];
 const Context = createContext<Context>(['', () => {}]);
+export const useUser = (): { [key: string]: any } => jwt_decode(useToken()[0]);
 export const useToken = () => useContext(Context);
 
 export default ({ children }: Children) => {

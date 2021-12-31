@@ -29,5 +29,14 @@ export const errorString = (err: any): string => {
     return v(err.description || err.errors);
 }
 
+export const professor = (email: string) => !email.endsWith('@student.uhasselt.be');
+
+export const displayName = (email: string) => {
+    let name = email.slice(0, (i => i < 0 ? undefined : i)(email.lastIndexOf('@')));
+    return name.replace('.', ' ').split(' ').map(s => {
+        return s[0].toUpperCase() + s.slice(1).toLowerCase();
+    }).join(' ');
+}
+
 export const show = (set: React.Dispatch<React.SetStateAction<string>>) => (err: any) => set(errorString(err));
 export const display = (set: React.Dispatch<React.SetStateAction<string>>) => (err: any) => set(errorString(`${err}`));
