@@ -15,6 +15,7 @@ type BaseScreens = {
 
         search?: string;
         subscribe?: boolean | null;
+        logout?: boolean;
 
         update?: number;
     }
@@ -32,7 +33,7 @@ type BaseTabs<T extends BaseScreens> = {
 const s = <T extends BaseScreens>(v: T): Base<BaseScreens, T> => v as any;
 const t = <T extends BaseScreens, U extends BaseTabs<T>>(_: T, v: U): Base<BaseTabs<T>, U> => v as any;
 type Generic<T, U extends { [key: string]: any }> = { [V in keyof U]: U[V] extends T ? T : U[V] };
-type Base<T extends { [key: string]: any }, U extends T> = { [V in keyof U]: Generic<boolean, U[V]> & T[string] };
+type Base<T extends { [key: string]: any }, U extends T> = { [V in keyof U]: Generic<boolean | null, U[V]> & T[string] };
 export { s as screens, t as tabs };
 
 // NavigatorScreenParams from '@react-navigation/native';

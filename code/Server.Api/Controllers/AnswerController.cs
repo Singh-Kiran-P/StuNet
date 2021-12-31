@@ -23,9 +23,9 @@ namespace Server.Api.Controllers
         private readonly IQuestionRepository _questionRepository;
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly INotificationRepository<AnswerNotification> _notificationRepository;
-        private readonly IQuestionSubscriptionRepository _subscriptionRepository;
+        private readonly ISubscriptionRepository<QuestionSubscription> _subscriptionRepository;
 
-        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, IQuestionSubscriptionRepository subscriptionRepository)
+        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, ISubscriptionRepository<QuestionSubscription> subscriptionRepository)
         {
             _answerRepository = answerRepository;
             _userManager = userManager;
@@ -123,7 +123,7 @@ namespace Server.Api.Controllers
 
                 await _answerRepository.CreateAsync(answer);
 
-                IEnumerable<string> subscriberIds = (await _subscriptionRepository.GetByQuestionId(question.id)).Select(sub => sub.userId);
+                IEnumerable<string> subscriberIds = (await _subscriptionRepository.GetBySubscribedId(question.id)).Select(sub => sub.userId);
                 await _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new AnswerNotification
                 {
                     userId = userId,
@@ -163,7 +163,7 @@ namespace Server.Api.Controllers
 
             Answer existingAnswer = await _answerRepository.GetAsync(id);
             User user = await _userManager.FindByIdAsync(dto.userId); //TODO: kunnen we dit miscchien uit de jwt van request halen?
-            Question question = await _questionRepository.GetAsync(dto.questionId);
+            Question question = existingAnswer.question;
             if (existingAnswer == null || user == null || question == null)
             {
                 return NotFound();
@@ -190,12 +190,16 @@ namespace Server.Api.Controllers
         public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
         {
             Answer existingAnswer = await _answerRepository.GetAsync(id);
+            if (existingAnswer == null) 
+            {
+                return NotFound();
+            }
+
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                Question question = await _questionRepository.GetAsync(existingAnswer.questionId);
-                if (question.userId == userId)
+                if (existingAnswer.question.userId == userId)
                 {
                     existingAnswer.isAccepted = accepted;
                     await _answerRepository.UpdateAsync(existingAnswer);

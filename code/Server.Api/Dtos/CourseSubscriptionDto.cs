@@ -15,7 +15,7 @@ namespace Server.Api.Dtos
             {
                 dateTime = subscription.dateTime,
                 userId = subscription.userId,
-                courseId = subscription.courseId,
+                courseId = subscription.subscribedItemId,
             };
         }
     }
@@ -44,7 +44,7 @@ namespace Server.Api.Dtos
             return new GetCourseSubscriptionDto
             {
                 userId = subscription.userId,
-                courseId = subscription.courseId,
+                courseId = subscription.subscribedItemId,
             };
         }
     }

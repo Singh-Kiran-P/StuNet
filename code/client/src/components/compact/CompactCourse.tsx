@@ -12,7 +12,10 @@ export default extend<typeof Touchable, Props>(Touchable, ({ course, ...props })
         <Touchable type='row' padding='all-0.2' onPress={() => nav.navigate({ name: 'Course', params: { id: course.id }, merge: true })} {...props}>
             <Icon sizing='huge' padding='vertical-0.2' name='book'/>
             <View shrink grow margin='left'>
-                <Text type='header' size='normal' children={course.name}/>
+                <View type='header'>
+                    <Text type='header' size='normal' children={course.name}/>
+                    <Text type='hint' align='right' children={course.number}/>
+                </View>
                 <Text numberOfLines={3} children={course.description}/>
             </View>
         </Touchable>

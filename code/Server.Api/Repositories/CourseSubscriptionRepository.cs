@@ -8,78 +8,13 @@ using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-    public interface ICourseSubscriptionRepository : IRestfulRepository<CourseSubscription>
+    public class PgCourseSubscriptionRepository : PgSubscriptionRepository<CourseSubscription>
     {
-        Task<ICollection<CourseSubscription>> GetByUserId(string userId);
-        Task<ICollection<CourseSubscription>> GetByCourseId(int id);
-        Task<ICollection<CourseSubscription>> GetByUserIdAndCourseIdAsync(string userId, int courseId);
-        Task<CourseSubscription> GetSingleByUserIdAndCourseIdAsync(string userId, int courseId);
-    }
+        public PgCourseSubscriptionRepository(IDataContext context) : base(context) { }
 
-    public class PgCourseSubscriptionRepository : ICourseSubscriptionRepository
-    {
-        private readonly IDataContext _context;
-
-        public PgCourseSubscriptionRepository(IDataContext context)
+        protected override DbSet<CourseSubscription> GetDbSet()
         {
-            _context = context;
-        }
-
-        public async Task<IEnumerable<CourseSubscription>> GetAllAsync()
-        {
-            return await _context.CourseSubscriptions
-                .ToListAsync();
-        }
-
-        public async Task<CourseSubscription> GetAsync(int id)
-        {
-            return await _context.CourseSubscriptions
-                .Where(s => s.id == id)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<ICollection<CourseSubscription>> GetByUserId(string userId)
-        {
-            return await _context.CourseSubscriptions.Where(s => userId == s.userId).ToListAsync();
-        }
-
-        public async Task<ICollection<CourseSubscription>> GetByCourseId(int id)
-        {
-            return await _context.CourseSubscriptions.Where(s => id == s.courseId).ToListAsync();
-        }
-
-        public async Task<ICollection<CourseSubscription>> GetByUserIdAndCourseIdAsync(string userId, int courseId)
-        {
-            return await _context.CourseSubscriptions
-                .Where(s => s.userId == userId && s.courseId == courseId).ToListAsync();
-        }
-
-        public async Task<CourseSubscription> GetSingleByUserIdAndCourseIdAsync(string userId, int courseId)
-        {
-            return (await GetByUserIdAndCourseIdAsync(userId, courseId)).FirstOrDefault(null);
-        }
-
-        public async Task CreateAsync(CourseSubscription coursesubscription)
-        {
-            _context.CourseSubscriptions.Add(coursesubscription);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateAsync(CourseSubscription coursesubscription)
-        {
-            //FIXME: this method doesn't belong here...
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            CourseSubscription coursesubscription = await _context.CourseSubscriptions.FindAsync(id);
-            if (coursesubscription == null)
-            {
-                throw new NullReferenceException();
-            }
-            _context.CourseSubscriptions.Remove(coursesubscription);
-            await _context.SaveChangesAsync();
+            return _context.CourseSubscriptions;
         }
     }
 }
