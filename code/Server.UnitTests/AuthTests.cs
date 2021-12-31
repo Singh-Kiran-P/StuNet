@@ -72,8 +72,8 @@ namespace Server.UnitTests
 
         [Theory]
         [InlineData("student@student.uhasselt.be", "", "Password length should be at least 6")] // valid mail, invalid password
-        [InlineData("student", "lengthOfAtleast6", "Please use an Uhasselt email")] // invalid mail, valid password
-        [InlineData(".:;@[/|\\]@uhasselt.be", "lengthOfAtleast6", "Please use an Uhasselt email")] // valid mail domain, valid password, ilegal mailaddress characters
+        [InlineData("student", "lengthOfAtleast6", "Please use an UHasselt email")] // invalid mail, valid password
+        [InlineData(".:;@[/|\\]@uhasselt.be", "lengthOfAtleast6", "Please use an UHasselt email")] // valid mail domain, valid password, ilegal mailaddress characters
         public async Task RegisterJWTUser_withInvalidProperties_ReturnsBadRequest(string email, string password, string expectedError)
         {
             // Given
