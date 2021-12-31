@@ -1,0 +1,73 @@
+@startuml Navigation
+
+rectangle {
+    rectangle Home
+    rectangle Courses
+    rectangle Notifications
+    rectangle Profile
+}
+rectangle Course
+rectangle Questions
+rectangle Question
+rectangle Answer
+rectangle TextChannel
+rectangle Login
+rectangle Register
+rectangle "Edit course" as EditCourse
+rectangle "Edit topics" as EditTopics
+rectangle "Edit channels" as EditChannels
+rectangle "Ask question" as AskQuestion
+rectangle "Create course" as CreateCourse
+rectangle "Give answer" as GiveAnswer
+
+Login -> Register
+Register -> Login
+
+Login -d-> Home
+Home -d-> Course
+Home -d-> Question
+
+
+Home -r-> Courses
+' Home -r-> Notifications
+' Home -r-> Profile
+
+Courses -l-> Home
+Courses -r-> Notifications
+' Courses -> Profile
+
+' Notifications -> Home
+Notifications -l-> Courses
+Notifications -r-> Profile
+Notifications -> Question
+Notifications -> Answer
+
+' Profile -> Home
+' Profile -> Courses
+Profile -l-> Notifications
+Profile -> Login
+
+Courses -d-> Course
+Courses -d-> CreateCourse
+CreateCourse -r-> Course
+
+Course -d-> Questions
+Course -d-> TextChannel
+Course -r-> EditCourse
+
+EditCourse -d-> EditChannels
+EditCourse -d-> EditTopics
+
+Questions -d-> Question
+
+Question -d-> GiveAnswer
+Question -d-> Answer
+
+GiveAnswer -r-> Answer
+Answer -d-> Question
+
+Questions -d-> AskQuestion
+AskQuestion -l-> Question
+
+
+@enduml
