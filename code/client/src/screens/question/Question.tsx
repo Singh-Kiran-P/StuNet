@@ -1,6 +1,7 @@
 import React, { axios, Screen, Style, useTheme, useState, Answer, dateString } from '@/.';
 import { Dimensions } from 'react-native';
-
+import RNFetchBlob from 'rn-fetch-blob';
+import {PermissionsAndroid, Alert} from "react-native";
 import {
     Text,
     View,
@@ -71,6 +72,68 @@ export default Screen('Question', ({ params, nav }) => {
         })
     }
 
+    const actualDownload = async () => {
+        // const { config, fs } = RNFetchBlob;
+        // const date = new Date();
+        
+        // const { DownloadDir } = fs.dirs; // You can check the available directories in the wiki.
+        // const fileName = 'kek.pdf';
+        // const options = {
+        //     fileCache: true,
+        //     addAndroidDownloads: {
+        //         useDownloadManager: true, // true will use native manager and be shown on notification bar.
+        //         notification: true,
+        //         path: `${DownloadDir}/me_${fileName}`,
+        //         description: 'Downloading.',
+        //     },
+        // };
+        // config(options).fetch('GET', 'http://localhost:5000/Question/getFile/1') // http://www.africau.edu/images/default/sample.pdf // http://localhost:5000/Question/getFile/1
+        // .then((res) => console.log(res))
+        // .catch(error => console.error(error));
+
+        // const { dirs } = RNFetchBlob.fs;
+        // RNFetchBlob.config({
+        //     fileCache: true,
+        //     addAndroidDownloads: {
+        //     useDownloadManager: true,
+        //     notification: true,
+        //     mediaScannable: true,
+        //     title: `test.pdf`,
+        //     path: `${dirs.DownloadDir}/test.pdf`,
+        //     },
+        // })
+        // .fetch('GET', 'http://localhost:5000/Question/getFile/1',  { 'Cache-Control': 'no-store' })
+        // .then((res) => { console.log('The file saved to ', res.path());})
+        // .catch((e) => {    console.log(e)        });
+
+
+        const {config, fs} = RNFetchBlob
+        const PictureDir = fs.dirs.DownloadDir
+        const options = {
+            fileCache: true,
+            addAndroidDownloads: {
+            useDownloadManager: true,
+            notification: true,
+            title: `nome`,
+            path: `${PictureDir}/lel.pdf`,
+            },
+        }
+        //const token = await getAccessToken()
+        const res = await config(options).fetch('GET', `http://www.africau.edu/images/default/sample.pdf`, {});
+    }
+    const downloadFiles = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                actualDownload();
+            } else {
+                Alert.alert('Permission Denied!', 'You need to give storage permission to download the file');
+            }
+        } catch (err) {
+            console.warn(err);
+        } 
+    }
+
     const fetch = () => Promise.all([info(), questions()]);
 
     return (
@@ -83,7 +146,8 @@ export default Screen('Question', ({ params, nav }) => {
                 <ScrollView style={[s.body, s.margin]} contentContainerStyle={s.bodyContent} nestedScrollEnabled>
                     <Text>{body}</Text>
                 </ScrollView>
-                <Text style={s.margin} type='link' {...{}/* TODO icon, attachments */}>Download 3 Attachments</Text>
+                <Text style={s.margin} type='link' onPress={downloadFiles}>Download 3 Attachments</Text>
+                <Button onPress={downloadFiles} children='Download'/>
                 <Button onPress={() => nav.push('CreateAnswer', {
                     questionId: params.id, question: title, date: date
                 })} children='Answer'/>
