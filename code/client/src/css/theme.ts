@@ -19,24 +19,24 @@ export const Base = {
 
     tabs: {
         auth: {
-            primary: 'pink',
-            accent: 'brown'
+            primary: '#C0CA33',
+            accent: '#E53935'
         },
         home: {
-            primary: 'blue',
-            accent: 'green'
+            primary: '#01579B',
+            accent: '#9575CD'
         },
         courses: {
-            primary: 'green',
-            accent: 'red'
+            primary: '#1B5E20',
+            accent: '#F57F17'
         },
         notifications: {
-            primary: 'red',
-            accent:'purple'
+            primary: '#BF360C',
+            accent:'#F06292'
         },
         profile: {
-            primary: 'purple',
-            accent: 'blue'
+            primary: '#004D40',
+            accent: '#6D4C41'
         }
     },
 

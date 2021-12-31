@@ -70,7 +70,7 @@ namespace Server.Api.Controllers
                 }
                 else
                 {
-                    return BadRequest("Please use an Uhasselt email");
+                    return BadRequest("Please use an UHasselt email");
                 }
 
                 var result = await _userManager.CreateAsync(_user, dto.Password);
@@ -92,7 +92,7 @@ namespace Server.Api.Controllers
             }
             catch (System.Exception)
             {
-                return BadRequest("Error while creating account contact support");
+                return BadRequest("Error while creating account");
             }
         }
 
@@ -102,19 +102,11 @@ namespace Server.Api.Controllers
             try
             {
                 var user = await _userManager.FindByEmailAsync(dto.Email);
-                if (!user.EmailConfirmed)
-                {
-                    return Unauthorized("Please confirm your email adres before logging in!");
-                }
-                else if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
-                {
-                    var token = await _tokenManager.GetTokenAsync(user);
-                    return Ok(token);
-                }
-                else
-                {
-                    return Unauthorized("Invalid password or email");
-                }
+                if (user == null) return Unauthorized("Invalid email address");
+                if (!user.EmailConfirmed) return Unauthorized("Please confirm your email address before logging in!");
+                if (!(await _userManager.CheckPasswordAsync(user, dto.Password))) return Unauthorized("Invalid password");
+                var token = await _tokenManager.GetTokenAsync(user);
+                return Ok(token);
             }
             catch (System.Exception)
             {

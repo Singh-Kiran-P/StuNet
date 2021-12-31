@@ -93,7 +93,7 @@ namespace Server.Api.Services
             throw new NotImplementedException();
         }
 
-        private async Task RecieveMail()
+        private async Task ReceiveMail()
         { //Probably use some sort of webhooks since al mailing clients are paid
             throw new NotImplementedException();
         }

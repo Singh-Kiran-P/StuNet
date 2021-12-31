@@ -1,4 +1,4 @@
-import React, { Screen, Answer, EmptyQuestion, useState, useEffect, axios, show, dateString } from '@/.';
+import React, { Screen, Answer, EmptyQuestion, useState, useEffect, axios, update, show, dateString, timeSort } from '@/.';
 import { View, Text, Chip, List, Icon, Loader, Button, CompactAnswer } from '@/components';
 
 export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
@@ -16,7 +16,7 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
 
     const questions = async () => {
         return axios.get('/Answer/GetAnswersByQuestionId/' + id).then(res => {
-            setAnswers(res.data);
+            setAnswers(timeSort(res.data));
         })
     }
 
@@ -34,11 +34,11 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
         if (subscribed === null) return;
         if (subscribe === !isNaN(subscribed)) return;
         if (subscribe) axios.post('/QuestionSubscription/', { questionId: id }).then(
-            res => setSubscribed(res.data.id),
+            res => (setSubscribed(res.data.id), update('Home')),
             show(setError)
         )
         else axios.delete('/QuestionSubscription/' + subscribed).then(
-            () => setSubscribed(NaN),
+            () => (setSubscribed(NaN), update('Home')),
             show(setError)
         )
     }, [subscribe, subscribed]);
@@ -48,7 +48,7 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
             <View pad='top'>
                 <Text type='error' margin='bottom' hidden={!error} children={error}/>
                 <View type='header' hidden={!question.topics?.length} children={question.topics?.map((topic, i) => (
-                    <Chip margin='bottom,right-0.5' key={i} children={topic.name}/>
+                    <Chip margin='bottom,right-0.5' key={i} children={topic.name} active/>
                 ))}/>
                 <View type='header'>
                     <Text type='header' children={question.title}/>
@@ -58,14 +58,9 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
             <List margin inner padding='horizontal,bottom' ListHeaderComponent={
                 <View>
                     <Text children={question.body}/>
-                    <View type='row' margin>
-                        <Icon sizing='large' margin='right-0.5' coloring='accent' name='download'/>
-                        <Text type='link' {...{}/* TODO attachments */}>
-                            Download 3 Attachments
-                        </Text>
-                    </View>
                     <Button margin='top-2' icon='text-box-plus' children='Give An Answer' onPress={() => nav.push('GiveAnswer', { question })}/>
-                    <Text margin='top-2' type='header' children={answers.length ? 'Answers' : 'No answers yet'}/>
+                    <Text margin='top-2' type='hint' size='normal' hidden={answers.length} children='No answers have been given'/>
+                    <Text margin='top-2' type='header' hidden={!answers.length} children='Answers'/>
                 </View>
             } data={answers} renderItem={answer => <CompactAnswer margin answer={answer.item}/>}/>
         </Loader>

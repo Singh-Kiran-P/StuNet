@@ -3,14 +3,17 @@ import 'intl/locale-data/jsonp/en-US';
 
 export const dateString = (moment: any) => {
     if (!moment) return '';
-    let datetime = new Date(moment);
+    let [datetime, now] = [new Date(moment), new Date()];
     const s = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('en-US', o).format(datetime);
     let weekday = s({ weekday: 'short' });
     let month = s({ month: 'short' });
     let day = s({ day: 'numeric' });
     let hour = s({ hour: '2-digit', hour12: false });
     let min = s({ minute: '2-digit' });
-    return `${weekday} ${month} ${day}, ${hour}:${min}`;
+    let year = s({ year: '2-digit' });
+    let current = datetime.getFullYear() === now.getFullYear();
+    if (current) return `${weekday} ${month} ${day}, ${hour}:${min}`;
+    return `${day} ${month} ${year}, ${hour}:${min}`;
 }
 
 export const timeDiff = (start: any, end: any) => {
@@ -36,6 +39,10 @@ export const displayName = (email: string) => {
     return name.replace('.', ' ').split(' ').map(s => {
         return s[0].toUpperCase() + s.slice(1).toLowerCase();
     }).join(' ');
+}
+
+export const timeSort = <T extends { time: string }>(items: T[]): T[] => {
+    return items.sort((a, b) => b.time.localeCompare(a.time));
 }
 
 export const show = (set: React.Dispatch<React.SetStateAction<string>>) => (err: any) => set(errorString(err));

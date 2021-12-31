@@ -120,6 +120,8 @@ export const s = screens({
 
     Profile: {
         screenTitle: '',
+        padding: false,
+        scroll: false,
         logout: true,
         email: ''
     }

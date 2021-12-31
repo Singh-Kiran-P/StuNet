@@ -5,7 +5,7 @@ import { contains } from '@/util/alg';
 export default Screen('EditCourse', ({ nav, params: { course } }) => {
     let [name, setName] = useState(course.name);
     let [number, setNumber] = useState(course.number);
-    let [email, setEmail] = useState(course.courseEmail || ''); // TODO email
+    let [email, setEmail] = useState(course.courseEmail);
     let [description, setDescription] = useState(course.description);
     let [error, setError] = useState('');
 

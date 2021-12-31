@@ -17,7 +17,6 @@ export default extend<typeof View, Props>(View, ({ load, state, ...props }) => {
 			setLoading(false);
 		}).catch(err => {
 			if (nav?.canGoBack()) nav.goBack();
-			// TODO system message
 		})
 	}, [update])
 
