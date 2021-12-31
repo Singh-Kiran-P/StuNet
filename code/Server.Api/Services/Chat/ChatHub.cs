@@ -21,10 +21,10 @@ namespace ChatSample.Hubs
     {
         private readonly IMessageRepository _messageRepository;
         private readonly UserManager<User> _userManager;
-        private readonly IQuestionSubscriptionRepository _questionSubscriptionRepository;
-        private readonly ICourseSubscriptionRepository _courseSubscriptionRepository;
+        private readonly ISubscriptionRepository<QuestionSubscription> _questionSubscriptionRepository;
+        private readonly ISubscriptionRepository<CourseSubscription> _courseSubscriptionRepository;
 
-        public ChatHub(IMessageRepository messageRepository, UserManager<User> userManager, IQuestionSubscriptionRepository questionSubscriptionRepository, ICourseSubscriptionRepository courseSubscriptionRepository)
+        public ChatHub(IMessageRepository messageRepository, UserManager<User> userManager, ISubscriptionRepository<QuestionSubscription> questionSubscriptionRepository, ISubscriptionRepository<CourseSubscription> courseSubscriptionRepository)
         {
             _messageRepository = messageRepository;
             _userManager = userManager;
@@ -81,8 +81,8 @@ namespace ChatSample.Hubs
             string userId = GetCurrentUserId();
             ICollection<CourseSubscription> subscribedCourses = await _courseSubscriptionRepository.GetByUserId(userId);
             ICollection<QuestionSubscription> subscribedQuestions = await _questionSubscriptionRepository.GetByUserId(userId);
-            await Task.WhenAll(subscribedCourses.Select(sc => Groups.AddToGroupAsync(Context.ConnectionId, "Course " + sc.courseId.ToString())));
-            await Task.WhenAll(subscribedQuestions.Select(sq => Groups.AddToGroupAsync(Context.ConnectionId, "Question " + sq.questionId.ToString())));
+            await Task.WhenAll(subscribedCourses.Select(sc => Groups.AddToGroupAsync(Context.ConnectionId, "Course " + sc.subscribedItemId.ToString())));
+            await Task.WhenAll(subscribedQuestions.Select(sq => Groups.AddToGroupAsync(Context.ConnectionId, "Question " + sq.subscribedItemId.ToString())));
         }
 
         public string GetCurrentUserEmail() //FIXME: private? only used in this file

@@ -68,7 +68,7 @@ namespace Server.UnitTests
             var result = await controller.GetQuestion(rand.Next());
 
             // Assert
-            ((result.Result as OkObjectResult).Value as GetQuestionDto).Should()
+            result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetQuestionDto>().And
             .BeEquivalentTo(question, options => options.ComparingByMembers<GetQuestionDto>().ExcludingMissingMembers());
         }
 
@@ -100,7 +100,7 @@ namespace Server.UnitTests
         		topicIds = Enumerable.Range(1, 10).Select(_ => rand.Next()).ToList<int>()
         	};
 
-            _courseSubscriptionRepositoryStub.Setup(repo => repo.GetByCourseId(It.IsAny<int>()))
+            _courseSubscriptionRepositoryStub.Setup(repo => repo.GetBySubscribedId(It.IsAny<int>()))
                 .ReturnsAsync(new CourseSubscription[0]);
 
 			_hubContextStub.Setup(c => c.Groups.AddToGroupAsync(It.IsAny<string>(), It.IsAny<string>(), CancellationToken.None)).
@@ -119,13 +119,14 @@ namespace Server.UnitTests
             var result = await controller.CreateQuestion(questionToCreate);
 
 
-        	var createdQuestion = (result.Result as OkObjectResult).Value as GetQuestionDto;
-        	questionToCreate.Should().BeEquivalentTo(
-        		createdQuestion,
+        	result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetQuestionDto>();
+            var createdQuestion = (result.Result as OkObjectResult).Value as GetQuestionDto;
+            
+            createdQuestion.Should().BeEquivalentTo(
+        		questionToCreate,
         		options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
         	);
-
-        	createdQuestion.id.Should().NotBe(null);
+            createdQuestion.id.Should().NotBe(null);
         	createdQuestion.topics.Should().NotBeNullOrEmpty();
         	foreach (GetPartialTopicDto t in createdQuestion.topics)
         	{
@@ -154,7 +155,8 @@ namespace Server.UnitTests
         public async Task UpdateQuestion_WithExistingItem_ReturnsNoContent()
         {
 
-            CreateQuestionDto randomQuestion = new()
+            Question oldQuestion = createRandomQuestion();
+            CreateQuestionDto newQuestion = new()
             {
                 courseId = rand.Next(),
                 title = rand.Next().ToString(),
@@ -163,13 +165,17 @@ namespace Server.UnitTests
             };
 
             _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
-                .ReturnsAsync((Question)createRandomQuestion());
+                .ReturnsAsync(oldQuestion);
 
         	var controller = CreateController();
 
-            var result = await controller.UpdateQuestion(rand.Next(), randomQuestion);
+            var result = await controller.UpdateQuestion(rand.Next(), newQuestion);
 
             result.Should().BeOfType<NoContentResult>();
+            oldQuestion.Should().BeEquivalentTo(
+                oldQuestion,
+                options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
+            );
         }
 
 

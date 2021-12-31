@@ -23,9 +23,9 @@ namespace Server.Api.Controllers
         private readonly IQuestionRepository _questionRepository;
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly INotificationRepository<AnswerNotification> _notificationRepository;
-        private readonly IQuestionSubscriptionRepository _subscriptionRepository;
+        private readonly ISubscriptionRepository<QuestionSubscription> _subscriptionRepository;
 
-        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, IQuestionSubscriptionRepository subscriptionRepository)
+        public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, ISubscriptionRepository<QuestionSubscription> subscriptionRepository)
         {
             _answerRepository = answerRepository;
             _userManager = userManager;
@@ -123,7 +123,7 @@ namespace Server.Api.Controllers
 
                 await _answerRepository.CreateAsync(answer);
 
-                IEnumerable<string> subscriberIds = (await _subscriptionRepository.GetByQuestionId(question.id)).Select(sub => sub.userId);
+                IEnumerable<string> subscriberIds = (await _subscriptionRepository.GetBySubscribedId(question.id)).Select(sub => sub.userId);
                 await _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new AnswerNotification
                 {
                     userId = userId,

@@ -83,7 +83,7 @@ namespace Server.UnitTests
             _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(randomQuestion);
 
-            _questionSubscriptionRepositoryStub.Setup(repo => repo.GetByQuestionId(It.IsAny<int>()))
+            _questionSubscriptionRepositoryStub.Setup(repo => repo.GetBySubscribedId(It.IsAny<int>()))
                 .ReturnsAsync(new QuestionSubscription[0]);
 
             _hubContextStub.Setup(c => c.Clients.Group(It.IsAny<string>()).SendCoreAsync(It.IsAny<string>(), It.IsAny<object[]>(), CancellationToken.None))
@@ -96,9 +96,8 @@ namespace Server.UnitTests
             var result = await controller.CreateAnswer(answerToCreate);
 
             // Then
-            result.Result.Should().BeOfType<OkObjectResult>();
-
-            GetAnswerDto createdAnswer = (result.Result as OkObjectResult).Value as GetAnswerDto;
+            result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetAnswerDto>();;
+            var createdAnswer = (result.Result as OkObjectResult).Value as GetAnswerDto;
 
             answerToCreate.Should().BeEquivalentTo(
                 createdAnswer,

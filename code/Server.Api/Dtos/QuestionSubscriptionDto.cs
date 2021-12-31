@@ -15,7 +15,7 @@ namespace Server.Api.Dtos
             {
                 dateTime = subscription.dateTime,
                 userId = subscription.userId,
-                questionId = subscription.questionId,
+                questionId = subscription.subscribedItemId,
             };
         }
     }
@@ -43,7 +43,7 @@ namespace Server.Api.Dtos
             return new GetQuestionSubscriptionDto
             {
                 userId = subscription.userId,
-                questionId = subscription.questionId,
+                questionId = subscription.subscribedItemId,
             };
         }
     }
