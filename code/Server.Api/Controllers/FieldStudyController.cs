@@ -56,13 +56,10 @@ namespace Server.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateFieldOfStudy(CreateFieldOfStudyDto createFieldOfStudyDto)
         {
-            string _fullname = createFieldOfStudyDto.name
-                + "-"
-                + (createFieldOfStudyDto.isBachelor ? "BACH" : "MASTER");
             FieldOfStudy fieldOfStudy = new()
             {
-                fullName = _fullname,
                 name = createFieldOfStudyDto.name,
+                fullName = createFieldOfStudyDto.fullName,
                 isBachelor = createFieldOfStudyDto.isBachelor
             };
             await _fieldOfStudyRepository.CreateAsync(fieldOfStudy);
@@ -82,8 +79,8 @@ namespace Server.Api.Controllers
             FieldOfStudy fieldOfStudy = new()
             {
                 id = id,
-                fullName = updateFieldOfStudyDto.fullName,
                 name = updateFieldOfStudyDto.name,
+                fullName = updateFieldOfStudyDto.fullName,
                 isBachelor = updateFieldOfStudyDto.isBachelor
             };
             await _fieldOfStudyRepository.UpdateAsync(fieldOfStudy);

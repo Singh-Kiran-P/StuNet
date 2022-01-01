@@ -105,14 +105,24 @@ namespace Server.Api.DataBase
 
         private void CreateFieldOfStudy(ModelBuilder modelBuilder)
         {
-            var fos1 = new FieldOfStudy()
+            var fos = new List<FieldOfStudy>
             {
-                id = 1,
-                fullName = "INF-BACH",
-                name = "INF",
-                isBachelor = true
+                new FieldOfStudy() {
+                    id = 1,
+                    name = "INF",
+                    isBachelor = true,
+                    fullName = "Bachelor in de Informatica",
+                },
+
+                new FieldOfStudy() {
+                    id = 2,
+                    name = "INF",
+                    isBachelor = false,
+                    fullName = "Master in de Informatica"
+                }
             };
-            modelBuilder.Entity<FieldOfStudy>().HasData(fos1);
+
+            modelBuilder.Entity<FieldOfStudy>().HasData(fos);
         }
 
         private void CreateCourse(ModelBuilder modelBuilder)

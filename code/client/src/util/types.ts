@@ -84,8 +84,3 @@ export type Field = {
 	fullName: string;
 	isBachelor: boolean;
 }
-
-export type FOS = {
-	field: string;
-	degree: string;
-}

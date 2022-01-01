@@ -8,6 +8,7 @@ export default Screen('AskQuestion', ({ nav, params: { course, selected } }) => 
     let [body, setBody] = useState('');
 
     const submit = () => {
+        setError('');
         axios.post('/Question', {
             body: body,
             title: title,

@@ -5,6 +5,8 @@ export const EmptyCourse: T.Course = {
     name: '',
     number: '',
     description: '',
+    courseEmail: '',
+    profEmail: '',
     topics: [],
     questions: [],
     channels: []

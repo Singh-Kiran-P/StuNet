@@ -58,7 +58,6 @@ namespace Server.Api.Services
             {
                 await Reconnect();
                 await FetchMessageSummaries(false);
-                Console.WriteLine("d");
 
             }
             catch (OperationCanceledException)

@@ -1,12 +1,13 @@
-import React, { extend, useTheme, Style, Size } from '@/.';
+import React, { extend, useTheme, Style, Size, Color } from '@/.';
 import { Text } from 'react-native-paper';
 
 type Props = {
     type?: 'normal' | 'header' | 'title' | 'error' | 'hint' | 'link';
     size?: 'auto' | Size;
+    color?: Color;
 }
 
-export default extend<typeof Text, Props>(Text, ({ type, size, style, ...props }) => {
+export default extend<typeof Text, Props>(Text, ({ type, size, color, style, ...props }) => {
     let [theme] = useTheme();
 
     const fontSize = (s: Size) => ({
@@ -46,11 +47,15 @@ export default extend<typeof Text, Props>(Text, ({ type, size, style, ...props }
             color: theme.accent,
             ...fontSize('normal'),
             textDecorationLine: 'underline'
+        },
+
+        color: !color ? {} : {
+            color: theme[color]
         }
     })
 
     return <Text
-        style={[s[type || 'normal'], style]}
+        style={[s[type || 'normal'], s.color, style]}
         {...props}
     />
 })

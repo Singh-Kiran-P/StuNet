@@ -29,7 +29,7 @@ namespace Server.Api.Dtos
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-        public string fieldOfStudy { get; set; }
+        public int fieldOfStudy { get; set; }
 
         public static RegisterUserDto Convert(User user)
         {
@@ -39,15 +39,12 @@ namespace Server.Api.Dtos
 
     public record ResponseUserDto
     {
-        //public string id { get;set; }
         public string email { get; set; }
 
-        //TODO: add subscribed courses, maybe answer and question ids?
         public static ResponseUserDto Convert(User user)
         {
             return new ResponseUserDto()
             {
-                //id = user.Id,
                 email = user.Email
             };
         }

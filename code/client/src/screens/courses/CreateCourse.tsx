@@ -9,6 +9,7 @@ export default Screen('CreateCourse', ({ nav }) => {
     let [error, setError] = useState('');
 
     const submit = () => {
+        setError('');
         axios.post('/Course', {
             name: name,
             email: email,
@@ -22,7 +23,6 @@ export default Screen('CreateCourse', ({ nav }) => {
         <View>
             <TextInput label='Name' onChangeText={setName}/>
             <TextInput margin label='Number' onChangeText={setNumber}/>
-            <TextInput margin label='Email' onChangeText={setEmail}/>
             <TextInput margin label='Description' multiline onChangeText={setDescription}/>
             <TextInput margin label='Email' onChangeText={setEmail}/>
             <Button margin icon='book-plus' children='Create' disabled={!name || !number || !email} toggled={error} onPress={submit}/>

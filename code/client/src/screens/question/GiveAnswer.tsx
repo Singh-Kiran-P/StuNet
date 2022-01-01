@@ -7,6 +7,7 @@ export default Screen('GiveAnswer', ({ nav, params: { question } }) => {
     let [body, setBody] = useState('');
 
     const submit = () => {
+        setError('');
         axios.post('/Answer', {
             body: body,
             title: title,

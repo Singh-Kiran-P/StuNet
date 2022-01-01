@@ -22,13 +22,13 @@ export default extend<typeof SectionList, Props>(SectionList, ({ courses = [], c
             padding='horizontal,bottom'
             {...props}
             sections={[
-                { title: 'courses', data: courses },
-                { title: 'channels', data: channels },
+                { title: 'courses', data: courses.reverse() },
+                { title: 'channels', data: channels.reverse() },
                 { title: 'questions', data: timeSort(questions) },
                 { title: 'answers', data: timeSort(answers) }
             ].filter(s => s.data.length)}
             renderSectionHeader={({ section }) => (
-                <Text type='header' margin='top-2' children={display(name, section.title)}/>
+                <Text type='header' color='placeholder' margin='top-2' children={display(name, section.title)}/>
             )}
             renderItem={({ item, index, section }: any) => {
                 switch (section.title) {

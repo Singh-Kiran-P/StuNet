@@ -12,6 +12,7 @@ export default Screen('EditCourse', ({ nav, params: { course } }) => {
     let changed = !contains(course, { name, number, email, description });
 
     const save = () => {
+        setError('');
         axios.put('/Course/' + course.id, {
             name: name,
             number: number,

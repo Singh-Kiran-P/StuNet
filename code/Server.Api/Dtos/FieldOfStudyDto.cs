@@ -5,11 +5,12 @@ namespace Server.Api.Dtos
 {
     public record FieldOfStudyDto
     {
-        public string fullName { get; set; }
         [Required()]
         public string name { get; set; }
         [Required()]
         public bool isBachelor { get; set; }
+        [Required()]
+        public string fullName { get; set; }
 
         public static FieldOfStudyDto Convert(FieldOfStudy fieldOfStudy)
         {
@@ -23,6 +24,8 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         [Required()]
         public bool isBachelor { get; set; }
+        [Required()]
+        public string fullName { get; set; }
 
         public static CreateFieldOfStudyDto Convert(FieldOfStudy fieldOfStudy)
         {

@@ -56,7 +56,7 @@ namespace Server.Api.Controllers
             return Ok(GetCourseSubscriptionDto.Convert(subscription));
         }
 
-        [HttpGet("ByUserAndCourseId/{courseId}")] //FIXME: Make route lower case
+        [HttpGet("ByUserAndCourseId/{courseId}")]
         public async Task<ActionResult<GetByIdsCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
         {
             IEnumerable<CourseSubscription> subscriptions = await _courseSubscriptionRepository.GetAllAsync();
@@ -109,6 +109,7 @@ namespace Server.Api.Controllers
 
                     await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + sub.subscribedItemId.ToString());
                     await _courseSubscriptionRepository.DeleteAsync(id);
+                    return NoContent();
                 }
                 else
                 {
@@ -119,7 +120,6 @@ namespace Server.Api.Controllers
             {
                 return NotFound();
             }
-            return NoContent(); //FIXME: this trailing return doesn't make sense, right?
         }
     }
 }

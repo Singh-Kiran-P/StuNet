@@ -47,36 +47,34 @@ namespace ChatSample.Hubs
             await Clients.Group("Channel " + channelId.ToString()).SendAsync("messageReceived", userEmail, message, DateTime.UtcNow);
         }
 
-        public Task JoinChannel(int channelId) //FIXME: 0 references
+        public Task JoinChannel(int channelId)
         {
             System.Console.WriteLine(Context.ConnectionId + " joined Channel: " + channelId.ToString());
             return Groups.AddToGroupAsync(Context.ConnectionId, "Channel " + channelId.ToString());
         }
 
-        public Task LeaveChannel(int channelId) //FIXME: 0 references
+        public Task LeaveChannel(int channelId)
         {
             System.Console.WriteLine(Context.ConnectionId + " left Channel: " + channelId.ToString());
             return Groups.RemoveFromGroupAsync(Context.ConnectionId, "Channel " + channelId.ToString());
         }
 
-        public override async Task OnConnectedAsync() //FIXME: private? only used in this file
+        public override async Task OnConnectedAsync()
         {
             // await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
-            System.Console.WriteLine("connect: " + Context.ConnectionId); //TODO: remove line
             UserHandler.ConnectedIds[GetCurrentUserId()] = Context.ConnectionId;
             await AddUserToSubscribedGroups();
             await base.OnConnectedAsync();
         }
 
-        public override async Task OnDisconnectedAsync(Exception exception) //FIXME: private? only used in this file
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
             // await Clients.All.SendAsync("UserDisconnected", Context.ConnectionId);
-            System.Console.WriteLine(Context.ConnectionId + " disconnected"); //TODO: remove line
             UserHandler.ConnectedIds.Remove(GetCurrentUserId());
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task AddUserToSubscribedGroups() //FIXME: private? only used in this file
+        public async Task AddUserToSubscribedGroups()
         {
             string userId = GetCurrentUserId();
             ICollection<CourseSubscription> subscribedCourses = await _courseSubscriptionRepository.GetByUserId(userId);
@@ -85,7 +83,7 @@ namespace ChatSample.Hubs
             await Task.WhenAll(subscribedQuestions.Select(sq => Groups.AddToGroupAsync(Context.ConnectionId, "Question " + sq.subscribedItemId.ToString())));
         }
 
-        public string GetCurrentUserEmail() //FIXME: private? only used in this file
+        public string GetCurrentUserEmail()
         {
             string userEmail = null;
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;
@@ -97,7 +95,7 @@ namespace ChatSample.Hubs
             return userEmail;
         }
 
-        public string GetCurrentUserId() //FIXME: private? only used in this file
+        public string GetCurrentUserId()
         {
             string userId = null;
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;

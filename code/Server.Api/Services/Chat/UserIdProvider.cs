@@ -4,7 +4,6 @@ public class UserIdProvider : IUserIdProvider
 {
     public string GetUserId(HubConnectionContext connection)
     {
-        System.Console.WriteLine(connection.User);
         return connection.User?.Identity?.Name;
     }
 }

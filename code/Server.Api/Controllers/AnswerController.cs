@@ -57,7 +57,7 @@ namespace Server.Api.Controllers
         }
 
         //[Authorize(Roles = "student,prof")]
-        [HttpGet("GetAnswersByQuestionId/{questionId}")] //FIXME: Make route lower case
+        [HttpGet("GetAnswersByQuestionId/{questionId}")]
         public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
             try
@@ -162,7 +162,7 @@ namespace Server.Api.Controllers
         {
 
             Answer existingAnswer = await _answerRepository.GetAsync(id);
-            User user = await _userManager.FindByIdAsync(dto.userId); //TODO: kunnen we dit miscchien uit de jwt van request halen?
+            User user = await _userManager.FindByIdAsync(dto.userId);
             Question question = existingAnswer.question;
             if (existingAnswer == null || user == null || question == null)
             {
@@ -186,7 +186,7 @@ namespace Server.Api.Controllers
         }
 
         // [Authorize(Roles = "prof")]
-        [HttpPut("SetAccepted/{id}")] //FIXME: Make route lower case
+        [HttpPut("SetAccepted/{id}")]
         public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
         {
             Answer existingAnswer = await _answerRepository.GetAsync(id);

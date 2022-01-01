@@ -43,8 +43,6 @@ namespace Server.Api.Controllers
             _questionSubscriptionRepository = questionSubscriptionRepository;
         }
 
-        // FIXME: I removed commented questionDto of 3 weeks old here
-
         //[Authorize(Roles = "student")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetQuestions()
@@ -105,7 +103,7 @@ namespace Server.Api.Controllers
             }
         }
 
-        [HttpGet("GetQuestionsByCourseId/search/{courseId}")] //FIXME: Make route lower case
+        [HttpGet("GetQuestionsByCourseId/search/{courseId}")]
         public async Task<ActionResult<GetCourseDto>> SearchByName(int courseId, [FromQuery] string name)
         {
             var questions = await _questionRepository.GetByCourseIdAsync(courseId);
@@ -130,7 +128,7 @@ namespace Server.Api.Controllers
                 User user = await _userManager.FindByEmailAsync(userEmail);
                 Course c = _courseRepository.GetAsync(dto.courseId).Result;
                 ICollection<Topic> topics = dto.topicIds
-                    .Select(id => _topicRepository.GetAsync(id)) //FIXME: Dit is een probleem als 1 van de topics niet bestaat, er wordt niet null teruggegeven maar een lijst met een null in en dit gaat niet in de db; voorlopige oplossing zie lijn 78
+                    .Select(id => _topicRepository.GetAsync(id))
                     .Select(task => task.Result)
                     .ToList();
 
@@ -145,10 +143,9 @@ namespace Server.Api.Controllers
                 Question question = new()
                 {
                     title = dto.title,
-                    userId = user.Id, //TODO: do what?
+                    userId = user.Id,
                     course = c,
                     body = dto.body,
-                    // files = createQuestionDto.files TODO
                     topics = topics,
                     time = DateTime.UtcNow
                 };

@@ -42,7 +42,7 @@ namespace Server.Api.Controllers
                 User _user = null;
                 string role = "";
 
-                if (dto.Password.Length < 6 || dto.ConfirmPassword.Length < 6)
+                if (dto.Password.Length < 6)
                 {
                     return BadRequest("Password length should be at least 6");
                 }
@@ -55,7 +55,7 @@ namespace Server.Api.Controllers
                 if (regStudent.IsMatch(dto.Email))
                 {
                     //fieldOfStudy processing
-                    FieldOfStudy fos = await _fieldOfStudyRepository.GetByFullNameAsync(dto.fieldOfStudy);
+                    FieldOfStudy fos = await _fieldOfStudyRepository.GetAsync(dto.fieldOfStudy);
                     if (fos == null)
                     {
                         return BadRequest("Field Of Study does not exist");
@@ -118,7 +118,7 @@ namespace Server.Api.Controllers
             }
         }
 
-        [HttpGet("ConfirmEmail")] //FIXME: Make route lower case
+        [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);

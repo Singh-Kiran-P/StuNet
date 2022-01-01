@@ -54,7 +54,7 @@ namespace Server.Api.Controllers
             return Ok(GetQuestionSubscriptionDto.Convert(subscription));
         }
 
-        [HttpGet("ByUserAndQuestionId/{questionId}")] //FIXME: Make route lower case
+        [HttpGet("ByUserAndQuestionId/{questionId}")]
         public async Task<ActionResult<GetByIdsQuestionSubscriptionDto>> GetQuestionSubscriptionByUserAndQuestionId(int questionId)
         {
             IEnumerable<QuestionSubscription> subscriptions = await _questionSubscriptionRepository.GetAllAsync();

@@ -5,6 +5,6 @@ namespace Server.Api.Models
 {
     public class User : IdentityUser
     {
-        public ICollection<Answer> answers;
+        
     }
 }

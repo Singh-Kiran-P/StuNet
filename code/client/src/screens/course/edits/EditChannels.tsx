@@ -38,7 +38,7 @@ export default Screen('EditChannels', ({ params: { course } }) => {
             <View type='row' margin='bottom-2'>
                 <Button flex margin='right' icon='close' children='Clear' onPress={() => (setEdit([]), setChannels(channels.map(t => [t[0]])))}/>
                 <Button flex margin='left' icon='delete' children='Delete' disabled={!selection.length || !!edit.length} toggled={channels}
-                    onPress={() => (setChannels(channels.map(t => [t[0], false])), remove(selection.map(t => t[0].id)))}
+                    onPress={() => (setError(''), setChannels(channels.map(t => [t[0], false])), remove(selection.map(t => t[0].id)))}
                 />
             </View>
             {channels.map(([channel, selected], i) => {
