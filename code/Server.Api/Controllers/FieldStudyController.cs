@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 using System;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -17,12 +18,13 @@ namespace Server.Api.Controllers
     {
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
         private readonly UserManager<User> _userManager;
-        
+
         public FieldOfStudyController(IFieldOfStudyRepository fieldOfStudyRepository, UserManager<User> userManager)
         {
             _fieldOfStudyRepository = fieldOfStudyRepository;
             _userManager = userManager;
         }
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FieldOfStudy>>> GetFieldOfStudies()
@@ -30,6 +32,7 @@ namespace Server.Api.Controllers
             var fieldOfStudies = await _fieldOfStudyRepository.GetAllAsync();
             return Ok(fieldOfStudies);
         }
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet("{id}")]
         public async Task<ActionResult<FieldOfStudy>> GetFieldOfStudy(int id)
@@ -41,6 +44,7 @@ namespace Server.Api.Controllers
             }
             return Ok(fieldOfStudy);
         }
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet("user")]
         public async Task<ActionResult<FieldOfStudy>> GetUserFieldOfStudy([FromQuery] string email)
@@ -52,6 +56,7 @@ namespace Server.Api.Controllers
             if (fieldOfStudy == null) return NotFound();
             return Ok(fieldOfStudy);
         }
+        [Authorize(Roles = "prof")]
 
         [HttpPost]
         public async Task<ActionResult> CreateFieldOfStudy(CreateFieldOfStudyDto createFieldOfStudyDto)
@@ -69,12 +74,15 @@ namespace Server.Api.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "prof")]
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFieldOfStudy(int id)
         {
             await _fieldOfStudyRepository.DeleteAsync(id);
             return Ok();
         }
+        [Authorize(Roles = "prof")]
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateFieldOfStudy(int id, FieldOfStudyDto updateFieldOfStudyDto)

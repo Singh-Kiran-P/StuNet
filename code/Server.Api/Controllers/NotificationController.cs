@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
@@ -31,6 +32,8 @@ namespace Server.Api.Controllers
         {
             return await _answerNotificationRepository.GetByUserId(userId);
         }
+        [Authorize(Roles = "student,prof")]
+
 
         [HttpGet]
         public async Task<ActionResult<(IEnumerable<GetNotificationDto>, IEnumerable<GetNotificationDto>)>> GetNotifications()

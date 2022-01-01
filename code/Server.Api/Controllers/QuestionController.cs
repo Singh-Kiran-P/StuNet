@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using ChatSample.Hubs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -45,7 +46,7 @@ namespace Server.Api.Controllers
 
         // FIXME: I removed commented questionDto of 3 weeks old here
 
-        //[Authorize(Roles = "student")]
+        [Authorize(Roles = "student,prof")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetQuestions()
         {
@@ -66,6 +67,8 @@ namespace Server.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "student,prof")]
+
         [HttpGet("subscribed")]
         public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetSubscribedQuestions()
         {
@@ -84,6 +87,8 @@ namespace Server.Api.Controllers
                 return Unauthorized();
             }
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetQuestionDto>> GetQuestion(int id)
@@ -105,6 +110,8 @@ namespace Server.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "student,prof")]
+
         [HttpGet("GetQuestionsByCourseId/search/{courseId}")] //FIXME: Make route lower case
         public async Task<ActionResult<GetCourseDto>> SearchByName(int courseId, [FromQuery] string name)
         {
@@ -119,7 +126,7 @@ namespace Server.Api.Controllers
             return Ok(res);
         }
 
-        //[Authorize(Roles = "student")]
+        [Authorize(Roles = "student,prof")]
         [HttpPost]
         public async Task<ActionResult<GetQuestionDto>> CreateQuestion(CreateQuestionDto dto)
         {
@@ -194,6 +201,8 @@ namespace Server.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "student,prof")]
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteQuestion(int id)
         {
@@ -205,6 +214,8 @@ namespace Server.Api.Controllers
             await _questionRepository.DeleteAsync(id);
             return NoContent();
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateQuestion(int id, CreateQuestionDto dto)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -30,12 +31,14 @@ namespace Server.Api.Controllers
                 questions = topic.questions.Select(question => GetPartialQuestionDto.Convert(question)).ToList()
             };
         }
-        
+
         public TopicController(ITopicRepository topicRepository, ICourseRepository courseRepository)
         {
             _topicRepository = topicRepository;
             _courseRepository = courseRepository;
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetTopicDto>>> GetTopics()
@@ -43,6 +46,7 @@ namespace Server.Api.Controllers
             var topics = await _topicRepository.GetAllAsync();
             return Ok(topics.Select(topic => ToDto(topic)));
         }
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetTopicDto>> GetTopic(int id)
@@ -54,6 +58,8 @@ namespace Server.Api.Controllers
             }
             return Ok(ToDto(topic));
         }
+
+        [Authorize(Roles = "prof")]
 
         [HttpPost]
         public async Task<ActionResult<Topic>> CreateTopic(CreateTopicDto dto)
@@ -68,12 +74,16 @@ namespace Server.Api.Controllers
             return Ok(topic);
         }
 
+        [Authorize(Roles = "prof")]
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTopic(int id)
         {
             await _topicRepository.DeleteAsync(id);
             return NoContent();
         }
+
+        [Authorize(Roles = "prof")]
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateTopic(int id, CreateTopicDto dto)

@@ -8,6 +8,7 @@ using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Services;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -26,11 +27,15 @@ namespace Server.Api.Controllers
             _subscriptionRepository = subscriptionRepository;
         }
 
+        [Authorize(Roles = "student,prof")]
+
         private async Task<IEnumerable<GetAllCourseDto>> _GetCourseAsync()
         {
             IEnumerable<Course> courses = await _courseRepository.GetAllAsync();
             return courses.Select(c => GetAllCourseDto.Convert(c));
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> GetCourses()
@@ -38,6 +43,7 @@ namespace Server.Api.Controllers
             IEnumerable<GetAllCourseDto> getDtos = await _GetCourseAsync();
             return Ok(getDtos);
         }
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet("subscribed")]
         public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> GetSubscribedCourses()
@@ -56,6 +62,7 @@ namespace Server.Api.Controllers
                 return Unauthorized();
             }
         }
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCourseDto>> GetCourse(int id)
@@ -69,6 +76,7 @@ namespace Server.Api.Controllers
             return Ok(GetCourseDto.Convert(course));
         }
 
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet("search/")]
         public async Task<ActionResult<GetCourseDto>> SearchByName([FromQuery] string name)
@@ -85,6 +93,7 @@ namespace Server.Api.Controllers
                 return Ok(searchResults);
             }
         }
+        [Authorize(Roles = "prof")]
 
         [HttpPost]
         public async Task<ActionResult<Course>> CreateCourse(CreateCourseDto dto)
@@ -107,6 +116,7 @@ namespace Server.Api.Controllers
                 return Unauthorized();
             }
         }
+        [Authorize(Roles = "prof")]
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCourse(int id)
@@ -121,6 +131,8 @@ namespace Server.Api.Controllers
             }
             return NoContent();
         }
+
+        [Authorize(Roles = "prof")]
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateCourse(int id, GetPartialCourseDto courseDto)
