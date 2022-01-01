@@ -24,19 +24,15 @@ export default ({ navigation, route: { params } }: Route) => {
     return (
         <View style={s.screen} padding flex>
             <Text type='title' children='Log in'/>
-
             <Text type='hint' margin='bottom' hidden={!params?.registered}>
                 You must first confirm the verification email sent to{'\n'}
                 <Text type='link' size='auto' children={params?.registered || ''}/>{'\n'}
                 before you can log in.
             </Text>
-
             <TextInput label='Email' onChangeText={setEmail}/>
             <PasswordInput margin label='Password' onChangeText={setPassword}/>
             <Text type='error' margin hidden={!error} children={error}/>
-
             <Button margin children='Log in' disabled={!login || !password} onPress={login}/>
-
             <Text type='hint' margin>
                 Don't have an account yet?{' '}
                 <Text type='link' size='auto' onPress={() => navigation.navigate('Register')}>

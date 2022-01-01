@@ -10,7 +10,7 @@ export default extend<typeof Touchable, Props>(Touchable, ({ course, ...props })
 
     return ( // TODO push?
         <Touchable type='row' padding='all-0.2' onPress={() => nav.navigate({ name: 'Course', params: { id: course.id }, merge: true })} {...props}>
-            <Icon sizing='huge' padding='vertical-0.2' name='book'/>
+            <Icon sizing='huge' coloring='accent' padding='vertical-0.2' name='book'/>
             <View shrink grow margin='left'>
                 <View type='header'>
                     <Text type='header' size='normal' children={course.name}/>

@@ -28,12 +28,6 @@ export default Screen('Answer', ({ nav, params: { id } }) => {
                 <Text type='hint' align='right' children={dateString(answer.time)}/>
             </View>
             <Text margin children={answer.body}/>
-            <View type='row' margin>
-                <Icon sizing='large' margin='right-0.5' coloring='accent' name='download'/>
-                <Text type='link' {...{}/* TODO attachments */}>
-                    Download 3 Attachments
-                </Text>
-            </View>
             <Fab background={answer.isAccepted && 'error'} icon={answer.isAccepted ? 'close' : 'check'} onPress={accept}/>
         </Loader>
     )

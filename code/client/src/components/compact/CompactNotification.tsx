@@ -4,8 +4,8 @@ import CompactAnswer from '@/components/compact/CompactAnswer';
 import { View, Text, Touchable } from '@/components/base';
 
 type Props = {
-    question?: BaseQuestion,
-    answer?: BaseAnswer
+    question?: BaseQuestion;
+    answer?: BaseAnswer;
 }
 
 export default extend<typeof Touchable, Props>(Touchable, ({ question, answer, ...props }) => {

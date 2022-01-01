@@ -1,4 +1,4 @@
-import React, { Screen, Question, useState, useEffect, axios, show } from '@/.';
+import React, { Screen, Question, useState, useEffect, axios, show, timeSort } from '@/.';
 import { View, Text, List, Button, CompactQuestion, SelectTopics } from '@/components';
 
 export default Screen('Questions', ({ nav, params: { course, search, update } }) => {
@@ -12,7 +12,7 @@ export default Screen('Questions', ({ nav, params: { course, search, update } })
     useEffect(() => {
         if (!refresh) setRefresh(true);
         axios.get('/Question/GetQuestionsByCourseId/search/' + course.id, { params: { name: search }}).then(
-            res => (setRefresh(false), setQuestions(res.data)),
+            res => (setRefresh(false), setQuestions(timeSort(res.data))),
             show(setError)
         )
     }, [search, update]);

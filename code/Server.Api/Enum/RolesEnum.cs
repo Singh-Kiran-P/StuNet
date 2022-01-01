@@ -1,5 +1,3 @@
-// @Kiran
-
 namespace Server.Api.Enum
 {
     public static class RolesEnum

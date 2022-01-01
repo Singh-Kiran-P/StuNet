@@ -1,45 +1,70 @@
-import React, { extend, BaseMessage, Style, useTheme, dateString } from '@/.';
-import { View, Text } from '@/components/base';
+import React, { extend, BaseMessage, useNav, useTheme, Style, dateString, displayName, professor } from '@/.';
+import { View, Text, Touchable } from '@/components/base';
 
 type Props = {
 	message: BaseMessage;
     sender: boolean;
-    time?: boolean;
+    first?: boolean;
+    last?: boolean;
 }
 
-const prof = (email: string) => !email.endsWith('@student.uhasselt.be');
-const name = (email: string) => {
-    let name = email.slice(0, (i => i < 0 ? undefined : i)(email.lastIndexOf('@')));
-    return name.replace('.', ' ').split(' ').map(s => {
-        return s[0].toUpperCase() + s.slice(1).toLowerCase();
-    }).join(' ');
-}
-
-export default extend<typeof View, Props>(View, ({ message, sender, time, ...props }) => {
+export default extend<typeof View, Props>(View, ({ message, sender, first, last, ...props }) => {
     let [theme] = useTheme();
+    let nav = useNav();
+
+    let email = message.userMail;
 
     const s = Style.create({
+        message: {
+            maxWidth: '80%'
+        },
+
+        profile: {
+            width: theme.massive,
+            height: theme.massive
+        },
+
+        padding: {
+            width: theme.massive
+        },
+
+        avatar: {
+            color: theme.foreground,
+            backgroundColor: theme.surface,
+            textAlignVertical: 'center',
+            textAlign: 'center',
+            height: '100%',
+            width: '100%'
+        },
+
         body: {
             color: sender ? theme.bright : theme.foreground,
-            backgroundColor: sender ? theme.primary : theme.surface,
-            maxWidth: '80%'
+            backgroundColor: sender ? theme.primary : theme.surface
         },
 
         align: {
             alignSelf: sender ? 'flex-end' : 'flex-start'
         },
 
-        prof: !prof(message.userMail) ? {} : {
+        prof: !professor(email) ? {} : {
             backgroundColor: theme.accent,
             color: theme.bright
         }
     })
 
-	return (
-        <View {...props}>
-            <Text size='small' margin='bottom-0.2' style={s.align} hidden={sender} children={name(message.userMail)}/>
-            <Text radius padding='all-0.5' style={[s.body, s.align, s.prof]} children={message.body}/>
-            <Text type='hint' margin='top-0.2,bottom-0.5' style={s.align} hidden={!time} children={dateString(message.time)}/>
+	return ( // TODO push?
+        <View {...props} type='row' margin='bottom-0.5' style={[s.message, s.align]}>
+            <Touchable margin='right,top' style={s.profile} radius='round' borderless hidden={sender || !first} onPress={() => {
+                nav.navigate({ name: 'Profile', params: { email: email, logout: false }, merge: true })
+            }}>
+                <Text size='large' style={[s.avatar, s.prof]} children={email[0].toUpperCase()}/>
+            </Touchable>
+            <View hidden={sender || first} style={s.padding} margin='right'/>
+            <View flex>
+                <Text type='header' size='small' margin='bottom-0.2,top-0.5' style={s.align} hidden={sender || !first} children={displayName(email)}/>
+                <Text radius padding='all-0.5' style={[s.body, s.align]} children={message.body}/>
+                <Text type='hint' margin='top-0.2,bottom-0.5' style={s.align} hidden={!last} children={dateString(message.time)}/>
+            </View>
         </View>
     )
 })

@@ -1,5 +1,3 @@
-// @kiran
-
 using System.Threading.Tasks;
 using FluentEmail.Core;
 using System.IO;

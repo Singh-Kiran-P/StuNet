@@ -1,10 +1,13 @@
-// @Kiran @Senn
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Models;
 using Server.Api.Repositories;
 using Server.Api.Dtos;
+using Microsoft.AspNetCore.Identity;
+
+using System;
+using System.ComponentModel;
 
 namespace Server.Api.Controllers
 {
@@ -13,10 +16,12 @@ namespace Server.Api.Controllers
     public class FieldOfStudyController : ControllerBase
     {
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
+        private readonly UserManager<User> _userManager;
         
-        public FieldOfStudyController(IFieldOfStudyRepository fieldOfStudyRepository)
+        public FieldOfStudyController(IFieldOfStudyRepository fieldOfStudyRepository, UserManager<User> userManager)
         {
             _fieldOfStudyRepository = fieldOfStudyRepository;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -34,6 +39,17 @@ namespace Server.Api.Controllers
             {
                 return NotFound();
             }
+            return Ok(fieldOfStudy);
+        }
+
+        [HttpGet("user")]
+        public async Task<ActionResult<FieldOfStudy>> GetUserFieldOfStudy([FromQuery] string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return NotFound();
+            var id = 1; // TODO DOESNT FUCKING WORK: user.FieldOfStudyId;
+            var fieldOfStudy = await _fieldOfStudyRepository.GetAsync(id);
+            if (fieldOfStudy == null) return NotFound();
             return Ok(fieldOfStudy);
         }
 

@@ -13,6 +13,7 @@ export default Screen('CreateCourse', ({ nav }) => {
             name: name,
             email: email,
             number: number,
+            courseEmail: email,
             description: description
         }).then(res => (update('Courses'), nav.replace('Course', { id: res.data.id })), show(setError))
     }
@@ -21,6 +22,7 @@ export default Screen('CreateCourse', ({ nav }) => {
         <View>
             <TextInput label='Name' onChangeText={setName}/>
             <TextInput margin label='Number' onChangeText={setNumber}/>
+            <TextInput margin label='Email' onChangeText={setEmail}/>
             <TextInput margin label='Description' multiline onChangeText={setDescription}/>
             <TextInput margin label='Email' onChangeText={setEmail}/>
             <Button margin icon='book-plus' children='Create' disabled={!name || !number || !email} toggled={error} onPress={submit}/>

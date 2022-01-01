@@ -1,5 +1,3 @@
-// @kiran
-
 using System.Threading.Tasks;
 
 public interface IEmailSender //TOASK: Move to namespace?

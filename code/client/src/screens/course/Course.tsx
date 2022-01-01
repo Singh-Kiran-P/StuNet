@@ -1,4 +1,4 @@
-import React, { Screen, EmptyCourse, useState, useEffect, axios, show } from '@/.';
+import React, { Screen, EmptyCourse, useState, useEffect, axios, update, show } from '@/.';
 import { Text, Fab, Button, Loader, ScrollView, CompactChannel } from '@/components';
 
 export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
@@ -27,11 +27,11 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
         if (subscribed === null) return;
         if (subscribe === !isNaN(subscribed)) return;
         if (subscribe) axios.post('/CourseSubscription/', { courseId: id }).then(
-            res => setSubscribed(res.data.id),
+            res => (setSubscribed(res.data.id), update('Home')),
             show(setError)
         )
         else axios.delete('/CourseSubscription/' + subscribed).then(
-            () => setSubscribed(NaN),
+            () => (setSubscribed(NaN), update('Home')),
             show(setError)
         )
     }, [subscribe, subscribed]);
@@ -39,6 +39,7 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     return (
         <Loader load={fetch}>
             <Text type='error' pad='top' hidden={!error} children={error}/>
+            <Text type='link' pad='top' children={course.courseEmail || 'cnet@uhasselt.be'}/>
             <Text pad='top' children={course.description}/>
             <Button pad='top' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
             <ScrollView inner padding flex children={course.channels?.map((channel, i) =>

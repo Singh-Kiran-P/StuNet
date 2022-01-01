@@ -119,9 +119,11 @@ export const s = screens({
 
 
     Profile: {
-        screenTitle: 'Your Profile',
+        screenTitle: '',
+        padding: false,
+        scroll: false,
         logout: true,
-        tabs: true
+        email: ''
     }
 
 })
@@ -152,7 +154,7 @@ export const t = tabs(s, {
     TabProfile: {
         screen: 'Profile',
         title: 'Profile',
-        icon: 'face',
+        icon: 'account',
         colors: 'profile'
     }
 

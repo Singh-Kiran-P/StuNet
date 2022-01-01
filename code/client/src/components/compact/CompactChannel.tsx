@@ -10,7 +10,7 @@ export default extend<typeof Touchable, Props>(Touchable, ({ channel, ...props }
 
     return ( // TODO push?
         <Touchable type='row' padding='all-0.2' onPress={() => nav.navigate({ name: 'Channel', params: { id: channel.id }, merge: true })} {...props}>
-            <Icon sizing='huge' padding='vertical-0.2' name='chat'/>
+            <Icon sizing='huge' coloring='accent' padding='vertical-0.2' name='chat'/>
             <View shrink grow margin='left'>
                 <Text type='header' size='normal' children={channel.name}/>
                 <Text numberOfLines={3} children='TODO last message? amount of messages?'/>
