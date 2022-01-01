@@ -45,10 +45,10 @@ namespace Server.UnitTests
                 Email = rand.Next().ToString() + domain,
                 Password = password,
                 ConfirmPassword = password,
-                fieldOfStudy = rand.Next().ToString()
+                fieldOfStudy = rand.Next()
             };
 
-            _FOSRepositoryStub.Setup(repo => repo.GetByFullNameAsync(It.IsAny<string>()))
+            _FOSRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(createRandomFieldOfStudy());
 
             var MockManager = GetMockUserManager();
@@ -82,7 +82,7 @@ namespace Server.UnitTests
                 Email = email,
                 Password = password,
                 ConfirmPassword = password,
-                fieldOfStudy = rand.Next().ToString()
+                fieldOfStudy = rand.Next()
             };
 
             _FOSRepositoryStub.Setup(repo => repo.GetByFullNameAsync(It.IsAny<string>()))
