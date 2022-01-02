@@ -8,7 +8,6 @@ namespace Server.Api.Dtos
         public int id { get; set; }
         public ResponseUserDto user { get; set; }
         public GetQuestionDto question { get; set; }
-        // public getOnlyCourseDto course { get; set; }
         public string title { get; set; }
         public string body { get; set; }
         public DateTime time { get; set; }
@@ -21,7 +20,6 @@ namespace Server.Api.Dtos
                 id = answer.id,
                 user = ResponseUserDto.Convert(user),
                 question = GetQuestionDto.Convert(answer.question, user),
-                // course = getOnlyCourseDto.convert(answer.question.course),
                 title = answer.title,
                 body = answer.body,
                 time = answer.time,

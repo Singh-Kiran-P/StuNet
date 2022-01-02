@@ -6,8 +6,10 @@ import { useToken } from '@/auth';
 import { update } from '@/nav';
 import axios from 'axios';
 
+
 const Context = createContext<HubConnection>(null as any as HubConnection);
 export const useConnection = () => useContext(Context);
+notifee.onBackgroundEvent(async () => {});
 
 export default ({ children }: Children) => {
 	let [token] = useToken();
@@ -18,8 +20,7 @@ export default ({ children }: Children) => {
 	})
 
 	useEffect(() => {
-		connection.start() // TODO handle error
-			.catch(err => console.log(err));
+		connection.start();
 
 		connection.on('QuestionNotification', async (question: Question) => {
 			const channelId = await notifee.createChannel({
@@ -36,10 +37,11 @@ export default ({ children }: Children) => {
 					smallIcon: 'ic_launcher',
 					style: {
 						type: AndroidStyle.BIGTEXT,
-						text: question.body
+						text: question.title
 					}
 				}
 			})
+
 			update('Notifications');
 		})
 
@@ -49,27 +51,27 @@ export default ({ children }: Children) => {
 				name: 'Question notifications',
 				id: 'Answer'
 			})
-		
+
 			await notifee.displayNotification({
 				title: 'Answer received',
-				body: answer.question.title,
+				body: answer.title,
 				android: {
 					channelId,
 					smallIcon: 'ic_launcher',
 					style: {
 						type: AndroidStyle.BIGTEXT,
-						text: answer.body
+						text: answer.title
 					}
 				}
 			})
+
 			update('Notifications');
 		})
 
 		return () => {
 			connection.off('QuestionNotification');
 			connection.off('AnswerNotification');
-			connection.stop() // TODO handle error
-				.catch(err => console.log(err))
+			connection.stop();
 		}
 	}, [])
 

@@ -55,7 +55,9 @@ export default Screen('Channel', ({ nav, params: { id, name } }) => {
 
 	return (
 		<Loader load={fetch}>
-			<List flex inner padding inverted data={messages} renderItem={({ item, index }) => (
+			<List flex inner padding inverted data={messages} ListFooterComponent={
+				<Text type='hint' margin='bottom-2' children={`This is the start of the ${name} channel`}/>
+			} renderItem={({ item, index }) => (
 				<CompactMessage margin='bottom' message={item} sender={item.userMail === email}
 					last={last(item, messages[index - 1])}
 					first={first(item, messages[index + 1])}
