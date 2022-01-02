@@ -24,3 +24,4 @@ alt Answer exists
 else Answer doesn't exist
     <-- controller: notFound
 end
+deactivate controller
