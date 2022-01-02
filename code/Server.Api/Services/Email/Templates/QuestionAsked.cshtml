@@ -9,7 +9,7 @@
     </head>
 
     <body style="font-size: 12px;">
-        @Model.email anonymously asked a question in @Model.course. <span style="display: none;">@Model.id</span>
+        @Model.email anonymously asked a question in @Model.course.
         <br/>
         <br/>
         @foreach(var topic in Model.topics) {
@@ -26,7 +26,7 @@
         <span style="white-space: pre;">@Model.body</span>
         <br/>
         <br/>
-        You can answer this question by replying to this email.
+        You can answer this question by replying to this email. <span id="id" style="display: none;">@Model.id</span>
         <br/>
         - Team StuNet
     </body>

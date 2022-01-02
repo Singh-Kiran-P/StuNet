@@ -19,7 +19,6 @@ namespace Server.Api.Services
         {
             var result = await _email.To(to)
                 .Subject(subject)
-                // .Header("QuestionId", )
                 .UsingTemplateFromFile(
                     $"{Directory.GetCurrentDirectory()}/Services/Email/Templates/{template}.cshtml",
                     model)

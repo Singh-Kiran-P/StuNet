@@ -188,7 +188,6 @@ namespace Server.Api.Controllers
                 question = question,
                 title = dto.title,
                 body = dto.body,
-                // files = createAnswerDto.files
                 time = DateTime.UtcNow,
                 isAccepted = existingAnswer.isAccepted
             };

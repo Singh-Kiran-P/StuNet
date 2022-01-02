@@ -16,10 +16,10 @@ export default Screen('Notifications', () => {
             let notifications: Notification[][] = [res.data.item1, res.data.item2];
             const unique = (id: number, i: number) => id * notifications.length + i;
             setNotifications(timeSort(notifications.map((l, i) => l.map(n => ({
-                ...n,
-                topics: [],
-                isQuestion: !i,
                 isAccepted: false,
+                topics: [],
+                ...n,
+                isQuestion: !i,
                 id: unique(n.id, i)
             }))).flat()));
         }).catch(show(setError));

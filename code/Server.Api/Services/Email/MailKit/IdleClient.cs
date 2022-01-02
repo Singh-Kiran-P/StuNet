@@ -160,7 +160,6 @@ namespace Server.Api.Services
 
         void OnMessageReceived(IMessageSummary message)
         {
-
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var _questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
@@ -173,88 +172,62 @@ namespace Server.Api.Services
                 var _subscriptionRepository = scope.ServiceProvider.GetRequiredService<ISubscriptionRepository<QuestionSubscription>>();
                 var questions = _questionRepository.GetAllAsync().GetAwaiter().GetResult();
 
-                (int questionId, string courseMail, string title, string body) = _parseEmail(message);
+                (int questionId, string title, string body) = _parseEmail(message);
 
-                Course course = _courseRepository.GetByCourseEmailAsync(courseMail).GetAwaiter().GetResult();
+                Question question = _questionRepository.GetAsync(questionId).GetAwaiter().GetResult();
+                User user = _userManager.FindByEmailAsync(question.course.profEmail).GetAwaiter().GetResult();
+                if (user == null || question == null) return;
 
-                if (course == null) return;
-
-                User user = _userManager.FindByEmailAsync(course.profEmail).GetAwaiter().GetResult();
-
-                Question _question = _questionRepository.GetAsync(questionId).GetAwaiter().GetResult();
-                if (user == null || _question == null) { return; }
                 Answer answer = new()
                 {
                     userId = user.Id,
-                    question = _question,
+                    question = question,
                     title = title,
                     body = body,
                     time = DateTime.UtcNow,
                     isAccepted = true
                 };
-                try
+
+                _answerRepository.CreateAsync(answer).GetAwaiter().GetResult();
+
+                var subscribers = _subscriptionRepository.GetBySubscribedId(question.id).GetAwaiter().GetResult();
+                _notificationRepository.CreateAllAync(subscribers.Select(sub => new AnswerNotification
                 {
-                    _answerRepository.CreateAsync(answer).GetAwaiter().GetResult();
-                    IEnumerable<string> subscriberIds = (_subscriptionRepository.GetBySubscribedId(_question.id).GetAwaiter().GetResult()).Select(sub => sub.userId);
-                    _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new AnswerNotification
-                    {
-                        userId = userId,
-                        answerId = answer.id,
-                        answer = answer,
-                        time = answer.time
-                    })).GetAwaiter().GetResult();
-                }
-                catch (System.Exception e)
-                {
-                    Console.WriteLine(e);
-                }
+                    userId = sub.userId,
+                    answerId = answer.id,
+                    answer = answer,
+                    time = answer.time
+                })).GetAwaiter().GetResult();
 
                 var ret = GetAnswerDto.Convert(answer, user);
-                _hubContext.Clients.Group("Question " + _question.id).SendAsync("AnswerNotification", ret).GetAwaiter().GetResult();
-
+                _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
             }
         }
 
-        private (int, string, string, string) _parseEmail(IMessageSummary message)
+        private (int, string, string) _parseEmail(IMessageSummary message)
         {
-            int questionId = 2;
-            string title = "Answer from Prof";
-
-            // courseMail = message.Envelope.From.Mailboxes[0]
-            string courseMail = message.Envelope.From.Mailboxes.First().Address;
-            string name = message.Envelope.From.Mailboxes.First().Name;
-
-            // IMessageSummary.TextBody is a convenience property that finds the 'text/plain' body part for us
-            var bodyPart = message.TextBody;
-
-            // download the 'text/plain' body part
-            var x = (TextPart)client.Inbox.GetBodyPart(message.UniqueId, bodyPart);
-
-            // TextPart.Text is a convenience property that decodes the content and converts the result to
-            // a string for us
-            var text = x.Text;
-
-            var body_splitted = text.Split("||| StuNet Question |||")[0].Split("\r\n\r\n");
-            var body = "";
-            for (int i = 0; i < body_splitted.Length - 2; i++)
-            {
-                body += body_splitted[i] + "\r\n\r\n";
+            var email = message.Envelope.From.Mailboxes.First().Address;
+            var index = email.LastIndexOf('@');
+            var start = email.Substring(0, index < 0 ? email.Length : index);
+            var name = "";
+            foreach (var s in start.Replace('.', ' ').Split(' ')) {
+                name += s.ToUpper()[0] + s.ToLower().Substring(1) + ' ';
             }
+            var title = "Prof " + name.Substring(0, name.Length - 1) + " answered";
 
-            var p = (TextPart)client.Inbox.GetBodyPart(message.UniqueId, message.HtmlBody);
+            var text = ((TextPart)client.Inbox.GetBodyPart(message.UniqueId, message.TextBody)).Text;
+            var content = text.Split("<stunetuh@gmail.com>")[0];
+            var body = content.Substring(0, content.LastIndexOf('\n'));
+
             var html = new HtmlDocument();
+            var p = (TextPart)client.Inbox.GetBodyPart(message.UniqueId, message.HtmlBody);
+            html.LoadHtml("<html><head></head><body>" + p.Text + "</body></html>");
+            var id = html.DocumentNode.QuerySelector("#id");
+            var questionId = Convert.ToInt32(id.InnerText);
 
-            var htmlText = @"< html >
-                        < head ></ head >
-                        < body >" + p.Text + @"
-                        </body>
-                    </html>";
-
-            html.LoadHtml(htmlText);
-            questionId = Convert.ToInt32(html.DocumentNode.QuerySelector("span").InnerText);
-
-            return (questionId, courseMail, title, body);
+            return (questionId, title, body);
         }
+
         public void Exit()
         {
             cancel.Cancel();
