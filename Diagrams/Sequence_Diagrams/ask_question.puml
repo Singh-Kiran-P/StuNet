@@ -39,7 +39,7 @@ alt Valid user
 	end
 
     alt Course in the database AND All topicss in database
-        questionController -> question **:create(createQuestionDto.title, user.Id, course, createQuestionDto.body, topics, DateTime.UtcNow)
+        questionController -> question **:create(createQuestionDto.title, user.id, course, createQuestionDto.body, topics, DateTime.UtcNow)
         'question -> questionController: question
 
         questionController -> questionRepository: CreateAsync(question)
@@ -47,7 +47,7 @@ alt Valid user
         questionRepository --> questionController: void
         deactivate questionRepository
 
-        questionController -> questionSubscription **:create(user.Id, question.id, question.time)
+        questionController -> questionSubscription **:create(user.id, question.id, question.time)
         'question -> questionController: question
         questionController -> questionSubscriptionRepository: CreateAsync(questionSubscription)
         activate questionSubscriptionRepository
