@@ -1,6 +1,6 @@
+using System.Linq;
 using Server.Api.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Server.Api.Dtos
 {
@@ -13,8 +13,7 @@ namespace Server.Api.Dtos
 
         public static GetChannelDto Convert(TextChannel channel)
         {
-            return new GetChannelDto
-            {
+            return new GetChannelDto {
                 id = channel.id,
                 name = channel.name,
                 course = GetPartialCourseDto.Convert(channel.course),
@@ -30,8 +29,7 @@ namespace Server.Api.Dtos
 
         public static GetPartialChannelDto Convert(TextChannel channel)
         {
-            return new GetPartialChannelDto
-            {
+            return new GetPartialChannelDto {
                 id = channel.id,
                 name = channel.name
             };
@@ -42,10 +40,5 @@ namespace Server.Api.Dtos
     {
         public string name { get; set; }
         public int courseId { get; set; }
-
-        public static CreateChannelDto Convert(TextChannel channel, User user)
-        {
-            throw new System.Exception("method not implement");
-        }
     }
 }

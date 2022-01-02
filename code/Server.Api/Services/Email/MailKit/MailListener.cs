@@ -1,17 +1,9 @@
 using System;
-using System.IO;
+using MailKit.Security;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-
-using MailKit;
-using MailKit.Net.Imap;
-using MailKit.Security;
-
-using Server.Api.Repositories;
-using Server.Api.Dtos;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Server.Api.Services
@@ -22,14 +14,11 @@ namespace Server.Api.Services
         private readonly IConfiguration _configuration;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-
         public MailListener(IConfiguration configuration, IServiceScopeFactory serviceScopeFactory)
         {
-            _serviceScopeFactory = serviceScopeFactory;
-
             _configuration = configuration;
+            _serviceScopeFactory = serviceScopeFactory;
         }
-
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {

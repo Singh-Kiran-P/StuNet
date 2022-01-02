@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Server.Api.DataBase;
 using Server.Api.Models;
+using Server.Api.DataBase;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Api.Repositories
 {
@@ -56,10 +56,7 @@ namespace Server.Api.Repositories
         public async Task UpdateAsync(TextChannel channel)
         {
             var channelToUpdate = await _context.Channels.FindAsync(channel.id);
-            if (channelToUpdate == null)
-            {
-                throw new NullReferenceException();
-            }
+            if (channelToUpdate == null) throw new NullReferenceException();
             channelToUpdate.name = channel.name;
             channelToUpdate.course = channel.course;
             channelToUpdate.messages = channel.messages;
@@ -69,11 +66,7 @@ namespace Server.Api.Repositories
         public async Task DeleteAsync(int channelId)
         {
             var channelToRemove = await _context.Channels.FindAsync(channelId);
-            if (channelToRemove == null)
-            {
-                throw new NullReferenceException();
-            }
-
+            if (channelToRemove == null) throw new NullReferenceException();
             _context.Channels.Remove(channelToRemove);
             await _context.SaveChangesAsync();
         }

@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using Server.Api.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Server.Api.Repositories;
-using Server.Api.Models;
-using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ChatSample.Hubs
@@ -19,28 +19,27 @@ namespace ChatSample.Hubs
     [Authorize]
     public class ChatHub : Hub
     {
-        private readonly IMessageRepository _messageRepository;
         private readonly UserManager<User> _userManager;
-        private readonly ISubscriptionRepository<QuestionSubscription> _questionSubscriptionRepository;
+        private readonly IMessageRepository _messageRepository;
         private readonly ISubscriptionRepository<CourseSubscription> _courseSubscriptionRepository;
+        private readonly ISubscriptionRepository<QuestionSubscription> _questionSubscriptionRepository;
 
         public ChatHub(IMessageRepository messageRepository, UserManager<User> userManager, ISubscriptionRepository<QuestionSubscription> questionSubscriptionRepository, ISubscriptionRepository<CourseSubscription> courseSubscriptionRepository)
         {
-            _messageRepository = messageRepository;
             _userManager = userManager;
-            _questionSubscriptionRepository = questionSubscriptionRepository;
+            _messageRepository = messageRepository;
             _courseSubscriptionRepository = courseSubscriptionRepository;
+            _questionSubscriptionRepository = questionSubscriptionRepository;
         }
 
         public async Task SendMessageToChannel(string message, int channelId)
         {
-            System.Console.WriteLine(Context.ConnectionId + " sent message to " + channelId.ToString());
             string userEmail = GetCurrentUserEmail();
             Message m = new()
             {
+                body = message,
                 userMail = userEmail,
                 channelId = channelId,
-                body = message,
                 time = DateTime.UtcNow
             };
             await _messageRepository.CreateAsync(m);
@@ -49,19 +48,16 @@ namespace ChatSample.Hubs
 
         public Task JoinChannel(int channelId)
         {
-            System.Console.WriteLine(Context.ConnectionId + " joined Channel: " + channelId.ToString());
             return Groups.AddToGroupAsync(Context.ConnectionId, "Channel " + channelId.ToString());
         }
 
         public Task LeaveChannel(int channelId)
         {
-            System.Console.WriteLine(Context.ConnectionId + " left Channel: " + channelId.ToString());
             return Groups.RemoveFromGroupAsync(Context.ConnectionId, "Channel " + channelId.ToString());
         }
 
         public override async Task OnConnectedAsync()
         {
-            // await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
             UserHandler.ConnectedIds[GetCurrentUserId()] = Context.ConnectionId;
             await AddUserToSubscribedGroups();
             await base.OnConnectedAsync();
@@ -69,7 +65,6 @@ namespace ChatSample.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            // await Clients.All.SendAsync("UserDisconnected", Context.ConnectionId);
             UserHandler.ConnectedIds.Remove(GetCurrentUserId());
             await base.OnDisconnectedAsync(exception);
         }
@@ -87,8 +82,7 @@ namespace ChatSample.Hubs
         {
             string userEmail = null;
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;
-            if (currentUser.HasClaim(c => c.Type == "username"))
-            {
+            if (currentUser.HasClaim(c => c.Type == "username")) {
                 userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 System.Console.WriteLine("email: " + userEmail);
             }
@@ -99,8 +93,7 @@ namespace ChatSample.Hubs
         {
             string userId = null;
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;
-            if (currentUser.HasClaim(c => c.Type == "userref"))
-            {
+            if (currentUser.HasClaim(c => c.Type == "userref")) {
                 userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
             }
             return userId;

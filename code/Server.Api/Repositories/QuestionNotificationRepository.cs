@@ -1,8 +1,8 @@
+using Server.Api.Models;
+using Server.Api.DataBase;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using System.Collections.Generic;
-using Server.Api.DataBase;
-using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
@@ -17,8 +17,9 @@ namespace Server.Api.Repositories
 
         protected override IIncludableQueryable<QuestionNotification, ICollection<Topic>> GetIncludes()
         {
-            return GetDbSet().Include(n => n.question).ThenInclude(q => q.course)
-                            .Include(n => n.question).ThenInclude(q => q.topics);
+            return GetDbSet()
+                .Include(n => n.question).ThenInclude(q => q.course)
+                .Include(n => n.question).ThenInclude(q => q.topics);
         }
     }
 }

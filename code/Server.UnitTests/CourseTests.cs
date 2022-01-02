@@ -1,19 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using Xunit;
 using Moq;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Server.Api.Repositories;
-using Server.Api.Controllers;
-using Server.Api.Models;
+using Xunit;
+using System;
+using System.Linq;
 using Server.Api.Dtos;
+using FluentAssertions;
+using Server.Api.Models;
+using Server.Api.Controllers;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Server.Api.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.UnitTests
 {

@@ -1,6 +1,9 @@
 using System.Threading.Tasks;
 
-public interface IEmailSender //TOASK: Move to namespace?
+namespace Server.Api.Services
 {
-    Task<bool> SendEmail(string to, string subject, EmailTemplate template, object model);
+    public interface IEmailSender
+    {
+        Task<bool> SendEmail(string to, string subject, EmailTemplate template, object model);
+    }
 }

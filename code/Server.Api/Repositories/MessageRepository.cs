@@ -1,13 +1,13 @@
 using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Server.Api.DataBase;
 using Server.Api.Models;
+using Server.Api.DataBase;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Api.Repositories
 {
-    public interface IMessageRepository //: IRestfulRepository<FieldOfStudy>
+    public interface IMessageRepository
     {
         Task<IEnumerable<Message>> GetAllAsync(int channelId);
         Task CreateAsync(Message message);

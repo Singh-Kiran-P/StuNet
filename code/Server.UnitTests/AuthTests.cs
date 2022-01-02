@@ -1,23 +1,23 @@
-using System;
-using Xunit;
 using Moq;
-using FluentAssertions;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Server.Api.Repositories;
-using Server.Api.Controllers;
-using Server.Api.Models;
+using Xunit;
+using System;
+using System.Linq;
 using Server.Api.Dtos;
+using FluentAssertions;
+using System.Threading;
+using Server.Api.Models;
 using Server.Api.Helpers;
 using Server.Api.Services;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Server.Api.Controllers;
+using System.Threading.Tasks;
+using Server.Api.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace Server.UnitTests
 {
@@ -67,7 +67,7 @@ namespace Server.UnitTests
             var result = await controller.RegisterJWTUser(registerDto);
 
             // Then
-            result.Should().BeOfType<StatusCodeResult>().Which.StatusCode.Should().Be(201);
+            result.Should().BeOfType<NoContentResult>();
         }
 
         [Theory]

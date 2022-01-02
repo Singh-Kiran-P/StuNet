@@ -1,15 +1,15 @@
 using System;
+using System.Linq;
 using Server.Api.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Server.Api.Dtos
 {
     public record GetQuestionDto
     {
         public int id { get; set; }
-        public string title { get; set; }
         public string body { get; set; }
+        public string title { get; set; }
         public DateTime time { get; set; }
         public ResponseUserDto user { get; set; }
         public GetPartialCourseDto course { get; set; }
@@ -20,11 +20,11 @@ namespace Server.Api.Dtos
             return new GetQuestionDto
             {
                 id = question.id,
-                course = GetPartialCourseDto.Convert(question.course),
-                title = question.title,
+                time = question.time,
                 body = question.body,
-                topics = question.topics.Select(topic => GetPartialTopicDto.Convert(topic)).ToList(),
-                time = question.time
+                title = question.title,
+                course = GetPartialCourseDto.Convert(question.course),
+                topics = question.topics.Select(topic => GetPartialTopicDto.Convert(topic)).ToList()
             };
         }
     }
@@ -32,20 +32,19 @@ namespace Server.Api.Dtos
     public record GetPartialQuestionDto
     {
         public int id { get; set; }
-        public string title { get; set; }
         public string body { get; set; }
+        public string title { get; set; }
         public DateTime time { get; set; }
         public ICollection<GetPartialTopicDto> topics { get; set; }
 
         public static GetPartialQuestionDto Convert(Question question)
         {
-            return new GetPartialQuestionDto
-            {
+            return new GetPartialQuestionDto {
                 id = question.id,
-                title = question.title,
+                time = question.time,
                 body = question.body,
-                topics = question.topics.Select(topic => GetPartialTopicDto.Convert(topic)).ToList(),
-                time = question.time
+                title = question.title,
+                topics = question.topics.Select(topic => GetPartialTopicDto.Convert(topic)).ToList()
             };
         }
     }
@@ -56,10 +55,5 @@ namespace Server.Api.Dtos
         public string title { get; set; }
         public string body { get; set; }
         public ICollection<int> topicIds { get; set; }
-
-        public static CreateQuestionDto Convert(Question question, User user)
-        {
-            throw new System.Exception("method not implement");
-        }
     }
 }

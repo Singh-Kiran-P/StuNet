@@ -1,36 +1,37 @@
-using System;
-using Xunit;
 using Moq;
-using FluentAssertions;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Server.Api.Repositories;
-using Server.Api.Controllers;
-using Server.Api.Models;
-using Server.Api.Dtos;
+using Xunit;
+using System;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using ChatSample.Hubs;
+using Server.Api.Dtos;
+using FluentAssertions;
+using System.Threading;
+using Server.Api.Models;
+using Server.Api.Services;
+using System.Threading.Tasks;
+using Server.Api.Controllers;
+using System.Security.Claims;
+using Server.Api.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.UnitTests
 {
 	public class UnitTest {
-        protected readonly Mock<IFieldOfStudyRepository> _FOSRepositoryStub = new();
-		protected readonly Mock<IAnswerRepository> _answerRepositoryStub = new();
-		protected readonly Mock<IQuestionRepository> _questionRepositoryStub = new();
+        protected readonly Mock<IEmailSender> _emailSenderStub = new();
+        protected readonly Mock<IHubContext<ChatHub>> _hubContextStub = new();
         protected readonly Mock<ITopicRepository> _topicRepositoryStub = new();
         protected readonly Mock<ICourseRepository> _courseRepositoryStub = new();
-        protected readonly Mock<IHubContext<ChatHub>> _hubContextStub = new();
-        protected readonly Mock<IEmailSender> _emailSenderStub = new();
-		protected readonly Mock<INotificationRepository<QuestionNotification>> _questionNotificationRepositoryStub = new();
+		protected readonly Mock<IAnswerRepository> _answerRepositoryStub = new();
+        protected readonly Mock<IFieldOfStudyRepository> _FOSRepositoryStub = new();
+		protected readonly Mock<IQuestionRepository> _questionRepositoryStub = new();
 		protected readonly Mock<INotificationRepository<AnswerNotification>> _answerNotificationRepositoryStub = new();
 		protected readonly Mock<ISubscriptionRepository<CourseSubscription>> _courseSubscriptionRepositoryStub = new();
+		protected readonly Mock<INotificationRepository<QuestionNotification>> _questionNotificationRepositoryStub = new();
 		protected readonly Mock<ISubscriptionRepository<QuestionSubscription>> _questionSubscriptionRepositoryStub = new();
 		protected static Random rand = new();
 

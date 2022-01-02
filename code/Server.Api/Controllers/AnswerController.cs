@@ -1,16 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using Server.Api.Dtos;
+using ChatSample.Hubs;
+using Server.Api.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Server.Api.Dtos;
-using Server.Api.Models;
 using Server.Api.Repositories;
-using ChatSample.Hubs;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -18,19 +18,19 @@ namespace Server.Api.Controllers
     [Route("[controller]")]
     public class AnswerController : ControllerBase
     {
-        private readonly IAnswerRepository _answerRepository;
         private readonly UserManager<User> _userManager;
-        private readonly IQuestionRepository _questionRepository;
         private readonly IHubContext<ChatHub> _hubContext;
+        private readonly IAnswerRepository _answerRepository;
+        private readonly IQuestionRepository _questionRepository;
         private readonly INotificationRepository<AnswerNotification> _notificationRepository;
         private readonly ISubscriptionRepository<QuestionSubscription> _subscriptionRepository;
 
         public AnswerController(IAnswerRepository answerRepository, UserManager<User> userManager, IQuestionRepository questionRepository, IHubContext<ChatHub> hubContext, INotificationRepository<AnswerNotification> notificationRepository, ISubscriptionRepository<QuestionSubscription> subscriptionRepository)
         {
-            _answerRepository = answerRepository;
-            _userManager = userManager;
-            _questionRepository = questionRepository;
             _hubContext = hubContext;
+            _userManager = userManager;
+            _answerRepository = answerRepository;
+            _questionRepository = questionRepository;
             _notificationRepository = notificationRepository;
             _subscriptionRepository = subscriptionRepository;
         }
@@ -39,78 +39,45 @@ namespace Server.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetAnswers()
         {
-            try
-            {
-                IEnumerable<Answer> answers = await _answerRepository.GetAllAsync();
-                List<GetAnswerDto> res = new List<GetAnswerDto>();
-                foreach (var answer in answers)
-                {
-                    User user = await _userManager.FindByIdAsync(answer.userId);
-                    res.Add(GetAnswerDto.Convert(answer, user));
-                }
-                return Ok(res);
+            IEnumerable<Answer> answers = await _answerRepository.GetAllAsync();
+            List<GetAnswerDto> res = new List<GetAnswerDto>();
+            foreach (var answer in answers) {
+                User user = await _userManager.FindByIdAsync(answer.userId);
+                res.Add(GetAnswerDto.Convert(answer, user));
             }
-            catch
-            {
-                return BadRequest("Error finding all answers");
-            }
+            return Ok(res);
         }
 
         [Authorize(Roles = "student,prof")]
         [HttpGet("GetAnswersByQuestionId/{questionId}")]
         public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
-            try
-            {
-                IEnumerable<Answer> answers = await _answerRepository.GetByQuestionId(questionId);
-                List<GetAnswerDto> res = new List<GetAnswerDto>();
-                foreach (var answer in answers)
-                {
-                    User user = await _userManager.FindByIdAsync(answer.userId);
-                    res.Add(GetAnswerDto.Convert(answer, user));
-                }
-                return Ok(res);
+            IEnumerable<Answer> answers = await _answerRepository.GetByQuestionId(questionId);
+            List<GetAnswerDto> res = new List<GetAnswerDto>();
+            foreach (var answer in answers) {
+                User user = await _userManager.FindByIdAsync(answer.userId);
+                res.Add(GetAnswerDto.Convert(answer, user));
             }
-            catch
-            {
-                return BadRequest("Error finding all answers");
-            }
+            return Ok(res);
         }
 
         [Authorize(Roles = "student,prof")]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetAnswerDto>> GetAnswer(int id)
         {
-            try
-            {
-                var answer = await _answerRepository.GetAsync(id);
-                User user = await _userManager.FindByIdAsync(answer.userId);
-                if (answer == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(GetAnswerDto.Convert(answer, user));
-            }
-            catch
-            {
-                return BadRequest("Error finding all answers");
-            }
+            var answer = await _answerRepository.GetAsync(id);
+            User user = await _userManager.FindByIdAsync(answer.userId);
+            if (answer == null) return NotFound();
+            return Ok(GetAnswerDto.Convert(answer, user));
         }
 
         [HttpGet("getGivenAnswersByEmail")]
         public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetGivenAnswers(string email)
         {
             User user = await _userManager.FindByEmailAsync(email);
-            if (user != null)
-            {
-                var answers = await _answerRepository.GetGivenByUserId(user.Id);
-                return Ok(answers.Select(q => GetAnswerDto.Convert(q, user)));
-            }
-            else
-            {
-                return Ok(new List<GetAnswerDto>());
-            }
+            if (user == null) return Ok(new List<GetAnswerDto>());
+            var answers = await _answerRepository.GetGivenByUserId(user.Id);
+            return Ok(answers.Select(q => GetAnswerDto.Convert(q, user)));
         }
 
         [Authorize(Roles = "student,prof")]
@@ -118,53 +85,39 @@ namespace Server.Api.Controllers
         public async Task<ActionResult<GetAnswerDto>> CreateAnswer(CreateAnswerDto dto)
         {
             ClaimsPrincipal currentUser = HttpContext.User;
-            if (currentUser.HasClaim(c => c.Type == "username"))
-            {
-                string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-                User user = await _userManager.FindByEmailAsync(userEmail);
+            if (!currentUser.HasClaim(c => c.Type == "username")) return Unauthorized();
+            string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+            User user = await _userManager.FindByEmailAsync(userEmail);
+            Question question = await _questionRepository.GetAsync(dto.questionId);
+            if (user == null || question == null) NotFound();
+            Answer answer = new() {
+                body = dto.body,
+                userId = user.Id,
+                title = dto.title,
+                question = question,
+                time = DateTime.UtcNow
+            };
 
-                Question question = await _questionRepository.GetAsync(dto.questionId);
-                if (user == null || question == null) { return BadRequest("User or Question related to answer not found"); }
-                Answer answer = new()
-                {
-                    userId = user.Id,
-                    question = question,
-                    title = dto.title,
-                    body = dto.body,
-                    time = DateTime.UtcNow
-                };
+            await _answerRepository.CreateAsync(answer);
+            IEnumerable<string> subscriberIds = (await _subscriptionRepository.GetBySubscribedId(question.id)).Select(sub => sub.userId);
+            await _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new AnswerNotification {
+                userId = userId,
+                answer = answer,
+                time = answer.time,
+                answerId = answer.id
+            }));
 
-                await _answerRepository.CreateAsync(answer);
-
-                IEnumerable<string> subscriberIds = (await _subscriptionRepository.GetBySubscribedId(question.id)).Select(sub => sub.userId);
-                await _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new AnswerNotification
-                {
-                    userId = userId,
-                    answerId = answer.id,
-                    answer = answer,
-                    time = answer.time
-                }));
-
-                var ret = GetAnswerDto.Convert(answer, user);
-                await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
-                return Ok(ret);
-            }
-            else
-            {
-                return Unauthorized();
-            }
+            var ret = GetAnswerDto.Convert(answer, user);
+            await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
+            return Ok(ret);
         }
 
         [Authorize(Roles = "prof")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAnswer(int id)
         {
-            var existingAnswer = await _answerRepository.GetAsync(id);
-            if (existingAnswer is null)
-            {
-                return NotFound();
-            }
-
+            var existing = _answerRepository.GetAsync(id);
+            if (existing == null) return NotFound();
             await _answerRepository.DeleteAsync(id);
             return NoContent();
         }
@@ -175,19 +128,14 @@ namespace Server.Api.Controllers
         {
             Answer existingAnswer = await _answerRepository.GetAsync(id);
             Question question = existingAnswer.question;
-            if (existingAnswer == null || question == null)
-            {
-                return NotFound();
-            }
-
-            Answer updatedAnswer = new()
-            {
+            if (existingAnswer == null || question == null) return NotFound();
+            Answer updatedAnswer = new() {
+                body = dto.body,
+                title = dto.title,
+                question = question,
+                time = DateTime.UtcNow,
                 id = existingAnswer.id,
                 userId = existingAnswer.userId,
-                question = question,
-                title = dto.title,
-                body = dto.body,
-                time = DateTime.UtcNow,
                 isAccepted = existingAnswer.isAccepted
             };
 
@@ -200,23 +148,14 @@ namespace Server.Api.Controllers
         public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
         {
             Answer existingAnswer = await _answerRepository.GetAsync(id);
-            if (existingAnswer == null)
-            {
-                return NotFound();
-            }
-
+            if (existingAnswer == null) return NotFound();
             ClaimsPrincipal currentUser = HttpContext.User;
-            if (currentUser.HasClaim(c => c.Type == "userref"))
-            {
-                string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                if (existingAnswer.question.userId == userId)
-                {
-                    existingAnswer.isAccepted = accepted;
-                    await _answerRepository.UpdateAsync(existingAnswer);
-                    return NoContent();
-                }
-            }
-            return Unauthorized();
+            if (!currentUser.HasClaim(c => c.Type == "userref")) return Unauthorized();
+            string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
+            if (existingAnswer.question.userId != userId) return Unauthorized();
+            existingAnswer.isAccepted = accepted;
+            await _answerRepository.UpdateAsync(existingAnswer);
+            return NoContent();
         }
     }
 }

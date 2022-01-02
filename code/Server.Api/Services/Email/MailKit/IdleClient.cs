@@ -1,23 +1,22 @@
 using System;
-using System.Collections.Generic;
+using MimeKit;
+using MailKit;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Server.Api.Dtos;
 using ChatSample.Hubs;
-using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
-using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Security;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using MimeKit;
-using Server.Api.Dtos;
+using System.Threading;
 using Server.Api.Models;
+using System.Threading.Tasks;
 using Server.Api.Repositories;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Identity;
+using Fizzler.Systems.HtmlAgilityPack;
+using Microsoft.Extensions.DependencyInjection;
 
 // https://github.com/jstedfast/MailKit/blob/master/Documentation/Examples/ImapIdleExample.cs
 
@@ -39,6 +38,7 @@ namespace Server.Api.Services
 
         public IdleClient(string host, int port, SecureSocketOptions options, string email, string pass, IServiceScopeFactory serviceScopeFactory)
         {
+            _serviceScopeFactory = serviceScopeFactory;
             this.client = new ImapClient();
             this.request = new FetchRequest(MessageSummaryItems.Full | MessageSummaryItems.UniqueId);
             this.messages = new List<IMessageSummary>();
@@ -48,8 +48,6 @@ namespace Server.Api.Services
             this.pass = pass;
             this.host = host;
             this.port = port;
-            _serviceScopeFactory = serviceScopeFactory;
-
         }
 
         public async Task Run()
@@ -162,41 +160,35 @@ namespace Server.Api.Services
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var _questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
-                var _answerRepository = scope.ServiceProvider.GetRequiredService<IAnswerRepository>();
-                var _courseRepository = scope.ServiceProvider.GetRequiredService<ICourseRepository>();
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
                 var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var _hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<ChatHub>>();
+                var _answerRepository = scope.ServiceProvider.GetRequiredService<IAnswerRepository>();
+                var _courseRepository = scope.ServiceProvider.GetRequiredService<ICourseRepository>();
+                var _questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
                 var _notificationRepository = scope.ServiceProvider.GetRequiredService<INotificationRepository<AnswerNotification>>();
                 var _subscriptionRepository = scope.ServiceProvider.GetRequiredService<ISubscriptionRepository<QuestionSubscription>>();
                 var questions = _questionRepository.GetAllAsync().GetAwaiter().GetResult();
-
                 (int questionId, string title, string body) = _parseEmail(message);
-
                 Question question = _questionRepository.GetAsync(questionId).GetAwaiter().GetResult();
                 User user = _userManager.FindByEmailAsync(question.course.profEmail).GetAwaiter().GetResult();
                 if (user == null || question == null) return;
-
-                Answer answer = new()
-                {
-                    userId = user.Id,
-                    question = question,
-                    title = title,
+                Answer answer = new() {
                     body = body,
-                    time = DateTime.UtcNow,
-                    isAccepted = true
+                    title = title,
+                    userId = user.Id,
+                    isAccepted = true,
+                    question = question,
+                    time = DateTime.UtcNow
                 };
 
                 _answerRepository.CreateAsync(answer).GetAwaiter().GetResult();
-
                 var subscribers = _subscriptionRepository.GetBySubscribedId(question.id).GetAwaiter().GetResult();
-                _notificationRepository.CreateAllAync(subscribers.Select(sub => new AnswerNotification
-                {
-                    userId = sub.userId,
-                    answerId = answer.id,
+                _notificationRepository.CreateAllAync(subscribers.Select(sub => new AnswerNotification {
                     answer = answer,
-                    time = answer.time
+                    time = answer.time,
+                    userId = sub.userId,
+                    answerId = answer.id
                 })).GetAwaiter().GetResult();
 
                 var ret = GetAnswerDto.Convert(answer, user);

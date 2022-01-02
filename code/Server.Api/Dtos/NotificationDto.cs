@@ -6,8 +6,8 @@ namespace Server.Api.Dtos
     public record GetNotificationDto
     {
         public int id { get; set; }
-        public int notifierId { get; set; }
         public DateTime time { get; set; }
+        public int notifierId { get; set; }
     }
 
     public record GetQuestionNotificationDto : GetNotificationDto
@@ -15,12 +15,11 @@ namespace Server.Api.Dtos
         public Question notifier { get; set; }
         public static GetQuestionNotificationDto Convert(QuestionNotification notification)
         {
-            return new GetQuestionNotificationDto
-            {
+            return new GetQuestionNotificationDto {
                 id = notification.id,
-                notifierId = notification.questionId,
+                time = notification.time,
                 notifier = notification.question,
-                time = notification.time
+                notifierId = notification.questionId
             };
         }
     }
@@ -30,12 +29,11 @@ namespace Server.Api.Dtos
         public Answer notifier { get; set; }
         public static GetAnswerNotificationDto Convert(AnswerNotification notification)
         {
-            return new GetAnswerNotificationDto
-            {
+            return new GetAnswerNotificationDto {
                 id = notification.id,
-                notifierId = notification.answerId,
+                time = notification.time,
                 notifier = notification.answer,
-                time = notification.time
+                notifierId = notification.answerId
             };
         }
     }

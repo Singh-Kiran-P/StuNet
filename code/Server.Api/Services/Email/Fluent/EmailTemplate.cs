@@ -1,5 +1,8 @@
-public enum EmailTemplate
+namespace Server.Api.Services
 {
-    QuestionAsked,
-    ConfirmEmail
+    public enum EmailTemplate
+    {
+        QuestionAsked,
+        ConfirmEmail
+    }
 }
