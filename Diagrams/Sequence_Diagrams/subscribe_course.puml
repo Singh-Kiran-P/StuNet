@@ -5,7 +5,7 @@ title Reference: [UC] Subscribe to course
 participant ":CourseSubscriptionController" as controller
 participant ":UserManager" as userManager
 participant ":CourseSubscription" as subscription
-participant ":CourseSubscriptionRepository" as courseSubsciptionRepository
+participant ":CourseSubscriptionRepository" as repository
 
 -> controller: CreateCourseSubscription(dto.courseId)
 activate controller
@@ -17,17 +17,17 @@ alt Valid user
     ' TO-ASK: User|null of gewoon User?
     deactivate userManager
 
-    controller -> courseSubsciptionRepository: GetAsync(dto.courseId)
-    activate courseSubsciptionRepository
-    courseSubsciptionRepository --> controller: subscibedItem
-    deactivate courseSubsciptionRepository
+    controller -> repository: GetAsync(dto.courseId)
+    activate repository
+    repository --> controller: subscibedItem
+    deactivate repository
     
     controller -> subscription **: create(DateTime.UtcNow, user.id, subscribedItem)
 
-    controller -> courseSubsciptionRepository: CreateAsync(subscription)
-    activate courseSubsciptionRepository
-    courseSubsciptionRepository --> controller: void
-    deactivate courseSubsciptionRepository
+    controller -> repository: CreateAsync(subscription)
+    activate repository
+    repository --> controller: void
+    deactivate repository
 
     <-- controller: ok
 else Invalid user

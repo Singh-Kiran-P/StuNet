@@ -2,75 +2,75 @@
 
 title Reference: [UC] Create Account
 
-participant ":AuthController" as authController
+participant ":AuthController" as controller
 participant ":UserManager" as userManager
 participant ":Student" as student
 participant ":Professor" as professor
 participant ":EmailSender" as emailSender
 participant ":FieldOfStudyRepository" as fieldOfStudyRepository
 
--> authController : RegisterJWTUser(dto.email, dto.password,\n\tdto.confirmPassword, dto.fieldOfStudy)
-activate authController
+-> controller : RegisterJWTUser(dto.email, dto.password,\n\tdto.confirmPassword, dto.fieldOfStudy)
+activate controller
 
 alt Valid password
     alt Valid student email
-        authController -> fieldOfStudyRepository: GetAsync(dto.fieldOfStudy)
+        controller -> fieldOfStudyRepository: GetAsync(dto.fieldOfStudy)
         activate fieldOfStudyRepository
-        fieldOfStudyRepository --> authController: fieldOfStudy
+        fieldOfStudyRepository --> controller: fieldOfStudy
         deactivate fieldOfStudyRepository
 
         alt fieldOfStudy doesn't exist
-            <-- authController: badRequest
+            <-- controller: badRequest
         end
 
-        authController -> student**: create(dto.Email, dto.Email, passwordHash, fieldofstudy.id)
-        ' student --> authController: user
+        controller -> student**: create(dto.Email, dto.Email, passwordHash, fieldofstudy.id)
+        ' student --> controller: user
     else Valid professor email
-        authController -> professor**: create(dto.Email, dto.Email, passwordHash, fieldofstudy.id)
+        controller -> professor**: create(dto.Email, dto.Email, passwordHash, fieldofstudy.id)
     else Invalid email
-        <-- authController: BadRequest
+        <-- controller: BadRequest
     end
 
-    authController -> userManager: CreateAsync(user, dto.Password)
+    controller -> userManager: CreateAsync(user, dto.Password)
     activate userManager
-    userManager --> authController: createResult
+    userManager --> controller: createResult
     deactivate userManager
 
     alt User creation succeeded
-        authController -> userManager: AddToRoleAsync(user, role)
+        controller -> userManager: AddToRoleAsync(user, role)
         activate userManager
-        userManager --> authController: addResult
+        userManager --> controller: addResult
         deactivate userManager
 
-        ' -> authController
-        authController -> authController: SendConfirmationEmail
-        activate authController
+        ' -> controller
+        controller -> controller: SendConfirmationEmail
+        activate controller
         
-        authController -> userManager: GenerateEmailConfirmationTokenAsync(user)
+        controller -> userManager: GenerateEmailConfirmationTokenAsync(user)
         activate userManager
-        userManager --> authController: token
+        userManager --> controller: token
         deactivate userManager
         
-        authController -> emailSender: SendEmail(user.email, title... )
+        controller -> emailSender: SendEmail(user.email, title... )
         activate emailSender
-        emailSender --> authController: void | exception
+        emailSender --> controller: void | exception
         deactivate emailSender
         
-        authController --> authController: void | exception
-        deactivate authController
+        controller --> controller: void | exception
+        deactivate controller
 
         alt no exception
-            <-- authController: statusCode201
+            <-- controller: statusCode201
         else exception
-            <-- authController: badRequest
+            <-- controller: badRequest
         end
     else User creation failed
-        <-- authController: badRequest
+        <-- controller: badRequest
     end
 else Bad password
-    <-- authController: badRequest
+    <-- controller: badRequest
 end
 
-deactivate authController
+deactivate controller
 
 @enduml
