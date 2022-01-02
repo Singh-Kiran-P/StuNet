@@ -1,9 +1,8 @@
 export type Notification = {
     id: number;
-    time: string;
-    body: string;
-    title: string;
     notifierId: number;
+    notifier: Question | Answer;
+    time: string,
 }
 
 export type BaseCourse = {

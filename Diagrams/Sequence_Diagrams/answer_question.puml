@@ -1,0 +1,66 @@
+@startuml Answer Question
+participant ":AnswerController" as controller
+participant ":UserManager" as userManager
+participant GetAnswerDto
+participant ":Answer" as answer
+participant ":AnswerNotification" as answerNotification
+participant ":GetAnswerDto" as getAnswerDto 
+participant ":QuestionRepository" as questionRepository
+participant ":AnswerRepository" as repository
+participant ":QuestionSubscriptionRepository" as subscriptionRepository
+participant ":AnswerNotificationRepository" as notificationRepository
+
+-> controller: CreateAnswer(dto.userId, dto.questionId, dto.title, dto.body)
+activate controller 
+
+
+alt Valid user
+    controller -> userManager: FindByEmailAsync(userEmail)
+	activate userManager
+	controller <-- userManager: User
+	' TO-ASK: User|null of gewoon User?
+	deactivate userManager
+
+    controller -> questionRepository: GetAsync(dto.questionId)
+    activate questionRepository
+    questionRepository --> controller : question
+    deactivate questionRepository
+
+    alt User exists AND question exists
+        controller -> answer **: create(user.id, question, dto.title, dto.body, DateTime.UtcNow)
+        controller -> repository: CreateAsync(answer)
+        activate repository
+        repository --> controller: void
+        deactivate repository
+
+        controller -> subscriptionRepository: GetBySubscribedId(question.id)
+        activate subscriptionRepository
+        subscriptionRepository --> controller: subscriberIds
+        deactivate subscriptionRepository
+        
+        loop 
+            controller -> answerNotification **: create(userId, answer.id, answer, answer.time)
+        end
+        controller -> notificationRepository: CreateAllAsync(answerNotifications)
+        activate notificationRepository
+        notificationRepository --> controller: void
+        deactivate notificationRepository
+        
+        controller -> GetAnswerDto: convert(answer, user)
+        activate GetAnswerDto
+        GetAnswerDto -> getAnswerDto ** : create(answer, user)
+        GetAnswerDto --> controller: answerDto
+        deactivate GetAnswerDto
+        <-- controller: ok
+
+
+    else User doesn't exist OR question doesn't exist
+        <-- controller: badRequest
+    end
+
+else Invalid user
+    <-- controller: unauthorized
+end
+
+' var ret = GetAnswerDto.Convert(answer, user);
+' return Ok(ret);

@@ -1,0 +1,16 @@
+@startuml Send Chat Message
+
+participant ":ChatHub" as hub
+participant ":MessageRepository" as repository
+participant ":Message" as message
+--> hub : SendMessageToChannel(message, channelId)
+activate hub
+hub -> message ** : create(userEmail, channelId, message, DateTime.UtcNow)
+
+hub -> repository: CreateAsync(message)
+activate repository
+repository --> hub: void
+deactivate repository
+<-- hub: void
+deactivate hub
+@enduml

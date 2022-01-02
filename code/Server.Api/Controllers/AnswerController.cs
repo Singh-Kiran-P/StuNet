@@ -35,7 +35,7 @@ namespace Server.Api.Controllers
             _subscriptionRepository = subscriptionRepository;
         }
 
-        //[Authorize(Roles = "student")]
+        [Authorize(Roles = "student,prof")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetAnswers()
         {
@@ -56,7 +56,7 @@ namespace Server.Api.Controllers
             }
         }
 
-        //[Authorize(Roles = "student,prof")]
+        [Authorize(Roles = "student,prof")]
         [HttpGet("GetAnswersByQuestionId/{questionId}")]
         public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetAnswersByQuestionId(int questionId)
         {
@@ -77,6 +77,7 @@ namespace Server.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "student,prof")]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetAnswerDto>> GetAnswer(int id)
         {
@@ -112,7 +113,7 @@ namespace Server.Api.Controllers
             }
         }
 
-        //[Authorize(Roles = "student")]
+        [Authorize(Roles = "student,prof")]
         [HttpPost]
         public async Task<ActionResult<GetAnswerDto>> CreateAnswer(CreateAnswerDto dto)
         {
@@ -194,12 +195,12 @@ namespace Server.Api.Controllers
             return NoContent();
         }
 
-        // [Authorize(Roles = "prof")]
+        [Authorize(Roles = "prof")]
         [HttpPut("SetAccepted/{id}")]
         public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
         {
             Answer existingAnswer = await _answerRepository.GetAsync(id);
-            if (existingAnswer == null) 
+            if (existingAnswer == null)
             {
                 return NotFound();
             }

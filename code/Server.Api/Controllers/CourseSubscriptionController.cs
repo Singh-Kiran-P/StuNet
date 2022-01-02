@@ -10,6 +10,7 @@ using Server.Api.Models;
 using Server.Api.Repositories;
 using Microsoft.AspNetCore.SignalR;
 using ChatSample.Hubs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -29,6 +30,7 @@ namespace Server.Api.Controllers
             _userManager = userManager;
             _hubContext = hubContext;
         }
+        [Authorize(Roles = "student,prof")]
 
         private async Task<IEnumerable<GetCourseSubscriptionDto>> _GetCourseSubscriptions()
         {
@@ -37,12 +39,16 @@ namespace Server.Api.Controllers
             return getDtos;
         }
 
+        [Authorize(Roles = "student,prof")]
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetCourseSubscriptionDto>>> GetCourseSubscriptions()
         {
             IEnumerable<GetCourseSubscriptionDto> getDtos = await _GetCourseSubscriptions();
             return Ok(getDtos);
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCourseSubscriptionDto>> GetCourseSubscription(int id)
@@ -56,6 +62,7 @@ namespace Server.Api.Controllers
             return Ok(GetCourseSubscriptionDto.Convert(subscription));
         }
 
+        [Authorize(Roles = "student,prof")]
         [HttpGet("ByUserAndCourseId/{courseId}")]
         public async Task<ActionResult<GetByIdsCourseSubscriptionDto>> GetCourseSubscriptionByUserAndCourseId(int courseId)
         {
@@ -69,6 +76,8 @@ namespace Server.Api.Controllers
                 .Select(subscription => GetByIdsCourseSubscriptionDto.Convert(subscription));
             return Ok(userSubscriptionDtos);
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpPost]
         public async Task<ActionResult<CreateCourseSubscriptionDto>> CreateCourseSubscription(CreateCourseSubscriptionDto dto)
@@ -94,6 +103,8 @@ namespace Server.Api.Controllers
                 return Unauthorized();
             }
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCourseSubscription(int id)

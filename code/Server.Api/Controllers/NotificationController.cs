@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
@@ -31,18 +32,20 @@ namespace Server.Api.Controllers
         {
             return await _answerNotificationRepository.GetByUserId(userId);
         }
+        [Authorize(Roles = "student,prof")]
+
 
         [HttpGet]
-        public async Task<ActionResult<(IEnumerable<GetNotificationDto>, IEnumerable<GetNotificationDto>)>> GetNotifications()
+        public async Task<ActionResult<(IEnumerable<GetQuestionNotificationDto>, IEnumerable<GetAnswerNotificationDto>)>> GetNotifications()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 IEnumerable<QuestionNotification> qNotifs = await _GetQuestionNotifications(userId);
-                IEnumerable<AnswerNotification> cNotifs = await _GetAnswerNotifications(userId);
+                IEnumerable<AnswerNotification> aNotifs = await _GetAnswerNotifications(userId);
 
-                return Ok((qNotifs.Select(n => GetNotificationDto.Convert(n)), cNotifs.Select(n => GetNotificationDto.Convert(n))));
+                return Ok((qNotifs.Select(n => GetQuestionNotificationDto.Convert(n)), aNotifs.Select(n => GetAnswerNotificationDto.Convert(n))));
             }
             else
             {
