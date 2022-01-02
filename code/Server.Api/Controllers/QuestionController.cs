@@ -83,6 +83,21 @@ namespace Server.Api.Controllers
             }
         }
 
+        [HttpGet("getAskedQuestionsByEmail")]
+        public async Task<ActionResult<IEnumerable<GetQuestionDto>>> GetAskedQuestions(string email)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var questions = await _questionRepository.GetAskedByUserId(user.Id);
+                return Ok(questions.Select(q => GetQuestionDto.Convert(q, user)));
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<GetQuestionDto>> GetQuestion(int id)
         {

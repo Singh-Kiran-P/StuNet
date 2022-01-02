@@ -97,6 +97,21 @@ namespace Server.Api.Controllers
             }
         }
 
+        [HttpGet("getGivenAnswersByEmail")]
+        public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetGivenAnswers(string email)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var answers = await _answerRepository.GetGivenByUserId(user.Id);
+                return Ok(answers.Select(q => GetAnswerDto.Convert(q, user)));
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
         //[Authorize(Roles = "student")]
         [HttpPost]
         public async Task<ActionResult<GetAnswerDto>> CreateAnswer(CreateAnswerDto dto)
