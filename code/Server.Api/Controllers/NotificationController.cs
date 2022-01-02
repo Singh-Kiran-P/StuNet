@@ -33,16 +33,16 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<(IEnumerable<GetNotificationDto>, IEnumerable<GetNotificationDto>)>> GetNotifications()
+        public async Task<ActionResult<(IEnumerable<GetQuestionNotificationDto>, IEnumerable<GetAnswerNotificationDto>)>> GetNotifications()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "userref"))
             {
                 string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
                 IEnumerable<QuestionNotification> qNotifs = await _GetQuestionNotifications(userId);
-                IEnumerable<AnswerNotification> cNotifs = await _GetAnswerNotifications(userId);
+                IEnumerable<AnswerNotification> aNotifs = await _GetAnswerNotifications(userId);
 
-                return Ok((qNotifs.Select(n => GetNotificationDto.Convert(n)), cNotifs.Select(n => GetNotificationDto.Convert(n))));
+                return Ok((qNotifs.Select(n => GetQuestionNotificationDto.Convert(n)), aNotifs.Select(n => GetAnswerNotificationDto.Convert(n))));
             }
             else
             {
