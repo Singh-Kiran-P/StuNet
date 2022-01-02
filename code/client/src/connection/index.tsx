@@ -6,7 +6,6 @@ import { useToken } from '@/auth';
 import { update } from '@/nav';
 import axios from 'axios';
 
-
 const Context = createContext<HubConnection>(null as any as HubConnection);
 export const useConnection = () => useContext(Context);
 notifee.onBackgroundEvent(async () => {});

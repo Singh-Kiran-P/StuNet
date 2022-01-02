@@ -15,7 +15,7 @@ export default extend<typeof View, Props>(View, ({ load, state, ...props }) => {
 	if (load) useEffect(() => {
 		load().then(() => {
 			setLoading(false);
-		}).catch(err => {
+		}).catch(() => {
 			if (nav?.canGoBack()) nav.goBack();
 		})
 	}, [update])

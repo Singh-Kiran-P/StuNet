@@ -1,17 +1,17 @@
-import React, { Screen, EmptyAnswer, useState, useEmail, axios, show, dateString, professor } from '@/.';
+import React, { Screen, EmptyAnswer, useState, useEmail, axios, update, show, dateString, professor } from '@/.';
 import { View, Text, Fab, Loader, CompactQuestion } from '@/components';
-import { update } from '@/nav';
 
 export default Screen('Answer', ({ nav, params: { id } }) => {
     let [answer, setAnswer] = useState(EmptyAnswer);
     let [error, setError] = useState('');
     let email = useEmail();
-    let auth = email === answer.question.user.email || professor(email)
+    let owner = email === answer.question.course.profEmail;
+    let sender = email === answer.question.user.email;
+    let auth = owner || sender;
 
     const fetch = async () => {
         return axios.get('/Answer/' + id).then(res => {
             setAnswer(res.data);
-            console.log(res.data)
             nav.setParams({ course: res.data.question?.course?.name || '' });
         })
     }

@@ -72,7 +72,8 @@ namespace Server.UnitTests
 
             User randomUser = new()
 			{
-				Id = userId
+				Id = userId,
+                Email = rand.Next().ToString()
 			};
 
             var MockManager = GetMockUserManager();

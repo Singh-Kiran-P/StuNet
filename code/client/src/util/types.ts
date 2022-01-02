@@ -1,8 +1,8 @@
 export type Notification = {
     id: number;
+    time: string;
     notifierId: number;
     notifier: Question | Answer;
-    time: string,
 }
 
 export type BaseCourse = {
@@ -74,7 +74,7 @@ export type BaseAnswer = {
 }
 
 export type Answer = BaseAnswer & {
-    question: BaseQuestion;
+    question: Question;
 }
 
 export type Field = {

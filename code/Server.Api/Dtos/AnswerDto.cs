@@ -13,7 +13,7 @@ namespace Server.Api.Dtos
         public ResponseUserDto user { get; set; }
         public GetQuestionDto question { get; set; }
 
-        public static GetAnswerDto Convert(Answer answer, User user)
+        public static GetAnswerDto Convert(Answer answer, User answerUser, User questionUser)
         {
             return new GetAnswerDto {
                 id = answer.id,
@@ -21,8 +21,8 @@ namespace Server.Api.Dtos
                 time = answer.time,
                 title = answer.title,
                 isAccepted = answer.isAccepted,
-                user = ResponseUserDto.Convert(user),
-                question = GetQuestionDto.Convert(answer.question, user)
+                user = ResponseUserDto.Convert(answerUser),
+                question = GetQuestionDto.Convert(answer.question, questionUser)
             };
         }
     }
