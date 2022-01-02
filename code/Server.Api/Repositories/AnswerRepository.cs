@@ -11,6 +11,8 @@ namespace Server.Api.Repositories
     public interface IAnswerRepository : IRestfulRepository<Answer>
     {
         Task<IEnumerable<Answer>> GetByQuestionId(int questionId);
+        
+        Task<IEnumerable<Answer>> GetGivenByUserId(string userId);
     }
 
     public class PgAnswerRepository : IAnswerRepository
@@ -43,6 +45,16 @@ namespace Server.Api.Repositories
                 .Include(a => a.question.course)
                 .Include(a => a.question.topics)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Answer>> GetGivenByUserId(string userId)
+        {
+            return await _context.Answers
+            .Where(q => q.userId == userId)
+            .Include(a => a.question)
+            .Include(a => a.question.course)
+            .Include(a => a.question.topics)
+            .ToListAsync();
         }
         public async Task CreateAsync(Answer answer)
         {

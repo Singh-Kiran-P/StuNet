@@ -21,7 +21,8 @@ namespace Server.UnitTests
     {
 
         private CourseController CreateController() {
-            return new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object);
+            var MockManager = GetMockUserManager();
+            return new CourseController(_courseRepositoryStub.Object, _topicRepositoryStub.Object, _courseSubscriptionRepositoryStub.Object, MockManager.Object);
         }
 
         [Fact]

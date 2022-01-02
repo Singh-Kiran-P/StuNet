@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
 using Server.Api.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Server.Api.Services;
 using System.Security.Claims;
 
@@ -18,12 +19,14 @@ namespace Server.Api.Controllers
         private readonly ICourseRepository _courseRepository;
         private readonly ITopicRepository _topicRepository;
         private readonly ISubscriptionRepository<CourseSubscription> _subscriptionRepository;
+        private readonly UserManager<User> _userManager;
 
-        public CourseController(ICourseRepository repository, ITopicRepository topicRepository, ISubscriptionRepository<CourseSubscription> subscriptionRepository)
+        public CourseController(ICourseRepository repository, ITopicRepository topicRepository, ISubscriptionRepository<CourseSubscription> subscriptionRepository,UserManager<User> userManager)
         {
             _courseRepository = repository;
             _topicRepository = topicRepository;
             _subscriptionRepository = subscriptionRepository;
+            _userManager = userManager;
         }
 
         private async Task<IEnumerable<GetAllCourseDto>> _GetCourseAsync()
@@ -54,6 +57,22 @@ namespace Server.Api.Controllers
             else
             {
                 return Unauthorized();
+            }
+        }
+
+        [HttpGet("getSubscribedByEmail")]
+        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> GetSubscribedCoursesByEmail(string email)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+            if (user != null) 
+            {
+                IEnumerable<CourseSubscription> subscriptions = await _subscriptionRepository.GetByUserId(user.Id);
+                IEnumerable<Course> subscribedCourses = subscriptions.Select(sub => sub.subscribedItem);
+                return Ok(subscribedCourses.Select(c => GetAllCourseDto.Convert(c)));
+            }
+            else
+            {
+                return NotFound();
             }
         }
 
