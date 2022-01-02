@@ -1,6 +1,6 @@
 @startuml Ask question
 participant ":QuestionController" as questionController
-participant GetQuestionDto as GetQuestionDto
+participant GetQuestionDto
 participant ":QuestionSubscription" as questionSubscription
 participant ":QuestionNotification" as questionNotification
 participant ":GetQuestionDto" as getQuestionDto
