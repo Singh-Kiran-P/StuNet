@@ -1,18 +1,18 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Server.Api.DataBase;
 using Server.Api.Models;
+using Server.Api.DataBase;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Api.Repositories
 {
     public interface ICourseRepository : IRestfulRepository<Course>
     {
         Task<Course> GetByNameAsync(string name);
-        Task<IEnumerable<Course>> GetAllByProfEmailAsync(string email);
         Task<Course> GetByCourseEmailAsync(string courseMail);
+        Task<IEnumerable<Course>> GetAllByProfEmailAsync(string email);
 
     }
 
@@ -51,18 +51,18 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Course>> GetAllByProfEmailAsync(string profEmail)
-        {
-            return await _context.Courses
-                .Where(c => c.profEmail == profEmail)
-                .ToListAsync();
-        }
-
         public async Task<Course> GetByCourseEmailAsync(string courseMail)
         {
             return await _context.Courses
                 .Where(c => c.courseEmail == courseMail)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Course>> GetAllByProfEmailAsync(string profEmail)
+        {
+            return await _context.Courses
+                .Where(c => c.profEmail == profEmail)
+                .ToListAsync();
         }
 
         public async Task CreateAsync(Course course)
@@ -74,28 +74,20 @@ namespace Server.Api.Repositories
         public async Task UpdateAsync(Course course)
         {
             Course courseToUpdate = await _context.Courses.FindAsync(course.id);
-            if (courseToUpdate == null)
-            {
-                throw new NullReferenceException();
-            }
+            if (courseToUpdate == null) throw new NullReferenceException();
             courseToUpdate.name = course.name;
             courseToUpdate.number = course.number;
-            courseToUpdate.description = course.description;
             courseToUpdate.topics = course.topics;
+            courseToUpdate.description = course.description;
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
             Course course = await _context.Courses.FindAsync(id);
-            if (course == null)
-            {
-                throw new NullReferenceException();
-            }
+            if (course == null) throw new NullReferenceException();
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
         }
-
-
     }
 }

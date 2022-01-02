@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Server.Api.Models;
+using System.Collections.Generic;
 
 namespace Server.Api.Dtos
 {
@@ -9,11 +9,6 @@ namespace Server.Api.Dtos
         public string name { get; set; }
         public GetPartialCourseDto course { get; set; }
         public ICollection<GetPartialQuestionDto> questions { get; set; }
-
-        public static GetTopicDto Convert(Topic topic)
-        {
-            throw new System.Exception("method not implement");
-        }
     }
 
     public record GetPartialTopicDto
@@ -23,11 +18,10 @@ namespace Server.Api.Dtos
 
         public static GetPartialTopicDto Convert(Topic topic)
         {
-            return new GetPartialTopicDto
-                {
-                    id = topic.id,
-                    name = topic.name
-                };
+            return new GetPartialTopicDto {
+                id = topic.id,
+                name = topic.name
+            };
         }
     }
 
@@ -35,10 +29,5 @@ namespace Server.Api.Dtos
     {
         public string name { get; set; }
         public int courseId { get; set; }
-
-        public static CreateTopicDto Convert(Topic topic)
-        {
-            throw new System.Exception("method not implement");
-        }
     }
 }

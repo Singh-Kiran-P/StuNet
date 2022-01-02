@@ -1,6 +1,6 @@
+using System;
 using System.Text;
 using System.Security.Cryptography;
-using System;
 
 namespace Server.Api.Helpers
 {
@@ -8,7 +8,6 @@ namespace Server.Api.Helpers
     {
         private static string CreateSalt(int size)
         {
-            //Generate a cryptographic random number.
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
             byte[] buff = new byte[size];
             rng.GetBytes(buff);

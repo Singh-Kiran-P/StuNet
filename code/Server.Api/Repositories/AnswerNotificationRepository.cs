@@ -1,7 +1,7 @@
+using Server.Api.Models;
+using Server.Api.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using Server.Api.DataBase;
-using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {

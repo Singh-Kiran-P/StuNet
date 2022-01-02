@@ -1,11 +1,12 @@
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Models;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Server.Api.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -13,13 +14,13 @@ namespace Server.Api.Controllers
     [Route("[controller]")]
     public class NotificationController : ControllerBase
     {
-        private readonly INotificationRepository<QuestionNotification> _questionNotificationRepository;
         private readonly INotificationRepository<AnswerNotification> _answerNotificationRepository;
+        private readonly INotificationRepository<QuestionNotification> _questionNotificationRepository;
 
         public NotificationController(INotificationRepository<QuestionNotification> questionNotificationRepository, INotificationRepository<AnswerNotification> answerNotificationRepository)
         {
-            _questionNotificationRepository = questionNotificationRepository;
             _answerNotificationRepository = answerNotificationRepository;
+            _questionNotificationRepository = questionNotificationRepository;
         }
 
         private async Task<IEnumerable<QuestionNotification>> _GetQuestionNotifications(string userId)
@@ -32,22 +33,16 @@ namespace Server.Api.Controllers
             return await _answerNotificationRepository.GetByUserId(userId);
         }
 
+        [Authorize(Roles = "student,prof")]
         [HttpGet]
         public async Task<ActionResult<(IEnumerable<GetQuestionNotificationDto>, IEnumerable<GetAnswerNotificationDto>)>> GetNotifications()
         {
             ClaimsPrincipal currentUser = HttpContext.User;
-            if (currentUser.HasClaim(c => c.Type == "userref"))
-            {
-                string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-                IEnumerable<QuestionNotification> qNotifs = await _GetQuestionNotifications(userId);
-                IEnumerable<AnswerNotification> aNotifs = await _GetAnswerNotifications(userId);
-
-                return Ok((qNotifs.Select(n => GetQuestionNotificationDto.Convert(n)), aNotifs.Select(n => GetAnswerNotificationDto.Convert(n))));
-            }
-            else
-            {
-                return Unauthorized();
-            }
+            if (!currentUser.HasClaim(c => c.Type == "userref")) return Unauthorized();
+            string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
+            IEnumerable<QuestionNotification> qNotifs = await _GetQuestionNotifications(userId);
+            IEnumerable<AnswerNotification> aNotifs = await _GetAnswerNotifications(userId);
+            return Ok((qNotifs.Select(n => GetQuestionNotificationDto.Convert(n)), aNotifs.Select(n => GetAnswerNotificationDto.Convert(n))));
         }
     }
 }

@@ -15,8 +15,12 @@ const Stack = createNativeStackNavigator();
 const key = 'token';
 type Context = [string, (token: string) => void];
 const Context = createContext<Context>(['', () => {}]);
-export const useUser = (): { [key: string]: any } => jwt_decode(useToken()[0]);
 export const useToken = () => useContext(Context);
+export const useEmail = (): string => {
+    let [token] = useToken();
+    if (!token) return '';
+    return (jwt_decode(token) as any).username || '';
+};
 
 export default ({ children }: Children) => {
     const [token, setToken] = useState('');

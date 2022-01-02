@@ -1,4 +1,4 @@
-import React, { Screen, Message, useEffect, useState, useUser, axios, display, timeDiff } from '@/.';
+import React, { Screen, Message, useEffect, useState, useEmail, axios, display, timeDiff } from '@/.';
 import { Text, List, Loader, SearchBar, CompactMessage } from '@/components';
 import { useConnection } from '@/connection';
 
@@ -7,7 +7,7 @@ export default Screen('Channel', ({ nav, params: { id, name } }) => {
 	let [error, setError] = useState('');
 
 	const connection = useConnection();
-	let email: string = useUser().username;
+	let email = useEmail();
 
 	let first = (current: Message, previous?: Message) => {
 		if (previous?.userMail !== current.userMail) return true;

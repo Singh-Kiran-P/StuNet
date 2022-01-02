@@ -5,17 +5,16 @@ namespace Server.Api.Dtos
 {
     public record GetQuestionSubscriptionDto
     {
-        public DateTime dateTime { get; set; }
         public string userId { get; set; }
         public int questionId { get; set; }
+        public DateTime dateTime { get; set; }
 
         public static GetQuestionSubscriptionDto Convert(QuestionSubscription subscription)
         {
-            return new GetQuestionSubscriptionDto
-            {
-                dateTime = subscription.dateTime,
+            return new GetQuestionSubscriptionDto {
                 userId = subscription.userId,
-                questionId = subscription.subscribedItemId,
+                dateTime = subscription.dateTime,
+                questionId = subscription.subscribedItemId
             };
         }
     }
@@ -27,10 +26,9 @@ namespace Server.Api.Dtos
         
         public static GetByIdsQuestionSubscriptionDto Convert(QuestionSubscription subscription)
         {
-            return new GetByIdsQuestionSubscriptionDto
-            {
+            return new GetByIdsQuestionSubscriptionDto {
                 id = subscription.id,
-                dateTime = subscription.dateTime,
+                dateTime = subscription.dateTime
             };
         }
     }
@@ -40,10 +38,9 @@ namespace Server.Api.Dtos
 
         public static GetQuestionSubscriptionDto Convert(QuestionSubscription subscription)
         {
-            return new GetQuestionSubscriptionDto
-            {
+            return new GetQuestionSubscriptionDto {
                 userId = subscription.userId,
-                questionId = subscription.subscribedItemId,
+                questionId = subscription.subscribedItemId
             };
         }
     }

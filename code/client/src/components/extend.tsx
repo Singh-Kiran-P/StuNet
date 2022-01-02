@@ -19,8 +19,6 @@ export type Props = {
     align?: 'right' | 'bottom';
     pad?: boolean | 'top' | 'bottom';
     inner?: boolean;
-
-    auth?: 'prof' | 'student' | ((email: string) => boolean);
 }
 
 const values = (s: string, values: undefined | boolean | Values, d: Side) => {

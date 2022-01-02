@@ -1,10 +1,12 @@
-import React, { Screen, EmptyCourse, useState, useEffect, axios, update, show } from '@/.';
+import React, { Screen, EmptyCourse, useState, useEffect, useEmail, axios, update, show } from '@/.';
 import { Text, Fab, Button, Loader, ScrollView, CompactChannel } from '@/components';
 
 export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     let [subscribed, setSubscribed] = useState<null | number>(null);
     let [course, setCourse] = useState(EmptyCourse);
     let [error, setError] = useState('');
+
+    let owner = useEmail() === (course.profEmail || NaN);
 
     const info = async () => {
         axios.get('/Course/' + id).then(res => {
@@ -46,7 +48,7 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
             <ScrollView inner padding='bottom,horizontal' flex children={course.channels?.map((channel, i) =>
                 <CompactChannel margin={!!i} key={i} channel={channel}/>)}
             />
-            <Fab pad='bottom' icon='pencil' onPress={() => nav.push('EditCourse', { course })}/>
+            <Fab pad='bottom' icon='pencil' hidden={!owner} onPress={() => nav.push('EditCourse', { course })}/>
         </Loader>
     )
 })

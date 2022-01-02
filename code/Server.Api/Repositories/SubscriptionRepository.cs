@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
+using Server.Api.Models;
+using Server.Api.DataBase;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using Server.Api.DataBase;
-using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
@@ -78,17 +78,13 @@ namespace Server.Api.Repositories
 
         public async Task UpdateAsync(T subscription)
         {
-            //FIXME: this method doesn't belong here...
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
             T subscription = await GetDbSet().FindAsync(id);
-            if (subscription == null)
-            {
-                throw new NullReferenceException();
-            }
+            if (subscription == null) throw new NullReferenceException();
             GetDbSet().Remove(subscription);
             await _context.SaveChangesAsync();
         }
