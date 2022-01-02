@@ -1,6 +1,6 @@
 'https://forum.plantuml.net/1353/is-it-possible-to-comment-out-lines-of-diagram-syntax
 
-@startuml create course sequention diagram
+@startuml Create Course
 participant Prof
 participant Course
 participant Channel
