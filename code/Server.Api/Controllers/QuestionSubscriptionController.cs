@@ -10,6 +10,7 @@ using Server.Api.Models;
 using Server.Api.Repositories;
 using Microsoft.AspNetCore.SignalR;
 using ChatSample.Hubs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Api.Controllers
 {
@@ -37,12 +38,16 @@ namespace Server.Api.Controllers
             return getDtos;
         }
 
+        [Authorize(Roles = "student,prof")]
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetQuestionSubscriptionDto>>> GetQuestionSubscriptions()
         {
             IEnumerable<GetQuestionSubscriptionDto> getDtos = await _GetQuestionSubscriptions();
             return Ok(getDtos);
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetQuestionSubscriptionDto>> GetQuestionSubscription(int id)
@@ -54,6 +59,7 @@ namespace Server.Api.Controllers
             return Ok(GetQuestionSubscriptionDto.Convert(subscription));
         }
 
+        [Authorize(Roles = "student,prof")]
         [HttpGet("ByUserAndQuestionId/{questionId}")]
         public async Task<ActionResult<GetByIdsQuestionSubscriptionDto>> GetQuestionSubscriptionByUserAndQuestionId(int questionId)
         {
@@ -67,6 +73,8 @@ namespace Server.Api.Controllers
                 .Select(subscription => GetByIdsQuestionSubscriptionDto.Convert(subscription));
             return Ok(userSubscriptionDtos);
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpPost]
         public async Task<ActionResult<CreateQuestionSubscriptionDto>> CreateQuestionSubscription(CreateQuestionSubscriptionDto dto)
@@ -93,6 +101,8 @@ namespace Server.Api.Controllers
                 return Unauthorized();
             }
         }
+
+        [Authorize(Roles = "student,prof")]
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteQuestionSubscription(int id)
