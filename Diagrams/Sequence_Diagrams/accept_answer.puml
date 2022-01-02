@@ -20,7 +20,7 @@ alt Answer exists
         end
     else Invalid user
         <-- controller: unauthorized
-    end 
+    end
 else Answer doesn't exist
     <-- controller: notFound
 end

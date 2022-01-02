@@ -29,7 +29,7 @@ loop
     GetQuestionDto -> getQuestionDto**: create(question, user)
     GetQuestionDto --> controller: questionDto
     deactivate GetQuestionDto
-    
+
 end
 <-- controller: ok
 deactivate controller

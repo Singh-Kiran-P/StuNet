@@ -4,22 +4,22 @@ participant ":UserManager" as userManager
 participant GetAnswerDto
 participant ":Answer" as answer
 participant ":AnswerNotification" as answerNotification
-participant ":GetAnswerDto" as getAnswerDto 
+participant ":GetAnswerDto" as getAnswerDto
 participant ":QuestionRepository" as questionRepository
 participant ":AnswerRepository" as repository
 participant ":QuestionSubscriptionRepository" as subscriptionRepository
 participant ":AnswerNotificationRepository" as notificationRepository
 
 -> controller: CreateAnswer(dto.userId, dto.questionId, dto.title, dto.body)
-activate controller 
+activate controller
 
 
 alt Valid user
     controller -> userManager: FindByEmailAsync(userEmail)
-	activate userManager
-	controller <-- userManager: User
-	' TO-ASK: User|null of gewoon User?
-	deactivate userManager
+    activate userManager
+    controller <-- userManager: User
+    ' TO-ASK: User|null of gewoon User?
+    deactivate userManager
 
     controller -> questionRepository: GetAsync(dto.questionId)
     activate questionRepository
@@ -37,15 +37,15 @@ alt Valid user
         activate subscriptionRepository
         subscriptionRepository --> controller: subscriberIds
         deactivate subscriptionRepository
-        
-        loop 
+
+        loop
             controller -> answerNotification **: create(userId, answer.id, answer, answer.time)
         end
         controller -> notificationRepository: CreateAllAsync(answerNotifications)
         activate notificationRepository
         notificationRepository --> controller: void
         deactivate notificationRepository
-        
+
         controller -> GetAnswerDto: convert(answer, user)
         activate GetAnswerDto
         GetAnswerDto -> getAnswerDto ** : create(answer, user)

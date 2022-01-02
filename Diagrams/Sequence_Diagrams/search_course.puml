@@ -10,22 +10,22 @@ activate courseController
 
 courseController -> courseController: _GetCourseAsync()
 activate courseController
-    courseController -> courseRepository: GetAllAsync()
+courseController -> courseRepository: GetAllAsync()
 
-    activate courseRepository
-    courseRepository --> courseController: courses
-    deactivate courseRepository
-    loop 
-        courseController -> GetAllCourseDto: convert(course)
-        activate GetAllCourseDto
-        GetAllCourseDto -> getAllCourseDto **: create(course)
-        GetAllCourseDto --> courseController: courseDto
-        deactivate GetAllCourseDto
-    end
-    
-    courseController --> courseController: courseDtos
+activate courseRepository
+courseRepository --> courseController: courses
+deactivate courseRepository
+loop
+    courseController -> GetAllCourseDto: convert(course)
+    activate GetAllCourseDto
+    GetAllCourseDto -> getAllCourseDto **: create(course)
+    GetAllCourseDto --> courseController: courseDto
+    deactivate GetAllCourseDto
+end
 
-    deactivate courseController
+courseController --> courseController: courseDtos
+
+deactivate courseController
 
 courseController -> StringMatcher: FuzzyMatchObject(courseDtos, name)
 activate StringMatcher
@@ -33,7 +33,7 @@ StringMatcher --> courseController: matches
 deactivate StringMatcher
 
 alt searchResults not empty AND searchResults not all
-' To-ASK
+    ' To-ASK
     <-- courseController: ok
 else searchResults empty OR searchResults all
     <-- courseController: noContent

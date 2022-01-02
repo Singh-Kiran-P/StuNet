@@ -20,23 +20,23 @@ title Reference: Contract SubmitQuestion()
 -> questionController: CreateQuestion(createQuestionDto)
 activate questionController
 alt Valid user
-	questionController -> userManager: FindByEmailAsync(userEmail)
-	activate userManager
-	questionController <-- userManager: User
-	' TO-ASK: User|null of gewoon User?
-	deactivate userManager
+    questionController -> userManager: FindByEmailAsync(userEmail)
+    activate userManager
+    questionController <-- userManager: User
+    ' TO-ASK: User|null of gewoon User?
+    deactivate userManager
 
-	questionController -> courseRepository: GetAsync(createQuestionDto.courseId)
-	activate courseRepository
-	courseRepository --> questionController: Course | null
-	deactivate courseRepository
-	
-	loop createQuestionDto.topicIds
-		questionController -> topicRepository: GetAsync(id)
-		activate topicRepository
-		topicRepository --> questionController: Topic | null
-		deactivate topicRepository
-	end
+    questionController -> courseRepository: GetAsync(createQuestionDto.courseId)
+    activate courseRepository
+    courseRepository --> questionController: Course | null
+    deactivate courseRepository
+
+    loop createQuestionDto.topicIds
+        questionController -> topicRepository: GetAsync(id)
+        activate topicRepository
+        topicRepository --> questionController: Topic | null
+        deactivate topicRepository
+    end
 
     alt Course in the database AND All topicss in database
         questionController -> question **:create(createQuestionDto.title, user.id, course, createQuestionDto.body, topics, DateTime.UtcNow)
@@ -61,7 +61,7 @@ alt Valid user
             deactivate courseSubscriptionRepository
         end
 
-        loop 
+        loop
             questionController -> questionNotification**: create(userId, question.id, question, question.time)
         end
 
@@ -77,10 +77,10 @@ alt Valid user
         deactivate GetQuestionDto
 
         <-- questionController: returnDto
-    else Course not in the database OR some topic not in database 
+    else Course not in the database OR some topic not in database
         <-- questionController: badRequeset
     end
 else Invalid user
-<-- questionController: unauthorized
+    <-- questionController: unauthorized
 end
 @enduml

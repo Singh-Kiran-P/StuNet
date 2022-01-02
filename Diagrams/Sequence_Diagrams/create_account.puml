@@ -8,7 +8,7 @@ participant ":FieldOfStudyRepository" as fieldOfStudyRepository
 
 title Reference: UC Create Account
 
- -> authController : RegisterJWTUser(dto.email, dto.password, dto.confirmPassword, dto.fieldOfStudy)
+-> authController : RegisterJWTUser(dto.email, dto.password, dto.confirmPassword, dto.fieldOfStudy)
 activate authController
 alt Bad password
     <-- authController: badRequest
@@ -18,7 +18,7 @@ else Valid password
         activate fieldOfStudyRepository
         fieldOfStudyRepository --> authController: fieldOfStudy
         deactivate fieldOfStudyRepository
-        
+
         alt fieldOfStudy doesn't exist
             <-- authController: badRequest
         end
@@ -42,17 +42,17 @@ else Valid password
         userManager --> authController: addResult
         deactivate userManager
 
-        ' -> authController 
+        ' -> authController
         authController -> authController: SendConfirmationEmail
         activate authController
-            authController -> userManager: GenerateEmailConfirmationTokenAsync(user)
-            activate userManager
-            userManager --> authController: token
-            deactivate userManager
-            authController -> emailSender: SendEmail(user.email, title... )
-            activate emailSender
-            emailSender --> authController: void | exception
-            deactivate emailSender
+        authController -> userManager: GenerateEmailConfirmationTokenAsync(user)
+        activate userManager
+        userManager --> authController: token
+        deactivate userManager
+        authController -> emailSender: SendEmail(user.email, title... )
+        activate emailSender
+        emailSender --> authController: void | exception
+        deactivate emailSender
         authController --> authController: void | exception
         deactivate authController
 

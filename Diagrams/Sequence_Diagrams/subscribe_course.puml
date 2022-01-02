@@ -9,10 +9,10 @@ activate controller
 
 alt Valid user
     controller -> userManager: FindByEmailAsync(userEmail)
-	activate userManager
-	controller <-- userManager: User
-	' TO-ASK: User|null of gewoon User?
-	deactivate userManager
+    activate userManager
+    controller <-- userManager: User
+    ' TO-ASK: User|null of gewoon User?
+    deactivate userManager
 
     controller -> courseSubsciptionRepository: GetAsync(dto.courseId)
     activate courseSubsciptionRepository
@@ -30,27 +30,3 @@ alt Valid user
 else Invalid user
     <-- controller: unauthorized
 end
-
-' public async Task<ActionResult<CreateCourseSubscriptionDto>> CreateCourseSubscription(CreateCourseSubscriptionDto dto)
-'         {
-'             ClaimsPrincipal currentUser = HttpContext.User;
-'             if (currentUser.HasClaim(c => c.Type == "username"))
-'             {
-'                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-'                 User user = await _userManager.FindByEmailAsync(userEmail);
-'                 CourseSubscription subscription = new()
-'                 {
-'                     dateTime = DateTime.UtcNow,
-'                     userId = user.Id,
-'                     subscribedItem = await _courseRepository.GetAsync(dto.courseId),
-'                 };
-
-'                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + subscription.subscribedItemId.ToString());
-'                 await _courseSubscriptionRepository.CreateAsync(subscription);
-'                 return Ok(subscription);
-'             }
-'             else
-'             {
-'                 return Unauthorized();
-'             }
-'         }
