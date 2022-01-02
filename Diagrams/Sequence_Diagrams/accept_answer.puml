@@ -1,0 +1,26 @@
+@startuml Accept Answer
+
+participant ":AnswerController" as controller
+participant ":AnswerRepository" as repository
+
+-> controller: SetAnswerAccepted(id, accepted)
+activate controller
+controller -> repository: GetAsync(id)
+activate repository
+repository --> controller: answer
+deactivate repository
+alt Answer exists
+    alt Valid user
+        alt Answer.question has been asked by the user
+            controller -> repository: UpdateAsync(answer)
+            activate repository
+            repository --> controller: void
+            deactivate repository
+            <-- controller: noContent
+        end
+    else Invalid user
+        <-- controller: unauthorized
+    end 
+else Answer doesn't exist
+    <-- controller: notFound
+end
