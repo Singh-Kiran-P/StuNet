@@ -5,17 +5,17 @@ namespace Server.Api.Dtos
 {
     public record GetCourseSubscriptionDto
     {
-        public DateTime dateTime { get; set; }
-        public string userId { get; set; }
         public int courseId { get; set; }
+        public string userId { get; set; }
+        public DateTime dateTime { get; set; }
         
         public static GetCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
             return new GetCourseSubscriptionDto
             {
-                dateTime = subscription.dateTime,
                 userId = subscription.userId,
-                courseId = subscription.subscribedItemId,
+                dateTime = subscription.dateTime,
+                courseId = subscription.subscribedItemId
             };
         }
     }
@@ -27,8 +27,7 @@ namespace Server.Api.Dtos
 
         public static GetByIdsCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
-            return new GetByIdsCourseSubscriptionDto
-            {
+            return new GetByIdsCourseSubscriptionDto {
                 id = subscription.id,
                 dateTime = subscription.dateTime,
             };
@@ -41,8 +40,7 @@ namespace Server.Api.Dtos
 
         public static GetCourseSubscriptionDto Convert(CourseSubscription subscription)
         {
-            return new GetCourseSubscriptionDto
-            {
+            return new GetCourseSubscriptionDto {
                 userId = subscription.userId,
                 courseId = subscription.subscribedItemId,
             };

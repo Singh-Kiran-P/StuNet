@@ -6,32 +6,34 @@ namespace Server.Api.Dtos
     public record GetNotificationDto
     {
         public int id { get; set; }
-        public int notifierId { get; set; }
-        public string title { get; set; }
-        public string body { get; set; }
         public DateTime time { get; set; }
+        public int notifierId { get; set; }
+    }
 
-        public static GetNotificationDto Convert(AnswerNotification notification)
+    public record GetQuestionNotificationDto : GetNotificationDto
+    {
+        public Question notifier { get; set; }
+        public static GetQuestionNotificationDto Convert(QuestionNotification notification)
         {
-            return new GetNotificationDto
-            {
+            return new GetQuestionNotificationDto {
                 id = notification.id,
-                notifierId = notification.answerId,
-                title = notification.answer.title,
-                body = notification.answer.body,
-                time = notification.time
+                time = notification.time,
+                notifier = notification.question,
+                notifierId = notification.questionId
             };
         }
+    }
 
-        public static GetNotificationDto Convert(QuestionNotification notification)
+    public record GetAnswerNotificationDto : GetNotificationDto
+    {
+        public Answer notifier { get; set; }
+        public static GetAnswerNotificationDto Convert(AnswerNotification notification)
         {
-            return new GetNotificationDto
-            {
+            return new GetAnswerNotificationDto {
                 id = notification.id,
-                notifierId = notification.questionId,
-                title = notification.question.title,
-                body = notification.question.body,
-                time = notification.time
+                time = notification.time,
+                notifier = notification.answer,
+                notifierId = notification.answerId
             };
         }
     }

@@ -1,7 +1,7 @@
-import React, { Route, Style, Field, FOS, useTheme, useState, axios, show } from '@/.';
+import React, { Route, Style, Field, useTheme, useState, axios, show } from '@/.';
 import { View, Text, Button, Loader, Picker, TextInput, PasswordInput } from '@/components';
 
-type Fields = { [name: string]: { [degree: string]: number[] } };
+type Fields = { [name: string]: [number, number] };
 
 const enum User {
 	PROF,
@@ -15,7 +15,7 @@ export default ({ navigation }: Route) => {
 	let [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
     let [confirmPassword, setConfirmPassword] = useState('');
-	let [FOS, setFOS] = useState<FOS>({ field: '', degree: '' });
+	let [FOS, setFOS] = useState<[string, number, string]>(['', NaN, '']);
 	let [fields, setFields] = useState<Fields>({});
 	let [error, setError] = useState('');
 	let [theme] = useTheme();
@@ -32,25 +32,34 @@ export default ({ navigation }: Route) => {
 		return null;
 	}
 
-	const degrees = (field: Fields[string]) => Object.keys(field || []).filter(degree => Object.values(field[degree]).length);
+	const study = () => (fields[FOS[0]] || [])[FOS[1]];
+
+	const valid = () => {
+		let t = type();
+		if (t === null) return false;
+		if (t === User.PROF) return true;
+		let s = study();
+		return !!s;
+	}
+
+	const degrees = (field?: Fields[string]) => (field || []).map((f, i) => !f ? '' : !i ? 'Bachelor' : 'Master').filter(d => d);
 
 	const fetch = async () => {
 		return axios.get('/FieldOfStudy').then(res => {
 			setFields((res.data as Field[]).reduce((acc, cur) => ({ ...acc, [cur.name]: (o => {
-					return (o[Object.keys(o)[cur.isBachelor ? 0 : 1]].push(-1), o);
-				})(acc[cur.name] || { Bachelor: [], Master: [] })
+					return (o[cur.isBachelor ? 0 : 1] = cur.id, o);
+				})(acc[cur.name] || [NaN, NaN])
 			}), {} as Fields));
 		})
 	}
 
 	const register = () => {
-		let degree = FOS.degree === 'Bachelor' ? 'BACH' : 'MAST';
-
+		setError('');
         axios.post('/Auth/register', {
             Email: email,
             Password: password,
 			ConfirmPassword: confirmPassword,
-			FieldOfStudy: `${FOS.field}-${degree}` // TODO dear god please fix this
+			FieldOfStudy: study()
         }).then(() => navigation.navigate('Login', { registered: email }), show(setError))
     }
 
@@ -63,14 +72,14 @@ export default ({ navigation }: Route) => {
 			<Text type='error' margin hidden={password == confirmPassword} children='Passwords do not match.'/>
 			<View type='row' margin hidden={type() != User.STUDENT}>
 				<Picker flex prompt='Field'
-					selectedValue={FOS.field} values={Object.keys(fields)}
-					onValueChange={v => setFOS({ field: v, degree: '' })}/>
-				<Picker flex prompt='Degree' enabled={!!FOS.field}
-					selectedValue={FOS.degree} values={degrees(fields[FOS.field])}
-					onValueChange={v => setFOS({ ...FOS, degree: v })}/>
+					selectedValue={FOS[0]} values={Object.keys(fields)}
+					onValueChange={v => setFOS([v, NaN, ''])}/>
+				<Picker flex prompt='Degree' enabled={!!FOS[0]}
+					selectedValue={FOS[2]} values={degrees(fields[FOS[0]])}
+					onValueChange={(v, i) => setFOS([FOS[0], i - 1, v])}/>
 			</View>
 			<Text type='error' margin hidden={!error} children={error}/>
-			<Button margin onPress={register} disabled={!email || !password || password !== confirmPassword || !type()} children='Register'/>
+			<Button margin children='Register' disabled={(password || NaN) !== confirmPassword || !valid()} toggled={error} onPress={register}/>
 			<Text type='hint' margin>
 				Already have an account?{' '}
 				<Text type='link' size='auto' onPress={() => navigation.navigate('Login')}>

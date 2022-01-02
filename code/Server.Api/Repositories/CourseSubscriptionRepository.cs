@@ -1,11 +1,8 @@
-using System;
-using System.Linq;
+using Server.Api.Models;
+using Server.Api.DataBase;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using Server.Api.DataBase;
-using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {

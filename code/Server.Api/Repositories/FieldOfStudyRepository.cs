@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Server.Api.DataBase;
 using Server.Api.Models;
+using Server.Api.DataBase;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Api.Repositories
 {
@@ -45,10 +45,7 @@ namespace Server.Api.Repositories
         public async Task DeleteAsync(int fieldOfStudyId)
         {
             var fieldOfStudyToRemove = await _context.FieldOfStudies.FindAsync(fieldOfStudyId);
-            if (fieldOfStudyToRemove == null)
-            {
-                throw new NullReferenceException();
-            }
+            if (fieldOfStudyToRemove == null) throw new NullReferenceException();
             _context.FieldOfStudies.Remove(fieldOfStudyToRemove);
             await _context.SaveChangesAsync();
         }
@@ -56,12 +53,9 @@ namespace Server.Api.Repositories
         public async Task UpdateAsync(FieldOfStudy fieldOfStudy)
         {
             var fieldOfStudyToUpdate = await _context.FieldOfStudies.FindAsync(fieldOfStudy.id);
-            if (fieldOfStudyToUpdate == null)
-            {
-                throw new NullReferenceException();
-            }
-            fieldOfStudyToUpdate.fullName = fieldOfStudy.fullName;
+            if (fieldOfStudyToUpdate == null) throw new NullReferenceException();
             fieldOfStudyToUpdate.name = fieldOfStudy.name;
+            fieldOfStudyToUpdate.fullName = fieldOfStudy.fullName;
             fieldOfStudyToUpdate.isBachelor = fieldOfStudy.isBachelor;
             await _context.SaveChangesAsync();
         }

@@ -59,10 +59,10 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
                 <View>
                     <Text children={question.body}/>
                     <Button margin='top-2' icon='text-box-plus' children='Give An Answer' onPress={() => nav.push('GiveAnswer', { question })}/>
-                    <Text margin='top-2' type='hint' size='normal' hidden={answers.length} children='No answers have been given'/>
-                    <Text margin='top-2' type='header' hidden={!answers.length} children='Answers'/>
+                    <Text type='hint' size='normal' margin='top-2' hidden={answers.length} children='No answers have been given'/>
+                    <Text type='header' color='placeholder' margin='top-2' hidden={!answers.length} children='Answers'/>
                 </View>
-            } data={answers} renderItem={answer => <CompactAnswer margin answer={answer.item}/>}/>
+            } data={answers} renderItem={answer => <CompactAnswer margin={!!answer.index} answer={answer.item}/>}/>
         </Loader>
     )
 })

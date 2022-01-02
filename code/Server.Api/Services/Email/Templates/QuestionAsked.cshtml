@@ -9,9 +9,11 @@
     </head>
 
     <body style="font-size: 12px;">
-        @Model.email anonymously asked a question in @Model.course. <span style="display: none;">@Model.id</span>
-        <br/>
-        <br/>
+        @Model.email anonymously asked a question in @Model.course.
+        @if (Model.topics.Length > 0) { 
+            <br/>
+            <br/>
+        }
         @foreach(var topic in Model.topics) {
             <span style="padding: 5px 10px; margin-right: 10px; border-radius: 100px; background-color: rgba(0, 0, 0, 0.26); color: '#000000';">
                 @topic.name
@@ -26,7 +28,7 @@
         <span style="white-space: pre;">@Model.body</span>
         <br/>
         <br/>
-        You can answer this question by replying to this email.
+        You can answer this question by replying to this email. <span id="id" style="display: none;">@Model.id</span>
         <br/>
         - Team StuNet
     </body>

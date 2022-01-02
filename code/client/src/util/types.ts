@@ -1,9 +1,8 @@
 export type Notification = {
     id: number;
-    time: string;
-    body: string;
-    title: string;
     notifierId: number;
+    notifier: Question | Answer;
+    time: string,
 }
 
 export type BaseCourse = {
@@ -83,9 +82,4 @@ export type Field = {
 	name: string;
 	fullName: string;
 	isBachelor: boolean;
-}
-
-export type FOS = {
-	field: string;
-	degree: string;
 }

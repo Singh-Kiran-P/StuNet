@@ -1,0 +1,70 @@
+@startuml Register
+participant ":AuthController" as authController
+participant ":Student" as student
+participant ":Professor" as professor
+participant ":UserManager" as userManager
+participant ":EmailSender" as emailSender
+participant ":FieldOfStudyRepository" as fieldOfStudyRepository
+
+title Reference: UC Create Account
+
+ -> authController : RegisterJWTUser(dto.email, dto.password, dto.confirmPassword, dto.fieldOfStudy)
+activate authController
+alt Bad password
+    <-- authController: badRequest
+else Valid password
+    alt Valid student email
+        authController -> fieldOfStudyRepository: GetAsync(dto.fieldOfStudy)
+        activate fieldOfStudyRepository
+        fieldOfStudyRepository --> authController: fieldOfStudy
+        deactivate fieldOfStudyRepository
+        
+        alt fieldOfStudy doesn't exist
+            <-- authController: badRequest
+        end
+
+        authController -> student**: create(dto.Email, dto.Email, passwordHash, fieldofstudy.id)
+        ' student --> authController: user
+    else Valid professor email
+        authController -> professor**: create(dto.Email, dto.Email, passwordHash, fieldofstudy.id)
+    else Invalid email
+        <-- authController: BadRequest
+    end
+
+    authController -> userManager: CreateAsync(user, dto.Password)
+    activate userManager
+    userManager --> authController: createResult
+    deactivate userManager
+
+    alt User creation succeeded
+        authController -> userManager: AddToRoleAsync(user, role)
+        activate userManager
+        userManager --> authController: addResult
+        deactivate userManager
+
+        ' -> authController 
+        authController -> authController: SendConfirmationEmail
+        activate authController
+            authController -> userManager: GenerateEmailConfirmationTokenAsync(user)
+            activate userManager
+            userManager --> authController: token
+            deactivate userManager
+            authController -> emailSender: SendEmail(user.email, title... )
+            activate emailSender
+            emailSender --> authController: void | exception
+            deactivate emailSender
+        authController --> authController: void | exception
+        deactivate authController
+
+        alt no exception
+            <-- authController: statusCode201
+        else exception
+            <-- authController: badRequest
+        end
+    else User creation failed
+        <-- authController: badRequest
+    end
+end
+deactivate authController
+
+@enduml

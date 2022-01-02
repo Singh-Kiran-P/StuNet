@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using Server.Api.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Server.Api.Repositories;
-using Server.Api.Models;
-using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ChatSample.Hubs
@@ -19,64 +19,57 @@ namespace ChatSample.Hubs
     [Authorize]
     public class ChatHub : Hub
     {
-        private readonly IMessageRepository _messageRepository;
         private readonly UserManager<User> _userManager;
-        private readonly ISubscriptionRepository<QuestionSubscription> _questionSubscriptionRepository;
+        private readonly IMessageRepository _messageRepository;
         private readonly ISubscriptionRepository<CourseSubscription> _courseSubscriptionRepository;
+        private readonly ISubscriptionRepository<QuestionSubscription> _questionSubscriptionRepository;
 
         public ChatHub(IMessageRepository messageRepository, UserManager<User> userManager, ISubscriptionRepository<QuestionSubscription> questionSubscriptionRepository, ISubscriptionRepository<CourseSubscription> courseSubscriptionRepository)
         {
-            _messageRepository = messageRepository;
             _userManager = userManager;
-            _questionSubscriptionRepository = questionSubscriptionRepository;
+            _messageRepository = messageRepository;
             _courseSubscriptionRepository = courseSubscriptionRepository;
+            _questionSubscriptionRepository = questionSubscriptionRepository;
         }
 
         public async Task SendMessageToChannel(string message, int channelId)
         {
-            System.Console.WriteLine(Context.ConnectionId + " sent message to " + channelId.ToString());
             string userEmail = GetCurrentUserEmail();
             Message m = new()
             {
+                body = message,
                 userMail = userEmail,
                 channelId = channelId,
-                body = message,
                 time = DateTime.UtcNow
             };
             await _messageRepository.CreateAsync(m);
             await Clients.Group("Channel " + channelId.ToString()).SendAsync("messageReceived", userEmail, message, DateTime.UtcNow);
         }
 
-        public Task JoinChannel(int channelId) //FIXME: 0 references
+        public Task JoinChannel(int channelId)
         {
-            System.Console.WriteLine(Context.ConnectionId + " joined Channel: " + channelId.ToString());
             return Groups.AddToGroupAsync(Context.ConnectionId, "Channel " + channelId.ToString());
         }
 
-        public Task LeaveChannel(int channelId) //FIXME: 0 references
+        public Task LeaveChannel(int channelId)
         {
-            System.Console.WriteLine(Context.ConnectionId + " left Channel: " + channelId.ToString());
             return Groups.RemoveFromGroupAsync(Context.ConnectionId, "Channel " + channelId.ToString());
         }
 
-        public override async Task OnConnectedAsync() //FIXME: private? only used in this file
+        public override async Task OnConnectedAsync()
         {
-            // await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
-            System.Console.WriteLine("connect: " + Context.ConnectionId); //TODO: remove line
             UserHandler.ConnectedIds[GetCurrentUserId()] = Context.ConnectionId;
             await AddUserToSubscribedGroups();
             await base.OnConnectedAsync();
         }
 
-        public override async Task OnDisconnectedAsync(Exception exception) //FIXME: private? only used in this file
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
-            // await Clients.All.SendAsync("UserDisconnected", Context.ConnectionId);
-            System.Console.WriteLine(Context.ConnectionId + " disconnected"); //TODO: remove line
             UserHandler.ConnectedIds.Remove(GetCurrentUserId());
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task AddUserToSubscribedGroups() //FIXME: private? only used in this file
+        public async Task AddUserToSubscribedGroups()
         {
             string userId = GetCurrentUserId();
             ICollection<CourseSubscription> subscribedCourses = await _courseSubscriptionRepository.GetByUserId(userId);
@@ -85,24 +78,22 @@ namespace ChatSample.Hubs
             await Task.WhenAll(subscribedQuestions.Select(sq => Groups.AddToGroupAsync(Context.ConnectionId, "Question " + sq.subscribedItemId.ToString())));
         }
 
-        public string GetCurrentUserEmail() //FIXME: private? only used in this file
+        public string GetCurrentUserEmail()
         {
             string userEmail = null;
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;
-            if (currentUser.HasClaim(c => c.Type == "username"))
-            {
+            if (currentUser.HasClaim(c => c.Type == "username")) {
                 userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
                 System.Console.WriteLine("email: " + userEmail);
             }
             return userEmail;
         }
 
-        public string GetCurrentUserId() //FIXME: private? only used in this file
+        public string GetCurrentUserId()
         {
             string userId = null;
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;
-            if (currentUser.HasClaim(c => c.Type == "userref"))
-            {
+            if (currentUser.HasClaim(c => c.Type == "userref")) {
                 userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
             }
             return userId;

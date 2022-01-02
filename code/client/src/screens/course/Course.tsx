@@ -8,7 +8,7 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
 
     const info = async () => {
         axios.get('/Course/' + id).then(res => {
-            setCourse(res.data);
+            setCourse({ ...res.data, channels: res.data.channels?.reverse() });
             nav.setParams({ name: res.data.name });
         })
     }
@@ -42,10 +42,11 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
             <Text type='link' pad='top' children={course.courseEmail || 'cnet@uhasselt.be'}/>
             <Text pad='top' children={course.description}/>
             <Button pad='top' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
-            <ScrollView inner padding flex children={course.channels?.map((channel, i) =>
-                <CompactChannel margin='bottom' key={i} channel={channel}/>)}
+            <Text type='header' color='placeholder' pad='top' hidden={!course.channels?.length} children='Channels'/>
+            <ScrollView inner padding='bottom,horizontal' flex children={course.channels?.map((channel, i) =>
+                <CompactChannel margin={!!i} key={i} channel={channel}/>)}
             />
-            <Fab pad='bottom' icon='pencil' onPress={() => nav.push('EditCourse', { course })}/>
+            <Fab pad='bottom' icon='pencil' auth={email => email === course.profEmail} onPress={() => nav.push('EditCourse', { course })}/>
         </Loader>
     )
 })

@@ -5,10 +5,10 @@ type Props = {
     course: BaseCourse;
 }
 
-export default extend<typeof Touchable, Props>(Touchable, ({ course, ...props }) => {  // TODO show course number
+export default extend<typeof Touchable, Props>(Touchable, ({ course, ...props }) => {
     let nav = useNav();
 
-    return ( // TODO push?
+    return (
         <Touchable type='row' padding='all-0.2' onPress={() => nav.navigate({ name: 'Course', params: { id: course.id }, merge: true })} {...props}>
             <Icon sizing='huge' coloring='accent' padding='vertical-0.2' name='book'/>
             <View shrink grow margin='left'>

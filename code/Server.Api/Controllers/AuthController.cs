@@ -1,15 +1,15 @@
 using System;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Server.Api.Dtos;
 using Server.Api.Enum;
-using Server.Api.Helpers;
 using Server.Api.Models;
-using Server.Api.Repositories;
+using Server.Api.Helpers;
 using Server.Api.Services;
+using System.Threading.Tasks;
+using Server.Api.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using System.Text.RegularExpressions;
 
 namespace Server.Api.Controllers
 {
@@ -18,86 +18,49 @@ namespace Server.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly UserManager<User> _userManager;
-        private readonly ITokenManager _tokenManager;
         private readonly IEmailSender _mailSender;
+        private readonly ITokenManager _tokenManager;
+        private readonly UserManager<User> _userManager;
 
-        //private readonly IUserRepository _userRepository;
         private readonly IFieldOfStudyRepository _fieldOfStudyRepository;
         public AuthController(IFieldOfStudyRepository fieldOfStudyRepository, IMapper mapper, UserManager<User> userManager, ITokenManager tokenGenerator, IEmailSender mailSender)
         {
-            _fieldOfStudyRepository = fieldOfStudyRepository;
             _mapper = mapper;
+            _mailSender = mailSender;
             _userManager = userManager;
             _tokenManager = tokenGenerator;
-            _mailSender = mailSender;
+            _fieldOfStudyRepository = fieldOfStudyRepository;
 
         }
 
         [HttpPost("register")]
         public async Task<ActionResult> RegisterJWTUser(RegisterUserDto dto)
         {
-            try
-            {
-                User _user = null;
-                string role = "";
-
-                if (dto.Password.Length < 6 || dto.ConfirmPassword.Length < 6)
-                {
-                    return BadRequest("Password length should be at least 6");
-                }
-
-                var hash = PasswordHelper.generateHashAndSalt(dto.Password).Item1;
-
-                //email check en aanmaken account
-                Regex regStudent = new Regex(@"\w+@student\.uhasselt\.be");
-                Regex regProf = new Regex(@"\w+@uhasselt\.be");
-                if (regStudent.IsMatch(dto.Email))
-                {
-                    //fieldOfStudy processing
-                    FieldOfStudy fos = await _fieldOfStudyRepository.GetByFullNameAsync(dto.fieldOfStudy);
-                    if (fos == null)
-                    {
-                        return BadRequest("Field Of Study does not exist");
-                    }
-                    Student newStudent = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString(), FieldOfStudyId = fos.id };
-
-                    _user = newStudent;
-                    role = RolesEnum.student_NORM;
-
-                }
-                else if (regProf.IsMatch(dto.Email))
-                {
-                    Professor prof = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString() };
-                    _user = prof;
-                    role = RolesEnum.prof_NORM;
-                }
-                else
-                {
-                    return BadRequest("Please use an UHasselt email");
-                }
-
-                var result = await _userManager.CreateAsync(_user, dto.Password);
-                if (!result.Succeeded)
-                {
-                    return BadRequest(result.Errors);
-                }
-
-                await _userManager.AddToRoleAsync(_user, role);
-
-                //send email confirmation link
-                try
-                {
-                    SendConfirmationEmail(_user);
-                }
-                catch (Exception) { return BadRequest("Error sending confirmation email"); }
-
-                return StatusCode(201);
+            User user = null;
+            string role = "";
+            if (dto.Password.Length < 6) return BadRequest("Password length should be at least 6");
+            var hash = PasswordHelper.generateHashAndSalt(dto.Password).Item1;
+            Regex regStudent = new Regex(@"\w+@student\.uhasselt\.be");
+            Regex regProf = new Regex(@"\w+@uhasselt\.be");
+            if (regStudent.IsMatch(dto.Email)) {
+                FieldOfStudy fos = await _fieldOfStudyRepository.GetAsync(dto.fieldOfStudy);
+                if (fos == null) return BadRequest("Field Of Study does not exist");
+                Student newStudent = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString(), FieldOfStudyId = fos.id };
+                role = RolesEnum.student_NORM;
+                user = newStudent;
             }
-            catch (System.Exception)
-            {
-                return BadRequest("Error while creating account");
+            else if (regProf.IsMatch(dto.Email)) {
+                Professor prof = new() { UserName = dto.Email, Email = dto.Email, PasswordHash = hash.ToString() };
+                role = RolesEnum.prof_NORM;
+                user = prof;
             }
+            else return BadRequest("Please use an UHasselt email");
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+            await _userManager.AddToRoleAsync(user, role);
+            try { SendConfirmationEmail(user); }
+            catch (Exception) { return BadRequest("Error sending confirmation email"); }
+            return NoContent();
         }
 
         [HttpPost("login")]
@@ -112,30 +75,17 @@ namespace Server.Api.Controllers
                 var token = await _tokenManager.GetTokenAsync(user);
                 return Ok(token);
             }
-            catch (System.Exception)
-            {
-                return Unauthorized("Invalid Authentication");
-            }
+            catch { return Unauthorized("Invalid Authentication"); }
         }
 
-        [HttpGet("ConfirmEmail")] //FIXME: Make route lower case
+        [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                return base.Content("<div><p>This user does not exist</p></div>", "text/html");
-            }
-
+            if (user == null) return base.Content("<div><p>This user does not exist</p></div>", "text/html");
             var result = await _userManager.ConfirmEmailAsync(user, token);
-            if (result.Succeeded)
-            {
-                return base.Content("<div><p>Thank you for confirming your email.</p></div>", "text/html");
-            }
-            else
-            {
-                return base.Content("<div><p>Email confirmation failed, please contact stunetUH@gmail.com</p></div>", "text/html");
-            }
+            if (result.Succeeded) return base.Content("<div><p>Your email has been confirmed, you can now log in to StuNet.</p></div>", "text/html");
+            else return base.Content("<div><p>Email confirmation failed, please contact stunetUH@gmail.com</p></div>", "text/html");
         }
 
         private async void SendConfirmationEmail(User user)
@@ -150,14 +100,8 @@ namespace Server.Api.Controllers
         [HttpGet("validateToken")]
         public IActionResult ValidateToken([FromQuery] string token)
         {
-            if (_tokenManager.ValidateToken(token))
-            {
-                return Ok();
-            }
-            else
-            {
-                return Unauthorized();
-            }
+            if (_tokenManager.ValidateToken(token)) return Ok();
+            else return Unauthorized();
         }
     }
 }

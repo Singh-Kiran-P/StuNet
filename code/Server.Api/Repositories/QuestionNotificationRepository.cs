@@ -1,11 +1,12 @@
+using Server.Api.Models;
+using Server.Api.DataBase;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using Server.Api.DataBase;
-using Server.Api.Models;
 
 namespace Server.Api.Repositories
 {
-    public class PgQuestionNotificationRepository : PgNotificationRepository<QuestionNotification, Question>
+    public class PgQuestionNotificationRepository : PgNotificationRepository<QuestionNotification, ICollection<Topic>>
     {
         public PgQuestionNotificationRepository(IDataContext context) : base(context) { }
 
@@ -14,9 +15,11 @@ namespace Server.Api.Repositories
             return _context.QuestionNotifications;
         }
 
-        protected override IIncludableQueryable<QuestionNotification, Question> GetIncludes()
+        protected override IIncludableQueryable<QuestionNotification, ICollection<Topic>> GetIncludes()
         {
-            return GetDbSet().Include(n => n.question);
+            return GetDbSet()
+                .Include(n => n.question).ThenInclude(q => q.course)
+                .Include(n => n.question).ThenInclude(q => q.topics);
         }
     }
 }

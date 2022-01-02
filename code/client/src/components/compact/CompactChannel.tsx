@@ -8,7 +8,7 @@ type Props = {
 export default extend<typeof Touchable, Props>(Touchable, ({ channel, ...props }) => {
     let nav = useNav();
 
-    return ( // TODO push?
+    return (
         <Touchable type='row' padding='all-0.2' onPress={() => nav.navigate({ name: 'Channel', params: { id: channel.id }, merge: true })} {...props}>
             <Icon sizing='huge' coloring='accent' padding='vertical-0.2' name='chat'/>
             <View shrink grow margin='left'>

@@ -52,7 +52,7 @@ export default extend<typeof View, Props>(View, ({ message, sender, first, last,
         }
     })
 
-	return ( // TODO push?
+	return (
         <View {...props} type='row' margin='bottom-0.5' style={[s.message, s.align]}>
             <Touchable margin='right,top' style={s.profile} radius='round' borderless hidden={sender || !first} onPress={() => {
                 nav.navigate({ name: 'Profile', params: { email: email, logout: false }, merge: true })

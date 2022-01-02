@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using Server.Api.Models;
+using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
 
 namespace Server.Api.Dtos
 {
@@ -10,14 +10,9 @@ namespace Server.Api.Dtos
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
-
-        public static LoginUserDto Convert(User user)
-        {
-            throw new System.Exception("method not implemented");
-        }
     }
 
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage] // TODO what
     public record RegisterUserDto
     {
         [Required(ErrorMessage = "Email is required")]
@@ -29,25 +24,16 @@ namespace Server.Api.Dtos
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-        public string fieldOfStudy { get; set; }
-
-        public static RegisterUserDto Convert(User user)
-        {
-            throw new System.Exception("method not implemented");
-        }
+        public int fieldOfStudy { get; set; }
     }
 
     public record ResponseUserDto
     {
-        //public string id { get;set; }
         public string email { get; set; }
 
-        //TODO: add subscribed courses, maybe answer and question ids?
         public static ResponseUserDto Convert(User user)
         {
-            return new ResponseUserDto()
-            {
-                //id = user.Id,
+            return new ResponseUserDto() {
                 email = user.Email
             };
         }

@@ -9,7 +9,7 @@ type Props = {
 export default extend<typeof Touchable, Props>(Touchable, ({ question, selected, ...props }) => {
     let nav = useNav();
 
-    return ( // TODO push?
+    return (
         <Touchable type='row' padding='all-0.2' onPress={() => nav.navigate({ name: 'Question', params: { id: question.id }, merge: true })} {...props}>
             <Icon sizing='huge' coloring='accent' padding='vertical-0.2' name='comment-question'/>
             <View shrink grow margin='left'>
