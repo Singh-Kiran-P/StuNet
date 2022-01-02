@@ -42,8 +42,9 @@ namespace Server.Api.Controllers
             IEnumerable<Answer> answers = await _answerRepository.GetAllAsync();
             List<GetAnswerDto> res = new List<GetAnswerDto>();
             foreach (var answer in answers) {
-                User user = await _userManager.FindByIdAsync(answer.userId);
-                res.Add(GetAnswerDto.Convert(answer, user));
+                User answerUser = await _userManager.FindByIdAsync(answer.userId);
+                User questionUser = await _userManager.FindByIdAsync(answer.question.userId);
+                res.Add(GetAnswerDto.Convert(answer, answerUser, questionUser));
             }
             return Ok(res);
         }
@@ -55,8 +56,9 @@ namespace Server.Api.Controllers
             IEnumerable<Answer> answers = await _answerRepository.GetByQuestionId(questionId);
             List<GetAnswerDto> res = new List<GetAnswerDto>();
             foreach (var answer in answers) {
-                User user = await _userManager.FindByIdAsync(answer.userId);
-                res.Add(GetAnswerDto.Convert(answer, user));
+                User answerUser = await _userManager.FindByIdAsync(answer.userId);
+                User questionUser = await _userManager.FindByIdAsync(answer.question.userId);
+                res.Add(GetAnswerDto.Convert(answer, answerUser, questionUser));
             }
             return Ok(res);
         }
@@ -66,18 +68,24 @@ namespace Server.Api.Controllers
         public async Task<ActionResult<GetAnswerDto>> GetAnswer(int id)
         {
             var answer = await _answerRepository.GetAsync(id);
-            User user = await _userManager.FindByIdAsync(answer.userId);
+            User answerUser = await _userManager.FindByIdAsync(answer.userId);
+            User questionUser = await _userManager.FindByIdAsync(answer.question.userId);
             if (answer == null) return NotFound();
-            return Ok(GetAnswerDto.Convert(answer, user));
+            return Ok(GetAnswerDto.Convert(answer, answerUser, questionUser));
         }
 
         [HttpGet("getGivenAnswersByEmail")]
         public async Task<ActionResult<IEnumerable<GetAnswerDto>>> GetGivenAnswers(string email)
         {
-            User user = await _userManager.FindByEmailAsync(email);
-            if (user == null) return Ok(new List<GetAnswerDto>());
-            var answers = await _answerRepository.GetGivenByUserId(user.Id);
-            return Ok(answers.Select(q => GetAnswerDto.Convert(q, user)));
+            User answerUser = await _userManager.FindByEmailAsync(email);
+            if (answerUser == null) return Ok(new List<GetAnswerDto>());
+            var answers = await _answerRepository.GetGivenByUserId(answerUser.Id);
+            List<GetAnswerDto> res = new List<GetAnswerDto>();
+            foreach (var answer in answers) {
+                User questionUser = await _userManager.FindByIdAsync(answer.question.userId);
+                res.Add(GetAnswerDto.Convert(answer, answerUser, questionUser));
+            }
+            return Ok(res);
         }
 
         [Authorize(Roles = "student,prof")]
@@ -87,15 +95,16 @@ namespace Server.Api.Controllers
             ClaimsPrincipal currentUser = HttpContext.User;
             if (!currentUser.HasClaim(c => c.Type == "username")) return Unauthorized();
             string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-            User user = await _userManager.FindByEmailAsync(userEmail);
             Question question = await _questionRepository.GetAsync(dto.questionId);
-            if (user == null || question == null) NotFound();
+            User answerUser = await _userManager.FindByEmailAsync(userEmail);
+            User questionUser = await _userManager.FindByIdAsync(question.userId);
+            if (answerUser == null || question == null) NotFound();
             Answer answer = new() {
                 body = dto.body,
-                userId = user.Id,
                 title = dto.title,
                 question = question,
-                time = DateTime.UtcNow
+                time = DateTime.UtcNow,
+                userId = answerUser.Id,
             };
 
             await _answerRepository.CreateAsync(answer);
@@ -107,7 +116,7 @@ namespace Server.Api.Controllers
                 answerId = answer.id
             }));
 
-            var ret = GetAnswerDto.Convert(answer, user);
+            var ret = GetAnswerDto.Convert(answer, answerUser, questionUser);
             await _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
             return Ok(ret);
         }

@@ -1,56 +1,39 @@
 @startuml Subscribe course
+
+title Reference: [UC] Subscribe to course
+
 participant ":CourseSubscriptionController" as controller
-participant ":CourseSubscription" as subscription
 participant ":UserManager" as userManager
-participant ":CourseSubscriptionRepository" as courseSubsciptionRepository
+participant ":CourseSubscription" as subscription
+participant ":CourseSubscriptionRepository" as repository
 
 -> controller: CreateCourseSubscription(dto.courseId)
 activate controller
 
 alt Valid user
     controller -> userManager: FindByEmailAsync(userEmail)
-	activate userManager
-	controller <-- userManager: User
-	' TO-ASK: User|null of gewoon User?
-	deactivate userManager
+    activate userManager
+    controller <-- userManager: User
+    ' TO-ASK: User|null of gewoon User?
+    deactivate userManager
 
-    controller -> courseSubsciptionRepository: GetAsync(dto.courseId)
-    activate courseSubsciptionRepository
-    courseSubsciptionRepository --> controller: subscibedItem
-    deactivate courseSubsciptionRepository
+    controller -> repository: GetAsync(dto.courseId)
+    activate repository
+    repository --> controller: subscibedItem
+    deactivate repository
+    
     controller -> subscription **: create(DateTime.UtcNow, user.id, subscribedItem)
 
-    controller -> courseSubsciptionRepository: CreateAsync(subscription)
-    activate courseSubsciptionRepository
-    courseSubsciptionRepository --> controller: void
-    deactivate courseSubsciptionRepository
+    controller -> repository: CreateAsync(subscription)
+    activate repository
+    repository --> controller: void
+    deactivate repository
 
     <-- controller: ok
-
 else Invalid user
     <-- controller: unauthorized
 end
 
-' public async Task<ActionResult<CreateCourseSubscriptionDto>> CreateCourseSubscription(CreateCourseSubscriptionDto dto)
-'         {
-'             ClaimsPrincipal currentUser = HttpContext.User;
-'             if (currentUser.HasClaim(c => c.Type == "username"))
-'             {
-'                 string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-'                 User user = await _userManager.FindByEmailAsync(userEmail);
-'                 CourseSubscription subscription = new()
-'                 {
-'                     dateTime = DateTime.UtcNow,
-'                     userId = user.Id,
-'                     subscribedItem = await _courseRepository.GetAsync(dto.courseId),
-'                 };
+deactivate controller
 
-'                 await _hubContext.Groups.AddToGroupAsync(UserHandler.ConnectedIds[user.Id], "Course " + subscription.subscribedItemId.ToString());
-'                 await _courseSubscriptionRepository.CreateAsync(subscription);
-'                 return Ok(subscription);
-'             }
-'             else
-'             {
-'                 return Unauthorized();
-'             }
-'         }
+@enduml

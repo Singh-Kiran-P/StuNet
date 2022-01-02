@@ -1,4 +1,4 @@
-import React, { Style, Theme, useUser, professor } from '@/.';
+import React, { Style, Theme } from '@/.';
 import { GetProps } from '@/util';
 
 type Side = 'bottom' | 'top' | 'left' | 'right' | 'vertical' | 'horizontal' | 'all';
@@ -19,8 +19,6 @@ export type Props = {
     align?: 'right' | 'bottom';
     pad?: boolean | 'top' | 'bottom';
     inner?: boolean;
-
-    auth?: 'prof' | 'student' | ((email: string) => boolean);
 }
 
 const values = (s: string, values: undefined | boolean | Values, d: Side) => {
@@ -60,11 +58,7 @@ const side = (s: string, margin: undefined | boolean | Side, d: Side) => {
 
 export default <T extends React.JSXElementConstructor<any>, U extends {} = {}>(c: T, e: (p: GetProps<T> & Props & Omit<U, keyof Props>) => JSX.Element | null) => {
 
-    const Extend = ({ hidden, flex, grow, shrink, margin, padding, radius, align, pad, inner, auth, ...props }: Partial<Omit<GetProps<T>, keyof (Props & U)> & Props & U>) =>  {
-        let email = useUser().username;
-        if (auth === 'prof' && !professor(email)) return null;
-        if (auth === 'student' && professor(email)) return null;
-        if (typeof auth === 'function' && !auth(email)) return null;
+    const Extend = ({ hidden, flex, grow, shrink, margin, padding, radius, align, pad, inner, ...props }: Partial<Omit<GetProps<T>, keyof (Props & U)> & Props & U>) =>  {
         if (hidden) return null;
 
         let margins = values('margin', margin, 'top');

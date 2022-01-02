@@ -30,6 +30,7 @@ export const errorString = (err: any): string => {
     if (err.status >= 500) return v();
     if (err.status === 404) return v('Item not found');
     if (err.status === 401) return v('Unauthorized request');
+    if (err.status === 403) return v('Unauthorized request');
     if (typeof (err = err?.response?.data) !== 'object') return v(err);
     if (Array.isArray(err)) err = err[0] || {};
     return v(err.description || err.errors);
@@ -45,7 +46,7 @@ export const displayName = (email: string) => {
 }
 
 export const timeSort = <T extends { time: string }>(items: T[]): T[] => {
-    return items.sort((a, b) => b.time.localeCompare(a.time));
+    return items.sort((a, b) => b?.time?.localeCompare(a?.time || '') || 0);
 }
 
 export const show = (set: React.Dispatch<React.SetStateAction<string>>) => (err: any) => set(errorString(err));

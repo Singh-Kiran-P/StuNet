@@ -84,7 +84,6 @@ namespace ChatSample.Hubs
             ClaimsPrincipal currentUser = Context.GetHttpContext().User;
             if (currentUser.HasClaim(c => c.Type == "username")) {
                 userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
-                System.Console.WriteLine("email: " + userEmail);
             }
             return userEmail;
         }

@@ -22,7 +22,6 @@ namespace Server.Api.Controllers
             _fieldOfStudyRepository = fieldOfStudyRepository;
         }
 
-        [Authorize(Roles = "student,prof")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FieldOfStudy>>> GetFieldOfStudies()
         {
@@ -30,7 +29,6 @@ namespace Server.Api.Controllers
             return Ok(fieldOfStudies);
         }
 
-        [Authorize(Roles = "student,prof")]
         [HttpGet("{id}")]
         public async Task<ActionResult<FieldOfStudy>> GetFieldOfStudy(int id)
         {

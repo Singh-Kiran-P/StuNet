@@ -9,8 +9,6 @@ export default Screen('EditCourse', ({ nav, params: { course } }) => {
     let [description, setDescription] = useState(course.description);
     let [error, setError] = useState('');
 
-    console.log(course);
-    console.log({ name, number, email, description });
     let changed = !contains(course, { name, number, courseEmail: email, description });
 
     const save = () => {

@@ -171,14 +171,15 @@ namespace Server.Api.Services
                 var questions = _questionRepository.GetAllAsync().GetAwaiter().GetResult();
                 (int questionId, string title, string body) = _parseEmail(message);
                 Question question = _questionRepository.GetAsync(questionId).GetAwaiter().GetResult();
-                User user = _userManager.FindByEmailAsync(question.course.profEmail).GetAwaiter().GetResult();
-                if (user == null || question == null) return;
+                User answerUser = _userManager.FindByEmailAsync(question.course.profEmail).GetAwaiter().GetResult();
+                User questionUser = _userManager.FindByIdAsync(question.userId).GetAwaiter().GetResult();
+                if (answerUser == null || question == null) return;
                 Answer answer = new() {
                     body = body,
                     title = title,
-                    userId = user.Id,
                     isAccepted = true,
                     question = question,
+                    userId = answerUser.Id,
                     time = DateTime.UtcNow
                 };
 
@@ -191,7 +192,7 @@ namespace Server.Api.Services
                     answerId = answer.id
                 })).GetAwaiter().GetResult();
 
-                var ret = GetAnswerDto.Convert(answer, user);
+                var ret = GetAnswerDto.Convert(answer, answerUser, questionUser);
                 _hubContext.Clients.Group("Question " + question.id).SendAsync("AnswerNotification", ret);
             }
         }

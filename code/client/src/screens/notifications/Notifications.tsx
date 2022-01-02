@@ -1,11 +1,9 @@
-import React, { Screen, useState, Notification, BaseTopic, axios, show, timeSort, Question, Answer } from '@/.';
+import React, { Screen, useState, Notification, axios, show, timeSort, Question, Answer } from '@/.';
 import { Text, List, Loader, CompactNotification } from '@/components';
 
 type Notifications = (Notification & {
-    isQuestion: boolean,
-    isAccepted: boolean,
-    topics: BaseTopic[]
-})[]
+    isQuestion: boolean;
+})[];
 
 export default Screen('Notifications', () => {
     let [notifications, setNotifications] = useState<Notifications>([]);
@@ -16,8 +14,6 @@ export default Screen('Notifications', () => {
             let notifications: Notification[][] = [res.data.item1, res.data.item2];
             const unique = (id: number, i: number) => id * notifications.length + i;
             setNotifications(timeSort(notifications.map((l, i) => l.map(n => ({
-                isAccepted: false,
-                topics: [],
                 ...n,
                 isQuestion: !i,
                 id: unique(n.id, i)

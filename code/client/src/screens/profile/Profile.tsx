@@ -1,4 +1,4 @@
-import React, { Screen, Course, Question, Answer, useState, useUser, axios, displayName, professor } from '@/.';
+import React, { Screen, Course, Question, Answer, useState, useEmail, axios, displayName, professor } from '@/.';
 import { Loader, View, Text, Icon, ItemList } from '@/components';
 
 export default Screen('Profile', ({ nav, params: { email } }) => {
@@ -7,13 +7,13 @@ export default Screen('Profile', ({ nav, params: { email } }) => {
     let [answers, setAnswers] = useState<Answer[]>([]);
     let [study, setStudy] = useState('');
 
-    let user: string = useUser().username;
+    let user = useEmail();
     if (!email) email = user;
     let owner = email === user;
     let prof = professor(email);
 
     const info = async () => {
-        return axios.get('/FieldOfStudy/user', { params: { email } }).then(res => {
+        if (!prof) return axios.get('/FieldOfStudy/user', { params: { email } }).then(res => {
             setStudy(res.data.fullName);
             nav.setParams({ screenTitle: owner ? 'Your Profile' : displayName(email) })
         })
@@ -45,7 +45,7 @@ export default Screen('Profile', ({ nav, params: { email } }) => {
                 <Icon sizing='massive' coloring='foreground' margin='right' name={prof ? 'account-tie' : 'account'}/>
                 <Text type='header' children={prof ? 'Professor' : 'Student'}/>
             </View>
-            <Text pad margin children={study}/>
+            <Text pad margin hidden={!study} children={study}/>
             <Text type='link' pad margin children={email}/>
             <ItemList name={owner ? 'Your' : ''} courses={courses} questions={questions} answers={answers}/>
         </Loader>
