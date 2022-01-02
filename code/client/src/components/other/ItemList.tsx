@@ -15,17 +15,17 @@ const display = (name: string, section: string) => {
     return `${name} ${section}`;
 }
 
-export default extend<typeof SectionList, Props>(SectionList, ({ courses = [], channels = [], questions = [], answers = [], name, ...props }) => {
+export default extend<typeof SectionList, Props>(SectionList, ({ courses, channels, questions, answers, name, ...props }) => {
     return (
         <SectionList
             inner
             padding='horizontal,bottom'
             {...props}
             sections={[
-                { title: 'courses', data: courses.reverse() },
-                { title: 'channels', data: channels.reverse() },
-                { title: 'questions', data: timeSort(questions) },
-                { title: 'answers', data: timeSort(answers) }
+                { title: 'courses', data: courses?.reverse() || [] },
+                { title: 'channels', data: channels?.reverse() || [] },
+                { title: 'questions', data: timeSort(questions || []) },
+                { title: 'answers', data: timeSort(answers || []) }
             ].filter(s => s.data.length)}
             renderSectionHeader={({ section }) => (
                 <Text type='header' color='placeholder' margin='top-2' children={display(name, section.title)}/>

@@ -30,7 +30,6 @@ namespace Server.Api.Dtos
 
     public record CreateAnswerDto
     {
-        public string userId { get; set; }
         public int questionId { get; set; }
         public string title { get; set; }
         public string body { get; set; }

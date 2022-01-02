@@ -10,8 +10,10 @@
 
     <body style="font-size: 12px;">
         @Model.email anonymously asked a question in @Model.course.
-        <br/>
-        <br/>
+        @if (Model.topics.Length > 0) { 
+            <br/>
+            <br/>
+        }
         @foreach(var topic in Model.topics) {
             <span style="padding: 5px 10px; margin-right: 10px; border-radius: 100px; background-color: rgba(0, 0, 0, 0.26); color: '#000000';">
                 @topic.name

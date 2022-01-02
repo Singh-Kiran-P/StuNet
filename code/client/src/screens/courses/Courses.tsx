@@ -21,7 +21,7 @@ export default Screen('Courses', ({ nav, params: { search, update } }) => {
             <List inner padding data={courses} refreshing={refresh} renderItem={course =>
                 <CompactCourse margin={!!course.index} course={course.item}/>}
             />
-            <Fab pad='bottom' icon='book-plus' onPress={() => nav.push('CreateCourse')}/>
+            <Fab pad='bottom' icon='book-plus' auth='prof' onPress={() => nav.push('CreateCourse')}/>
         </View>
     )
 })

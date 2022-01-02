@@ -46,7 +46,7 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
             <ScrollView inner padding='bottom,horizontal' flex children={course.channels?.map((channel, i) =>
                 <CompactChannel margin={!!i} key={i} channel={channel}/>)}
             />
-            <Fab pad='bottom' icon='pencil' onPress={() => nav.push('EditCourse', { course })}/>
+            <Fab pad='bottom' icon='pencil' auth={email => email === course.profEmail} onPress={() => nav.push('EditCourse', { course })}/>
         </Loader>
     )
 })

@@ -1,5 +1,5 @@
-import React, { Screen, EmptyAnswer, useState, axios, show, dateString } from '@/.';
-import { View, Text, Icon, Fab, Loader, CompactQuestion } from '@/components';
+import React, { Screen, EmptyAnswer, useState, axios, show, dateString, professor } from '@/.';
+import { View, Text, Fab, Loader, CompactQuestion } from '@/components';
 import { update } from '@/nav';
 
 export default Screen('Answer', ({ nav, params: { id } }) => {
@@ -32,7 +32,9 @@ export default Screen('Answer', ({ nav, params: { id } }) => {
                 <Text type='hint' align='right' children={dateString(answer.time)}/>
             </View>
             <Text margin children={answer.body}/>
-            <Fab background={answer.isAccepted && 'error'} icon={answer.isAccepted ? 'close' : 'check'} onPress={accept}/>
+            <Fab background={answer.isAccepted && 'error'} icon={answer.isAccepted ? 'close' : 'check'}
+                auth={email => professor(email) || email === 'TODO'} onPress={accept}
+            />
         </Loader>
     )
 })

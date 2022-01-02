@@ -172,11 +172,9 @@ namespace Server.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateAnswer(int id, CreateAnswerDto dto)
         {
-
             Answer existingAnswer = await _answerRepository.GetAsync(id);
-            User user = await _userManager.FindByIdAsync(dto.userId);
             Question question = existingAnswer.question;
-            if (existingAnswer == null || user == null || question == null)
+            if (existingAnswer == null || question == null)
             {
                 return NotFound();
             }
@@ -184,7 +182,7 @@ namespace Server.Api.Controllers
             Answer updatedAnswer = new()
             {
                 id = existingAnswer.id,
-                userId = user.Id,
+                userId = existingAnswer.userId,
                 question = question,
                 title = dto.title,
                 body = dto.body,

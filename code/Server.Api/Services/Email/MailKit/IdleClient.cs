@@ -213,7 +213,7 @@ namespace Server.Api.Services
             foreach (var s in start.Replace('.', ' ').Split(' ')) {
                 name += s.ToUpper()[0] + s.ToLower().Substring(1) + ' ';
             }
-            var title = "Prof " + name.Substring(0, name.Length - 1) + " answered";
+            var title = "Answered by Prof. " + name.Substring(0, name.Length - 1);
 
             var text = ((TextPart)client.Inbox.GetBodyPart(message.UniqueId, message.TextBody)).Text;
             var content = text.Split("<stunetuh@gmail.com>")[0];
