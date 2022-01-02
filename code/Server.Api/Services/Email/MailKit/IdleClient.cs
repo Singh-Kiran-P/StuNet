@@ -170,6 +170,8 @@ namespace Server.Api.Services
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
                 var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var _hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<ChatHub>>();
+                var _notificationRepository = scope.ServiceProvider.GetRequiredService<INotificationRepository<AnswerNotification>>();
+                var _subscriptionRepository = scope.ServiceProvider.GetRequiredService<ISubscriptionRepository<QuestionSubscription>>();
                 var questions = _questionRepository.GetAllAsync().GetAwaiter().GetResult();
 
                 Console.WriteLine("Email Sent"); // TODO implement
@@ -192,17 +194,28 @@ namespace Server.Api.Services
                     title = title,
                     body = body,
                     // files = createAnswerDto.files
-                    time = DateTime.UtcNow
+                    time = DateTime.UtcNow,
+                    isAccepted = true
                 };
                 try
                 {
                     _answerRepository.CreateAsync(answer).GetAwaiter().GetResult();
+                    IEnumerable<string> subscriberIds = (_subscriptionRepository.GetBySubscribedId(_question.id).GetAwaiter().GetResult()).Select(sub => sub.userId);
+                    _notificationRepository.CreateAllAync(subscriberIds.Select(userId => new AnswerNotification
+                    {
+                        userId = userId,
+                        answerId = answer.id,
+                        answer = answer,
+                        time = answer.time
+                    })).GetAwaiter().GetResult();
                 }
                 catch (System.Exception e)
                 {
                     Console.WriteLine(e);
                 }
-                _hubContext.Clients.Group("Question " + _question.id).SendAsync("AnswerNotification", answer.id).GetAwaiter().GetResult();
+
+                var ret = GetAnswerDto.Convert(answer, user);
+                _hubContext.Clients.Group("Question " + _question.id).SendAsync("AnswerNotification", ret).GetAwaiter().GetResult();
 
             }
         }
