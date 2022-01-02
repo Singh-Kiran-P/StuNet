@@ -45,9 +45,9 @@ namespace Server.Api.Controllers
         [HttpGet("user")]
         public async Task<ActionResult<FieldOfStudy>> GetUserFieldOfStudy([FromQuery] string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email) as Student;
             if (user == null) return NotFound();
-            var id = 1; // TODO DOESNT FUCKING WORK: user.FieldOfStudyId;
+            var id = user.FieldOfStudyId;
             var fieldOfStudy = await _fieldOfStudyRepository.GetAsync(id);
             if (fieldOfStudy == null) return NotFound();
             return Ok(fieldOfStudy);
