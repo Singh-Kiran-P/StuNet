@@ -3,11 +3,11 @@
 title Reference: [UC] Search Question
 
 participant ":QuestionController" as controller
+participant ":UserManager" as manager
 participant GetQuestionDto
 participant ":GetQuestionDto" as getQuestionDto
-participant ":QuestionRepository" as repository
 participant StringMatcher
-participant ":UserManager" as manager
+participant ":QuestionRepository" as repository
 
 --> controller: SearchByName(courseId, name)
 activate controller

@@ -3,8 +3,8 @@
 title Reference: [UC] Subscribe to course
 
 participant ":CourseSubscriptionController" as controller
-participant ":CourseSubscription" as subscription
 participant ":UserManager" as userManager
+participant ":CourseSubscription" as subscription
 participant ":CourseSubscriptionRepository" as courseSubsciptionRepository
 
 -> controller: CreateCourseSubscription(dto.courseId)

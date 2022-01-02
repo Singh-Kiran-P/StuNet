@@ -3,12 +3,12 @@
 title Reference: [Contract] SubmitQuestion
 
 participant ":QuestionController" as questionController
-participant GetQuestionDto
+participant ":UserManager" as userManager
 participant ":QuestionSubscription" as questionSubscription
 participant ":QuestionNotification" as questionNotification
-participant ":GetQuestionDto" as getQuestionDto
 participant ":Question" as question
-participant ":UserManager" as userManager
+participant GetQuestionDto
+participant ":GetQuestionDto" as getQuestionDto
 participant ":CourseRepository" as courseRepository
 participant ":TopicRepository" as topicRepository
 participant ":QuestionRepository" as questionRepository

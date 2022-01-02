@@ -3,10 +3,10 @@
 title Reference: [UC] Send Chat Message
 
 participant ":ChatHub" as hub
-participant ":MessageRepository" as repository
 participant ":Message" as message
+participant ":MessageRepository" as repository
 
---> hub : SendMessageToChannel(message, channelId)
+--> hub : SendMessageToChannel(\n\tmessage, channelId)
 activate hub
 
 hub -> message ** : create(userEmail, channelId, message, DateTime.UtcNow)

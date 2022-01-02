@@ -3,13 +3,13 @@
 title Reference: [UC] Create Account
 
 participant ":AuthController" as authController
+participant ":UserManager" as userManager
 participant ":Student" as student
 participant ":Professor" as professor
-participant ":UserManager" as userManager
 participant ":EmailSender" as emailSender
 participant ":FieldOfStudyRepository" as fieldOfStudyRepository
 
--> authController : RegisterJWTUser(dto.email, dto.password, dto.confirmPassword, dto.fieldOfStudy)
+-> authController : RegisterJWTUser(dto.email, dto.password,\n\tdto.confirmPassword, dto.fieldOfStudy)
 activate authController
 
 alt Valid password

@@ -3,10 +3,10 @@
 title Reference: [Contract] SubmitCourse
 
 participant ":CourseController" as controller
-participant ":CourseRepository" as repository
 participant ":Course" as course
+participant ":CourseRepository" as repository
 
---> controller: CreateCourse(dto.name, dto.number, dto.description, dto.courseEmail, dto.profEmail)
+--> controller: CreateCourse(dto.name, dto.number, dto.description,\n\tdto.courseEmail, dto.profEmail)
 activate controller
 
 alt Valid user

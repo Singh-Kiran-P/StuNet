@@ -13,7 +13,7 @@ participant ":AnswerRepository" as repository
 participant ":QuestionSubscriptionRepository" as subscriptionRepository
 participant ":AnswerNotificationRepository" as notificationRepository
 
--> controller: CreateAnswer(dto.userId, dto.questionId, dto.title, dto.body)
+-> controller: CreateAnswer(dto.userId, dto.questionId,\n\tdto.title, dto.body)
 activate controller
 
 alt Valid user
