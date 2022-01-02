@@ -1,14 +1,17 @@
-import React, { Screen, EmptyAnswer, useState, axios, show, dateString, professor } from '@/.';
+import React, { Screen, EmptyAnswer, useState, useEmail, axios, show, dateString, professor } from '@/.';
 import { View, Text, Fab, Loader, CompactQuestion } from '@/components';
 import { update } from '@/nav';
 
 export default Screen('Answer', ({ nav, params: { id } }) => {
     let [answer, setAnswer] = useState(EmptyAnswer);
     let [error, setError] = useState('');
+    let email = useEmail();
+    let auth = email === answer.question.user.email || professor(email)
 
     const fetch = async () => {
         return axios.get('/Answer/' + id).then(res => {
             setAnswer(res.data);
+            console.log(res.data)
             nav.setParams({ course: res.data.question?.course?.name || '' });
         })
     }
@@ -32,9 +35,7 @@ export default Screen('Answer', ({ nav, params: { id } }) => {
                 <Text type='hint' align='right' children={dateString(answer.time)}/>
             </View>
             <Text margin children={answer.body}/>
-            <Fab background={answer.isAccepted && 'error'} icon={answer.isAccepted ? 'close' : 'check'}
-                auth={email => professor(email) || email === 'TODO'} onPress={accept}
-            />
+            <Fab background={answer.isAccepted && 'error'} icon={answer.isAccepted ? 'close' : 'check'} hidden={!auth} onPress={accept}/>
         </Loader>
     )
 })

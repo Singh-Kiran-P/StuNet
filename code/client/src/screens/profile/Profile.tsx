@@ -1,4 +1,4 @@
-import React, { Screen, Course, Question, Answer, useState, useUser, axios, displayName, professor } from '@/.';
+import React, { Screen, Course, Question, Answer, useState, useEmail, axios, displayName, professor } from '@/.';
 import { Loader, View, Text, Icon, ItemList } from '@/components';
 
 export default Screen('Profile', ({ nav, params: { email } }) => {
@@ -7,7 +7,7 @@ export default Screen('Profile', ({ nav, params: { email } }) => {
     let [answers, setAnswers] = useState<Answer[]>([]);
     let [study, setStudy] = useState('');
 
-    let user: string = useUser().username;
+    let user = useEmail();
     if (!email) email = user;
     let owner = email === user;
     let prof = professor(email);

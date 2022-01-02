@@ -53,13 +53,13 @@ export type BaseQuestion = {
     body: string;
     time: string;
     topics: BaseTopic[];
+    user: {
+        email: string;
+    }
 }
 
 export type Question = BaseQuestion & {
     course: BaseCourse;
-    user: {
-        email: string;
-    }
 }
 
 export type BaseAnswer = {
@@ -68,13 +68,13 @@ export type BaseAnswer = {
     body: string;
     title: string;
     isAccepted: boolean;
+    user: {
+        email: string;
+    }
 }
 
 export type Answer = BaseAnswer & {
     question: BaseQuestion;
-    user: {
-        email: string;
-    }
 }
 
 export type Field = {

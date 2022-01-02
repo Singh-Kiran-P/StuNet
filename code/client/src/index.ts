@@ -9,5 +9,5 @@ export { useTheme, theming, paper, Theme } from '@/css';
 export { StyleSheet as Style } from 'react-native';
 
 export { update } from '@/nav';
-export { useToken, useUser } from '@/auth';
+export { useToken, useEmail } from '@/auth';
 export { Screen, Component, useParams, useNav } from '@/nav/types';

@@ -1,10 +1,11 @@
-import React, { Screen, Course, useState, useEffect, axios, show } from '@/.';
+import React, { Screen, Course, useState, useEffect, useEmail, axios, show, professor } from '@/.';
 import { View, Text, Fab, List, CompactCourse } from '@/components';
 
 export default Screen('Courses', ({ nav, params: { search, update } }) => {
     let [courses, setCourses] = useState<Course[]>([]);
     let [refresh, setRefresh] = useState(true);
     let [error, setError] = useState('');
+    let prof = professor(useEmail());
 
     useEffect(() => {
         if (!refresh) setRefresh(true);
@@ -21,7 +22,7 @@ export default Screen('Courses', ({ nav, params: { search, update } }) => {
             <List inner padding data={courses} refreshing={refresh} renderItem={course =>
                 <CompactCourse margin={!!course.index} course={course.item}/>}
             />
-            <Fab pad='bottom' icon='book-plus' auth='prof' onPress={() => nav.push('CreateCourse')}/>
+            <Fab pad='bottom' icon='book-plus' hidden={!prof} onPress={() => nav.push('CreateCourse')}/>
         </View>
     )
 })
