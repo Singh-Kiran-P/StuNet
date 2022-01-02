@@ -29,7 +29,7 @@ activate courseController
 
 courseController -> StringMatcher: FuzzyMatchObject(courseDtos, name)
 activate StringMatcher
-StringMatcher --> courseController: searchResults
+StringMatcher --> courseController: matches
 deactivate StringMatcher
 
 alt searchResults not empty AND searchResults not all
