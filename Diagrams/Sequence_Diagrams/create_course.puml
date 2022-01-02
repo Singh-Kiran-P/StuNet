@@ -1,99 +1,19 @@
-'https://forum.plantuml.net/1353/is-it-possible-to-comment-out-lines-of-diagram-syntax
-
 @startuml Create Course
-participant Prof
-participant Course
-participant Channel
-participant Topic
-participant Assistent
-participant "Data Access Object"
-database DataStore
+participant ":CourseController" as controller
+participant ":CourseRepository" as repository
+participant ":Course" as course
 
-activate Prof
-    Prof -> Course **: createCourse(name, number, email)
-    activate Course
-
-        Course -> "Data Access Object": saveChanges()
-        activate "Data Access Object"
-            "Data Access Object" -> DataStore: save()
-            activate DataStore
-                DataStore -> DataStore: query()
-                DataStore --> "Data Access Object": void | RunTimeException
-            deactivate DataStore
-            "Data Access Object" --> Course: void | RunTimeException
-        deactivate "Data Access Object"
-    Course --> Prof: course
-    deactivate Course
-
-    loop add items
-        opt add channel
-            'channel op hoogte van pijl normaal gezien
-            Prof -> Course: addChannelToCourse(course, name)
-            activate Course
-                Course -> Channel **: createChannel(name)
-                activate Channel
-                    opt
-                        Channel -> "Data Access Object": saveChanges()
-                        activate "Data Access Object"
-                            "Data Access Object" -> DataStore: save()
-                            activate DataStore
-                                DataStore -> DataStore: query()
-                                DataStore --> "Data Access Object": void | RunTimeException
-                            deactivate DataStore
-                            "Data Access Object" --> Channel: void | RunTimeException
-                        deactivate "Data Access Object"
-                    end
-                    Channel --> Course: void
-                deactivate Channel
-                Course --> Prof: void
-            deactivate Course
-        end
-
-        opt add topic
-            ' activate Course
-            Prof -> Course: addTopicToCourse(course, name)
-            activate Course
-                Course -> Topic **: createTopic(name)
-                activate Topic
-                    opt
-                        Topic -> "Data Access Object": saveChanges()
-                        activate "Data Access Object"
-                            "Data Access Object" -> DataStore: save()
-                            activate DataStore
-                                DataStore -> DataStore: query()
-                                DataStore --> "Data Access Object": void | RunTimeException
-                            deactivate DataStore
-                            "Data Access Object" --> Topic: void | RunTimeException
-                        deactivate "Data Access Object"
-                    end
-                    Topic --> Course: void
-                deactivate Topic
-                Course --> Prof: void
-            deactivate Course
-        end
-
-        opt add assistant
-            Prof -> Course: addAssistentToCourse(course, email)
-            activate Course
-                Course -> Assistent **: createAssistant(email)
-                activate Assistent
-                    opt
-                        Assistent -> "Data Access Object": saveChanges()
-                        activate "Data Access Object"
-                            "Data Access Object" -> DataStore: save()
-                            activate DataStore
-                                DataStore -> DataStore: query()
-                                DataStore --> "Data Access Object": void | RunTimeException
-                            deactivate DataStore
-                            "Data Access Object" --> Assistent: void | RunTimeException
-                        deactivate "Data Access Object"
-                    end
-                    Assistent --> Course: void
-                deactivate Assistent
-                Course --> Prof: void
-            deactivate Course
-        end
-    end
-deactivate Prof
-
+--> controller: CreateCourse(dto.name, dto.number, dto.description, dto.courseEmail, dto.profEmail)
+activate controller
+alt Valid user
+    controller -> course **: create(dto.name, dto.number, dto.description, dto.courseEmail, userEmail)
+    controller -> repository: CreateAsync(course)
+    activate repository
+    repository --> controller: void
+    deactivate repository
+    <-- controller: ok
+else Invalid user
+    <-- controller: unauthorized
+end
+deactivate controller
 @enduml

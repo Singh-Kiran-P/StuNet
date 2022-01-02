@@ -66,42 +66,5 @@ else Valid password
     end
 end
 deactivate authController
-' alt Request as student
-' -> student: register(email, password,confirmPassword, study)
-' activate student
-'     student -> DataAccessObject: RegisterJwtUser(email, password, confirmPassword, study)
-'     activate DataAccessObject
-'         DataAccessObject -> DataStore: save()
-'             activate DataStore
-'                 DataStore -> DataStore: query()
-'                 DataStore --> DataAccessObject: user | null
-'             deactivate DataStore
-'         DataAccessObject --> student: user | null
-'     deactivate DataAccessObject
-'     <-- student  : accessToken(JWT)
-' else Invalid credentials
-' 	<-- student: null
-' deactivate student
-' end
-
-' alt Request as Prof
-' -> Prof: register(email, password, confirmPassword)
-' activate Prof
-
-'     Prof -> DataAccessObject: RegisterJwtUser(email, password, confirmPassword)
-'     activate DataAccessObject
-'         DataAccessObject -> DataStore: save()
-'             activate DataStore
-'                 DataStore -> DataStore: query()
-'                 DataStore --> DataAccessObject: user | null
-'             deactivate DataStore
-'         DataAccessObject --> Prof: user | null
-'     deactivate DataAccessObject
-' else Invalid credentials
-' 	<-- Prof: null
-' deactivate Prof
-' 
-' end
-
 
 @enduml
