@@ -69,7 +69,7 @@ namespace Server.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFieldOfStudy(int id)
         {
-            var existing = _fieldOfStudyRepository.GetAsync(id);
+            var existing = await _fieldOfStudyRepository.GetAsync(id);
             if (existing == null) return NotFound();
             await _fieldOfStudyRepository.DeleteAsync(id);
             return Ok();
@@ -79,6 +79,8 @@ namespace Server.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateFieldOfStudy(int id, FieldOfStudyDto updateFieldOfStudyDto)
         {
+            var existing = await _fieldOfStudyRepository.GetAsync(id);
+            if (existing == null) return NotFound();
             FieldOfStudy fieldOfStudy = new() {
                 id = id,
                 name = updateFieldOfStudyDto.name,

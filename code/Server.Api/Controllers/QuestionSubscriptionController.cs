@@ -93,12 +93,13 @@ namespace Server.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteQuestionSubscription(int id)
         {
-            QuestionSubscription sub = await _questionSubscriptionRepository.GetAsync(id);
+            var existing = await _questionSubscriptionRepository.GetAsync(id);
+            if (existing == null) return NotFound();
             ClaimsPrincipal currentUser = HttpContext.User;
             if (!currentUser.HasClaim(c => c.Type == "username")) return Unauthorized();
             string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
             User user = await _userManager.FindByEmailAsync(userEmail);
-            await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + sub.subscribedItemId.ToString());
+            await _hubContext.Groups.RemoveFromGroupAsync(UserHandler.ConnectedIds[user.Id], "Question " + existing.subscribedItemId.ToString());
             await _questionSubscriptionRepository.DeleteAsync(id);
             return NoContent();
         }

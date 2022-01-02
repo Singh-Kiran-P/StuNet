@@ -160,7 +160,7 @@ namespace Server.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteQuestion(int id)
         {
-            var existing = _questionRepository.GetAsync(id);
+            var existing = await _questionRepository.GetAsync(id);
             if (existing == null) return NotFound();
             await _questionRepository.DeleteAsync(id);
             return NoContent();
@@ -170,6 +170,8 @@ namespace Server.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateQuestion(int id, CreateQuestionDto dto)
         {
+            var existing = await _questionRepository.GetAsync(id);
+            if (existing == null) return NotFound();
             Question updatedQuestion = new() {
                 body = dto.body,
                 title = dto.title,

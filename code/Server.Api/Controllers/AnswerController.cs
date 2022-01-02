@@ -116,7 +116,7 @@ namespace Server.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAnswer(int id)
         {
-            var existing = _answerRepository.GetAsync(id);
+            var existing = await _answerRepository.GetAsync(id);
             if (existing == null) return NotFound();
             await _answerRepository.DeleteAsync(id);
             return NoContent();
@@ -126,35 +126,34 @@ namespace Server.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateAnswer(int id, CreateAnswerDto dto)
         {
-            Answer existingAnswer = await _answerRepository.GetAsync(id);
-            Question question = existingAnswer.question;
-            if (existingAnswer == null || question == null) return NotFound();
+            var existing = await _answerRepository.GetAsync(id);
+            if (existing == null) return NotFound();
             Answer updatedAnswer = new() {
                 body = dto.body,
+                id = existing.id,
                 title = dto.title,
-                question = question,
                 time = DateTime.UtcNow,
-                id = existingAnswer.id,
-                userId = existingAnswer.userId,
-                isAccepted = existingAnswer.isAccepted
+                userId = existing.userId,
+                question = existing.question,
+                isAccepted = existing.isAccepted
             };
 
             await _answerRepository.UpdateAsync(updatedAnswer);
             return NoContent();
         }
 
-        [Authorize(Roles = "prof")]
+        [Authorize(Roles = "student,prof")]
         [HttpPut("SetAccepted/{id}")]
         public async Task<ActionResult> SetAnswerAccepted(int id, bool accepted)
         {
-            Answer existingAnswer = await _answerRepository.GetAsync(id);
-            if (existingAnswer == null) return NotFound();
+            Answer existing = await _answerRepository.GetAsync(id);
+            if (existing == null) return NotFound();
             ClaimsPrincipal currentUser = HttpContext.User;
             if (!currentUser.HasClaim(c => c.Type == "userref")) return Unauthorized();
             string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-            if (existingAnswer.question.userId != userId) return Unauthorized();
-            existingAnswer.isAccepted = accepted;
-            await _answerRepository.UpdateAsync(existingAnswer);
+            if (existing.question.userId != userId) return Unauthorized();
+            existing.isAccepted = accepted;
+            await _answerRepository.UpdateAsync(existing);
             return NoContent();
         }
     }
