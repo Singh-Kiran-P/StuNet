@@ -1,40 +1,43 @@
 @startuml Search course
-participant ":CourseController" as courseController
+
+title Reference: [UC] Search Course
+
+participant ":CourseController" as controller
 participant GetAllCourseDto
 participant ":GetAllCourseDto" as getAllCourseDto
 participant StringMatcher
-participant ":CourseRepository" as courseRepository
+participant ":CourseRepository" as repository
 
--> courseController: SearchByName(name)
-activate courseController
+-> controller: SearchByName(name)
+activate controller
 
-courseController -> courseController: _GetCourseAsync()
-activate courseController
-    courseController -> courseRepository: GetAllAsync()
+controller -> controller: _GetCourseAsync()
+activate controller
 
-    activate courseRepository
-    courseRepository --> courseController: courses
-    deactivate courseRepository
-    loop 
-        courseController -> GetAllCourseDto: convert(course)
-        activate GetAllCourseDto
-        GetAllCourseDto -> getAllCourseDto **: create(course)
-        GetAllCourseDto --> courseController: courseDto
-        deactivate GetAllCourseDto
-    end
-    
-    courseController --> courseController: courseDtos
+controller -> repository: GetAllAsync()
+activate repository
+repository --> controller: courses
+deactivate repository
 
-    deactivate courseController
+loop
+    controller -> GetAllCourseDto: convert(course)
+    activate GetAllCourseDto
+    GetAllCourseDto -> getAllCourseDto **: create(course)
+    GetAllCourseDto --> controller: courseDto
+    deactivate GetAllCourseDto
+end
 
-courseController -> StringMatcher: FuzzyMatchObject(courseDtos, name)
+controller --> controller: courseDtos
+deactivate controller
+
+controller -> StringMatcher: FuzzyMatchObject(courseDtos, name)
 activate StringMatcher
-StringMatcher --> courseController: matches
+StringMatcher --> controller: matches
 deactivate StringMatcher
 
 alt searchResults not empty AND searchResults not all
-' To-ASK
-    <-- courseController: ok
+    ' To-ASK
+    <-- controller: ok
 else searchResults empty OR searchResults all
-    <-- courseController: noContent
+    <-- controller: noContent
 end
