@@ -1,4 +1,7 @@
-@startuml Search Question
+@startuml Search question
+
+title Reference: [UC] Search Question
+
 participant ":QuestionController" as controller
 participant GetQuestionDto
 participant ":GetQuestionDto" as getQuestionDto
@@ -8,6 +11,7 @@ participant ":UserManager" as manager
 
 --> controller: SearchByName(courseId, name)
 activate controller
+
 controller -> repository: GetByCourseIdAsync(courseId)
 activate repository
 repository --> controller: questions
@@ -31,6 +35,9 @@ loop
     deactivate GetQuestionDto
 
 end
+
 <-- controller: ok
+
 deactivate controller
+
 @enduml

@@ -1,19 +1,27 @@
-@startuml Create Course
+@startuml Create course
+
+title Reference: [Contract] SubmitCourse
+
 participant ":CourseController" as controller
 participant ":CourseRepository" as repository
 participant ":Course" as course
 
 --> controller: CreateCourse(dto.name, dto.number, dto.description, dto.courseEmail, dto.profEmail)
 activate controller
+
 alt Valid user
     controller -> course **: create(dto.name, dto.number, dto.description, dto.courseEmail, userEmail)
+    
     controller -> repository: CreateAsync(course)
     activate repository
     repository --> controller: void
     deactivate repository
+
     <-- controller: ok
 else Invalid user
     <-- controller: unauthorized
 end
+
 deactivate controller
+
 @enduml

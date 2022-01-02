@@ -6,14 +6,18 @@ database DataStore
 -> User: login(email, password)
 activate User
 User -> DataAccessObject: checkDetials()
+
 activate DataAccessObject
 DataAccessObject -> DataStore: load()
+
 activate DataStore
 DataStore -> DataStore: query()
 DataStore --> DataAccessObject: user | null
 deactivate DataStore
+
 DataAccessObject --> User: user | null
 deactivate DataAccessObject
+
 <-- User  : accessToken(JWT)
 deactivate User
 @enduml

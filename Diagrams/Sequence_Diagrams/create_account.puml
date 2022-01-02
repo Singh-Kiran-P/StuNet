@@ -1,4 +1,7 @@
 @startuml Register
+
+title Reference: [UC] Create Account
+
 participant ":AuthController" as authController
 participant ":Student" as student
 participant ":Professor" as professor
@@ -6,13 +9,10 @@ participant ":UserManager" as userManager
 participant ":EmailSender" as emailSender
 participant ":FieldOfStudyRepository" as fieldOfStudyRepository
 
-title Reference: UC Create Account
-
 -> authController : RegisterJWTUser(dto.email, dto.password, dto.confirmPassword, dto.fieldOfStudy)
 activate authController
-alt Bad password
-    <-- authController: badRequest
-else Valid password
+
+alt Valid password
     alt Valid student email
         authController -> fieldOfStudyRepository: GetAsync(dto.fieldOfStudy)
         activate fieldOfStudyRepository
@@ -45,14 +45,17 @@ else Valid password
         ' -> authController
         authController -> authController: SendConfirmationEmail
         activate authController
+        
         authController -> userManager: GenerateEmailConfirmationTokenAsync(user)
         activate userManager
         userManager --> authController: token
         deactivate userManager
+        
         authController -> emailSender: SendEmail(user.email, title... )
         activate emailSender
         emailSender --> authController: void | exception
         deactivate emailSender
+        
         authController --> authController: void | exception
         deactivate authController
 
@@ -64,7 +67,10 @@ else Valid password
     else User creation failed
         <-- authController: badRequest
     end
+else Bad password
+    <-- authController: badRequest
 end
+
 deactivate authController
 
 @enduml

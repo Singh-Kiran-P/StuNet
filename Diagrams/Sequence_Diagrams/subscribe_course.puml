@@ -1,4 +1,7 @@
 @startuml Subscribe course
+
+title Reference: [UC] Subscribe to course
+
 participant ":CourseSubscriptionController" as controller
 participant ":CourseSubscription" as subscription
 participant ":UserManager" as userManager
@@ -18,6 +21,7 @@ alt Valid user
     activate courseSubsciptionRepository
     courseSubsciptionRepository --> controller: subscibedItem
     deactivate courseSubsciptionRepository
+    
     controller -> subscription **: create(DateTime.UtcNow, user.id, subscribedItem)
 
     controller -> courseSubsciptionRepository: CreateAsync(subscription)
@@ -26,7 +30,10 @@ alt Valid user
     deactivate courseSubsciptionRepository
 
     <-- controller: ok
-
 else Invalid user
     <-- controller: unauthorized
 end
+
+deactivate controller
+
+@enduml

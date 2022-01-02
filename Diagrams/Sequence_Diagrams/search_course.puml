@@ -1,4 +1,7 @@
 @startuml Search course
+
+title Reference: [UC] Search Course
+
 participant ":CourseController" as courseController
 participant GetAllCourseDto
 participant ":GetAllCourseDto" as getAllCourseDto
@@ -10,11 +13,12 @@ activate courseController
 
 courseController -> courseController: _GetCourseAsync()
 activate courseController
-courseController -> courseRepository: GetAllAsync()
 
+courseController -> courseRepository: GetAllAsync()
 activate courseRepository
 courseRepository --> courseController: courses
 deactivate courseRepository
+
 loop
     courseController -> GetAllCourseDto: convert(course)
     activate GetAllCourseDto
@@ -24,7 +28,6 @@ loop
 end
 
 courseController --> courseController: courseDtos
-
 deactivate courseController
 
 courseController -> StringMatcher: FuzzyMatchObject(courseDtos, name)

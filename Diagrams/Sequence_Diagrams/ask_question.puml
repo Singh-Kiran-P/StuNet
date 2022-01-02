@@ -1,4 +1,7 @@
 @startuml Ask question
+
+title Reference: [Contract] SubmitQuestion
+
 participant ":QuestionController" as questionController
 participant GetQuestionDto
 participant ":QuestionSubscription" as questionSubscription
@@ -13,17 +16,14 @@ participant ":QuestionSubscriptionRepository" as questionSubscriptionRepository
 participant ":CourseSubscriptionRepository" as courseSubscriptionRepository
 participant ":NotificationRepository" as notificationRepository
 
-' DataContext-[hidden]->DataContext
-
-title Reference: Contract SubmitQuestion()
-
 -> questionController: CreateQuestion(createQuestionDto)
 activate questionController
+
 alt Valid user
     questionController -> userManager: FindByEmailAsync(userEmail)
     activate userManager
     questionController <-- userManager: User
-    ' TO-ASK: User|null of gewoon User?
+    ' TOASK: User|null of gewoon User?
     deactivate userManager
 
     questionController -> courseRepository: GetAsync(createQuestionDto.courseId)
@@ -40,7 +40,6 @@ alt Valid user
 
     alt Course in the database AND All topicss in database
         questionController -> question **:create(createQuestionDto.title, user.id, course, createQuestionDto.body, topics, DateTime.UtcNow)
-        'question -> questionController: question
 
         questionController -> questionRepository: CreateAsync(question)
         activate questionRepository
@@ -48,7 +47,7 @@ alt Valid user
         deactivate questionRepository
 
         questionController -> questionSubscription **:create(user.id, question.id, question.time)
-        'question -> questionController: question
+
         questionController -> questionSubscriptionRepository: CreateAsync(questionSubscription)
         activate questionSubscriptionRepository
         questionSubscriptionRepository -> questionController: void
@@ -83,4 +82,7 @@ alt Valid user
 else Invalid user
     <-- questionController: unauthorized
 end
+
+deactivate questionController
+
 @enduml
