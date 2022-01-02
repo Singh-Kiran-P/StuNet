@@ -80,6 +80,9 @@ namespace Server.UnitTests
 			MockManager.Setup(repo => repo.FindByEmailAsync(It.IsAny<string>()))
         		.ReturnsAsync(randomUser);
 
+            MockManager.Setup(repo => repo.FindByIdAsync(It.IsAny<string>()))
+        		.ReturnsAsync(randomUser);
+
             _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(randomQuestion);
 
