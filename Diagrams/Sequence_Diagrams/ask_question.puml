@@ -1,72 +1,86 @@
-@startuml Ask Question
-participant QuestionController
-participant UserManager
-participant CourseRepository
-participant TopicRepository
-participant QuestionRepository
-participant QuestionSubscriptionRepository
-
+@startuml Ask question
+participant ":QuestionController" as questionController
+participant GetQuestionDto as GetQuestionDto
+participant ":QuestionSubscription" as questionSubscription
+participant ":QuestionNotification" as questionNotification
+participant ":GetQuestionDto" as getQuestionDto
+participant ":Question" as question
+participant ":UserManager" as userManager
+participant ":CourseRepository" as courseRepository
+participant ":TopicRepository" as topicRepository
+participant ":QuestionRepository" as questionRepository
+participant ":QuestionSubscriptionRepository" as questionSubscriptionRepository
+participant ":CourseSubscriptionRepository" as courseSubscriptionRepository
+participant ":NotificationRepository" as notificationRepository
 
 ' DataContext-[hidden]->DataContext
 
 title Reference: Contract SubmitQuestion()
 
--> QuestionController: CreateQuestion(createQuestionDto)
-activate QuestionController
+-> questionController: CreateQuestion(createQuestionDto)
+activate questionController
 alt Valid user
-	QuestionController -> UserManager: FindByEmailAsync(userEmail)
-	activate UserManager
-	QuestionController <-- UserManager: User
+	questionController -> userManager: FindByEmailAsync(userEmail)
+	activate userManager
+	questionController <-- userManager: User
 	' TO-ASK: User|null of gewoon User?
-	deactivate UserManager
+	deactivate userManager
 
-	QuestionController -> CourseRepository: GetAsync(createQuestionDto.courseId)
-	activate CourseRepository
-	CourseRepository --> QuestionController: Course | null
-	deactivate CourseRepository
+	questionController -> courseRepository: GetAsync(createQuestionDto.courseId)
+	activate courseRepository
+	courseRepository --> questionController: Course | null
+	deactivate courseRepository
 	
 	loop createQuestionDto.topicIds
-		QuestionController -> TopicRepository: GetAsync(id)
-		activate TopicRepository
-		TopicRepository --> QuestionController: Topic | null
-		deactivate TopicRepository
+		questionController -> topicRepository: GetAsync(id)
+		activate topicRepository
+		topicRepository --> questionController: Topic | null
+		deactivate topicRepository
 	end
 
-	QuestionController -> ":Question" **:create(createQuestionDto.title, user.Id, course, createQuestionDto.body, topics, DateTime.UtcNow)
-	'Question -> QuestionController: question
+    alt Course in the database AND All topicss in database
+        questionController -> question **:create(createQuestionDto.title, user.Id, course, createQuestionDto.body, topics, DateTime.UtcNow)
+        'question -> questionController: question
 
-	QuestionController -> QuestionRepository: CreateAsync(question)
-	activate QuestionRepository
-	QuestionRepository --> QuestionController: void
-	deactivate QuestionRepository
+        questionController -> questionRepository: CreateAsync(question)
+        activate questionRepository
+        questionRepository --> questionController: void
+        deactivate questionRepository
 
-	QuestionController -> QuestionSubscription **:create(user.Id, question.id, question.time)
-	'Question -> QuestionController: question
-	QuestionController -> QuestionSubscriptionRepository: CreateAsync(questionSubscription)
-	activate QuestionSubscriptionRepository
-	QuestionSubscriptionRepository -> QuestionController: void
-	deactivate QuestionSubscriptionRepository
+        questionController -> questionSubscription **:create(user.Id, question.id, question.time)
+        'question -> questionController: question
+        questionController -> questionSubscriptionRepository: CreateAsync(questionSubscription)
+        activate questionSubscriptionRepository
+        questionSubscriptionRepository -> questionController: void
+        deactivate questionSubscriptionRepository
 
-	loop
-		QuestionController -> CourseSubscriptionRepository: GetByCourseId(course.id)
-		activate CourseSubscriptionRepository
-		CourseSubscriptionRepository --> QuestionController: SubscriberId
-		deactivate CourseSubscriptionRepository
-	end
+        loop
+            questionController -> courseSubscriptionRepository: GetByCourseId(course.id)
+            activate courseSubscriptionRepository
+            courseSubscriptionRepository --> questionController: SubscriberId
+            deactivate courseSubscriptionRepository
+        end
 
-participant CourseSubscriptionRepository
+        loop 
+            questionController -> questionNotification**: create(userId, question.id, question, question.time)
+        end
 
+        questionController -> notificationRepository: CreateAllAync(questionNotifications)
+        activate notificationRepository
+        notificationRepository --> questionController: void
+        deactivate notificationRepository
 
-participant NotificationRepository
-	loop 
-		QuestionController -> QuestionNotification**: create(userId, question.id, question, question.time)
-	end
+        questionController -> GetQuestionDto: convert(question, user)
+        activate GetQuestionDto
+        GetQuestionDto -> getQuestionDto**: create(question, user)
+        GetQuestionDto --> questionController: returnDto
+        deactivate GetQuestionDto
 
-	QuestionController -> NotificationRepository: CreateAllAync(questionNotifications)
-	activate NotificationRepository
-	NotificationRepository --> QuestionController: void
-	deactivate NotificationRepository
-
-	QuestionController -> returnDto**: create(question, user)
-	<-- QuestionController: returnDto
+        <-- questionController: returnDto
+    else Course not in the database OR some topic not in database 
+        <-- questionController: badRequeset
+    end
+else Invalid user
+<-- questionController: unauthorized
+end
 @enduml
