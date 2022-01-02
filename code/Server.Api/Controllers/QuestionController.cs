@@ -90,11 +90,11 @@ namespace Server.Api.Controllers
             if (user != null)
             {
                 var questions = await _questionRepository.GetAskedByUserId(user.Id);
-                return Ok(questions.Select(q => GetQuestionDto.Convert(q, user)));
+                return Ok(questions.Select(q => GetPartialQuestionDto.Convert(q)));
             }
             else
             {
-                return NotFound();
+                return Ok(new List<GetPartialQuestionDto>());
             }
         }
 
@@ -231,13 +231,11 @@ namespace Server.Api.Controllers
             Question updatedQuestion = new()
             {
                 title = dto.title,
-                // user = updateQuestionDto.user,
-                course = _courseRepository.GetAsync(dto.courseId).Result,
                 body = dto.body,
-                // files = updateQuestionDto.files
+                course = _courseRepository.GetAsync(dto.courseId).Result,
                 topics = dto.topicIds.Select(id => _topicRepository.GetAsync(id))
-                                                .Select(task => task.Result)
-                                                .ToList(),
+                    .Select(task => task.Result)
+                    .ToList(),
                 time = DateTime.UtcNow
             };
             await _questionRepository.UpdateAsync(updatedQuestion);

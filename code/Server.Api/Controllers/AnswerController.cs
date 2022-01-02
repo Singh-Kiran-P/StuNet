@@ -108,7 +108,7 @@ namespace Server.Api.Controllers
             }
             else
             {
-                return NotFound();
+                return Ok(new List<GetAnswerDto>());
             }
         }
 
@@ -116,8 +116,6 @@ namespace Server.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<GetAnswerDto>> CreateAnswer(CreateAnswerDto dto)
         {
-
-            // Get user from token
             ClaimsPrincipal currentUser = HttpContext.User;
             if (currentUser.HasClaim(c => c.Type == "username"))
             {
@@ -132,7 +130,6 @@ namespace Server.Api.Controllers
                     question = question,
                     title = dto.title,
                     body = dto.body,
-                    // files = createAnswerDto.files
                     time = DateTime.UtcNow
                 };
 

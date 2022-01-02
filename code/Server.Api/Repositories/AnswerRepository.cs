@@ -27,9 +27,7 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Answer>> GetAllAsync()
         {
             return await _context.Answers
-                // .Include(a => a.userId)
                 .Include(a => a.question)
-                // .Include(a => a.question.user)
                 .Include(a => a.question.course)
                 .Include(a => a.question.topics)
                 .ToListAsync();
@@ -39,9 +37,7 @@ namespace Server.Api.Repositories
         {
             return await _context.Answers
                 .Where(a => a.id == id)
-                // .Include(a => a.userId)
                 .Include(a => a.question)
-                // .Include(a => a.question.user)
                 .Include(a => a.question.course)
                 .Include(a => a.question.topics)
                 .FirstOrDefaultAsync();
@@ -50,11 +46,11 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Answer>> GetGivenByUserId(string userId)
         {
             return await _context.Answers
-            .Where(q => q.userId == userId)
-            .Include(a => a.question)
-            .Include(a => a.question.course)
-            .Include(a => a.question.topics)
-            .ToListAsync();
+                .Where(q => q.userId == userId)
+                .Include(a => a.question)
+                .Include(a => a.question.course)
+                .Include(a => a.question.topics)
+                .ToListAsync();
         }
         public async Task CreateAsync(Answer answer)
         {
@@ -80,9 +76,7 @@ namespace Server.Api.Repositories
         public async Task<IEnumerable<Answer>> GetByQuestionId(int questionId)
         {
             return await _context.Answers
-                // .Include(a => a.userId)
                 .Include(a => a.question)
-                // .Include(a => a.question.user)
                 .Include(a => a.question.course)
                 .Include(a => a.question.topics)
                 .Where(a => a.question.id == questionId)

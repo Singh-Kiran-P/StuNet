@@ -1,4 +1,4 @@
-import React, { Screen, Course, Question, useState, useTheme, axios } from '@/.';
+import React, { Screen, Course, Question, useState, axios } from '@/.';
 import { Loader, Text, Button, ItemList } from '@/components';
 
 export default Screen('Home', ({ nav }) => {

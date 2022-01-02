@@ -11,7 +11,8 @@ namespace Server.Api.Repositories
     public interface ICourseRepository : IRestfulRepository<Course>
     {
         Task<Course> GetByNameAsync(string name);
-        Task<Course> getByCourseMail(string courseMail);
+        Task<IEnumerable<Course>> GetAllByProfEmailAsync(string email);
+        Task<Course> GetByCourseEmailAsync(string courseMail);
 
     }
 
@@ -50,13 +51,18 @@ namespace Server.Api.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Course> getByCourseMail(string courseMail)
+        public async Task<IEnumerable<Course>> GetAllByProfEmailAsync(string profEmail)
         {
             return await _context.Courses
-                        .Where(c => c.courseEmail == courseMail)
-                        .Include(c => c.topics)
-                        .Include(c => c.channels)
-                        .FirstOrDefaultAsync();
+                .Where(c => c.profEmail == profEmail)
+                .ToListAsync();
+        }
+
+        public async Task<Course> GetByCourseEmailAsync(string courseMail)
+        {
+            return await _context.Courses
+                .Where(c => c.courseEmail == courseMail)
+                .FirstOrDefaultAsync();
         }
 
         public async Task CreateAsync(Course course)

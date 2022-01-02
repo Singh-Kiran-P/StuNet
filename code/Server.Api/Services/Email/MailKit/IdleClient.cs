@@ -173,12 +173,9 @@ namespace Server.Api.Services
                 var _subscriptionRepository = scope.ServiceProvider.GetRequiredService<ISubscriptionRepository<QuestionSubscription>>();
                 var questions = _questionRepository.GetAllAsync().GetAwaiter().GetResult();
 
-                Console.WriteLine("Email Sent"); // TODO implement
-                Console.WriteLine(message.ToString());
-
                 (int questionId, string courseMail, string title, string body) = _parseEmail(message);
 
-                Course course = _courseRepository.getByCourseMail(courseMail).GetAwaiter().GetResult();
+                Course course = _courseRepository.GetByCourseEmailAsync(courseMail).GetAwaiter().GetResult();
 
                 if (course == null) return;
 
@@ -192,7 +189,6 @@ namespace Server.Api.Services
                     question = _question,
                     title = title,
                     body = body,
-                    // files = createAnswerDto.files
                     time = DateTime.UtcNow,
                     isAccepted = true
                 };

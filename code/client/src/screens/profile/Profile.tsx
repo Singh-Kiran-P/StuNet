@@ -19,20 +19,20 @@ export default Screen('Profile', ({ nav, params: { email } }) => {
         })
     }
 
-    const course = async () => { // TODO by user
-        if (prof) return axios.get('/Course', { params: { email } }).then(res => {
+    const course = async () => {
+        if (prof) return axios.get('/Course/getCreatedCoursesByEmail', { params: { email } }).then(res => {
             setCourses(res.data);
         })
     }
 
-    const question = async () => { // TODO by user
-        if (owner) return axios.get('/Question', { params: { email } }).then(res => {
+    const question = async () => {
+        if (owner) return axios.get('/Question/getAskedQuestionsByEmail', { params: { email } }).then(res => {
             setQuestions(res.data);
         })
     }
 
-    const answer = async () => { // TODO by user
-        if (owner) return axios.get('/Answer', { params: { email } }).then(res => {
+    const answer = async () => {
+        if (owner) return axios.get('/Answer/getGivenAnswersByEmail', { params: { email } }).then(res => {
             setAnswers(res.data)
         })
     }

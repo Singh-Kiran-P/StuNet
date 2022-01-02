@@ -49,19 +49,5 @@ namespace Server.Api.Controllers
                 return Unauthorized();
             }
         }
-
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult> DeleteCourseNotification(int id)
-        // {
-        //     try
-        //     {
-        //         await _courseNotificationRepository.deleteAsync(id);
-        //     }
-        //     catch (System.Exception)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return NoContent();
-        // }
     }
 }

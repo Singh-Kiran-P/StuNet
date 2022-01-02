@@ -18,58 +18,56 @@ export default ({ children }: Children) => {
 	})
 
 	useEffect(() => {
-		connection.start() // TODO handle error
-			.catch(err => console.log(err));
+		connection.start();
 
-		connection.on('QuestionNotification', async (question: Question) => {
-			const channelId = await notifee.createChannel({
+		connection.on('QuestionNotification', (question: Question) => {
+			update('Notifications');
+			notifee.createChannel({
 				importance: AndroidImportance.HIGH,
 				name: 'Course notifications',
 				id: 'Question'
-			})
-
-			await notifee.displayNotification({
-				title: `Question asked in ${question.course.name}`,
-				body: question.title,
-				android: {
-					channelId,
-					smallIcon: 'ic_launcher',
-					style: {
-						type: AndroidStyle.BIGTEXT,
-						text: question.body
+			}).then(channelId => {
+				notifee.displayNotification({
+					title: `Question asked in ${question.course.name}`,
+					body: question.title,
+					android: {
+						channelId,
+						smallIcon: 'ic_launcher',
+						style: {
+							type: AndroidStyle.BIGTEXT,
+							text: question.title
+						}
 					}
-				}
+				})
 			})
-			update('Notifications');
 		})
 
-		connection.on('AnswerNotification', async (answer: Answer) => {
-			const channelId = await notifee.createChannel({
+		connection.on('AnswerNotification', (answer: Answer) => {
+			update('Notifications');
+			notifee.createChannel({
 				importance: AndroidImportance.HIGH,
 				name: 'Question notifications',
 				id: 'Answer'
-			})
-		
-			await notifee.displayNotification({
-				title: 'Answer received',
-				body: answer.question.title,
-				android: {
-					channelId,
-					smallIcon: 'ic_launcher',
-					style: {
-						type: AndroidStyle.BIGTEXT,
-						text: answer.body
+			}).then(channelId => {
+				notifee.displayNotification({
+					title: 'Answer received',
+					body: answer.title,
+					android: {
+						channelId,
+						smallIcon: 'ic_launcher',
+						style: {
+							type: AndroidStyle.BIGTEXT,
+							text: answer.title
+						}
 					}
-				}
+				})
 			})
-			update('Notifications');
 		})
 
 		return () => {
 			connection.off('QuestionNotification');
 			connection.off('AnswerNotification');
-			connection.stop() // TODO handle error
-				.catch(err => console.log(err))
+			connection.stop();
 		}
 	}, [])
 

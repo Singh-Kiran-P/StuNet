@@ -8,7 +8,6 @@ using Server.Api.Models;
 using Server.Api.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Server.Api.Services;
-using System.Security.Claims;
 
 namespace Server.Api.Controllers
 {
@@ -60,20 +59,11 @@ namespace Server.Api.Controllers
             }
         }
 
-        [HttpGet("getSubscribedByEmail")]
-        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> GetSubscribedCoursesByEmail(string email)
+        [HttpGet("getCreatedCoursesByEmail")]
+        public async Task<ActionResult<IEnumerable<GetAllCourseDto>>> GetCreatedCourses([FromQuery] string email)
         {
-            User user = await _userManager.FindByEmailAsync(email);
-            if (user != null) 
-            {
-                IEnumerable<CourseSubscription> subscriptions = await _subscriptionRepository.GetByUserId(user.Id);
-                IEnumerable<Course> subscribedCourses = subscriptions.Select(sub => sub.subscribedItem);
-                return Ok(subscribedCourses.Select(c => GetAllCourseDto.Convert(c)));
-            }
-            else
-            {
-                return NotFound();
-            }
+            var courses = await _courseRepository.GetAllByProfEmailAsync(email);
+            return Ok(courses.Select(c => GetPartialCourseDto.Convert(c)));
         }
 
         [HttpGet("{id}")]
@@ -89,7 +79,7 @@ namespace Server.Api.Controllers
         }
 
 
-        [HttpGet("search/")]
+        [HttpGet("search")]
         public async Task<ActionResult<GetCourseDto>> SearchByName([FromQuery] string name)
         {
             IEnumerable<GetAllCourseDto> getDtos = await _GetCourseAsync();
