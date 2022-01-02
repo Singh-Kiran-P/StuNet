@@ -21,6 +21,7 @@ namespace Server.Api.Dtos
             {
                 id = question.id,
                 course = GetPartialCourseDto.Convert(question.course),
+                user = ResponseUserDto.Convert(user),
                 title = question.title,
                 body = question.body,
                 topics = question.topics.Select(topic => GetPartialTopicDto.Convert(topic)).ToList(),
