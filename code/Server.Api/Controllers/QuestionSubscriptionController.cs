@@ -81,6 +81,7 @@ namespace Server.Api.Controllers
             QuestionSubscription subscription = new() {
                 userId = user.Id,
                 dateTime = DateTime.UtcNow,
+                subscribedItemId = dto.questionId,
                 subscribedItem = await _questionRepository.GetAsync(dto.questionId),
             };
 
