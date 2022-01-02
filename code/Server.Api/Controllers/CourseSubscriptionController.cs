@@ -82,6 +82,7 @@ namespace Server.Api.Controllers
             CourseSubscription subscription = new() {
                 userId = user.Id,
                 dateTime = DateTime.UtcNow,
+                subscribedItemId = dto.courseId,
                 subscribedItem = await _courseRepository.GetAsync(dto.courseId)
             };
 
