@@ -23,6 +23,7 @@ namespace Server.Api.Dtos
                 time = question.time,
                 body = question.body,
                 title = question.title,
+                user = ResponseUserDto.Convert(user),
                 course = GetPartialCourseDto.Convert(question.course),
                 topics = question.topics.Select(topic => GetPartialTopicDto.Convert(topic)).ToList()
             };

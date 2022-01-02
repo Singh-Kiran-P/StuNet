@@ -56,7 +56,7 @@ namespace Server.UnitTests
 			};
 
             var MockManager = GetMockUserManager();
-			MockManager.Setup(repo => repo.FindByEmailAsync(It.IsAny<string>()))
+			MockManager.Setup(repo => repo.FindByIdAsync(It.IsAny<string>()))
         		.ReturnsAsync(randomUser);
 
             _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
