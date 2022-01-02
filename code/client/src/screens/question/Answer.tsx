@@ -1,5 +1,6 @@
 import React, { Screen, EmptyAnswer, useState, axios, show, dateString } from '@/.';
 import { View, Text, Icon, Fab, Loader, CompactQuestion } from '@/components';
+import { update } from '@/nav';
 
 export default Screen('Answer', ({ nav, params: { id } }) => {
     let [answer, setAnswer] = useState(EmptyAnswer);
@@ -14,7 +15,10 @@ export default Screen('Answer', ({ nav, params: { id } }) => {
 
     const accept = () => {
         axios.put('/Answer/SetAccepted/' + id + '?accepted=' + !answer.isAccepted).then(
-            () => setAnswer({ ...answer, isAccepted: !answer.isAccepted }),
+            () => {
+                setAnswer({ ...answer, isAccepted: !answer.isAccepted })
+                update('Question')
+            },
             show(setError)
         )
     }
