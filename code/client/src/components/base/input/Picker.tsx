@@ -12,7 +12,7 @@ export default extend<typeof Picker, ValueProps>(Picker, ({ values, prompt, chil
 
     return <Picker
         mode='dropdown'
-        dropdownIconColor={theme.primary}
+        dropdownIconColor={theme.accent}
         itemStyle={{ color: theme.foreground }}
         {...props}
     >

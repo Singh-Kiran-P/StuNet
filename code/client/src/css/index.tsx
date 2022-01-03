@@ -46,10 +46,10 @@ export const paper = (theme: Theme) => {
             disabled: theme.disabled,
             onSurface: theme.surface,
             surface: theme.foreground,
+            notification: theme.accent,
             backdrop: theme.placeholder,
             background: theme.background,
-            placeholder: theme.placeholder,
-            notification: theme.notification
+            placeholder: theme.placeholder
         }
     }
 }
