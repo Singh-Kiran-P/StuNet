@@ -9,14 +9,14 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     let owner = useEmail() === (course.profEmail || NaN);
 
     const info = async () => {
-        axios.get('/Course/' + id).then(res => {
+        return axios.get('/Course/' + id).then(res => {
             setCourse({ ...res.data, channels: res.data.channels?.reverse() });
             nav.setParams({ name: res.data.name });
         })
     }
 
     const subscription = async () => {
-        axios.get('/CourseSubscription/ByUserAndCourseId/' + id).then(res => {
+        return axios.get('/CourseSubscription/ByUserAndCourseId/' + id).then(res => {
             setSubscribed(res.data.length ? res.data[0].id : NaN);
             nav.setParams({ subscribe: res.data.length > 0 });
         })
