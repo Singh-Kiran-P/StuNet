@@ -10,7 +10,7 @@ import Nav from '@/nav';
 // https://github.com/dotnet/aspnetcore/issues/38286#issuecomment-970580861
 if (!(globalThis as any).document) (globalThis as any).document = undefined;
 
-axios.defaults.baseURL = 'http://10.0.2.2:5000';
+axios.defaults.baseURL = 'https://stunet-2021.herokuapp.com';
 
 export default () => (
     <PaperProvider>
