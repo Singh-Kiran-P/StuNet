@@ -117,10 +117,10 @@ namespace Server.Api
         private void setupEmail(IServiceCollection services)
         {
             string from = Configuration.GetSection("Mail")["From"];
-            string G_host = Configuration.GetSection("Mail")["G-host"];
-            string password = Configuration.GetSection("Mail")["G-password"];
-            string senderEmail = Configuration.GetSection("Mail")["G-SenderEmail"];
-            int G_port = Convert.ToInt32(Configuration.GetSection("Mail")["G-port"]);
+            string G_host = Configuration.GetSection("Mail")["host"];
+            string password = Configuration.GetSection("Mail")["password"];
+            string senderEmail = Configuration.GetSection("Mail")["SenderEmail"];
+            int G_port = Convert.ToInt32(Configuration.GetSection("Mail")["port"]);
 
             SmtpClient smtp = new SmtpClient {
                 Host = G_host,

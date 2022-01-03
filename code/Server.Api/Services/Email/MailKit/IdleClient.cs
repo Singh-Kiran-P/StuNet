@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Fizzler.Systems.HtmlAgilityPack;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 // https://github.com/jstedfast/MailKit/blob/master/Documentation/Examples/ImapIdleExample.cs
@@ -143,10 +144,10 @@ namespace Server.Api.Services
 
         void OnMessageReceived(IMessageSummary message)
         {
-            Console.WriteLine("Email");
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
+                var _configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
                 var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var _hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<ChatHub>>();
                 var _answerRepository = scope.ServiceProvider.GetRequiredService<IAnswerRepository>();
@@ -155,11 +156,9 @@ namespace Server.Api.Services
                 var _notificationRepository = scope.ServiceProvider.GetRequiredService<INotificationRepository<AnswerNotification>>();
                 var _subscriptionRepository = scope.ServiceProvider.GetRequiredService<ISubscriptionRepository<QuestionSubscription>>();
                 var questions = _questionRepository.GetAllAsync().GetAwaiter().GetResult();
+                var sender =_configuration.GetSection("Mail")["SenderEmail"];
 
-                (int questionId, string title, string body) = _parseEmail(message);
-                Console.WriteLine(questionId);
-                Console.WriteLine(title);
-                Console.WriteLine(body);
+                (int questionId, string title, string body) = _parseEmail(message, sender);
                 Question question = _questionRepository.GetAsync(questionId).GetAwaiter().GetResult();
                 User answerUser = _userManager.FindByEmailAsync(question.course.profEmail).GetAwaiter().GetResult();
                 User questionUser = _userManager.FindByIdAsync(question.userId).GetAwaiter().GetResult();
@@ -187,7 +186,7 @@ namespace Server.Api.Services
             }
         }
 
-        private (int, string, string) _parseEmail(IMessageSummary message)
+        private (int, string, string) _parseEmail(IMessageSummary message, string sender)
         {
             var name = "";
             var email = message.Envelope.From.Mailboxes.First().Address;
@@ -199,13 +198,13 @@ namespace Server.Api.Services
             var title = "Answered by Prof. " + name.Substring(0, name.Length - 1);
 
             var text = ((TextPart)client.Inbox.GetBodyPart(message.UniqueId, message.TextBody)).Text;
-            var content = text.Split("<stunetuh@outlook.com>")[0];
+            var content = text.Split(sender)[0];
             var body = content.Substring(0, content.LastIndexOf('\n'));
 
             var html = new HtmlDocument();
             var p = (TextPart)client.Inbox.GetBodyPart(message.UniqueId, message.HtmlBody);
             html.LoadHtml("<html><head></head><body>" + p.Text + "</body></html>");
-            var id = html.DocumentNode.QuerySelector("#id");
+            var id = html.DocumentNode.QuerySelectorAll("span").LastOrDefault();
             var questionId = Convert.ToInt32(id.InnerText);
 
             return (questionId, title, body);
