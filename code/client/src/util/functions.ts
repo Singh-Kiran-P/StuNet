@@ -46,7 +46,7 @@ export const displayName = (email: string) => {
 }
 
 export const timeSort = <T extends { time: string, isAccepted?: boolean }>(items: T[]): T[] => {
-    return [true, false].map(b => items.filter(item => item.isAccepted === b)).map(l => {
+    return [true, false].map(b => items.filter(item => !!item.isAccepted === b)).map(l => {
         return l.sort((a, b) => b?.time?.localeCompare(a?.time || '') || 0);
     }).flat();
 }
