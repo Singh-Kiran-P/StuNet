@@ -19,28 +19,29 @@ export const Base = {
 
     tabs: {
         auth: {
-            primary: '#C0CA33',
-            accent: '#E53935'
+            primary: '#607d8b',
+            accent: '#ffc107'
         },
         home: {
-            primary: '#01579B',
-            accent: '#9575CD'
+            primary: '#01579b',
+            accent: '#9575cd'
         },
         courses: {
-            primary: '#1B5E20',
-            accent: '#F57F17'
+            primary: '#1b5e20',
+            accent: '#f57c00'
         },
         notifications: {
-            primary: '#BF360C',
-            accent:'#F06292'
+            primary: '#bf360c',
+            accent:'#f06292'
         },
         profile: {
-            primary: '#004D40',
-            accent: '#6D4C41'
+            primary: '#006064',
+            accent: '#795548'
         }
     },
 
-    bright: '#ffffff',
+    error: '#b71c1c',
+    bright: '#f6f6f6',
     dimmed: 'rgba(255, 255, 255, 0.54)'
 
 }
@@ -49,10 +50,7 @@ export const Light = { ...Base,
 
     surface: '#e4e4e4',
     background: '#f6f6f6',
-    foreground: '#000000',
-
-    error: '#b00020',
-    notification: '#f50057',
+    foreground: '#141414',
 
     disabled: 'rgba(0, 0, 0, 0.26)',
     placeholder: 'rgba(0, 0, 0, 0.54)'
@@ -63,10 +61,7 @@ export const Dark = { ...Base,
 
     surface: '#222222',
     background: '#141414',
-    foreground: '#ffffff',
-
-    error: '#cf6679',
-    notification: '#ff80ab',
+    foreground: '#f6f6f6',
 
     disabled: 'rgba(255, 255, 255, 0.38)',
     placeholder: 'rgba(255, 255, 255, 0.54)'
@@ -74,4 +69,4 @@ export const Dark = { ...Base,
 }
 
 type Base = typeof Base;
-export type Color = Exclude<keyof (typeof Light & typeof Dark), keyof typeof Base> | 'primary' | 'accent' | 'bright' | 'dimmed';
+export type Color = Exclude<keyof (typeof Light & typeof Dark), keyof typeof Base> | 'primary' | 'accent' | 'error' | 'bright' | 'dimmed';
