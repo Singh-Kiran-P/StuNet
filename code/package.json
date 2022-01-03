@@ -6,7 +6,7 @@
     "server": "docker-compose up -d && dotnet run --project Server.Api",
     "server-hot": "docker-compose up -d && cd Server.Api && dotnet watch run",
     "dev-hot": "concurrently \"npm run server-hot\" \"npm run client\"",
-    "migrations": "cd Server.Api && dotnet ef database update 0 && dotnet ef migrations remove && dotnet ef database drop -f && dotnet ef migrations add Initial && dotnet ef database update && cd ..",
+    "migrations": "cd Server.Api && dotnet ef database update 0 && dotnet ef migrations remove && dotnet ef migrations add Initial && dotnet ef database update && cd ..",
     "restore": "cd Server.Api && dotnet restore && cd .. && cd Server.UnitTests && dotnet restore",
     "upgrade": "npm run i && npm run restore && npm run migrations"
   },

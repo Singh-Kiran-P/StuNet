@@ -128,6 +128,7 @@ namespace Server.Api
                 EnableSsl = true,
                 UseDefaultCredentials = false,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
+
                 Credentials = new NetworkCredential(senderEmail, password)
             };
 
