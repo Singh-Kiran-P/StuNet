@@ -158,6 +158,9 @@ namespace Server.Api.Services
 
         void OnMessageReceived(IMessageSummary message)
         {
+            Console.WriteLine("-----------------------------------EMAIL RECIEVED-------------------------------");
+            Console.WriteLine("-----------------------------------EMAIL RECIEVED-------------------------------");
+
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
@@ -209,7 +212,7 @@ namespace Server.Api.Services
             var title = "Answered by Prof. " + name.Substring(0, name.Length - 1);
 
             var text = ((TextPart)client.Inbox.GetBodyPart(message.UniqueId, message.TextBody)).Text;
-            var content = text.Split("<stunetuh@gmail.com>")[0];
+            var content = text.Split("<stunetuh@outlook.com>")[0];
             var body = content.Substring(0, content.LastIndexOf('\n'));
 
             var html = new HtmlDocument();

@@ -85,7 +85,7 @@ namespace Server.Api.Controllers
             if (user == null) return base.Content("<div><p>This user does not exist</p></div>", "text/html");
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded) return base.Content("<div><p>Your email has been confirmed, you can now log in to StuNet.</p></div>", "text/html");
-            else return base.Content("<div><p>Email confirmation failed, please contact stunetUH@gmail.com</p></div>", "text/html");
+            else return base.Content("<div><p>Email confirmation failed, please contact stunetuh@outlook.com</p></div>", "text/html");
         }
 
         private async void SendConfirmationEmail(User user)
