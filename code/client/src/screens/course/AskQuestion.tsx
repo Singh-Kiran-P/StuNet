@@ -14,7 +14,14 @@ export default Screen('AskQuestion', ({ nav, params: { course, selected } }) => 
             title: title,
             topicIds: actives,
             courseId: course.id
-        }).then(() => (update('Questions', { course: { id: course.id } }), nav.pop()), show(setError))
+        }).then(
+            () => {
+                update('Questions', { course: { id: course.id } });
+                update('Profile', { email: '' });
+                nav.pop();
+            },
+            show(setError)
+        )
     }
 
     return (

@@ -69,7 +69,7 @@ namespace Server.Api.Repositories
             var questionToUpdate = await _context.Questions.FindAsync(question.id);
             if (questionToUpdate == null) throw new NullReferenceException();
             questionToUpdate.body = question.body;
-            questionToUpdate.time = DateTime.UtcNow;
+            questionToUpdate.time = question.time;
             questionToUpdate.title = question.title;
             questionToUpdate.topics = question.topics;
             await _context.SaveChangesAsync();

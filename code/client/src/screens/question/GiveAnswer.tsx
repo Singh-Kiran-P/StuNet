@@ -12,7 +12,13 @@ export default Screen('GiveAnswer', ({ nav, params: { question } }) => {
             body: body,
             title: title,
             questionId: question.id
-        }).then(() => (update('Question', { id: question.id }), nav.pop()), show(setError))
+        }).then(
+            () => {
+                update('Question', { id: question.id });
+                nav.pop();
+            },
+            show(setError)
+        )
     }
 
     return (

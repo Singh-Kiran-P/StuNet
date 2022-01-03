@@ -18,7 +18,15 @@ export default Screen('EditCourse', ({ nav, params: { course } }) => {
             number: number,
             courseEmail: email,
             description: description
-        }).then(() => (update('Course', { id: course.id }), nav.pop()), show(setError))
+        }).then(
+            () => {
+                update('Course', { id: course.id });
+                update('Profile', { email: '' });
+                update('Courses');
+                nav.pop();
+            },
+            show(setError)
+        )
     }
 
     return (

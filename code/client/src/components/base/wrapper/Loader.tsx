@@ -20,6 +20,6 @@ export default extend<typeof View, Props>(View, ({ load, state, ...props }) => {
 		})
 	}, [update])
 
-	if (state === true || loading) return <Spinner/>
+	if (state === true || loading) return <Spinner background/>
 	return <View flex {...props}/>
 })

@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
-using FluentEmail.Core;
 using System.IO;
+using FluentEmail.Core;
+using System.Threading.Tasks;
 
 namespace Server.Api.Services
 {

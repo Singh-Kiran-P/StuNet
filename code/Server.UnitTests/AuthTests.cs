@@ -38,14 +38,12 @@ namespace Server.UnitTests
         [InlineData("@uhasselt.be")]
         public async Task RegisterJWTUser_withValidEmail_Returns201(string domain)
         {
-            // Given
             string password = rand.Next().ToString().PadLeft(6);
-            RegisterUserDto registerDto = new()
-            {
-                Email = rand.Next().ToString() + domain,
+            RegisterUserDto registerDto = new() {
                 Password = password,
                 ConfirmPassword = password,
-                fieldOfStudy = rand.Next()
+                fieldOfStudy = rand.Next(),
+                Email = rand.Next().ToString() + domain
             };
 
             _FOSRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
@@ -56,29 +54,26 @@ namespace Server.UnitTests
                 .ReturnsAsync(IdentityResult.Success)
                 .Callback<User, string>((u, _) => u.Should().BeEquivalentTo(
                     registerDto,
-                    options => options.ComparingByMembers<RegisterUserDto>().ExcludingMissingMembers()));
+                    options => options.ComparingByMembers<RegisterUserDto>().ExcludingMissingMembers()
+                ));
 
             MockManager.Setup(repo => repo.GenerateEmailConfirmationTokenAsync(It.IsAny<User>()))
                 .ReturnsAsync(rand.Next().ToString());
 
             var controller = createController(MockManager.Object);
 
-            // When
             var result = await controller.RegisterJWTUser(registerDto);
 
-            // Then
             result.Should().BeOfType<NoContentResult>();
         }
 
         [Theory]
         [InlineData("student@student.uhasselt.be", "", "Password length should be at least 6")] // valid mail, invalid password
         [InlineData("student", "lengthOfAtleast6", "Please use an UHasselt email")] // invalid mail, valid password
-        [InlineData(".:;@[/|\\]@uhasselt.be", "lengthOfAtleast6", "Please use an UHasselt email")] // valid mail domain, valid password, ilegal mailaddress characters
+        [InlineData(".:;@[/|\\]@uhasselt.be", "lengthOfAtleast6", "Please use an UHasselt email")] // valid mail domain, valid password, illegal mailaddress characters
         public async Task RegisterJWTUser_withInvalidProperties_ReturnsBadRequest(string email, string password, string expectedError)
         {
-            // Given
-            RegisterUserDto registerDto = new()
-            {
+            RegisterUserDto registerDto = new() {
                 Email = email,
                 Password = password,
                 ConfirmPassword = password,
@@ -97,10 +92,8 @@ namespace Server.UnitTests
 
             var controller = createController(MockManager.Object);
 
-            // When
             var result = await controller.RegisterJWTUser(registerDto);
 
-            // Then
             result.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().Be(expectedError);
         }
     }

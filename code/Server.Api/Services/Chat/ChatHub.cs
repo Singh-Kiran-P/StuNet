@@ -35,8 +35,7 @@ namespace ChatSample.Hubs
         public async Task SendMessageToChannel(string message, int channelId)
         {
             string userEmail = GetCurrentUserEmail();
-            Message m = new()
-            {
+            Message m = new() {
                 body = message,
                 userMail = userEmail,
                 channelId = channelId,
