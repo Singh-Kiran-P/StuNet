@@ -41,8 +41,7 @@ namespace Server.UnitTests
 		}
 
 		public static Course createRandomCourse() {
-			return new()
-            {
+			return new() {
 				id = rand.Next(),
                 name = rand.Next().ToString(),
                 number = rand.Next().ToString(),
@@ -54,65 +53,59 @@ namespace Server.UnitTests
 
 		public static Topic createRandomTopic() {
 			int courseId = rand.Next();
-			return new()
-			{
+			return new() {
 				id = rand.Next(),
-				name = rand.Next().ToString(),
 				courseId = courseId,
-				course = new Course
-				{
+				name = rand.Next().ToString(),
+				course = new Course {
 					id = courseId,
 					name = rand.Next().ToString(),
 					number = rand.Next().ToString()
-				},
+				}
 			};
 		}
 
 
 		public static Question createRandomQuestion() {
 			int courseId = rand.Next();
-			return new()
-			{
+			return new() {
 				id = rand.Next(),
-				userId = rand.Next().ToString(),
 				courseId = courseId,
-				course = new Course
-				{
+				time = randomPassedDate(),
+				body = rand.Next().ToString(),
+				title = rand.Next().ToString(),
+				userId = rand.Next().ToString(),
+				course = new Course {
 					id = courseId,
 					name = rand.Next().ToString(),
 					number = rand.Next().ToString()
 				},
-				title = rand.Next().ToString(),
-				body = rand.Next().ToString(),
 				topics = Enumerable.Range(1, 10).Select(_ => new Topic {
 					id = rand.Next(),
 					name = rand.Next().ToString()
-				}).ToList(),
-				time = randomPassedDate()
+				}).ToList()
 			};
 		}
 
 		public static Answer createRandomAnswer() {
 			Question question = createRandomQuestion();
-			return new()
-			{
+			return new() {
 				id = rand.Next(),
-				userId = rand.Next().ToString(),
-				questionId = question.id,
 				question = question,
-				title = rand.Next().ToString(),
-				body = rand.Next().ToString(),
+				questionId = question.id,
 				time = randomPassedDate(),
-				isAccepted = rand.Next(2) == 0,
+				body = rand.Next().ToString(),
+				title = rand.Next().ToString(),
+				userId = rand.Next().ToString(),
+				isAccepted = rand.Next(2) == 0
 			};
 		}
 
 		public static FieldOfStudy createRandomFieldOfStudy() {
-			return new()
-			{
+			return new() {
 				id = rand.Next(),
-				fullName = rand.Next().ToString(),
 				name = rand.Next().ToString(),
+				fullName = rand.Next().ToString(),
 				isBachelor = rand.Next(2) == 0
 			};
 		}

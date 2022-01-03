@@ -32,16 +32,13 @@ namespace Server.UnitTests
         [Fact]
         public async Task GetQuestion_InvalidId_ReturnsNotFound()
         {
-            // Arrange
             _questionRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync((Question)null);
 
         	var controller = CreateController();
 
-            // Act
             var result = await controller.GetQuestion(rand.Next());
 
-            // Assert
             result.Result.Should().BeOfType<NotFoundResult>();
         }
 
@@ -50,8 +47,7 @@ namespace Server.UnitTests
         {
             // Arrange
             Question question = createRandomQuestion();
-			User randomUser = new()
-			{
+			User randomUser = new() {
 				Id = rand.Next().ToString()
 			};
 
@@ -64,10 +60,8 @@ namespace Server.UnitTests
 
         	var controller = CreateController(MockManager.Object);
 
-            // Act
             var result = await controller.GetQuestion(rand.Next());
 
-            // Assert
             result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetQuestionDto>().And
             .BeEquivalentTo(question, options => options.ComparingByMembers<GetQuestionDto>().ExcludingMissingMembers());
         }
@@ -83,8 +77,7 @@ namespace Server.UnitTests
         	_courseRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
         		.ReturnsAsync(randomCourse);
 
-			User randomUser = new()
-			{
+			User randomUser = new() {
 				Id = rand.Next().ToString()
 			};
 			UserHandler.ConnectedIds[randomUser.Id] = "";
@@ -92,11 +85,10 @@ namespace Server.UnitTests
 			MockManager.Setup(repo => repo.FindByEmailAsync(It.IsAny<string>()))
         		.ReturnsAsync(randomUser);
 
-			CreateQuestionDto questionToCreate = new()
-        	{
+			CreateQuestionDto questionToCreate = new() {
         		courseId = rand.Next(),
-        		title = rand.Next().ToString(),
         		body = rand.Next().ToString(),
+        		title = rand.Next().ToString(),
         		topicIds = Enumerable.Range(1, 10).Select(_ => rand.Next()).ToList<int>()
         	};
 
@@ -112,12 +104,10 @@ namespace Server.UnitTests
 			var httpContext = new DefaultHttpContext();
             httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("username", "") }, "TestAuthType"));
 
-
 			var controller = CreateController(MockManager.Object);
 			controller.ControllerContext.HttpContext = httpContext;
 
             var result = await controller.CreateQuestion(questionToCreate);
-
 
         	result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetQuestionDto>();
             var createdQuestion = (result.Result as OkObjectResult).Value as GetQuestionDto;
@@ -128,8 +118,7 @@ namespace Server.UnitTests
         	);
             createdQuestion.id.Should().NotBe(null);
         	createdQuestion.topics.Should().NotBeNullOrEmpty();
-        	foreach (GetPartialTopicDto t in createdQuestion.topics)
-        	{
+        	foreach (GetPartialTopicDto t in createdQuestion.topics) {
         		t.Should().BeEquivalentTo(
         			randomTopic,
         			options => options.ComparingByMembers<GetPartialTopicDto>().ExcludingMissingMembers()
@@ -156,11 +145,10 @@ namespace Server.UnitTests
         {
 
             Question oldQuestion = createRandomQuestion();
-            CreateQuestionDto newQuestion = new()
-            {
+            CreateQuestionDto newQuestion = new() {
                 courseId = rand.Next(),
-                title = rand.Next().ToString(),
                 body = rand.Next().ToString(),
+                title = rand.Next().ToString(),
                 topicIds = Enumerable.Range(1, 10).OrderBy(_ => rand.Next()).ToList<int>()
             };
 
@@ -177,7 +165,6 @@ namespace Server.UnitTests
                 options => options.ComparingByMembers<CreateQuestionDto>().ExcludingMissingMembers()
             );
         }
-
 
         [Fact]
         public async Task DeleteQuestion_InvalidId_ReturnsNotFound()

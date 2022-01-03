@@ -16,7 +16,14 @@ export default Screen('CreateCourse', ({ nav }) => {
             number: number,
             courseEmail: email,
             description: description
-        }).then(res => (update('Courses'), nav.replace('Course', { id: res.data.id })), show(setError))
+        }).then(
+            res => {
+                update('Courses');
+                update('Profile', { email: '' });
+                nav.replace('Course', { id: res.data.id });
+            },
+            show(setError)
+        )
     }
 
     return (

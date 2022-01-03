@@ -63,9 +63,9 @@ namespace Server.Api.Repositories
         {
             var answerToUpdate = await _context.Answers.FindAsync(answer.id);
             if (answerToUpdate == null) throw new NullReferenceException();
+            answerToUpdate.time = answer.time;
             answerToUpdate.body = answer.body;
             answerToUpdate.title = answer.title;
-            answerToUpdate.time = DateTime.UtcNow;
             answerToUpdate.userId = answer.userId;
             answerToUpdate.question = answer.question;
             await _context.SaveChangesAsync();

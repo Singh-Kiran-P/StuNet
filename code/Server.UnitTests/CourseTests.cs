@@ -28,27 +28,23 @@ namespace Server.UnitTests
         [Fact]
         public async Task CreateCourse_WithValidCourseDto_Ok()
         {
-            //Given
             string profEmail = rand.Next().ToString();
-            CreateCourseDto dto = new()
-            {
+            CreateCourseDto dto = new() {
+                profEmail = profEmail,
                 name = rand.Next().ToString(),
                 number = rand.Next().ToString(),
                 description = rand.Next().ToString(),
-                courseEmail = rand.Next().ToString(),
-                profEmail = profEmail
+                courseEmail = rand.Next().ToString()
             };
+
             var httpContext = new DefaultHttpContext();
             httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("username", profEmail) }, "TestAuthType"));
-
 
 			var controller = CreateController();
 			controller.ControllerContext.HttpContext = httpContext;
 
-			//When
 			var result = await controller.CreateCourse(dto);
 
-            //Then
             result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<Course>();
             var createdCourse = (result.Result as OkObjectResult).Value as Course;
 
@@ -62,16 +58,13 @@ namespace Server.UnitTests
         [Fact]
         public async Task GetCourse_WithValidId_CourseDto()
         {
-			//Given
 			Course course = createRandomCourse();
 			_courseRepositoryStub.Setup(repo => repo.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(course);
             var controller = CreateController();
-            
-            //When
+
 			var result = await controller.GetCourse(rand.Next());
 
-            //Then
             result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetCourseDto>();
             var createdCourse = (result.Result as OkObjectResult).Value as GetCourseDto;
 

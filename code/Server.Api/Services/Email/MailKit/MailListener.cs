@@ -28,10 +28,10 @@ namespace Server.Api.Services
 
         public void Listen()
         {
-            string pass = _configuration.GetSection("Mail")["G-password"];
-            string email = _configuration.GetSection("Mail")["G-SenderEmail"];
-            string imapHost = _configuration.GetSection("Mail")["G-ImapHost"];
-            int imapPort = Convert.ToInt32(_configuration.GetSection("Mail")["G-ImapPort"]);
+            string pass = _configuration.GetSection("Mail")["password"];
+            string email = _configuration.GetSection("Mail")["SenderEmail"];
+            string imapHost = _configuration.GetSection("Mail")["ImapHost"];
+            int imapPort = Convert.ToInt32(_configuration.GetSection("Mail")["ImapPort"]);
             var client = new IdleClient(imapHost, imapPort, SecureSocketOptions.Auto, email, pass, _serviceScopeFactory);
             client.Run().GetAwaiter();
         }

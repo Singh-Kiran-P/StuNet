@@ -50,10 +50,10 @@ export default ({ children }: Children) => {
     ], [token])
 
     return (
-        <Context.Provider value={context}>
-            <Loader state={load}>
-                {token ? children : (
-                    <ThemeProvider {...Theme.tabs.auth}>
+        <ThemeProvider {...Theme.tabs.auth}>
+            <Context.Provider value={context}>
+                <Loader state={load}>
+                    {token ? children : (
                         <Stack.Navigator
                             screenOptions={{
                                 animationTypeForReplace: 'push',
@@ -63,9 +63,9 @@ export default ({ children }: Children) => {
                             <Stack.Screen name='Login' component={Login}/>
                             <Stack.Screen name='Register' component={Register}/>
                         </Stack.Navigator>
-                    </ThemeProvider>
-                )}
-            </Loader>
-        </Context.Provider>
+                    )}
+                </Loader>
+            </Context.Provider>
+        </ThemeProvider>
     )
 }

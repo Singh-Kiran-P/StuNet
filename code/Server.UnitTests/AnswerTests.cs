@@ -31,7 +31,6 @@ namespace Server.UnitTests
         [InlineData(false)]
         public async Task SetAnswerAccepted_withValidAnswerAndPermissions_ReturnsNoContent(bool setAccepted)
         {
-            // Given
             string userId = rand.Next().ToString();
             Answer randomAnswer = createRandomAnswer();
             randomAnswer.question.userId = userId;
@@ -44,10 +43,9 @@ namespace Server.UnitTests
         
             var controller = createController();
             controller.ControllerContext.HttpContext = httpContext;
-            // When
+
             var result = await controller.SetAnswerAccepted(rand.Next(), setAccepted);
 
-            // Then
             result.Should().BeOfType<NoContentResult>();
             randomAnswer.isAccepted.Should().Be(setAccepted);
 
@@ -56,30 +54,24 @@ namespace Server.UnitTests
         [Fact]
         public async Task createAnswer_fromCreateAnswerDto_ReturnsGetAnswerDto()
         {
-            // Given
             string userId = rand.Next().ToString();
             Question randomQuestion = createRandomQuestion();
 
-            CreateAnswerDto answerToCreate = new() 
-            {
-                questionId = randomQuestion.id,
+            CreateAnswerDto answerToCreate = new()  {
+                body = rand.Next().ToString(),
                 title = rand.Next().ToString(),
-                body = rand.Next().ToString()
+                questionId = randomQuestion.id
             };
 
             var httpContext = new DefaultHttpContext();
-            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("username", rand.Next().ToString()) }, "TestAuthType")); 
+            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("userref", userId) }, "TestAuthType")); 
 
-            User randomUser = new()
-			{
+            User randomUser = new() {
 				Id = userId,
                 Email = rand.Next().ToString()
 			};
 
             var MockManager = GetMockUserManager();
-			MockManager.Setup(repo => repo.FindByEmailAsync(It.IsAny<string>()))
-        		.ReturnsAsync(randomUser);
-
             MockManager.Setup(repo => repo.FindByIdAsync(It.IsAny<string>()))
         		.ReturnsAsync(randomUser);
 
@@ -95,10 +87,8 @@ namespace Server.UnitTests
             var controller = createController(MockManager.Object);
             controller.ControllerContext.HttpContext = httpContext;
 
-            // When
             var result = await controller.CreateAnswer(answerToCreate);
 
-            // Then
             result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<GetAnswerDto>();;
             var createdAnswer = (result.Result as OkObjectResult).Value as GetAnswerDto;
 

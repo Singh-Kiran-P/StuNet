@@ -1,4 +1,4 @@
-import React, { Screen, EmptyAnswer, useState, useEmail, axios, update, show, dateString, professor } from '@/.';
+import React, { Screen, EmptyAnswer, useState, useEmail, axios, update, show, dateString } from '@/.';
 import { View, Text, Fab, Loader, CompactQuestion } from '@/components';
 
 export default Screen('Answer', ({ nav, params: { id } }) => {
@@ -19,8 +19,10 @@ export default Screen('Answer', ({ nav, params: { id } }) => {
     const accept = () => {
         axios.put('/Answer/SetAccepted/' + id + '?accepted=' + !answer.isAccepted).then(
             () => {
-                setAnswer({ ...answer, isAccepted: !answer.isAccepted })
-                update('Question')
+                setAnswer({ ...answer, isAccepted: !answer.isAccepted });
+                update('Question', { id: answer.question.id });
+                update('Profile', { email: '' });
+                update('Notifications');
             },
             show(setError)
         )
