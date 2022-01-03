@@ -14,6 +14,9 @@ WORKDIR /app
 RUN mkdir  -p  Services/Email/Templates/
 COPY ./Services/Email/Templates/ /app/Services/Email/Templates/
 
+RUN mkdir  -p  Downloads
+COPY ./Downloads /app/Downloads/
+
 EXPOSE 80
 EXPOSE 5000
 EXPOSE 5001
