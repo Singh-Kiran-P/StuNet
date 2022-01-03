@@ -143,6 +143,7 @@ namespace Server.Api.Services
 
         void OnMessageReceived(IMessageSummary message)
         {
+            Console.WriteLine("Email");
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
@@ -154,8 +155,11 @@ namespace Server.Api.Services
                 var _notificationRepository = scope.ServiceProvider.GetRequiredService<INotificationRepository<AnswerNotification>>();
                 var _subscriptionRepository = scope.ServiceProvider.GetRequiredService<ISubscriptionRepository<QuestionSubscription>>();
                 var questions = _questionRepository.GetAllAsync().GetAwaiter().GetResult();
-    
+
                 (int questionId, string title, string body) = _parseEmail(message);
+                Console.WriteLine(questionId);
+                Console.WriteLine(title);
+                Console.WriteLine(body);
                 Question question = _questionRepository.GetAsync(questionId).GetAwaiter().GetResult();
                 User answerUser = _userManager.FindByEmailAsync(question.course.profEmail).GetAwaiter().GetResult();
                 User questionUser = _userManager.FindByIdAsync(question.userId).GetAwaiter().GetResult();
@@ -195,7 +199,7 @@ namespace Server.Api.Services
             var title = "Answered by Prof. " + name.Substring(0, name.Length - 1);
 
             var text = ((TextPart)client.Inbox.GetBodyPart(message.UniqueId, message.TextBody)).Text;
-            var content = text.Split("<stunetuh@gmail.com>")[0];
+            var content = text.Split("<stunetuh@outlook.com>")[0];
             var body = content.Substring(0, content.LastIndexOf('\n'));
 
             var html = new HtmlDocument();
