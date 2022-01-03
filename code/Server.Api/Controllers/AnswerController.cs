@@ -58,6 +58,7 @@ namespace Server.Api.Controllers
             foreach (var answer in answers) {
                 User answerUser = await _userManager.FindByIdAsync(answer.userId);
                 User questionUser = await _userManager.FindByIdAsync(answer.question.userId);
+                if (answerUser == null || questionUser == null) return NotFound();
                 res.Add(GetAnswerDto.Convert(answer, answerUser, questionUser));
             }
             return Ok(res);
@@ -70,7 +71,7 @@ namespace Server.Api.Controllers
             var answer = await _answerRepository.GetAsync(id);
             User answerUser = await _userManager.FindByIdAsync(answer.userId);
             User questionUser = await _userManager.FindByIdAsync(answer.question.userId);
-            if (answer == null) return NotFound();
+            if (answer == null || answerUser == null || questionUser == null) return NotFound();
             return Ok(GetAnswerDto.Convert(answer, answerUser, questionUser));
         }
 
@@ -83,6 +84,7 @@ namespace Server.Api.Controllers
             List<GetAnswerDto> res = new List<GetAnswerDto>();
             foreach (var answer in answers) {
                 User questionUser = await _userManager.FindByIdAsync(answer.question.userId);
+                if (questionUser == null) return NotFound();
                 res.Add(GetAnswerDto.Convert(answer, answerUser, questionUser));
             }
             return Ok(res);
@@ -93,18 +95,18 @@ namespace Server.Api.Controllers
         public async Task<ActionResult<GetAnswerDto>> CreateAnswer(CreateAnswerDto dto)
         {
             ClaimsPrincipal currentUser = HttpContext.User;
-            if (!currentUser.HasClaim(c => c.Type == "username")) return Unauthorized();
-            string userEmail = currentUser.Claims.FirstOrDefault(c => c.Type == "username").Value;
+            if (!currentUser.HasClaim(c => c.Type == "userref")) return Unauthorized();
+            string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
             Question question = await _questionRepository.GetAsync(dto.questionId);
-            User answerUser = await _userManager.FindByEmailAsync(userEmail);
+            User answerUser = await _userManager.FindByIdAsync(userId);
             User questionUser = await _userManager.FindByIdAsync(question.userId);
-            if (answerUser == null || question == null) NotFound();
+            if (question == null || answerUser == null || questionUser == null) NotFound();
             Answer answer = new() {
                 body = dto.body,
                 title = dto.title,
                 question = question,
                 time = DateTime.UtcNow,
-                userId = answerUser.Id,
+                userId = answerUser.Id
             };
 
             await _answerRepository.CreateAsync(answer);
@@ -157,10 +159,6 @@ namespace Server.Api.Controllers
         {
             Answer existing = await _answerRepository.GetAsync(id);
             if (existing == null) return NotFound();
-            ClaimsPrincipal currentUser = HttpContext.User;
-            if (!currentUser.HasClaim(c => c.Type == "userref")) return Unauthorized();
-            string userId = currentUser.Claims.FirstOrDefault(c => c.Type == "userref").Value;
-            if (existing.question.userId != userId) return Unauthorized();
             existing.isAccepted = accepted;
             await _answerRepository.UpdateAsync(existing);
             return NoContent();

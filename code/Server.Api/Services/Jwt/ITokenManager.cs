@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Server.Api.Dtos;
+﻿using Server.Api.Dtos;
 using Server.Api.Models;
+using System.Threading.Tasks;
 
 namespace Server.Api.Services
 {

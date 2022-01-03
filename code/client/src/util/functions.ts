@@ -45,8 +45,10 @@ export const displayName = (email: string) => {
     }).join(' ');
 }
 
-export const timeSort = <T extends { time: string }>(items: T[]): T[] => {
-    return items.sort((a, b) => b?.time?.localeCompare(a?.time || '') || 0);
+export const timeSort = <T extends { time: string, isAccepted?: boolean }>(items: T[]): T[] => {
+    return [true, false].map(b => items.filter(item => !!item.isAccepted === b)).map(l => {
+        return l.sort((a, b) => b?.time?.localeCompare(a?.time || '') || 0);
+    }).flat();
 }
 
 export const show = (set: React.Dispatch<React.SetStateAction<string>>) => (err: any) => set(errorString(err));

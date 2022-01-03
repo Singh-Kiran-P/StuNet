@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+// https://code-maze.com/migrations-and-seed-data-efcore
+// https://www.learnentityframeworkcore.com/configuration/one-to-many-relationship-configuration
+// https://henriquesd.medium.com/entity-framework-core-relationships-with-fluent-api-8f741c57b881
+// https://dejanstojanovic.net/aspnet/2020/july/seeding-data-with-entity-framework-core-using-migrations
+
 namespace Server.Api.DataBase {
-    // https://henriquesd.medium.com/entity-framework-core-relationships-with-fluent-api-8f741c57b881
-    // https://www.learnentityframeworkcore.com/configuration/one-to-many-relationship-configuration
-    // https://code-maze.com/migrations-and-seed-data-efcore/
-    // https://dejanstojanovic.net/aspnet/2020/july/seeding-data-with-entity-framework-core-using-migrations/
     public class DataContext : DbContext, IDataContext {
         public DbSet<User> Users { get; set; }
         public DbSet<Topic> Topics { get; set; }
@@ -27,69 +28,73 @@ namespace Server.Api.DataBase {
         public DbSet<QuestionSubscription> QuestionSubscriptions { get; set; }
         public DbSet<QuestionNotification> QuestionNotifications { get; set; }
 
-        public DataContext (DbContextOptions<DataContext> options) : base (options) {
+        public DataContext(DbContextOptions<DataContext> options) : base(options) {}
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            optionsBuilder.EnableSensitiveDataLogging();
+            base.OnConfiguring(optionsBuilder);
         }
 
-        protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.EnableSensitiveDataLogging ();
-            base.OnConfiguring (optionsBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            CreateFieldOfStudy(modelBuilder);
+            CreateUsers(modelBuilder);
+            CreateCourse(modelBuilder);
         }
 
-        protected override void OnModelCreating (ModelBuilder modelBuilder) {
-            CreateFieldOfStudy (modelBuilder);
-            CreateUsers (modelBuilder);
-            CreateCourse (modelBuilder);
-        }
+        private void CreateUsers(ModelBuilder modelBuilder) {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration (new RoleConfiguration());
+            modelBuilder.Entity<IdentityUserRole<string>>().HasKey(p => new { p.UserId, p.RoleId });
 
-        private void CreateUsers (ModelBuilder modelBuilder) {
-            base.OnModelCreating (modelBuilder);
-            modelBuilder.ApplyConfiguration (new RoleConfiguration ());
-            modelBuilder.Entity<IdentityUserRole<string>> ().HasKey (p => new { p.UserId, p.RoleId });
-
-            var defaultStudent = new Student () {
-                FieldOfStudyId = 1,
-                Email = "student@student.uhasselt.be",
-                NormalizedEmail = "STUDENT@STUDENT.UHASSELT.BE",
-                UserName = "student@student.uhasselt.be",
-                NormalizedUserName = "STUDENT@STUDENT.UHASSELT.BE",
-                PhoneNumber = "+111111111111",
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-                SecurityStamp = "GSXIEJ7H7DWJTSRP24CU5DWFJV4WNFAI",
-                Id = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                PasswordHash = "AQAAAAEAACcQAAAAEM3NAKXyohZdXCFtacPu/m8XMK+7VbOGSSePxwzsA+RcDlg1m9p/5RWvBSJtrgNrjQ==", //abc123
-                ConcurrencyStamp = "de4df913-7e5b-4406-b710-ea134f7b4a43",
+            var students = new List<Student>
+            {
+                new Student() {
+                    FieldOfStudyId = 1,
+                    Email = "student@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT@STUDENT.UHASSELT.BE",
+                    UserName = "student@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    SecurityStamp = "GSXIEJ7H7DWJTSRP24CU5DWFJV4WNFAI",
+                    Id = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    PasswordHash = "AQAAAAEAACcQAAAAEM3NAKXyohZdXCFtacPu/m8XMK+7VbOGSSePxwzsA+RcDlg1m9p/5RWvBSJtrgNrjQ==", //abc123
+                    ConcurrencyStamp = "de4df913-7e5b-4406-b710-ea134f7b4a43"
+                }
             };
-            var defaultProf = new Professor () {
-                Email = "prof@uhasselt.be",
-                NormalizedEmail = "PROF@UHASSELT.BE",
-                UserName = "prof@uhasselt.be",
-                NormalizedUserName = "PROF@UHASSELT.BE",
-                PhoneNumber = "+111111111111",
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-                SecurityStamp = "TZEZOM5SNMCQIPT4UPQPHWDJZVAZDIQ2",
-                Id = "7d2b412e-7de8-4341-90f4-49b741e83466",
-                PasswordHash = "AQAAAAEAACcQAAAAEJCOeIX31jPsOvnmQsfwN+7lRjUAAGFJ8ALpjqPTTXjIT9AbdDcr5vJkgK2gsVqK7A==", //abc123
-                ConcurrencyStamp = "83fe0b78-26c9-4c24-a39c-140ec82493b8",
+
+            var profs = new List<Professor>
+            {
+                new Professor() {
+                    Email = "prof@uhasselt.be",
+                    NormalizedEmail = "PROF@UHASSELT.BE",
+                    UserName = "prof@uhasselt.be",
+                    NormalizedUserName = "PROF@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    SecurityStamp = "TZEZOM5SNMCQIPT4UPQPHWDJZVAZDIQ2",
+                    Id = "7d2b412e-7de8-4341-90f4-49b741e83466",
+                    PasswordHash = "AQAAAAEAACcQAAAAEJCOeIX31jPsOvnmQsfwN+7lRjUAAGFJ8ALpjqPTTXjIT9AbdDcr5vJkgK2gsVqK7A==", //abc123
+                    ConcurrencyStamp = "83fe0b78-26c9-4c24-a39c-140ec82493b8"
+                }
             };
-            var defaultRoleStudent= new IdentityUserRole<string> () {
-                UserId = defaultStudent.Id,
+
+            var studentRole= new IdentityUserRole<string>() {
+                UserId = students[0].Id,
                 RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
             };
-            var defaultRoleProf = new IdentityUserRole<string>()
-            {
-                UserId = defaultProf.Id,
+            var profRole = new IdentityUserRole<string>() {
+                UserId = profs[0].Id,
                 RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
             };
 
-            base.OnModelCreating (modelBuilder);
-            modelBuilder.Entity<Student> ().HasData (defaultStudent);
-            modelBuilder.Entity<Professor> ().HasData (defaultProf);
-
-            modelBuilder.Entity<IdentityUserRole<string>> ().HasData (defaultRoleStudent);
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(defaultRoleProf);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Professor>().HasData(profs);
+            modelBuilder.Entity<Student>().HasData(students);
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(profRole);
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(studentRole);
         }
 
         private void CreateFieldOfStudy(ModelBuilder modelBuilder)
@@ -107,6 +112,54 @@ namespace Server.Api.DataBase {
                     name = "INF",
                     isBachelor = false,
                     fullName = "Master in de Informatica"
+                },
+                new FieldOfStudy() {
+                    id = 3,
+                    name = "BIO",
+                    isBachelor = true,
+                    fullName = "Bachelor in de Biologie",
+                },
+                new FieldOfStudy() {
+                    id = 4,
+                    name = "BIO",
+                    isBachelor = false,
+                    fullName = "Master in de Biologie"
+                },
+                new FieldOfStudy() {
+                    id = 5,
+                    name = "CHEM",
+                    isBachelor = true,
+                    fullName = "Bachelor in de Chemie",
+                },
+                new FieldOfStudy() {
+                    id = 6,
+                    name = "CHEM",
+                    isBachelor = false,
+                    fullName = "Master in de Chemie"
+                },
+                new FieldOfStudy() {
+                    id = 7,
+                    name = "FYS",
+                    isBachelor = true,
+                    fullName = "Bachelor in de Fysica",
+                },
+                new FieldOfStudy() {
+                    id = 8,
+                    name = "FYS",
+                    isBachelor = false,
+                    fullName = "Master in de Fysica"
+                },
+                new FieldOfStudy() {
+                    id = 9,
+                    name = "WIS",
+                    isBachelor = true,
+                    fullName = "Bachelor in de Wiskunde",
+                },
+                new FieldOfStudy() {
+                    id = 10,
+                    name = "WIS",
+                    isBachelor = false,
+                    fullName = "Master in de Wiskunde"
                 }
             };
 
@@ -115,19 +168,67 @@ namespace Server.Api.DataBase {
 
         private void CreateCourse (ModelBuilder modelBuilder) {
             var courses = new List<Course> {
-                new Course () {
+                new Course() {
                     id = 1,
-                    name = "Course 1",
-                    number = "Course 1 number",
-                    description = "Course 1 description",
-                    courseEmail = "lander.moors@student.uhasselt.be",
+                    number = "1303",
+                    name = "Software Engineering",
+                    description = "In dit opleidingsonderdeel maak je kennis met de processen, tools en technieken om complexe, correcte en bruikbare software te bouwen. De verschillende fases van een software engineering process worden bestudeerd. We starten met een basis van requirements engineering. We behandelen diverse procesmodellen voor de ontwikkeling van software, inclusief agiele processen. Technieken zoals test-driven development en refactoring komen aan bod. Na het volgen van dit opleidingsonderdeel, kunnen de studenten (1) principes en kwaliteitsattributen van proces en product uitleggen en nastreven, (2) de fasen van het ontwikkelingsproces, de activiteiten, de resultaten en gerelateerde terminologie uitleggen, (3) een probleem analyseren waarvoor software moet gemaakt worden en dit omzetten in een verzameling gestructureerde vereisten (requirements), (4) UML (Unified Modeling Language) gebruiken voor het maken van een object-georiënteerde analyse en ontwerp van een gesteld probleem, en (5) een software ontwerp omzetten in gestructureerde en onderhoudbare object-georiënteerde code. De studenten verkrijgen ook inzicht in validatie, verificatie en testing, en kunnen de aangeleerde benaderingen toepassen, en verwerven de basisvaardigheden om software design en code gradueel te laten evolueren.",
+                    courseEmail = "senn.robyns@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
-                new Course () {
+                new Course() {
                     id = 2,
-                    name = "Course 2",
-                    number = "Course 2 number",
-                    description = "Course 2 description",
+                    number = "1282",
+                    name = "Juridische aspecten van informatica",
+                    description = "In dit opleidingsonderdeel worden de juridische aspecten van informatica belicht vanuit een praktische invalshoek. Het opleidingsonderdeel bestaat uit een combinatie van interactieve colleges en oefeningen op basis van casussen.\nEen aantal van de topics die in dit opleidingsonderdeel aan bod komen zijn: intellectuele eigendom, privacybescherming, elektronische contracten, elektronische handel, informaticamisdrijven, telecommunicatierecht, productaansprakelijkheid, consumentenbescherming en netwerkzoeking.",
+                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    profEmail = "prof@uhasselt.be"
+                },
+                new Course() {
+                    id = 3,
+                    number = "2941",
+                    name = "Kansrekening en statistiek",
+                    description = "Voor het deel kansrekening:\n1. De student is vertrouwd met basisconcepten in de kansrekening.\n2. De student is vertrouwd met kansexperimenten en met het begrip stochastische variabele.\n3. De student kent de basisregels van de kansrekening.\n4. De student kent de basistechnieken van de combinatieleer.\n5. De student kent de belangrijkste discrete en continue verdelingen.\n6. De student is vertrouwd met voorwaardelijke verdelingen (discreet en continu).\n7. De student is vertrouwd met de verwachtingswaarde, het gemiddelde en de variantie, en de moment genererende functie (van discrete en continue verdelingen).\n8. De student kent de wet van de grote aantallen en de centrale limietstelling.\n9. De student kent de basisconcepten van simulaties en Monte Carlo methoden.\n10. De student kent de basisbegrippen van stochastische processen, telprocessen, Markov processen en Markov ketens.\n11. De student kent de basisconcepten van de simulatie van stochastische processen.\n12. De student is vertrouwd met wachtlijnen, single- en multi-server systemen.\n13. De student kent de basisconcepten van de simulatie van wachtlijn-systemen.\n14. De student kan kanstheoretische problemen oplossen en simulaties uitvoeren met een softwarepakket (R)\nVoor het deel statistiek\n1. De student is vertrouwd met basisconcepten in de beschrijvende statistiek.\n2. De student is vertrouwd met de begrippen steekproef en populatie en kent de basis van steekproeftheorie.\n3. De student is vertrouwd met de eigenschappen van schatters voor parameters.\n4. De student kent de basistechnieken van de statistische inferentie: het construeren van betrouwbaarheidsintervallen en het toetsen van hypothesen.\n5. De student kent de basistechnieken van niet-parametrische testen.\n6. De student kan data beschrijven, betrouwbaarheidsintervallen opstellen en hypothesen toetsen met behulp van de statistische software R\n7. De student kan een niet-parametrische test uitvoeren met het statistisch software pakket R",
+                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    profEmail = "prof@uhasselt.be"
+                },
+                new Course() {
+                    id = 4,
+                    number = "0660",
+                    name = "Besturingssystemen",
+                    description = "Het besturingssysteem is het eerste, en vaak ook het enige, programma dat steeds loopt als een computer werkt. Het verschaft een omgeving waarin andere programma's beschermd en efficient uitgevoerd kunnen worden. Het is een tussenlaag tussen de computer hardware en gebruikersprogrammatuur, en beheert systeemfaciliteiten zoals hoofdgeheugen, CPU rekentijd, en randapparatuur.\n\nIn dit opleidingsonderdeel maakt de student kennis met de fundamentele concepten van werking en programmering van besturingssystemen. De volgende onderwerpen komen onder meer aan bod: - Structuur van besturingssystemen;- Taken die door besturingssystemen vervuld worden - CPU werkindeling; - Procesmanagement: Gelijktijdige processen: interproces-communicatie, procescoördinatie, deadlockdetectie en -preventie; - Multithreading - Geheugenbeheer en het virtueel geheugen - Bestandsystemen en permanente gegevensopslag - Gegevensinvoer en -uitvoer en efficiënte gegevenstoegang - beveiliging en afscherming.\n\nTijdens de oefeningen wordt aandacht besteed aan verschillende technieken die gerelateerd zijn met de theorie, met nadruk op multithreaded programmering.",
+                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    profEmail = "prof@uhasselt.be"
+                },
+                new Course() {
+                    id = 5,
+                    number = "4380",
+                    name = "Bachelorproef",
+                    description = "Zelfstandig kunnen analyseren, aanpakken/implementeren en evalueren van een gegeven probleemstelling, ondersteund door een geschreven werk. Het eindwerk is een uiteenzetting van de (nieuwe) informaticaleerstof die men heeft moeten aanwenden en/of bijleren om tot een voltooiing van de opdracht te komen. De student levert een eindproduct af op basis waarvan bepaald wordt op welke manier de specifieke eindcompetenties van de bachelorproef gehaald werden. Concreet omvat dit eindproduct de volgende elementen:\n\n1. de bachelorproeftekst\n2. een mondelinge (poster)presentatie op academisch niveau\n\nDe vereisten voor de bachelorproef en bovenstaande deelaspecten worden omschreven in een specifieke leidraad die de studenten ter beschikking wordt gesteld.\nBinnen de bachelorproef bestaat eveneens de mogelijkheid om seminaries te organiseren door leden van de vakgroep Informatica; dit neemt dan de vorm aan van lezingen die de verschillende profielen van de Master Informatica kaderen. Indien zij georganiseerd worden zijn studenten verplicht deze seminaries bij te wonen. ",
+                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    profEmail = "prof@uhasselt.be"
+                },
+                new Course() {
+                    id = 6,
+                    number = "4379",
+                    name = "Computernetwerken",
+                    description = "Dit opleidingsonderdeel behandelt de basisprincipes van computernetwerken. Onder meer volgende onderwerpen komen aan bod:\n\n- architectuur, ontwerpprincipes, algoritmiek en werking van computernetwerken\n- het hybride OSI-TCP/IP model voor computernetwerken en de principes van gelaagde netwerken, met specifieke focus op de TCP/IP protocolsuite\n- realisatie van praktische implementaties op basis van socket programming (in Python)\n- interpretatie van netwerktraces.\n\nTijdens elk hoorcollege komt een (deel van een) hoofdstuk uit het handboek aan bod, waarbij de docent verwacht dat de studenten dit op voorhand hebben gelezen. Er wordt voornamelijk ingegaan op de moeilijke onderwerpen en op de vragen van de studenten (en de prof). Van de studenten wordt dus zowel een degelijke voorbereiding als actieve participatie verwacht.\nDe theorie wordt verder aan de praktijk getoetst door enerzijds analyses van netwerktraces (die telkens in het volgende hoorcollege worden besproken) en anderzijds programmeeropdrachten waarin zelf netwerksoftware wordt geschreven met socket-gebaseerde communicatie in Python.\nDe practica dienen strikt individueel te worden uitgevoerd, zonder enig overleg met andere studenten of externen.",
+                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    profEmail = "prof@uhasselt.be"
+                },
+                new Course() {
+                    id = 7,
+                    number = "4377",
+                    name = "Theoretische informatica",
+                    description = "1. De studenten verwerven de basiskennis van reguliere talen en kunnen deze toepassen.\n2. De studenten verwerven de basiskennis van context-vrije talen en kunnen deze toepassen.\n3. De studenten maken kennis met een toepassing van context-vrije talen: het CYK-parsingalgoritme.\n4. De studenten verwerven de basiskennis van Turing Machines en het begrip beslisbaarheid en kunnen deze toepassen.\n5. De studenten kunnen de verworven kennis over concepten en algoritmen verwerken in een implementatie.",
+                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    profEmail = "prof@uhasselt.be"
+                },
+                new Course() {
+                    id = 8,
+                    number = "1588",
+                    name = "Wetenschapsfilosofie",
+                    description = "De student verwerft inzicht in de historische evolutie en het eigentijdse functioneren van de wetenschappen in hun maatschappelijke context en is op de hoogte van de diverse kennisbelangen die met wetenschap kunnen worden nagestreefd. Hij/zij kan mee discussiëren over tegenstellingen zoals o.m. deze tussen analytische kennis a priori (wiskunde, logica) versus synthetische kennis a posteriori (ervaringswetenschappen), wetenschappelijke kennis versus alledaagse kennis resp. religieuze en metafysische overtuigingen, reductionisme versus holisme, intrinsieke versus instrumentele waarde. Bovendien slaagt hij/zij er in deze betekenisvol toe te passen op het eigen vakgebied.",
                     courseEmail = "senn.robyns@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 }

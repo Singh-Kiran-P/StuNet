@@ -1,5 +1,5 @@
 import React, { Screen, Answer, EmptyQuestion, useState, useEffect, axios, update, show, dateString, timeSort } from '@/.';
-import { View, Text, Chip, List, Icon, Loader, Button, CompactAnswer } from '@/components';
+import { View, Text, Chip, List, Loader, Button, CompactAnswer } from '@/components';
 
 export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
     let [subscribed, setSubscribed] = useState<null | number>(null);
