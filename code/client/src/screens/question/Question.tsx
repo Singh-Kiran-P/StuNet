@@ -21,7 +21,7 @@ export default Screen('Question', ({ nav, params: { id, subscribe } }) => {
     }
 
     const subscription = async () => {
-        axios.get('/QuestionSubscription/ByUserAndQuestionId/' + id).then(res => {
+        return axios.get('/QuestionSubscription/ByUserAndQuestionId/' + id).then(res => {
             setSubscribed(res.data.length ? res.data[0].id : NaN);
             nav.setParams({ subscribe: res.data.length > 0 });
         })
