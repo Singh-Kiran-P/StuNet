@@ -214,59 +214,61 @@ namespace Server.Api.DataBase
                 }
             };
 
+            var studentRole = "36c604a2-1f4e-4552-8741-74140540679b";
             var studentRoles = new List<IdentityUserRole<string>>
             {
                 new IdentityUserRole<string>() {
                     UserId = students[0].Id,
-                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                    RoleId = studentRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = students[1].Id,
-                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                    RoleId = studentRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = students[2].Id,
-                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                    RoleId = studentRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = students[3].Id,
-                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                    RoleId = studentRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = students[4].Id,
-                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                    RoleId = studentRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = students[5].Id,
-                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                    RoleId = studentRole
                 }
             };
 
+            var profRole = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3";
             var profRoles = new List<IdentityUserRole<string>>
             {
                 new IdentityUserRole<string>() {
                     UserId = profs[0].Id,
-                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                    RoleId = profRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = profs[1].Id,
-                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                    RoleId = profRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = profs[2].Id,
-                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                    RoleId = profRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = profs[3].Id,
-                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                    RoleId = profRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = profs[4].Id,
-                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                    RoleId = profRole
                 },
                 new IdentityUserRole<string>() {
                     UserId = profs[5].Id,
-                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                    RoleId = profRole
                 }
             };
 
@@ -353,7 +355,7 @@ namespace Server.Api.DataBase
                     name = "Software Engineering",
                     description = "In dit opleidingsonderdeel maak je kennis met de processen, tools en technieken om complexe, correcte en bruikbare software te bouwen. De verschillende fases van een software engineering process worden bestudeerd. We starten met een basis van requirements engineering. We behandelen diverse procesmodellen voor de ontwikkeling van software, inclusief agiele processen. Technieken zoals test-driven development en refactoring komen aan bod. Na het volgen van dit opleidingsonderdeel, kunnen de studenten (1) principes en kwaliteitsattributen van proces en product uitleggen en nastreven, (2) de fasen van het ontwikkelingsproces, de activiteiten, de resultaten en gerelateerde terminologie uitleggen, (3) een probleem analyseren waarvoor software moet gemaakt worden en dit omzetten in een verzameling gestructureerde vereisten (requirements), (4) UML (Unified Modeling Language) gebruiken voor het maken van een object-georiënteerde analyse en ontwerp van een gesteld probleem, en (5) een software ontwerp omzetten in gestructureerde en onderhoudbare object-georiënteerde code. De studenten verkrijgen ook inzicht in validatie, verificatie en testing, en kunnen de aangeleerde benaderingen toepassen, en verwerven de basisvaardigheden om software design en code gradueel te laten evolueren.",
                     courseEmail = "kiran.singh@student.uhasselt.be",
-                    profEmail = "prof@uhasselt.be"
+                    profEmail = profs[0].Email
                 },
                 new Course() {
                     id = 2,
@@ -361,7 +363,7 @@ namespace Server.Api.DataBase
                     name = "Juridische aspecten van informatica",
                     description = "In dit opleidingsonderdeel worden de juridische aspecten van informatica belicht vanuit een praktische invalshoek. Het opleidingsonderdeel bestaat uit een combinatie van interactieve colleges en oefeningen op basis van casussen.\nEen aantal van de topics die in dit opleidingsonderdeel aan bod komen zijn: intellectuele eigendom, privacybescherming, elektronische contracten, elektronische handel, informaticamisdrijven, telecommunicatierecht, productaansprakelijkheid, consumentenbescherming en netwerkzoeking.",
                     courseEmail = "jochem.lenaers@student.uhasselt.be",
-                    profEmail = "prof1@uhasselt.be"
+                    profEmail = profs[1].Email
                 },
                 new Course() {
                     id = 3,
@@ -369,7 +371,7 @@ namespace Server.Api.DataBase
                     name = "Kansrekening en statistiek",
                     description = "Voor het deel kansrekening:\n1. De student is vertrouwd met basisconcepten in de kansrekening.\n2. De student is vertrouwd met kansexperimenten en met het begrip stochastische variabele.\n3. De student kent de basisregels van de kansrekening.\n4. De student kent de basistechnieken van de combinatieleer.\n5. De student kent de belangrijkste discrete en continue verdelingen.\n6. De student is vertrouwd met voorwaardelijke verdelingen (discreet en continu).\n7. De student is vertrouwd met de verwachtingswaarde, het gemiddelde en de variantie, en de moment genererende functie (van discrete en continue verdelingen).\n8. De student kent de wet van de grote aantallen en de centrale limietstelling.\n9. De student kent de basisconcepten van simulaties en Monte Carlo methoden.\n10. De student kent de basisbegrippen van stochastische processen, telprocessen, Markov processen en Markov ketens.\n11. De student kent de basisconcepten van de simulatie van stochastische processen.\n12. De student is vertrouwd met wachtlijnen, single- en multi-server systemen.\n13. De student kent de basisconcepten van de simulatie van wachtlijn-systemen.\n14. De student kan kanstheoretische problemen oplossen en simulaties uitvoeren met een softwarepakket (R)\nVoor het deel statistiek\n1. De student is vertrouwd met basisconcepten in de beschrijvende statistiek.\n2. De student is vertrouwd met de begrippen steekproef en populatie en kent de basis van steekproeftheorie.\n3. De student is vertrouwd met de eigenschappen van schatters voor parameters.\n4. De student kent de basistechnieken van de statistische inferentie: het construeren van betrouwbaarheidsintervallen en het toetsen van hypothesen.\n5. De student kent de basistechnieken van niet-parametrische testen.\n6. De student kan data beschrijven, betrouwbaarheidsintervallen opstellen en hypothesen toetsen met behulp van de statistische software R\n7. De student kan een niet-parametrische test uitvoeren met het statistisch software pakket R",
                     courseEmail = "senn.robyns@student.uhasselt.be",
-                    profEmail = "prof2@uhasselt.be"
+                    profEmail = profs[2].Email
                 },
                 new Course() {
                     id = 4,
@@ -377,7 +379,7 @@ namespace Server.Api.DataBase
                     name = "Besturingssystemen",
                     description = "Het besturingssysteem is het eerste, en vaak ook het enige, programma dat steeds loopt als een computer werkt. Het verschaft een omgeving waarin andere programma's beschermd en efficient uitgevoerd kunnen worden. Het is een tussenlaag tussen de computer hardware en gebruikersprogrammatuur, en beheert systeemfaciliteiten zoals hoofdgeheugen, CPU rekentijd, en randapparatuur.\n\nIn dit opleidingsonderdeel maakt de student kennis met de fundamentele concepten van werking en programmering van besturingssystemen. De volgende onderwerpen komen onder meer aan bod: - Structuur van besturingssystemen;- Taken die door besturingssystemen vervuld worden - CPU werkindeling; - Procesmanagement: Gelijktijdige processen: interproces-communicatie, procescoördinatie, deadlockdetectie en -preventie; - Multithreading - Geheugenbeheer en het virtueel geheugen - Bestandsystemen en permanente gegevensopslag - Gegevensinvoer en -uitvoer en efficiënte gegevenstoegang - beveiliging en afscherming.\n\nTijdens de oefeningen wordt aandacht besteed aan verschillende technieken die gerelateerd zijn met de theorie, met nadruk op multithreaded programmering.",
                     courseEmail = "tijl.elens@student.uhasselt.be",
-                    profEmail = "prof3@uhasselt.be"
+                    profEmail = profs[3].Email
                 },
                 new Course() {
                     id = 5,
@@ -385,7 +387,7 @@ namespace Server.Api.DataBase
                     name = "Bachelorproef",
                     description = "Zelfstandig kunnen analyseren, aanpakken/implementeren en evalueren van een gegeven probleemstelling, ondersteund door een geschreven werk. Het eindwerk is een uiteenzetting van de (nieuwe) informaticaleerstof die men heeft moeten aanwenden en/of bijleren om tot een voltooiing van de opdracht te komen. De student levert een eindproduct af op basis waarvan bepaald wordt op welke manier de specifieke eindcompetenties van de bachelorproef gehaald werden. Concreet omvat dit eindproduct de volgende elementen:\n\n1. de bachelorproeftekst\n2. een mondelinge (poster)presentatie op academisch niveau\n\nDe vereisten voor de bachelorproef en bovenstaande deelaspecten worden omschreven in een specifieke leidraad die de studenten ter beschikking wordt gesteld.\nBinnen de bachelorproef bestaat eveneens de mogelijkheid om seminaries te organiseren door leden van de vakgroep Informatica; dit neemt dan de vorm aan van lezingen die de verschillende profielen van de Master Informatica kaderen. Indien zij georganiseerd worden zijn studenten verplicht deze seminaries bij te wonen. ",
                     courseEmail = "senn.robyns@student.uhasselt.be",
-                    profEmail = "prof4@uhasselt.be"
+                    profEmail = profs[4].Email
                 },
                 new Course() {
                     id = 6,
@@ -393,7 +395,7 @@ namespace Server.Api.DataBase
                     name = "Computernetwerken",
                     description = "Dit opleidingsonderdeel behandelt de basisprincipes van computernetwerken. Onder meer volgende onderwerpen komen aan bod:\n\n- architectuur, ontwerpprincipes, algoritmiek en werking van computernetwerken\n- het hybride OSI-TCP/IP model voor computernetwerken en de principes van gelaagde netwerken, met specifieke focus op de TCP/IP protocolsuite\n- realisatie van praktische implementaties op basis van socket programming (in Python)\n- interpretatie van netwerktraces.\n\nTijdens elk hoorcollege komt een (deel van een) hoofdstuk uit het handboek aan bod, waarbij de docent verwacht dat de studenten dit op voorhand hebben gelezen. Er wordt voornamelijk ingegaan op de moeilijke onderwerpen en op de vragen van de studenten (en de prof). Van de studenten wordt dus zowel een degelijke voorbereiding als actieve participatie verwacht.\nDe theorie wordt verder aan de praktijk getoetst door enerzijds analyses van netwerktraces (die telkens in het volgende hoorcollege worden besproken) en anderzijds programmeeropdrachten waarin zelf netwerksoftware wordt geschreven met socket-gebaseerde communicatie in Python.\nDe practica dienen strikt individueel te worden uitgevoerd, zonder enig overleg met andere studenten of externen.",
                     courseEmail = "melih.demirel@student.uhasselt.be",
-                    profEmail = "prof5@uhasselt.be"
+                    profEmail = profs[5].Email
                 },
                 new Course() {
                     id = 7,
@@ -401,7 +403,7 @@ namespace Server.Api.DataBase
                     name = "Theoretische informatica",
                     description = "1. De studenten verwerven de basiskennis van reguliere talen en kunnen deze toepassen.\n2. De studenten verwerven de basiskennis van context-vrije talen en kunnen deze toepassen.\n3. De studenten maken kennis met een toepassing van context-vrije talen: het CYK-parsingalgoritme.\n4. De studenten verwerven de basiskennis van Turing Machines en het begrip beslisbaarheid en kunnen deze toepassen.\n5. De studenten kunnen de verworven kennis over concepten en algoritmen verwerken in een implementatie.",
                     courseEmail = "lander.moors@student.uhasselt.be",
-                    profEmail = "prof@uhasselt.be"
+                    profEmail = profs[0].Email
                 },
                 new Course() {
                     id = 8,
@@ -409,7 +411,7 @@ namespace Server.Api.DataBase
                     name = "Wetenschapsfilosofie",
                     description = "De student verwerft inzicht in de historische evolutie en het eigentijdse functioneren van de wetenschappen in hun maatschappelijke context en is op de hoogte van de diverse kennisbelangen die met wetenschap kunnen worden nagestreefd. Hij/zij kan mee discussiëren over tegenstellingen zoals o.m. deze tussen analytische kennis a priori (wiskunde, logica) versus synthetische kennis a posteriori (ervaringswetenschappen), wetenschappelijke kennis versus alledaagse kennis resp. religieuze en metafysische overtuigingen, reductionisme versus holisme, intrinsieke versus instrumentele waarde. Bovendien slaagt hij/zij er in deze betekenisvol toe te passen op het eigen vakgebied.",
                     courseEmail = "tijl.elens@student.uhasselt.be",
-                    profEmail = "prof1@uhasselt.be"
+                    profEmail = profs[1].Email
                 }
             };
 
@@ -496,7 +498,7 @@ namespace Server.Api.DataBase
             {
                 new Question {
                     id = 1,
-                    userId = students[0].id,
+                    userId = students[0].Id,
                     courseId = courses[0].id,
                     title = "Agile processen",
                     body = "Wat zijn agile processen?",
@@ -504,7 +506,7 @@ namespace Server.Api.DataBase
                 },
                 new Question {
                     id = 2,
-                    userId = students[0].id,
+                    userId = students[0].Id,
                     courseId = courses[0].id,
                     title = "Studeren Examen",
                     body = "Wat moet er allemaal bestudeerd worden van de kopies voor het examen?",
@@ -512,7 +514,7 @@ namespace Server.Api.DataBase
                 },
                 new Question {
                     id = 3,
-                    userId = students[0].id,
+                    userId = students[0].Id,
                     courseId = courses[0].id,
                     title = "Unit Testing",
                     body = "Wanneer moet men stoppen met unit testing?",
@@ -520,7 +522,7 @@ namespace Server.Api.DataBase
                 },
                 new Question {
                     id = 4,
-                    userId = students[0].id,
+                    userId = students[0].Id,
                     courseId = courses[1].id,
                     title = "Intellectuele eigendom",
                     body = "Wat is intellectuele eigendom?",
@@ -528,7 +530,7 @@ namespace Server.Api.DataBase
                 },
                 new Question {
                     id = 5,
-                    userId = students[1].id,
+                    userId = students[1].Id,
                     courseId = courses[1].id,
                     title = "Studeren Examen",
                     body = "Welke hoofdstukken komen aan bod op het examen?",
@@ -536,7 +538,7 @@ namespace Server.Api.DataBase
                 },
                 new Question {
                     id = 6,
-                    userId = students[2].id,
+                    userId = students[2].Id,
                     courseId = courses[2].id,
                     title = "Monte Carlo",
                     body = "Wat zijn de Monte Carlo methoden?",
@@ -544,7 +546,7 @@ namespace Server.Api.DataBase
                 },
                 new Question {
                     id = 7,
-                    userId = students[3].id,
+                    userId = students[3].Id,
                     courseId = courses[2].id,
                     title = "Steekproeftheorie",
                     body = "Wat is een steekproeftheorie?",
@@ -552,7 +554,7 @@ namespace Server.Api.DataBase
                 },
                 new Question {
                     id = 8,
-                    userId = students[3].id,
+                    userId = students[3].Id,
                     courseId = courses[3].id,
                     title = "Deadlockdetectie",
                     body = "Hoe wordt deadlock precies detect?",
@@ -560,15 +562,15 @@ namespace Server.Api.DataBase
                 },
                 new Question {
                     id = 9,
-                    userId = students[4].id,
+                    userId = students[4].Id,
                     courseId = courses[5].id,
                     title = "Network latency",
-                    body = "What is the best way to deal with network latency in a synchronized multiplayer game? Could you advise me on an algorithm or method to use?",
+                    body = "Wat is de beste manier om om te gaan met network latency in een gesynchroniseerde multiplayer game? Can je me een algortime of methode adviseren om te gebruiken?",
                     time = DateTime.UtcNow.AddDays(-3.4)
                 },
                 new Question {
                     id = 10,
-                    userId = students[4].id,
+                    userId = students[4].Id,
                     courseId = courses[7].id,
                     title = "Reductionisme, Holisme",
                     body = "Reductionisme versus Holisme?",
@@ -606,36 +608,98 @@ namespace Server.Api.DataBase
             {
                 new Answer {
                     id = 1,
-                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    userId = students[0].Id,
                     questionId = questions[0].id,
-                    title = "Answer 1",
-                    body = "answer",
-                    time = DateTime.UtcNow.AddHours (-5)
+                    title = "Agile-methodologie",
+                    body = "De Agile-methodologie is een manier om een project te managen door het op te delen in verschillende fasen. Het gaat om constante samenwerking met belanghebbenden en continue verbetering in elke fase. Zodra het werk begint, doorlopen teams een proces van plannen, uitvoeren en evalueren. Voortdurende samenwerking is essentieel, zowel met teamleden als met belanghebbenden van het project.",
+                    time = DateTime.UtcNow.AddDays(-0.234)
                 },
                 new Answer {
                     id = 2,
-                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    userId = profs[0].Id,
                     questionId = questions[1].id,
-                    title = "Answer 2",
-                    body = "answer",
-                    time = DateTime.UtcNow.AddHours (-2),
+                    title = "Examen",
+                    body = "Alles buiten hoofdstuk 4 en 5.",
+                    time = DateTime.UtcNow.AddDays(-2.23),
                     isAccepted = true
                 },
                 new Answer {
                     id = 3,
-                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    userId = profs[0].Id,
                     questionId = questions[1].id,
-                    title = "Answer 3",
-                    body = "answer",
-                    time = DateTime.UtcNow.AddDays (-18)
+                    title = "Examen",
+                    body = "Alles buiten hoofdstuk 4.",
+                    time = DateTime.UtcNow.AddDays(-1.4323),
+                    isAccepted = true
                 },
                 new Answer {
                     id = 4,
-                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    questionId = questions[2].id,
-                    title = "Answer 4",
-                    body = "answer",
-                    time = DateTime.UtcNow.AddMonths (-11)
+                    userId = students[0].Id,
+                    questionId = questions[3].id,
+                    title = "Intellectuele eigendom",
+                    body = "Intellectuele eigendom is een categorie van eigendom die immateriële creaties van het menselijk intellect omvat. Er zijn veel soorten intellectueel eigendom en sommige landen erkennen meer dan andere. De meest bekende soorten zijn auteursrechten, patenten, handelsmerken en handelsgeheimen.",
+                    time = DateTime.UtcNow.AddDays(-45.331)
+                },
+                new Answer {
+                    id = 5,
+                    userId = profs[1].Id,
+                    questionId = questions[4].id,
+                    title = "Hoofdstukken examens",
+                    body = "Hoofdstukken 1, 2, 3, 4, en 5",
+                    time = DateTime.UtcNow.AddDays(-98.311),
+                    isAccepted = true
+                },
+                new Answer {
+                    id = 6,
+                    userId = students[2].Id,
+                    questionId = questions[5].id,
+                    title = "Monte Carlo-methoden",
+                    body = "Monte Carlo-methoden, of Monte Carlo-experimenten, zijn een brede klasse van computationele algoritmen die afhankelijk zijn van herhaalde willekeurige steekproeven om numerieke resultaten te verkrijgen. Het onderliggende concept is om willekeur te gebruiken om problemen op te lossen die in principe deterministisch kunnen zijn.",
+                    time = DateTime.UtcNow.AddDays(-0.043),
+                    isAccepted = true
+                },
+                new Answer {
+                    id = 7,
+                    userId = students[3].Id,
+                    questionId = questions[6].id,
+                    title = "Steekproef",
+                    body = "Een steekproef of monster, een statistisch begrip, is een selectie uit een totale populatie ten behoeve van een meting van bepaalde eigenschappen van die populatie. In het dagelijkse spraakgebruik kan een monster ook een voorbeeld van één individu uit een populatie betekenen.",
+                    time = DateTime.UtcNow.AddDays(-11.122)
+                },
+                new Answer {
+                    id = 8,
+                    userId = students[5].Id,
+                    questionId = questions[7].id,
+                    title = "Deadlockdetectie",
+                    body = "Dunno",
+                    time = DateTime.UtcNow.AddDays(-0.01),
+                    isAccepted = true
+                },
+                new Answer {
+                    id = 9,
+                    userId = profs[5].Id,
+                    questionId = questions[8].id,
+                    title = "Network latency",
+                    body = "- Brute-force method \n-Dead reckoning\n-nLockstep synchronization",
+                    time = DateTime.UtcNow.AddDays(-3.123),
+                    isAccepted = true
+                },
+                new Answer {
+                    id = 10,
+                    userId = students[5].Id,
+                    questionId = questions[8].id,
+                    title = "Network latency",
+                    body = "- Brute-force method \n-Dead reckoning\n-nLockstep synchronization",
+                    time = DateTime.UtcNow.AddDays(-2.964)
+                },
+                new Answer {
+                    id = 11,
+                    userId = profs[1].Id,
+                    questionId = questions[9].id,
+                    title = "Reductionism vs holism",
+                    body = "Reductionisme en holisme zijn twee verschillende benaderingen in de psychologie die onderzoekers gebruiken om experimenten te creëren en conclusies te trekken. Het reductionisme verdeelt verklaringen van gedrag graag in afzonderlijke componenten, terwijl het holisme het plaatje graag als geheel bekijkt.",
+                    time = DateTime.UtcNow.AddDays(-58.20),
+                    isAccepted = true
                 }
             };
 
