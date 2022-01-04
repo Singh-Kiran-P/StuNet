@@ -58,8 +58,6 @@ namespace Server.Api.Repositories
             var channelToUpdate = await _context.Channels.FindAsync(channel.id);
             if (channelToUpdate == null) throw new NullReferenceException();
             channelToUpdate.name = channel.name;
-            channelToUpdate.course = channel.course;
-            channelToUpdate.messages = channel.messages;
             await _context.SaveChangesAsync();
         }
 

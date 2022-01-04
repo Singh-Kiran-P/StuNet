@@ -77,7 +77,8 @@ namespace Server.Api.Repositories
             if (courseToUpdate == null) throw new NullReferenceException();
             courseToUpdate.name = course.name;
             courseToUpdate.number = course.number;
-            courseToUpdate.topics = course.topics;
+            courseToUpdate.profEmail = course.profEmail;
+            courseToUpdate.courseEmail = course.courseEmail;
             courseToUpdate.description = course.description;
             await _context.SaveChangesAsync();
         }

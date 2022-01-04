@@ -52,8 +52,6 @@ namespace Server.Api.Repositories
             var topicToUpdate = await _context.Topics.FindAsync(topic.id);
             if (topicToUpdate == null) throw new NullReferenceException();
             topicToUpdate.name = topic.name;
-            topicToUpdate.course = topic.course;
-            topicToUpdate.questions = topic.questions;
             await _context.SaveChangesAsync();
         }
 
