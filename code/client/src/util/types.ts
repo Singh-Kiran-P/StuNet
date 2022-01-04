@@ -27,6 +27,7 @@ export type BaseChannel = {
 
 export type Channel = BaseChannel & {
     course: BaseCourse;
+    lastMessage?: BaseMessage;
 }
 
 export type BaseMessage = {

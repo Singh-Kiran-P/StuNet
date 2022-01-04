@@ -48,8 +48,8 @@ namespace Server.Api.Dtos
                 profEmail = course.profEmail,
                 description = course.description,
                 courseEmail = course.courseEmail,
-                topics = course.topics.Select(topic => new GetPartialTopicDto(){ id = topic.id, name = topic.name }).ToList(),
-                channels = course.channels.Select(channel => new GetPartialChannelDto(){ id = channel.id, name = channel.name }).ToList()
+                topics = course.topics.Select(topic => GetPartialTopicDto.Convert(topic)).ToList(),
+                channels = course.channels.Select(channel => GetPartialChannelDto.Convert(channel)).ToList()
             };
         }
     }

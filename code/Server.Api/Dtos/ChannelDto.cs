@@ -26,12 +26,15 @@ namespace Server.Api.Dtos
     {
         public int id { get; set; }
         public string name { get; set; }
+        public MessageDto lastMessage { get; set; }
 
         public static GetPartialChannelDto Convert(TextChannel channel)
         {
+            var lastMessage = channel.messages?.LastOrDefault();
             return new GetPartialChannelDto {
                 id = channel.id,
-                name = channel.name
+                name = channel.name,
+                lastMessage = lastMessage != null ? MessageDto.Convert(lastMessage) : null
             };
         }
     }
