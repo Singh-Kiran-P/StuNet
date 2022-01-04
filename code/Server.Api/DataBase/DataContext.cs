@@ -10,8 +10,10 @@ using Microsoft.EntityFrameworkCore;
 // https://henriquesd.medium.com/entity-framework-core-relationships-with-fluent-api-8f741c57b881
 // https://dejanstojanovic.net/aspnet/2020/july/seeding-data-with-entity-framework-core-using-migrations
 
-namespace Server.Api.DataBase {
-    public class DataContext : DbContext, IDataContext {
+namespace Server.Api.DataBase
+{
+    public class DataContext : DbContext, IDataContext
+    {
         public DbSet<User> Users { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Answer> Answers { get; set; }
@@ -28,22 +30,25 @@ namespace Server.Api.DataBase {
         public DbSet<QuestionSubscription> QuestionSubscriptions { get; set; }
         public DbSet<QuestionNotification> QuestionNotifications { get; set; }
 
-        public DataContext(DbContextOptions<DataContext> options) : base(options) {}
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
             optionsBuilder.EnableSensitiveDataLogging();
             base.OnConfiguring(optionsBuilder);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
             CreateFieldOfStudy(modelBuilder);
             CreateUsers(modelBuilder);
             CreateCourse(modelBuilder);
         }
 
-        private void CreateUsers(ModelBuilder modelBuilder) {
+        private void CreateUsers(ModelBuilder modelBuilder)
+        {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration (new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(p => new { p.UserId, p.RoleId });
 
             var students = new List<Student>
@@ -81,11 +86,13 @@ namespace Server.Api.DataBase {
                 }
             };
 
-            var studentRole= new IdentityUserRole<string>() {
+            var studentRole = new IdentityUserRole<string>()
+            {
                 UserId = students[0].Id,
                 RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
             };
-            var profRole = new IdentityUserRole<string>() {
+            var profRole = new IdentityUserRole<string>()
+            {
                 UserId = profs[0].Id,
                 RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
             };
@@ -166,7 +173,8 @@ namespace Server.Api.DataBase {
             modelBuilder.Entity<FieldOfStudy>().HasData(fos);
         }
 
-        private void CreateCourse (ModelBuilder modelBuilder) {
+        private void CreateCourse(ModelBuilder modelBuilder)
+        {
             var courses = new List<Course> {
                 new Course() {
                     id = 1,
@@ -237,29 +245,77 @@ namespace Server.Api.DataBase {
             var topics = new List<Topic> {
                 new Topic {
                     id = 1,
-                    name = "Topic 1",
+                    name = "UML",
                     courseId = courses[0].id,
                 },
                 new Topic {
                     id = 2,
-                    name = "Topic 2",
+                    name = "Refactoring",
                     courseId = courses[0].id,
                 },
                 new Topic {
                     id = 3,
-                    name = "Topic 3",
+                    name = "Examen",
                     courseId = courses[0].id,
                 },
+
                 new Topic {
                     id = 4,
-                    name = "Topic 4",
+                    name = "Privacybescherming",
                     courseId = courses[1].id,
                 },
                 new Topic {
                     id = 5,
-                    name = "Topic 5",
+                    name = "Elektronische contracten",
                     courseId = courses[1].id,
-                }
+                },
+                new Topic {
+                    id = 6,
+                    name = "Netwerkzoeking",
+                    courseId = courses[1].id,
+                },
+
+                new Topic {
+                    id = 7,
+                    name = "Kanstheoretische",
+                    courseId = courses[2].id,
+                },
+
+                new Topic {
+                    id = 8,
+                    name = "Steekproeftheorie",
+                    courseId = courses[2].id,
+                },
+
+                new Topic {
+                    id = 9,
+                    name = "Procesmanagement",
+                    courseId = courses[3].id,
+                },
+
+                new Topic {
+                    id = 10,
+                    name = "Bachelorproeftekst",
+                    courseId = courses[4].id,
+                },
+
+                new Topic {
+                    id = 11,
+                    name = "Socket",
+                    courseId = courses[5].id,
+                },
+
+                new Topic {
+                    id = 12,
+                    name = "CYK-parsingalgoritme",
+                    courseId = courses[6].id,
+                },
+
+                new Topic {
+                    id = 13,
+                    name = "Ervaringswetenschappen",
+                    courseId = courses[7].id,
+                },
             };
 
             var questions = new List<Question> {
@@ -293,11 +349,12 @@ namespace Server.Api.DataBase {
             modelBuilder.Entity<Question>()
                 .HasMany(q => q.topics)
                 .WithMany(t => t.questions)
-                .UsingEntity("QuestionTopic", typeof (Dictionary<string, object>),
-                    r => r.HasOne (typeof (Topic)).WithMany ().HasForeignKey ("topicId"),
-                    l => l.HasOne (typeof (Question)).WithMany ().HasForeignKey ("questionId"),
-                    je => {
-                        je.ToTable ("questiontopics").HasData(
+                .UsingEntity("QuestionTopic", typeof(Dictionary<string, object>),
+                    r => r.HasOne(typeof(Topic)).WithMany().HasForeignKey("topicId"),
+                    l => l.HasOne(typeof(Question)).WithMany().HasForeignKey("questionId"),
+                    je =>
+                    {
+                        je.ToTable("questiontopics").HasData(
                             new { questionId = 1, topicId = 1 },
                             new { questionId = 1, topicId = 2 },
                             new { questionId = 1, topicId = 3 },
@@ -342,23 +399,106 @@ namespace Server.Api.DataBase {
                 }
             };
 
-            var channel = new TextChannel {
-                id = 1,
-                name = "testChannel",
-                courseId = courses[0].id,
+            var channels = new List<TextChannel>{
+                new TextChannel
+                {
+                    id = 1,
+                    name = "UML Oefeningen",
+                    courseId = courses[0].id,
+                },
+                new TextChannel
+                {
+                    id = 2,
+                    name = "Refactoring Oefeningen",
+                    courseId = courses[0].id,
+                },
+                new TextChannel
+                {
+                    id = 3,
+                    name = "Examen Oef",
+                    courseId = courses[0].id,
+                },
+
+                new TextChannel
+                {
+                    id = 4,
+                    name = "Privacybescherming Oefeningen",
+                    courseId = courses[1].id,
+                },
+                new TextChannel
+                {
+                    id = 5,
+                    name = "Elektronische contracten Oefeningen",
+                    courseId = courses[1].id,
+                },
+                new TextChannel
+                {
+                    id = 6,
+                    name = "Netwerkzoeking Oefeningen",
+                    courseId = courses[1].id,
+                },
+
+                new TextChannel
+                {
+                    id = 7,
+                    name = "Kanstheoretische Oefeningen",
+                    courseId = courses[2].id,
+                },
+
+                new TextChannel
+                {
+                    id = 8,
+                    name = "Steekproeftheorie Oefeningen",
+                    courseId = courses[2].id,
+                },
+
+                new TextChannel
+                {
+                    id = 9,
+                    name = "Procesmanagement Oefeningen",
+                    courseId = courses[3].id,
+                },
+
+                new TextChannel
+                {
+                    id = 10,
+                    name = "Bachelorproeftekst Oefeningen",
+                    courseId = courses[4].id,
+                },
+
+                new TextChannel
+                {
+                    id = 11,
+                    name = "Socket Oefeningen",
+                    courseId = courses[5].id,
+                },
+
+                new TextChannel
+                {
+                    id = 12,
+                    name = "CYK-parsingalgoritme Oefeningen",
+                    courseId = courses[6].id,
+                },
+
+                new TextChannel
+                {
+                    id = 13,
+                    name = "Ervaringswetenschappen Oefeningen",
+                    courseId = courses[7].id,
+                }
             };
 
             var messages = new List<Message> {
                 new Message {
                     id = 1,
-                    channelId = channel.id,
+                    channelId = channels[0].id,
                     userMail = "student@student.uhasselt.be",
                     body = "Message",
                     time = DateTime.UtcNow.AddDays (-1)
                 },
                 new Message {
                     id = 2,
-                    channelId = channel.id,
+                    channelId = channels[0].id,
                     userMail = "prof@uhasselt.be",
                     body = "Reply",
                     time = DateTime.UtcNow.AddHours (-23)
@@ -369,7 +509,7 @@ namespace Server.Api.DataBase {
             modelBuilder.Entity<Topic>().HasData(topics);
             modelBuilder.Entity<Question>().HasData(questions);
             modelBuilder.Entity<Answer>().HasData(answers);
-            modelBuilder.Entity<TextChannel>().HasData(channel);
+            modelBuilder.Entity<TextChannel>().HasData(channels);
             modelBuilder.Entity<Message>().HasData(messages);
         }
     }
