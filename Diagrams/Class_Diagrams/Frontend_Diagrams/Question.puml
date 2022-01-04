@@ -1,47 +1,93 @@
 @startuml Question
 skinparam classAttributeIconSize 0
+left to right direction
 
-class QuestionView {
-	-header: string
-	-topics: CompactTopicView
-	-answers: AnswerView
-	-title: string
-	-body: string
-	+fetch()
+class Question
+class Answer
+
+class QuestionScreen {
+	-subscribed: number | null
+	-question: Question
+	-answers : Answer[]
+	-error: string
+
+	info(): Promise
+	questions(): Promise
+	subscription(): Promise
+	fetch(): Promise
+
+	-setSubscribed(): void
+	-setQuestion(): void
+	-setAnswers(): void
+	-setError(): void
 }
 
-class AnswerView {}
-class CompactTopicView {}
-class "Button" as b2
+Question --* QuestionScreen
+Answer --* QuestionScreen
 
-AnswerView --* QuestionView
-CompactTopicView --* QuestionView
-b2 --* QuestionView
+class QuestionsScreen {
+	-questions: Question[]
+	-actives: number[]
+	-refresh: boolean
+	-error: string
 
+	-display(): boolean
 
-class TextInput {}
-class "Button" as b1
-class CheckboxCollapse {}
-class Checkbox {}
-
-class AskQuestion {
-	-header: string
-	-topics: CheckBox
-	-title: string
-	-body: string
-	+setHeader()
-	+setTopics()
-	+setTitle()
-	+setBody()
-	+fetch()
-	+submit()
+	-setQuestions(): void
+	-setActives(): void
+	-setRefresh(): void
+	-setError(): void
 }
 
-Checkbox --* CheckboxCollapse
-TextInput --* AskQuestion
-b1 --* AskQuestion
-CheckboxCollapse --* AskQuestion
+Question --* QuestionsScreen
 
-b1 ..> QuestionView: <<navigate>>
+class AskQuestionScreen {
+	-actives: number[]
+	-error: string
+	-title: string
+	-body: string
+
+	-submit(): Promise
+
+	-setActives(): void
+	-setError(): void
+	-setTitle(): void
+	-setBody(): void
+}
+
+class Text
+class Chip
+class TextInput
+class Button
+class CompactQuestion
+class CompactAnswer
+class SelectTopics
+class Icon
+class IconButton
+
+Text --* AskQuestionScreen
+TextInput --* AskQuestionScreen
+SelectTopics --* AskQuestionScreen
+Button --* AskQuestionScreen
+
+Text --* QuestionScreen
+Chip --* QuestionScreen
+Button --* QuestionScreen
+CompactAnswer --* QuestionScreen
+
+SelectTopics --* QuestionsScreen
+Button --* QuestionsScreen
+Text --* QuestionsScreen
+CompactQuestion --* QuestionsScreen
+
+Icon --* CompactQuestion
+Text --* CompactQuestion
+Chip --* CompactQuestion
+
+Icon --* CompactAnswer
+Text --* CompactAnswer
+
+IconButton --* SelectTopics
+
 
 @enduml
