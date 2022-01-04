@@ -29,12 +29,15 @@ export const errorString = (err: any): string => {
     if (typeof err !== 'object') return v(err);
     let status = err.response?.status;
     if (status >= 500) return v();
+    err = err?.response?.data;
+    if (typeof err !== 'object') return v(err);
+    if (Array.isArray(err)) err = err[0] || {};
+    if (err.description) return v(err.description);
+    if (err.errors) return (err.errors);
     if (status === 404) return v('Item not found');
     if (status === 401) return v('Unauthorized request');
     if (status === 403) return v('Unauthorized request');
-    if (typeof (err = err?.response?.data) !== 'object') return v(err);
-    if (Array.isArray(err)) err = err[0] || {};
-    return v(err.description || err.errors);
+    return v();
 }
 
 export const professor = (email: string) => email.endsWith('@uhasselt.be');
