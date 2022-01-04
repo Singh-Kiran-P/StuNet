@@ -1,6 +1,6 @@
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import notifee, { AndroidImportance, AndroidStyle } from '@notifee/react-native';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Children, Question, Answer } from '@/util';
 import { useToken } from '@/auth';
 import { update } from '@/nav';
@@ -21,6 +21,7 @@ export default ({ children }: Children) => {
 	useEffect(() => {
 		const start = (): any => connection.start().catch(() => setTimeout(() => start(), 5000));
 		connection.onclose(() => start());
+		start();
 
 		connection.on('QuestionNotification', async (question: Question) => {
 			const channelId = await notifee.createChannel({
