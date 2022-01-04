@@ -1,5 +1,5 @@
 import React, { Screen, EmptyCourse, useState, useEffect, useEmail, axios, update, show } from '@/.';
-import { Text, Fab, Button, Loader, ScrollView, CompactChannel, CompactCourse } from '@/components';
+import { Text, Fab, Button, Loader, ScrollView, CompactChannel } from '@/components';
 
 export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     let [subscribed, setSubscribed] = useState<null | number>(null);
