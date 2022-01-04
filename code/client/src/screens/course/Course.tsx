@@ -1,11 +1,11 @@
 import React, { Screen, EmptyCourse, useState, useEffect, useEmail, axios, update, show } from '@/.';
-import { Text, Fab, Button, Loader, ScrollView, CompactChannel } from '@/components';
+import { Text, Fab, Button, Loader, ScrollView, CompactChannel, CompactCourse } from '@/components';
 
 export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     let [subscribed, setSubscribed] = useState<null | number>(null);
     let [course, setCourse] = useState(EmptyCourse);
     let [error, setError] = useState('');
-    
+
     let owner = useEmail() === (course.profEmail || NaN);
 
     const info = async () => {
@@ -41,7 +41,7 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     return (
         <Loader load={fetch}>
             <Text type='error' pad='top' hidden={!error} children={error}/>
-            <Text type='link' pad='top' children={course.courseEmail || 'cnet@uhasselt.be'}/>
+            <Text type='link' pad='top' children={course.courseEmail}/>
             <ScrollView inner pad='top' flex>
                 <Text children={course.description}/>
             </ScrollView>

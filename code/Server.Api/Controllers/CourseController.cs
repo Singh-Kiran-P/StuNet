@@ -122,7 +122,7 @@ namespace Server.Api.Controllers
                 id = id,
                 name = courseDto.name,
                 number = courseDto.number,
-                profEmail = courseDto.profEmail,
+                profEmail = existing.profEmail,
                 courseEmail = courseDto.courseEmail,
                 description = courseDto.description
             };

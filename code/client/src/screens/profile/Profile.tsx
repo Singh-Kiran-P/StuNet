@@ -1,4 +1,4 @@
-import React, { Screen, Course, Question, Answer, useState, useEmail, axios, displayName, professor } from '@/.';
+import React, { Screen, Course, Question, Answer, useState, useEffect, useEmail, axios, displayName, professor } from '@/.';
 import { Loader, View, Text, Icon, ItemList } from '@/components';
 
 export default Screen('Profile', ({ nav, params: { email } }) => {
@@ -12,10 +12,13 @@ export default Screen('Profile', ({ nav, params: { email } }) => {
     let owner = email === user;
     let prof = professor(email);
 
+    useEffect(() => {
+        nav.setParams({ screenTitle: owner ? 'Your Profile' : displayName(email) });
+    }, []);
+
     const info = async () => {
         if (!prof) return axios.get('/FieldOfStudy/user', { params: { email } }).then(res => {
             setStudy(res.data.fullName);
-            nav.setParams({ screenTitle: owner ? 'Your Profile' : displayName(email) })
         })
     }
 
