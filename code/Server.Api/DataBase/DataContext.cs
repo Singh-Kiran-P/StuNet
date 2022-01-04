@@ -62,10 +62,80 @@ namespace Server.Api.DataBase
                     PhoneNumber = null,
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
-                    SecurityStamp = "GSXIEJ7H7DWJTSRP24CU5DWFJV4WNFAI",
                     Id = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    PasswordHash = "AQAAAAEAACcQAAAAEM3NAKXyohZdXCFtacPu/m8XMK+7VbOGSSePxwzsA+RcDlg1m9p/5RWvBSJtrgNrjQ==", //abc123
-                    ConcurrencyStamp = "de4df913-7e5b-4406-b710-ea134f7b4a43"
+                    SecurityStamp = "GSXIEJ7H7DWJTSRP24CU5DWFJV4WNFAI",
+                    ConcurrencyStamp = "de4df913-7e5b-4406-b710-ea134f7b4a43",
+                    PasswordHash = "AQAAAAEAACcQAAAAEM3NAKXyohZdXCFtacPu/m8XMK+7VbOGSSePxwzsA+RcDlg1m9p/5RWvBSJtrgNrjQ==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 7,
+                    Email = "student1@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT1@STUDENT.UHASSELT.BE",
+                    UserName = "student1@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT1@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "310c5066-290f-4735-968f-6a01c4ced67a",
+                    SecurityStamp = "DR74ZA3KM3J2CQLDCRNDKYR6T76PMVYA",
+                    ConcurrencyStamp = "a5ce3a02-0d48-4e24-8ee6-97cc6d67ea9c",
+                    PasswordHash = "AQAAAAEAACcQAAAAEP/I1bTevAWPLRUOYFHsleMGlmTAPiU0z9crCJMaeLfkL1I02Z5Lx5EhNH4fOAWT2Q==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 5,
+                    Email = "student2@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT2@STUDENT.UHASSELT.BE",
+                    UserName = "student2@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT2@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "4f2f5684-cec0-4457-ae2a-7cd73e53c8b9",
+                    SecurityStamp = "JGGQ2VKBERLLNTL2GOK2UQXVK3UPCUYM",
+                    ConcurrencyStamp = "b50c49b7-b8cd-487e-a449-4c7fd2543539",
+                    PasswordHash = "AQAAAAEAACcQAAAAEFf7Xdkdes6TByfOYYmu9sN4K1xx3AX0EITa32PAz5urKobJVVy57xcgO3rvK9GhwA==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 10,
+                    Email = "student3@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT3@STUDENT.UHASSELT.BE",
+                    UserName = "student3@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT3@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "40baaecf-375d-4854-9f78-7b8bc8e6e102",
+                    SecurityStamp = "NZT6UF2IYRYKOXDZZA7H2SODQRGYGG7H",
+                    ConcurrencyStamp = "e50df050-357e-462a-ae57-e2d2115fcf6e",
+                    PasswordHash = "AQAAAAEAACcQAAAAEJXGzWhvGDBZC18L6K3ixYDQVOORk6ts0LUVqgJlJED/SeI13ePtne7oTjTzTdI/Ag==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 1,
+                    Email = "student4@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT4@STUDENT.UHASSELT.BE",
+                    UserName = "student4@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT4@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "ff7a6453-0439-40ec-b30c-e79ce79dc4a6",
+                    SecurityStamp = "WGEGLET3G7O5D3NNKG5TA42MRA2DVY7Z",
+                    ConcurrencyStamp = "8884b0bc-60ec-4cae-be82-6cde78c4eca4",
+                    PasswordHash = "AQAAAAEAACcQAAAAEDi5DCcmyt6OAFh75nVzshU9NEA0Sjd4WUPef2ysxuX41YEuYOMK5Vev91WmjWlhDw==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 4,
+                    Email = "student5@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT5@STUDENT.UHASSELT.BE",
+                    UserName = "student5@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT5@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "f214016b-90c8-41ed-aa3d-4dbab0df8625",
+                    SecurityStamp = "3WCB6AQGRJWLQSE5RRTBIMYMEZARAPMT",
+                    ConcurrencyStamp = "7dc224fc-69ac-4596-ae55-c04efd844937",
+                    PasswordHash = "AQAAAAEAACcQAAAAEFdCioQAxFtgb7ctja6DGSaUIJE6aOOYhcWYdTVPP+ERRjbx3X2ja5yaWc0ZV98Umg==" //abc123
                 }
             };
 
@@ -79,29 +149,137 @@ namespace Server.Api.DataBase
                     PhoneNumber = null,
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
-                    SecurityStamp = "TZEZOM5SNMCQIPT4UPQPHWDJZVAZDIQ2",
                     Id = "7d2b412e-7de8-4341-90f4-49b741e83466",
-                    PasswordHash = "AQAAAAEAACcQAAAAEJCOeIX31jPsOvnmQsfwN+7lRjUAAGFJ8ALpjqPTTXjIT9AbdDcr5vJkgK2gsVqK7A==", //abc123
-                    ConcurrencyStamp = "83fe0b78-26c9-4c24-a39c-140ec82493b8"
+                    SecurityStamp = "TZEZOM5SNMCQIPT4UPQPHWDJZVAZDIQ2",
+                    ConcurrencyStamp = "83fe0b78-26c9-4c24-a39c-140ec82493b8",
+                    PasswordHash = "AQAAAAEAACcQAAAAEJCOeIX31jPsOvnmQsfwN+7lRjUAAGFJ8ALpjqPTTXjIT9AbdDcr5vJkgK2gsVqK7A==" //abc123
+                },
+                new Professor() {
+                    Email = "prof1@uhasselt.be",
+                    NormalizedEmail = "PROF1@UHASSELT.BE",
+                    UserName = "prof1@uhasselt.be",
+                    NormalizedUserName = "PROF1@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "efdc70a3-7ff1-46a0-8a33-48d83042b259",
+                    SecurityStamp = "FO6ETYXBTGSULYOJL362JGNDCW45AY3A",
+                    ConcurrencyStamp = "a28fd6d2-f4ca-48ae-b063-5de233e57658",
+                    PasswordHash = "AQAAAAEAACcQAAAAELqC8akNOfSKRyC2gXiCwIEimQNxxKWEkFulI6JcTR+dQXwQKJ8kyAon/rqEzsStKg==" //abc123
+                },
+                new Professor() {
+                    Email = "prof2@uhasselt.be",
+                    NormalizedEmail = "PROF2@UHASSELT.BE",
+                    UserName = "prof2@uhasselt.be",
+                    NormalizedUserName = "PROF2@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "eb5b5256-906e-4f97-be88-e47666a857df",
+                    SecurityStamp = "GOLUONBWSONCFHJSQ4OBGKP57Q2NUORX",
+                    ConcurrencyStamp = "03b440d0-cd49-4512-bca1-c33720747a60",
+                    PasswordHash = "AQAAAAEAACcQAAAAEDV3ZynNttjowfQ+/dVaRsxSVVqsmoSOHb5mnHTi7RxOqoJtnS0UiYR83e0QofLOZA==" //abc123
+                },
+                new Professor() {
+                    Email = "prof3@uhasselt.be",
+                    NormalizedEmail = "PROF3@UHASSELT.BE",
+                    UserName = "prof3@uhasselt.be",
+                    NormalizedUserName = "PROF3@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "ff346ff2-e727-4f88-a221-9d9728b7d728",
+                    SecurityStamp = "RFH7FN4KSLJKEC2DL7J32U73KJHXZRAS",
+                    ConcurrencyStamp = "cbc2cc9f-dae0-435a-8796-58e3dd97002f",
+                    PasswordHash = "AQAAAAEAACcQAAAAEIUH779vRE4TVMofmD6SyhnchM4kbqOubtVX9fTiv4mP9/q5HDk8WbP/n7M5v1rg1w==" //abc123
+                },
+                new Professor() {
+                    Email = "prof4@uhasselt.be",
+                    NormalizedEmail = "PROF4@UHASSELT.BE",
+                    UserName = "prof4@uhasselt.be",
+                    NormalizedUserName = "PROF4@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "52afdc0d-0f9a-4b9b-8b66-7bf9b856fdd3",
+                    SecurityStamp = "6YTM4AWVOSVXBXERPGGBW7GFMAJ7CQSW",
+                    ConcurrencyStamp = "3698a6ea-6991-4a51-b9f0-8ede0ca30961",
+                    PasswordHash = "AQAAAAEAACcQAAAAEF8sovgu55Kdi3myaatbhE0gvNjp79a0YU4KMyafbxib3Bpl8E6/D6gpQF2TqPJp2w==" //abc123
+                },
+                new Professor() {
+                    Email = "prof5@uhasselt.be",
+                    NormalizedEmail = "PROF5@UHASSELT.BE",
+                    UserName = "prof5@uhasselt.be",
+                    NormalizedUserName = "PROF5@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "8f88e953-f111-4dba-be2e-4fb6efa7dd35",
+                    SecurityStamp = "HQ5HJSREDPY6MHUHZRNIFUETSTD6XVNW",
+                    ConcurrencyStamp = "74ddbd9a-940b-478c-9f45-67308271c0a3",
+                    PasswordHash = "AQAAAAEAACcQAAAAEKc7kBxm3Nfaco7nHVDKfHdZUOQIc0FuTHUeTBqkMgqzWrvjMK/0Oa2pi48t9PRBjA==" //abc123
                 }
             };
 
-            var studentRole = new IdentityUserRole<string>()
-            {
-                UserId = students[0].Id,
-                RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+            var studentRoles = new List<IdentityUserRole<string>> {
+                new IdentityUserRole<string>() {
+                    UserId = students[0].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[1].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[2].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[3].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[4].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[5].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                }
             };
-            var profRole = new IdentityUserRole<string>()
-            {
-                UserId = profs[0].Id,
-                RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+
+            var profRoles = new List<IdentityUserRole<string>> {
+                new IdentityUserRole<string>() {
+                    UserId = profs[0].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[1].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[2].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[3].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[4].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[5].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                }
             };
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Professor>().HasData(profs);
             modelBuilder.Entity<Student>().HasData(students);
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(profRole);
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(studentRole);
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(profRoles);
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(studentRoles);
         }
 
         private void CreateFieldOfStudy(ModelBuilder modelBuilder)
@@ -181,7 +359,7 @@ namespace Server.Api.DataBase
                     number = "1303",
                     name = "Software Engineering",
                     description = "In dit opleidingsonderdeel maak je kennis met de processen, tools en technieken om complexe, correcte en bruikbare software te bouwen. De verschillende fases van een software engineering process worden bestudeerd. We starten met een basis van requirements engineering. We behandelen diverse procesmodellen voor de ontwikkeling van software, inclusief agiele processen. Technieken zoals test-driven development en refactoring komen aan bod. Na het volgen van dit opleidingsonderdeel, kunnen de studenten (1) principes en kwaliteitsattributen van proces en product uitleggen en nastreven, (2) de fasen van het ontwikkelingsproces, de activiteiten, de resultaten en gerelateerde terminologie uitleggen, (3) een probleem analyseren waarvoor software moet gemaakt worden en dit omzetten in een verzameling gestructureerde vereisten (requirements), (4) UML (Unified Modeling Language) gebruiken voor het maken van een object-georiënteerde analyse en ontwerp van een gesteld probleem, en (5) een software ontwerp omzetten in gestructureerde en onderhoudbare object-georiënteerde code. De studenten verkrijgen ook inzicht in validatie, verificatie en testing, en kunnen de aangeleerde benaderingen toepassen, en verwerven de basisvaardigheden om software design en code gradueel te laten evolueren.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "kiran.singh@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -189,7 +367,7 @@ namespace Server.Api.DataBase
                     number = "1282",
                     name = "Juridische aspecten van informatica",
                     description = "In dit opleidingsonderdeel worden de juridische aspecten van informatica belicht vanuit een praktische invalshoek. Het opleidingsonderdeel bestaat uit een combinatie van interactieve colleges en oefeningen op basis van casussen.\nEen aantal van de topics die in dit opleidingsonderdeel aan bod komen zijn: intellectuele eigendom, privacybescherming, elektronische contracten, elektronische handel, informaticamisdrijven, telecommunicatierecht, productaansprakelijkheid, consumentenbescherming en netwerkzoeking.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "jochem.lenaers@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -205,7 +383,7 @@ namespace Server.Api.DataBase
                     number = "0660",
                     name = "Besturingssystemen",
                     description = "Het besturingssysteem is het eerste, en vaak ook het enige, programma dat steeds loopt als een computer werkt. Het verschaft een omgeving waarin andere programma's beschermd en efficient uitgevoerd kunnen worden. Het is een tussenlaag tussen de computer hardware en gebruikersprogrammatuur, en beheert systeemfaciliteiten zoals hoofdgeheugen, CPU rekentijd, en randapparatuur.\n\nIn dit opleidingsonderdeel maakt de student kennis met de fundamentele concepten van werking en programmering van besturingssystemen. De volgende onderwerpen komen onder meer aan bod: - Structuur van besturingssystemen;- Taken die door besturingssystemen vervuld worden - CPU werkindeling; - Procesmanagement: Gelijktijdige processen: interproces-communicatie, procescoördinatie, deadlockdetectie en -preventie; - Multithreading - Geheugenbeheer en het virtueel geheugen - Bestandsystemen en permanente gegevensopslag - Gegevensinvoer en -uitvoer en efficiënte gegevenstoegang - beveiliging en afscherming.\n\nTijdens de oefeningen wordt aandacht besteed aan verschillende technieken die gerelateerd zijn met de theorie, met nadruk op multithreaded programmering.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "tijl.elens@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -221,7 +399,7 @@ namespace Server.Api.DataBase
                     number = "4379",
                     name = "Computernetwerken",
                     description = "Dit opleidingsonderdeel behandelt de basisprincipes van computernetwerken. Onder meer volgende onderwerpen komen aan bod:\n\n- architectuur, ontwerpprincipes, algoritmiek en werking van computernetwerken\n- het hybride OSI-TCP/IP model voor computernetwerken en de principes van gelaagde netwerken, met specifieke focus op de TCP/IP protocolsuite\n- realisatie van praktische implementaties op basis van socket programming (in Python)\n- interpretatie van netwerktraces.\n\nTijdens elk hoorcollege komt een (deel van een) hoofdstuk uit het handboek aan bod, waarbij de docent verwacht dat de studenten dit op voorhand hebben gelezen. Er wordt voornamelijk ingegaan op de moeilijke onderwerpen en op de vragen van de studenten (en de prof). Van de studenten wordt dus zowel een degelijke voorbereiding als actieve participatie verwacht.\nDe theorie wordt verder aan de praktijk getoetst door enerzijds analyses van netwerktraces (die telkens in het volgende hoorcollege worden besproken) en anderzijds programmeeropdrachten waarin zelf netwerksoftware wordt geschreven met socket-gebaseerde communicatie in Python.\nDe practica dienen strikt individueel te worden uitgevoerd, zonder enig overleg met andere studenten of externen.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "melih.demirel@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -229,7 +407,7 @@ namespace Server.Api.DataBase
                     number = "4377",
                     name = "Theoretische informatica",
                     description = "1. De studenten verwerven de basiskennis van reguliere talen en kunnen deze toepassen.\n2. De studenten verwerven de basiskennis van context-vrije talen en kunnen deze toepassen.\n3. De studenten maken kennis met een toepassing van context-vrije talen: het CYK-parsingalgoritme.\n4. De studenten verwerven de basiskennis van Turing Machines en het begrip beslisbaarheid en kunnen deze toepassen.\n5. De studenten kunnen de verworven kennis over concepten en algoritmen verwerken in een implementatie.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "lander.moors@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -237,7 +415,7 @@ namespace Server.Api.DataBase
                     number = "1588",
                     name = "Wetenschapsfilosofie",
                     description = "De student verwerft inzicht in de historische evolutie en het eigentijdse functioneren van de wetenschappen in hun maatschappelijke context en is op de hoogte van de diverse kennisbelangen die met wetenschap kunnen worden nagestreefd. Hij/zij kan mee discussiëren over tegenstellingen zoals o.m. deze tussen analytische kennis a priori (wiskunde, logica) versus synthetische kennis a posteriori (ervaringswetenschappen), wetenschappelijke kennis versus alledaagse kennis resp. religieuze en metafysische overtuigingen, reductionisme versus holisme, intrinsieke versus instrumentele waarde. Bovendien slaagt hij/zij er in deze betekenisvol toe te passen op het eigen vakgebied.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "tijl.elens@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 }
             };
@@ -313,8 +491,20 @@ namespace Server.Api.DataBase
 
                 new Topic {
                     id = 13,
+                    name = "CYK-parsingalgoritme",
+                    courseId = courses[6].id,
+                },
+
+                new Topic {
+                    id = 14,
                     name = "Ervaringswetenschappen",
                     courseId = courses[7].id,
+                },
+
+                new Topic {
+                    id = 15,
+                    name = "2D Multiplayer",
+                    courseId = courses[5].id,
                 },
             };
 
@@ -324,7 +514,7 @@ namespace Server.Api.DataBase
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
                     title = "Question 1, all topics for course",
-                    body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque dui libero, egestas gravida nisl vitae, luctus ornare felis. Donec eget orci vitae mauris ornare tempor ornare eu felis. Donec commodo nec orci eu lobortis. Nam nec feugiat nibh, quis rhoncus quam. Vivamus sit amet lobortis mi. Nulla bibendum orci ac finibus ultrices. Sed pellentesque quam ac metus elementum, sed gravida sem mollis. Proin facilisis id nisl ut varius. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis a ipsum fermentum, feugiat lectus eu, sollicitudin quam.",
+                    body = "Wat zijn agile processen?",
                     time = DateTime.UtcNow.AddDays (-1)
                 },
                 new Question {
@@ -332,15 +522,71 @@ namespace Server.Api.DataBase
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
                     title = "Question 2, single topic",
-                    body = "Etiam erat dui, cursus vel pulvinar ac, accumsan varius diam. Nullam dignissim efficitur eros, eu semper dui viverra in. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer dignissim lectus in convallis aliquam. Aliquam consectetur ligula eget felis ultrices eleifend. Proin eu purus lectus. Phasellus pharetra suscipit tempor. Nullam mollis maximus quam, quis maximus mauris semper tincidunt. Nam venenatis, lorem eu pellentesque posuere, sem elit tempor velit, eu tincidunt felis tellus sed odio. Phasellus tristique maximus sem vitae ultrices. Cras ut pharetra nisl, sed varius tellus.",
+                    body = "Wat moet er allemaal bestudeerd worden van de kopies voor het examen?",
                     time = DateTime.UtcNow.AddMonths (-1)
                 },
                 new Question {
                     id = 3,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    courseId = courses[1].id,
+                    courseId = courses[0].id,
                     title = "Question 3, no topics",
-                    body = "In bibendum dictum mauris, vitae posuere mi fringilla at. Cras dapibus vestibulum risus eu pretium. In varius sed metus id consequat. Suspendisse at interdum leo, eu pharetra nibh. Sed in sollicitudin nunc, a dapibus elit. Phasellus posuere velit a lacinia mattis. Quisque volutpat magna metus, vel dictum dui porttitor id. Cras eu sapien pulvinar, imperdiet leo vel, tincidunt lorem. Nulla facilisi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus quis odio quam. Fusce nec libero eget arcu gravida faucibus. Sed vulputate porttitor ligula, non posuere lectus iaculis eu. Phasellus rhoncus risus laoreet, laoreet felis eu, bibendum ligula.",
+                    body = "Wanneer moet men stoppen met unit testing?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 4,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[1].id,
+                    title = "Question 4, multiple topics",
+                    body = "Wat is intellectuele eigendom?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 5,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[1].id,
+                    title = "Question 5, multiple topics",
+                    body = "Welke hoofdstukken komen aan bod op het examen?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 6,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[2].id,
+                    title = "Question 6, no topics",
+                    body = "Wat zijn de Monte Carlo methoden?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 7,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[2].id,
+                    title = "Question 7, multiple topics",
+                    body = "Wat is een steekproeftheorie?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 8,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[3].id,
+                    title = "Question 8, all topics for course",
+                    body = "Hoe wordt deadlock precies detect?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 9,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[5].id,
+                    title = "Question 9, multiple topics",
+                    body = "What is the best way to deal with network latency in a synchronized multiplayer game? Could you advise me on an algorithm or method to use?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 10,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[7].id,
+                    title = "Question 10, no topics",
+                    body = "Reductionisme versus Holisme?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
 
@@ -358,7 +604,17 @@ namespace Server.Api.DataBase
                             new { questionId = 1, topicId = 1 },
                             new { questionId = 1, topicId = 2 },
                             new { questionId = 1, topicId = 3 },
-                            new { questionId = 2, topicId = 1 }
+                            new { questionId = 2, topicId = 3 },
+                            new { questionId = 4, topicId = 4 },
+                            new { questionId = 4, topicId = 5 },
+                            new { questionId = 5, topicId = 4 },
+                            new { questionId = 5, topicId = 5 },
+                            new { questionId = 5, topicId = 6 },
+                            new { questionId = 7, topicId = 7  },
+                            new { questionId = 7, topicId = 8  },
+                            new { questionId = 8, topicId = 9  },
+                            new { questionId = 9, topicId = 15 },
+                            new { questionId = 9, topicId = 11 }
                         );
                     }
                 );

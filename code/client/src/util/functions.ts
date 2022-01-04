@@ -27,10 +27,11 @@ export const errorString = (err: any): string => {
         return (a ? `${a}` : '') || 'An unknown error has occurred';
     }
     if (typeof err !== 'object') return v(err);
-    if (err.status >= 500) return v();
-    if (err.status === 404) return v('Item not found');
-    if (err.status === 401) return v('Unauthorized request');
-    if (err.status === 403) return v('Unauthorized request');
+    let status = err.response?.status;
+    if (status >= 500) return v();
+    if (status === 404) return v('Item not found');
+    if (status === 401) return v('Unauthorized request');
+    if (status === 403) return v('Unauthorized request');
     if (typeof (err = err?.response?.data) !== 'object') return v(err);
     if (Array.isArray(err)) err = err[0] || {};
     return v(err.description || err.errors);

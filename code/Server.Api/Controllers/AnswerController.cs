@@ -106,7 +106,8 @@ namespace Server.Api.Controllers
                 title = dto.title,
                 question = question,
                 time = DateTime.UtcNow,
-                userId = answerUser.Id
+                userId = answerUser.Id,
+                isAccepted = currentUser.IsInRole("prof")
             };
 
             await _answerRepository.CreateAsync(answer);

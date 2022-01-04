@@ -23,11 +23,11 @@ export type Course = BaseCourse & {
 export type BaseChannel = {
     id: number;
     name: string;
+    lastMessage?: BaseMessage;
 }
 
 export type Channel = BaseChannel & {
     course: BaseCourse;
-    lastMessage?: BaseMessage;
 }
 
 export type BaseMessage = {
