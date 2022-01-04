@@ -20,8 +20,8 @@ class QuestionController {
     + <<async>> UpdateQuestion(id:int, dto:CreateQuestionDto) : Task<ActionResult>
 }
 ControllerBase <|-- QuestionController
-QuestionController --> PgQuestionRepository: _questionRepository (Injection)
-QuestionController --> Mailer: _mailSender (Injection)
+QuestionController *-u- PgQuestionRepository: _questionRepository (Injection)
+QuestionController *-u- Mailer: _mailSender (Injection)
 
 
 interface "IRestfulRepository"<T> {

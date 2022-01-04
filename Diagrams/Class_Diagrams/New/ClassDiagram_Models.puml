@@ -1,130 +1,130 @@
 @startuml
 class Answer {
-    + id : int <<get>> <<set>>
-    + body : string <<get>> <<set>>
-    + title : string <<get>> <<set>>
-    + time : DateTime <<get>> <<set>>
-    + userId : string <<get>> <<set>>
-    + isAccepted : bool <<get>> <<set>> = false
-    + questionId : int <<get>> <<set>>
-    + question : Question <<get>> <<set>>
+    + id : int 
+    + body : string 
+    + title : string 
+    + time : DateTime 
+    + userId : string 
+    + isAccepted : bool  = false
+    + questionId : int 
+    + question : Question 
 }
-Answer --> Question: "question"
-Answer --> User: "userId"
+Answer *-- Question: "question"
+Answer *-- User: "userId"
 
 
 class Course {
-    + id : int <<get>> <<set>>
-    + name : string <<get>> <<set>>
-    + number : string <<get>> <<set>>
-    + profEmail : string <<get>> <<set>>
-    + description : string <<get>> <<set>>
-    + courseEmail : string <<get>> <<set>>
-    + topics : ICollection<Topic> <<get>> <<set>>
-    + questions : ICollection<Question> <<get>> <<set>>
-    + channels : ICollection<TextChannel> <<get>> <<set>>
+    + id : int 
+    + name : string 
+    + number : string 
+    + profEmail : string 
+    + description : string 
+    + courseEmail : string 
+    + topics : ICollection<Topic> 
+    + questions : ICollection<Question> 
+    + channels : ICollection<TextChannel> 
 }
-Course --> Topic: "topics"
-Course --> Question: "questions"
-Course --> TextChannel: "channels"
-Course --> Professor: "profEmail"
+Course *-- Topic: "topics"
+Course *-- Question: "questions"
+Course *-- TextChannel: "channels"
+Course *-- Professor: "profEmail"
 
 
 class FieldOfStudy {
-    + id : int <<get>> <<set>>
-    + name : string <<get>> <<set>>
-    + isBachelor : bool <<get>> <<set>>
-    + fullName : string <<get>> <<set>>
+    + id : int 
+    + name : string 
+    + isBachelor : bool 
+    + fullName : string 
 }
 
 
 class Message {
-    + id : int <<get>> <<set>>
-    + body : string <<get>> <<set>>
-    + channelId : int <<get>> <<set>>
-    + channel : TextChannel <<get>> <<set>>
-    + userMail : string <<get>> <<set>>
-    + time : DateTime <<get>> <<set>>
+    + id : int 
+    + body : string 
+    + channelId : int 
+    + channel : TextChannel 
+    + userMail : string 
+    + time : DateTime 
 }
-Message --> TextChannel: "channel"
-Message --> User: "userMail"
+Message *-- TextChannel: "channel"
+Message *-- User: "userMail"
 
 
 class Notification {
-    + id : int <<get>> <<set>>
-    + userId : string <<get>> <<set>>
-    + time : DateTime <<get>> <<set>>
+    + id : int 
+    + userId : string 
+    + time : DateTime 
 }
 class AnswerNotification {
-    + answerId : int <<get>> <<set>>
-    + answer : Answer <<get>> <<set>>
+    + answerId : int 
+    + answer : Answer 
 }
 class QuestionNotification {
-    + questionId : int <<get>> <<set>>
-    + question : Question <<get>> <<set>>
+    + questionId : int 
+    + question : Question 
 }
-Notification --> User: "userId"
+Notification *-- User: "userId"
 Notification <|-- AnswerNotification
 Notification <|-- QuestionNotification
-AnswerNotification --> Answer: "answer"
-QuestionNotification --> Question: "question"
+AnswerNotification *-- Answer: "answer"
+QuestionNotification *-- Question: "question"
 
 
 class Question {
-    + id : int <<get>> <<set>>
-    + body : string <<get>> <<set>>
-    + title : string <<get>> <<set>>
-    + courseId : int <<get>> <<set>>
-    + course : Course <<get>> <<set>>
-    + time : DateTime <<get>> <<set>>
-    + topics : ICollection<Topics> <<get>> <<set>>
-    + userId : string <<get>> <<set>>
+    + id : int 
+    + body : string 
+    + title : string 
+    + courseId : int 
+    + course : Course 
+    + time : DateTime 
+    + topics : ICollection<Topics> 
+    + userId : string 
 }
 
-Question --> Course: "course"
-Question --> Topic: "topics"
-Question --> User: "userId"
+Question *-- Course: "course"
+Question *-- Topic: "topics"
+Question *-- User: "userId"
 
 
 class Subscription {
-    + id : int <<get>> <<set>>
-    + userId : string <<get>> <<set>>
-    + subscribedItemId : int <<get>> <<set>>
-    + dateTime : DateTime <<get>> <<set>>
+    + id : int 
+    + userId : string 
+    + subscribedItemId : int 
+    + dateTime : DateTime 
 }
 class CourseSubscription {
-    + subscribedItem : Course <<get>> <<set>>
+    + subscribedItem : Course 
 }
 class QuestionSubscription {
-    + subscribedItem : Question <<get>> <<set>>
+    + subscribedItem : Question 
 }
-Subscription --> User: "userId"
+Subscription *-- User: "userId"
 Subscription <|-- CourseSubscription
 Subscription <|-- QuestionSubscription
-CourseSubscription --> Course: "subscribedItem"
-QuestionSubscription --> Question: "subscribedItem"
+CourseSubscription *-- Course: "subscribedItem"
+QuestionSubscription *-- Question: "subscribedItem"
 
 
 class TextChannel {
-    + id : int <<get>> <<set>>
-    + name : string <<get>> <<set>>
-    + courseId : int <<get>> <<set>>
-    + course : Course <<get>> <<set>>
-    + messages : List<Message> <<get>> <<set>>
+    + id : int 
+    + name : string 
+    + courseId : int 
+    + course : Course 
+    + messages : List<Message> 
 }
-TextChannel --> Course: "course"
-TextChannel --> Message: "messages"
+TextChannel *-- Course: "course"
+TextChannel *-- Message: "messages"
 
 
 class Topic {
-    + id : int <<get>> <<set>>
-    + name : string <<get>> <<set>>
-    + courseId : int <<get>> <<set>>
-    + course : Course <<get>> <<set>>
-    + questions : ICollection<Question> <<get>> <<set>>
+    + id : int 
+    + name : string 
+    + courseId : int 
+    + course : Course 
+    + questions : ICollection<Question> 
 }
-Topic --> Course: "course"
-Topic --> Question: "questions"
+Topic *-- Course: "course"
+Topic *-- Question: "questions"
 
 
 class User {
@@ -138,7 +138,7 @@ User <|-- Professor
 
 
 class Student {
-    + FieldOfStudyId : int <<get>> <<set>>
+    + FieldOfStudyId : int 
 }
 User <|-- Student
 @enduml

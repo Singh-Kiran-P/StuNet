@@ -1,0 +1,120 @@
+@startuml
+
+Notification -[hidden]- Course
+
+class Notification {
+    +id: number
+    +time: string
+    +notifierId: number
+    +notifier: Question | Answer
+}
+
+Notification *-- Question: notifier
+Notification *-- Answer: notifier
+
+class BaseCourse {
+    +id: number
+    +name: string
+    +number: string
+    +profEmail: string
+    +courseEmail: string
+    +description: string
+}
+
+class Course {
+    +topics: Topic[]
+    +channels: Channel[]
+    +questions: Question[]
+}
+
+Course *-- Topic: topics
+Course *-- Channel: channels
+Course *-- Question: questions
+
+Course --|> BaseCourse
+
+class BaseChannel {
+    +id: number
+    +name: string
+    +lastMessage?: BaseMessage
+}
+
+BaseChannel *-- BaseMessage: lastMessage
+
+class Channel {
+    +course: BaseCourse
+}
+
+Channel *-- BaseCourse: course
+
+Channel --|> BaseChannel
+
+class BaseMessage {
+	+userMail: string
+	+body: string
+	+time: string
+}
+
+class Message {}
+
+Message --|> BaseMessage
+
+class BaseTopic {
+    +id: number
+    +name: string
+}
+
+class Topic {
+    +course: BaseCourse
+    +questions: BaseQuestion[]
+}
+
+Topic *-- BaseCourse: course
+Topic *-- BaseQuestion: questions
+
+Topic --|> BaseTopic
+
+class BaseQuestion {
+    +id: number
+    +title: string
+    +body: string
+    +time: string
+    +topics: BaseTopic[]
+}
+
+BaseQuestion *-- BaseTopic: topics
+
+class Question {
+    +course: BaseCourse
+}
+
+Question *-- BaseCourse: course
+
+Question --|> BaseQuestion
+
+class BaseAnswer {
+    +id: number
+    +time: string
+    +body: string
+    +title: string
+    +isAccepted: boolean
+    +userEmail: string
+}
+
+class Answer {
+    +question: Question
+}
+
+Answer *-- Question: question
+
+Answer --|> BaseAnswer
+
+class Field {
+	+id: number
+	+name: string
+	+fullName: string
+	+isBachelor: boolean
+}
+
+@enduml
+
