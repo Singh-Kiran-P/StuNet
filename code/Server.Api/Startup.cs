@@ -21,6 +21,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Server.Api
 {
@@ -37,7 +39,8 @@ namespace Server.Api
         {
             services.AddControllers();
 
-            services.AddCors(options => {
+            services.AddCors(options =>
+            {
                 options.AddPolicy("PolicyName", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
 
@@ -47,7 +50,8 @@ namespace Server.Api
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
-            services.Configure<IdentityOptions>(options => {
+            services.Configure<IdentityOptions>(options =>
+            {
                 options.Password.RequiredLength = 6;
                 options.Password.RequireDigit = false;
                 options.Password.RequireUppercase = false;
@@ -57,11 +61,14 @@ namespace Server.Api
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             var jwtSettings = Configuration.GetSection("JwtSettings");
-            services.AddAuthentication(opt => {
+            services.AddAuthentication(opt =>
+            {
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options => {
-                options.TokenValidationParameters = new TokenValidationParameters {
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
                     ValidateIssuer = false,
                     ValidateLifetime = true,
                     ValidateAudience = false,
@@ -71,9 +78,12 @@ namespace Server.Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("secretKey").Value))
                 };
 
-                options.Events = new JwtBearerEvents {
-                    OnMessageReceived = context => {
-                        if (context.Request.Path.ToString().StartsWith("/chat")) {
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Path.ToString().StartsWith("/chat"))
+                        {
                             context.Token = context.Request.Query["access_token"];
                         }
 
@@ -85,8 +95,9 @@ namespace Server.Api
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession();
 
-            services.AddControllers().AddNewtonsoftJson(options => {
-              options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
             services.AddSingleton<IConfiguration>(Configuration);
@@ -104,7 +115,8 @@ namespace Server.Api
             services.AddScoped<ISubscriptionRepository<QuestionSubscription>, PgQuestionSubscriptionRepository>();
             services.AddScoped<INotificationRepository<QuestionNotification>, PgQuestionNotificationRepository>();
 
-            services.AddSwaggerGen(c => {
+            services.AddSwaggerGen(c =>
+            {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server.Api", Version = "v1" });
             });
 
@@ -122,7 +134,8 @@ namespace Server.Api
             string senderEmail = Configuration.GetSection("Mail")["SenderEmail"];
             int G_port = Convert.ToInt32(Configuration.GetSection("Mail")["port"]);
 
-            SmtpClient smtp = new SmtpClient {
+            SmtpClient smtp = new SmtpClient
+            {
                 Host = G_host,
                 Port = G_port,
                 EnableSsl = true,
@@ -144,7 +157,8 @@ namespace Server.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) {
+            if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Server.Api v1"));
@@ -163,7 +177,8 @@ namespace Server.Api
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
             });
