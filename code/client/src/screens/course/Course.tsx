@@ -5,11 +5,10 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     let [subscribed, setSubscribed] = useState<null | number>(null);
     let [course, setCourse] = useState(EmptyCourse);
     let [error, setError] = useState('');
-
+    
     let owner = useEmail() === (course.profEmail || NaN);
 
     const info = async () => {
-        console.log('fetch' + id);
         return axios.get('/Course/' + id).then(res => {
             setCourse({ ...res.data, channels: res.data.channels?.reverse() });
             nav.setParams({ name: res.data.name });
