@@ -585,8 +585,8 @@ namespace Server.Api.DataBase
                     id = 10,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[7].id,
-                    title = "Reductionisme, Holisme",
-                    body = "Reductionisme versus Holisme?",
+                    title = "Reductionism, Holism",
+                    body = "Reductionism versus Holism?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
 
@@ -624,16 +624,16 @@ namespace Server.Api.DataBase
                     id = 1,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     questionId = questions[0].id,
-                    title = "Answer 1",
-                    body = "answer",
+                    title = "Agile-methodologie",
+                    body = "De Agile-methodologie is een manier om een project te managen door het op te delen in verschillende fasen. Het gaat om constante samenwerking met belanghebbenden en continue verbetering in elke fase. Zodra het werk begint, doorlopen teams een proces van plannen, uitvoeren en evalueren. Voortdurende samenwerking is essentieel, zowel met teamleden als met belanghebbenden van het project.",
                     time = DateTime.UtcNow.AddHours (-5)
                 },
                 new Answer {
                     id = 2,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     questionId = questions[1].id,
-                    title = "Answer 2",
-                    body = "answer",
+                    title = "Examen",
+                    body = "Alles buiten hoofdstuk 4 en 5.",
                     time = DateTime.UtcNow.AddHours (-2),
                     isAccepted = true
                 },
@@ -641,16 +641,84 @@ namespace Server.Api.DataBase
                     id = 3,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     questionId = questions[1].id,
-                    title = "Answer 3",
-                    body = "answer",
+                    title = "Examen",
+                    body = "Alles buiten hoofdstuk 4.",
                     time = DateTime.UtcNow.AddDays (-18)
                 },
                 new Answer {
                     id = 4,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     questionId = questions[2].id,
-                    title = "Answer 4",
-                    body = "answer",
+                    title = "Testing",
+                    body = "Wanneer u meer waarde kunt bieden door iets anders te doen.",
+                    time = DateTime.UtcNow.AddMonths (-11)
+                },
+                new Answer {
+                    id = 5,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    questionId = questions[3].id,
+                    title = "Intellectuele eigendom",
+                    body = "Intellectuele eigendom is een categorie van eigendom die immateriële creaties van het menselijk intellect omvat. Er zijn veel soorten intellectueel eigendom en sommige landen erkennen meer dan andere. De meest bekende soorten zijn auteursrechten, patenten, handelsmerken en handelsgeheimen.",
+                    time = DateTime.UtcNow.AddMonths (-11),
+                    isAccepted = true
+                },
+                new Answer {
+                    id = 6,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    questionId = questions[4].id,
+                    title = "Hoofdstukken examens",
+                    body = "Hoofdstukken 1, 2, 3, 4, en 5",
+                    time = DateTime.UtcNow.AddMonths (-11),
+                    isAccepted = true
+                },
+                new Answer {
+                    id = 7,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    questionId = questions[5].id,
+                    title = "Monte Carlo-methoden",
+                    body = "Monte Carlo-methoden, of Monte Carlo-experimenten, zijn een brede klasse van computationele algoritmen die afhankelijk zijn van herhaalde willekeurige steekproeven om numerieke resultaten te verkrijgen. Het onderliggende concept is om willekeur te gebruiken om problemen op te lossen die in principe deterministisch kunnen zijn.",
+                    time = DateTime.UtcNow.AddMonths (-11),
+                    isAccepted = true
+                },
+                new Answer {
+                    id = 8,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    questionId = questions[6].id,
+                    title = "Steekproef",
+                    body = "Een steekproef of monster, een statistisch begrip, is een selectie uit een totale populatie ten behoeve van een meting van bepaalde eigenschappen van die populatie. In het dagelijkse spraakgebruik kan een monster ook een voorbeeld van één individu uit een populatie betekenen.",
+                    time = DateTime.UtcNow.AddMonths (-11)
+                },
+                new Answer {
+                    id = 9,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    questionId = questions[7].id,
+                    title = "Deadlockdetectie",
+                    body = "Dunno",
+                    time = DateTime.UtcNow.AddMonths (-11),
+                    isAccepted = true
+                },
+                new Answer {
+                    id = 10,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    questionId = questions[8].id,
+                    title = "Network latency",
+                    body = "- Brute-force method \n-Dead reckoning\n-nLockstep synchronization",
+                    time = DateTime.UtcNow.AddMonths (-11)
+                },
+                new Answer {
+                    id = 11,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    questionId = questions[8].id,
+                    title = "Network latency",
+                    body = "- Brute-force method \n-Dead reckoning\n-nLockstep synchronization",
+                    time = DateTime.UtcNow.AddMonths (-11)
+                },
+                new Answer {
+                    id = 12,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    questionId = questions[9].id,
+                    title = "Reductionism vs holism",
+                    body = "Reductionisme en holisme zijn twee verschillende benaderingen in de psychologie die onderzoekers gebruiken om experimenten te creëren en conclusies te trekken. Het reductionisme verdeelt verklaringen van gedrag graag in afzonderlijke componenten, terwijl het holisme het plaatje graag als geheel bekijkt.",
                     time = DateTime.UtcNow.AddMonths (-11)
                 }
             };
