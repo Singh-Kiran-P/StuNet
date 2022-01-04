@@ -513,7 +513,7 @@ namespace Server.Api.DataBase
                     id = 1,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
-                    title = "Question 1, all topics for course",
+                    title = "Agile processen",
                     body = "Wat zijn agile processen?",
                     time = DateTime.UtcNow.AddDays (-1)
                 },
@@ -521,7 +521,7 @@ namespace Server.Api.DataBase
                     id = 2,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
-                    title = "Question 2, single topic",
+                    title = "Studeren Examen",
                     body = "Wat moet er allemaal bestudeerd worden van de kopies voor het examen?",
                     time = DateTime.UtcNow.AddMonths (-1)
                 },
@@ -529,7 +529,7 @@ namespace Server.Api.DataBase
                     id = 3,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
-                    title = "Question 3, no topics",
+                    title = "Unit Testing",
                     body = "Wanneer moet men stoppen met unit testing?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
@@ -537,7 +537,7 @@ namespace Server.Api.DataBase
                     id = 4,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[1].id,
-                    title = "Question 4, multiple topics",
+                    title = "Intellectuele eigendom",
                     body = "Wat is intellectuele eigendom?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
@@ -545,7 +545,7 @@ namespace Server.Api.DataBase
                     id = 5,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[1].id,
-                    title = "Question 5, multiple topics",
+                    title = "Studeren Examen",
                     body = "Welke hoofdstukken komen aan bod op het examen?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
@@ -553,7 +553,7 @@ namespace Server.Api.DataBase
                     id = 6,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[2].id,
-                    title = "Question 6, no topics",
+                    title = "Monte Carlo",
                     body = "Wat zijn de Monte Carlo methoden?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
@@ -561,7 +561,7 @@ namespace Server.Api.DataBase
                     id = 7,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[2].id,
-                    title = "Question 7, multiple topics",
+                    title = "Steekproeftheorie",
                     body = "Wat is een steekproeftheorie?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
@@ -569,7 +569,7 @@ namespace Server.Api.DataBase
                     id = 8,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[3].id,
-                    title = "Question 8, all topics for course",
+                    title = "Deadlockdetectie",
                     body = "Hoe wordt deadlock precies detect?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
@@ -577,7 +577,7 @@ namespace Server.Api.DataBase
                     id = 9,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[5].id,
-                    title = "Question 9, multiple topics",
+                    title = "Network latency",
                     body = "What is the best way to deal with network latency in a synchronized multiplayer game? Could you advise me on an algorithm or method to use?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
@@ -585,7 +585,7 @@ namespace Server.Api.DataBase
                     id = 10,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[7].id,
-                    title = "Question 10, no topics",
+                    title = "Reductionisme, Holisme",
                     body = "Reductionisme versus Holisme?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
