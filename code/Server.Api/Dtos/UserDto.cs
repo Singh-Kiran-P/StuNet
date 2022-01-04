@@ -12,7 +12,7 @@ namespace Server.Api.Dtos
         public string Password { get; set; }
     }
 
-    [ExcludeFromCodeCoverage] // TODO what
+    [ExcludeFromCodeCoverage]
     public record RegisterUserDto
     {
         [Required(ErrorMessage = "Email is required")]
