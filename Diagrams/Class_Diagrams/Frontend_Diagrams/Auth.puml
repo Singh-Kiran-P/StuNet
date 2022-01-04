@@ -1,5 +1,4 @@
 @startuml Auth
-skinparam classAttributeIconSize 0
 left to right direction
 
 class Fields {
@@ -20,6 +19,8 @@ enum User {
 
 class RegisterScreen {
 	-mail: string
+	-fields: Fields
+	-FOS: [string, number, string]
 	-password: string
 	-passwordConfirm: string
 	-error: string
@@ -29,7 +30,7 @@ class RegisterScreen {
 	-type(): User
 	-valid(): boolean
 	-degrees(): string
-	-register(): void
+	-RegisterScreen(): void
 
 	-setMail(): void
 	-setPassword(): void
@@ -46,7 +47,7 @@ class LoginScreen {
 	-error: string
 	-theme: Theme
 
-	-login(): void
+	-LoginScreen(): void
 	
 	-setToken(): void
 	-setError(): void
@@ -54,23 +55,23 @@ class LoginScreen {
 	-setPassword(): void
 }
 
-Text --* Login
-Text --* Register
+Text --* LoginScreen
+Text --* RegisterScreen
 
-Theme --* Login
+Theme --* LoginScreen
 
-User --* Register
+User --* RegisterScreen
 
-TextInput --* Login
-Button --* Login
-Link --* Login
-PasswordInput --* Login
+TextInput --* LoginScreen
+Button --* LoginScreen
+Link --* LoginScreen
+PasswordInput --* LoginScreen
 PasswordInput --|> TextInput
 
-TextInput --* Register
-PasswordInput --* Register
-Link --* Register
-Button --* Register
-Fields --* Register
-Picker --* Register
+TextInput --* RegisterScreen
+PasswordInput --* RegisterScreen
+Link --* RegisterScreen
+Button --* RegisterScreen
+Fields --* RegisterScreen: fields
+Picker --* RegisterScreen
 @enduml

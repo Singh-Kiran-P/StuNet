@@ -1,5 +1,4 @@
 @startuml Course
-skinparam classAttributeIconSize 0
 
 class TextInput
 class Button
@@ -43,7 +42,7 @@ class CourseScreen {
 	-setError(): void
 }
 
-Course --* CourseScreen
+Course --* CourseScreen: course
 
 Button --* CourseScreen
 Fab --* CourseScreen

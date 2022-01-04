@@ -1,5 +1,4 @@
 @startuml Question
-skinparam classAttributeIconSize 0
 left to right direction
 
 class Question
@@ -11,10 +10,10 @@ class QuestionScreen {
 	-answers : Answer[]
 	-error: string
 
-	info(): Promise
-	questions(): Promise
-	subscription(): Promise
-	fetch(): Promise
+	-info(): Promise
+	-questions(): Promise
+	-subscription(): Promise
+	-fetch(): Promise
 
 	-setSubscribed(): void
 	-setQuestion(): void
@@ -22,8 +21,8 @@ class QuestionScreen {
 	-setError(): void
 }
 
-Question --* QuestionScreen
-Answer --* QuestionScreen
+Question --* QuestionScreen: question
+Answer --* QuestionScreen: answers
 
 class QuestionsScreen {
 	-questions: Question[]
@@ -39,7 +38,7 @@ class QuestionsScreen {
 	-setError(): void
 }
 
-Question --* QuestionsScreen
+Question --* QuestionsScreen: question
 
 class AskQuestionScreen {
 	-actives: number[]
