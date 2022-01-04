@@ -15,13 +15,13 @@ export default ({ children }: Children) => {
     let [connection] = useState(() => {
 		return new HubConnectionBuilder().withUrl(axios.defaults.baseURL + '/chat', {
 			accessTokenFactory: () => token
-		}).configureLogging(LogLevel.None).build();
+		}).configureLogging(LogLevel.None)
+		.withAutomaticReconnect()
+		.build();
 	})
 
 	useEffect(() => {
-		const start = (): any => connection.start().catch(() => setTimeout(() => start(), 5000));
-		connection.onclose(() => start());
-		start();
+		connection.start();
 
 		connection.on('QuestionNotification', async (question: Question) => {
 			const channelId = await notifee.createChannel({
