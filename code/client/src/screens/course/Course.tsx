@@ -42,12 +42,12 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
         <Loader load={fetch}>
             <Text type='error' pad='top' hidden={!error} children={error}/>
             <Text type='link' pad='top' children={course.courseEmail || 'cnet@uhasselt.be'}/>
-            <ScrollView inner pad='top' flex>
+            <ScrollView inner pad='top' flex shrink>
                 <Text children={course.description}/>
             </ScrollView>
             <Button pad='top' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
             <Text type='header' color='placeholder' pad='top' hidden={!course.channels?.length} children='Channels'/>
-            <ScrollView inner padding='bottom,horizontal' flex children={course.channels?.map((channel, i) =>
+            <ScrollView inner padding='bottom,horizontal' flex shrink children={course.channels?.map((channel, i) =>
                 <CompactChannel margin={!!i} key={i} channel={channel}/>)}
             />
             <Fab pad='bottom' icon='pencil' hidden={!owner} onPress={() => nav.push('EditCourse', { course })}/>
