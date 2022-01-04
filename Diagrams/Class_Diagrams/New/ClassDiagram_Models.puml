@@ -1,0 +1,144 @@
+@startuml
+class Answer {
+    + id : int 
+    + body : string 
+    + title : string 
+    + time : DateTime 
+    + userId : string 
+    + isAccepted : bool  = false
+    + questionId : int 
+    + question : Question 
+}
+Answer *-- Question: "question"
+Answer *-- User: "userId"
+
+
+class Course {
+    + id : int 
+    + name : string 
+    + number : string 
+    + profEmail : string 
+    + description : string 
+    + courseEmail : string 
+    + topics : ICollection<Topic> 
+    + questions : ICollection<Question> 
+    + channels : ICollection<TextChannel> 
+}
+Course *-- Topic: "topics"
+Course *-- Question: "questions"
+Course *-- TextChannel: "channels"
+Course *-- Professor: "profEmail"
+
+
+class FieldOfStudy {
+    + id : int 
+    + name : string 
+    + isBachelor : bool 
+    + fullName : string 
+}
+
+
+class Message {
+    + id : int 
+    + body : string 
+    + channelId : int 
+    + channel : TextChannel 
+    + userMail : string 
+    + time : DateTime 
+}
+Message *-- TextChannel: "channel"
+Message *-- User: "userMail"
+
+
+class Notification {
+    + id : int 
+    + userId : string 
+    + time : DateTime 
+}
+class AnswerNotification {
+    + answerId : int 
+    + answer : Answer 
+}
+class QuestionNotification {
+    + questionId : int 
+    + question : Question 
+}
+Notification *-- User: "userId"
+Notification <|-- AnswerNotification
+Notification <|-- QuestionNotification
+AnswerNotification *-- Answer: "answer"
+QuestionNotification *-- Question: "question"
+
+
+class Question {
+    + id : int 
+    + body : string 
+    + title : string 
+    + courseId : int 
+    + course : Course 
+    + time : DateTime 
+    + topics : ICollection<Topics> 
+    + userId : string 
+}
+
+Question *-- Course: "course"
+Question *-- Topic: "topics"
+Question *-- User: "userId"
+
+
+class Subscription {
+    + id : int 
+    + userId : string 
+    + subscribedItemId : int 
+    + dateTime : DateTime 
+}
+class CourseSubscription {
+    + subscribedItem : Course 
+}
+class QuestionSubscription {
+    + subscribedItem : Question 
+}
+Subscription *-- User: "userId"
+Subscription <|-- CourseSubscription
+Subscription <|-- QuestionSubscription
+CourseSubscription *-- Course: "subscribedItem"
+QuestionSubscription *-- Question: "subscribedItem"
+
+
+class TextChannel {
+    + id : int 
+    + name : string 
+    + courseId : int 
+    + course : Course 
+    + messages : List<Message> 
+}
+TextChannel *-- Course: "course"
+TextChannel *-- Message: "messages"
+
+
+class Topic {
+    + id : int 
+    + name : string 
+    + courseId : int 
+    + course : Course 
+    + questions : ICollection<Question> 
+}
+Topic *-- Course: "course"
+Topic *-- Question: "questions"
+
+
+class User {
+}
+IdentityUser <|-- User
+
+
+class Professor {
+}
+User <|-- Professor
+
+
+class Student {
+    + FieldOfStudyId : int 
+}
+User <|-- Student
+@enduml

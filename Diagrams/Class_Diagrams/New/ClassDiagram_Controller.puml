@@ -1,0 +1,60 @@
+@startuml
+class QuestionController {
+    + QuestionController(questionRepository:IQuestionRepository, topicRepository:ITopicRepository, courseRepository:ICourseRepository,\n userManager:UserManager<User>, hubContext:IHubContext<ChatHub>, notificationRepository:INotificationRepository<QuestionNotification>,\n subscriptionRepository:ISubscriptionRepository<CourseSubscription>, questionSubscriptionRepository:ISubscriptionRepository<QuestionSubscription>, mailSender:IEmailSender)
+    - _mailSender : IEmailSender
+    - _userManager : UserManager<User>
+    - _hubContext : IHubContext<ChatHub>
+    - _topicRepository : ITopicRepository
+    - _courseRepository : ICourseRepository
+    - _questionRepository : IQuestionRepository
+    - _notificationRepository : INotificationRepository<QuestionNotification>
+    - _courseSubscriptionRepository : ISubscriptionRepository<CourseSubscription>
+    - _questionSubscriptionRepository : ISubscriptionRepository<QuestionSubscription>
+    + <<async>> GetQuestions() : Task<ActionResult<IEnumerable<GetQuestionDto>>>
+    + <<async>> GetSubscribedQuestions() : Task<ActionResult<IEnumerable<GetQuestionDto>>>
+    + <<async>> GetAskedQuestions(email:string) : Task<ActionResult<IEnumerable<GetQuestionDto>>>
+    + <<async>> GetQuestion(id:int) : Task<ActionResult<GetQuestionDto>>
+    + <<async>> SearchByName(courseId:int, name:string) : Task<ActionResult<GetCourseDto>>
+    + <<async>> CreateQuestion(dto:CreateQuestionDto) : Task<ActionResult<GetQuestionDto>>
+    + <<async>> DeleteQuestion(id:int) : Task<ActionResult>
+    + <<async>> UpdateQuestion(id:int, dto:CreateQuestionDto) : Task<ActionResult>
+}
+ControllerBase <|-- QuestionController
+QuestionController *-u- PgQuestionRepository: _questionRepository (Injection)
+QuestionController *-u- Mailer: _mailSender (Injection)
+
+
+interface "IRestfulRepository"<T> {
+    GetAsync(id:int) : Task<T>
+    CreateAsync(item:T) : Task
+    UpdateAsync(item:T) : Task
+    DeleteAsync(id:int) : Task
+    GetAllAsync() : Task<IEnumerable<T>>
+}
+interface IQuestionRepository {
+    GetByCourseIdAsync(courseId:int) : Task<IEnumerable<Question>>
+    GetAskedByUserId(userId:string) : Task<IEnumerable<Question>>
+}
+class PgQuestionRepository {
+    + PgQuestionRepository(context:IDataContext)
+    + <<async>> GetAllAsync() : Task<IEnumerable<Question>>
+    + <<async>> GetAskedByUserId(userId:string) : Task<IEnumerable<Question>>
+    + <<async>> GetAsync(id:int) : Task<Question>
+    + <<async>> GetByCourseIdAsync(courseId:int) : Task<IEnumerable<Question>>
+    + <<async>> CreateAsync(question:Question) : Task
+    + <<async>> UpdateAsync(question:Question) : Task
+    + <<async>> DeleteAsync(questionId:int) : Task
+}
+"IRestfulRepository" "<Question>" <|-- IQuestionRepository
+IQuestionRepository <|-- PgQuestionRepository
+
+interface IEmailSender {
+    SendEmail(to:string, subject:string, template:EmailTemplate, model:object) : Task<bool>
+}
+class Mailer {
+    + Mailer(email:IFluentEmail)
+    + <<async>> SendEmail(to:string, subject:string, template:EmailTemplate, model:object) : Task<bool>
+}
+IEmailSender <|-- Mailer
+
+@enduml
