@@ -9,6 +9,7 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
     let owner = useEmail() === (course.profEmail || NaN);
 
     const info = async () => {
+        console.log('fetch' + id);
         return axios.get('/Course/' + id).then(res => {
             setCourse({ ...res.data, channels: res.data.channels?.reverse() });
             nav.setParams({ name: res.data.name });
@@ -42,7 +43,9 @@ export default Screen('Course', ({ nav, params: { id, subscribe } }) => {
         <Loader load={fetch}>
             <Text type='error' pad='top' hidden={!error} children={error}/>
             <Text type='link' pad='top' children={course.courseEmail || 'cnet@uhasselt.be'}/>
-            <Text pad='top' children={course.description}/>
+            <ScrollView inner pad='top' flex>
+                <Text children={course.description}/>
+            </ScrollView>
             <Button pad='top' icon='comment-multiple' children='Questions' onPress={() => nav.push('Questions', { course })}/>
             <Text type='header' color='placeholder' pad='top' hidden={!course.channels?.length} children='Channels'/>
             <ScrollView inner padding='bottom,horizontal' flex children={course.channels?.map((channel, i) =>

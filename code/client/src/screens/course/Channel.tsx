@@ -1,9 +1,10 @@
-import React, { Screen, Message, useEffect, useState, useEmail, axios, display, timeDiff } from '@/.';
+import React, { Screen, Message, useEffect, useState, useEmail, axios, update, display, timeDiff } from '@/.';
 import { Text, List, Loader, SearchBar, CompactMessage } from '@/components';
 import { useConnection } from '@/connection';
 
 export default Screen('Channel', ({ nav, params: { id, name } }) => {
 	let [messages, setMessages] = useState<Message[]>([]);
+	let [courseId, setCourseId] = useState(NaN);
 	let [error, setError] = useState('');
 
 	const connection = useConnection();
@@ -27,8 +28,10 @@ export default Screen('Channel', ({ nav, params: { id, name } }) => {
 	}
 
 	useEffect(() => {
+		if (isNaN(courseId)) return;
 		connection.invoke('JoinChannel', id).catch(display(setError));
 		connection.on('messageReceived', (username: string, message: string, time: string) => {
+			update('Course', { id: courseId });
 			setMessages(messages => [{
 				userMail: username,
                 body: message,
@@ -40,10 +43,11 @@ export default Screen('Channel', ({ nav, params: { id, name } }) => {
 			connection.off('messageReceived');
 			connection.invoke('LeaveChannel', id).catch(display(setError));
 		}
-	}, [])
+	}, [courseId])
 
 	const fetch = async () => {
 		return axios.get('/Channel/' + id).then(res => {
+			setCourseId(res.data.course?.id);
 			setMessages(res.data.messages.reverse());
 			nav.setParams({ course: res.data.course?.name, name: res.data.name })
 		})
