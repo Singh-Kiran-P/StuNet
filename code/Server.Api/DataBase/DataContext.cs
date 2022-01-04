@@ -784,7 +784,7 @@ namespace Server.Api.DataBase
                     channelId = channels[2].id,
                     userMail = profs[0].Email,
                     body = "Stel hier al je vragen over de voorbereiding van het examen!",
-                    time = DateTime.UtcNow.AddDays(-1.123)
+                    time = DateTime.UtcNow.AddDays(-3.123)
                 },
                 new Message {
                     id = 2,
@@ -805,14 +805,14 @@ namespace Server.Api.DataBase
                     channelId = channels[2].id,
                     userMail = students[0].Email,
                     body = "ah",
-                    time = DateTime.UtcNow.AddHours(-0.952)
+                    time = DateTime.UtcNow.AddHours(-0.752)
                 },
                 new Message {
-                    id = 4,
+                    id = 5,
                     channelId = channels[2].id,
                     userMail = students[4].Email,
                     body = "oh",
-                    time = DateTime.UtcNow.AddHours(-0.501)
+                    time = DateTime.UtcNow.AddHours(-0.201)
                 }
             };
 
