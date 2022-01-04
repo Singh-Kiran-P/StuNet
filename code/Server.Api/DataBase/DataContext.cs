@@ -359,7 +359,7 @@ namespace Server.Api.DataBase
                     number = "1303",
                     name = "Software Engineering",
                     description = "In dit opleidingsonderdeel maak je kennis met de processen, tools en technieken om complexe, correcte en bruikbare software te bouwen. De verschillende fases van een software engineering process worden bestudeerd. We starten met een basis van requirements engineering. We behandelen diverse procesmodellen voor de ontwikkeling van software, inclusief agiele processen. Technieken zoals test-driven development en refactoring komen aan bod. Na het volgen van dit opleidingsonderdeel, kunnen de studenten (1) principes en kwaliteitsattributen van proces en product uitleggen en nastreven, (2) de fasen van het ontwikkelingsproces, de activiteiten, de resultaten en gerelateerde terminologie uitleggen, (3) een probleem analyseren waarvoor software moet gemaakt worden en dit omzetten in een verzameling gestructureerde vereisten (requirements), (4) UML (Unified Modeling Language) gebruiken voor het maken van een object-georiënteerde analyse en ontwerp van een gesteld probleem, en (5) een software ontwerp omzetten in gestructureerde en onderhoudbare object-georiënteerde code. De studenten verkrijgen ook inzicht in validatie, verificatie en testing, en kunnen de aangeleerde benaderingen toepassen, en verwerven de basisvaardigheden om software design en code gradueel te laten evolueren.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "kiran.singh@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -367,7 +367,7 @@ namespace Server.Api.DataBase
                     number = "1282",
                     name = "Juridische aspecten van informatica",
                     description = "In dit opleidingsonderdeel worden de juridische aspecten van informatica belicht vanuit een praktische invalshoek. Het opleidingsonderdeel bestaat uit een combinatie van interactieve colleges en oefeningen op basis van casussen.\nEen aantal van de topics die in dit opleidingsonderdeel aan bod komen zijn: intellectuele eigendom, privacybescherming, elektronische contracten, elektronische handel, informaticamisdrijven, telecommunicatierecht, productaansprakelijkheid, consumentenbescherming en netwerkzoeking.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "jochem.lenaers@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -383,7 +383,7 @@ namespace Server.Api.DataBase
                     number = "0660",
                     name = "Besturingssystemen",
                     description = "Het besturingssysteem is het eerste, en vaak ook het enige, programma dat steeds loopt als een computer werkt. Het verschaft een omgeving waarin andere programma's beschermd en efficient uitgevoerd kunnen worden. Het is een tussenlaag tussen de computer hardware en gebruikersprogrammatuur, en beheert systeemfaciliteiten zoals hoofdgeheugen, CPU rekentijd, en randapparatuur.\n\nIn dit opleidingsonderdeel maakt de student kennis met de fundamentele concepten van werking en programmering van besturingssystemen. De volgende onderwerpen komen onder meer aan bod: - Structuur van besturingssystemen;- Taken die door besturingssystemen vervuld worden - CPU werkindeling; - Procesmanagement: Gelijktijdige processen: interproces-communicatie, procescoördinatie, deadlockdetectie en -preventie; - Multithreading - Geheugenbeheer en het virtueel geheugen - Bestandsystemen en permanente gegevensopslag - Gegevensinvoer en -uitvoer en efficiënte gegevenstoegang - beveiliging en afscherming.\n\nTijdens de oefeningen wordt aandacht besteed aan verschillende technieken die gerelateerd zijn met de theorie, met nadruk op multithreaded programmering.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "tijl.elens@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -399,7 +399,7 @@ namespace Server.Api.DataBase
                     number = "4379",
                     name = "Computernetwerken",
                     description = "Dit opleidingsonderdeel behandelt de basisprincipes van computernetwerken. Onder meer volgende onderwerpen komen aan bod:\n\n- architectuur, ontwerpprincipes, algoritmiek en werking van computernetwerken\n- het hybride OSI-TCP/IP model voor computernetwerken en de principes van gelaagde netwerken, met specifieke focus op de TCP/IP protocolsuite\n- realisatie van praktische implementaties op basis van socket programming (in Python)\n- interpretatie van netwerktraces.\n\nTijdens elk hoorcollege komt een (deel van een) hoofdstuk uit het handboek aan bod, waarbij de docent verwacht dat de studenten dit op voorhand hebben gelezen. Er wordt voornamelijk ingegaan op de moeilijke onderwerpen en op de vragen van de studenten (en de prof). Van de studenten wordt dus zowel een degelijke voorbereiding als actieve participatie verwacht.\nDe theorie wordt verder aan de praktijk getoetst door enerzijds analyses van netwerktraces (die telkens in het volgende hoorcollege worden besproken) en anderzijds programmeeropdrachten waarin zelf netwerksoftware wordt geschreven met socket-gebaseerde communicatie in Python.\nDe practica dienen strikt individueel te worden uitgevoerd, zonder enig overleg met andere studenten of externen.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "melih.demirel@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -407,7 +407,7 @@ namespace Server.Api.DataBase
                     number = "4377",
                     name = "Theoretische informatica",
                     description = "1. De studenten verwerven de basiskennis van reguliere talen en kunnen deze toepassen.\n2. De studenten verwerven de basiskennis van context-vrije talen en kunnen deze toepassen.\n3. De studenten maken kennis met een toepassing van context-vrije talen: het CYK-parsingalgoritme.\n4. De studenten verwerven de basiskennis van Turing Machines en het begrip beslisbaarheid en kunnen deze toepassen.\n5. De studenten kunnen de verworven kennis over concepten en algoritmen verwerken in een implementatie.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "lander.moors@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 },
                 new Course() {
@@ -415,7 +415,7 @@ namespace Server.Api.DataBase
                     number = "1588",
                     name = "Wetenschapsfilosofie",
                     description = "De student verwerft inzicht in de historische evolutie en het eigentijdse functioneren van de wetenschappen in hun maatschappelijke context en is op de hoogte van de diverse kennisbelangen die met wetenschap kunnen worden nagestreefd. Hij/zij kan mee discussiëren over tegenstellingen zoals o.m. deze tussen analytische kennis a priori (wiskunde, logica) versus synthetische kennis a posteriori (ervaringswetenschappen), wetenschappelijke kennis versus alledaagse kennis resp. religieuze en metafysische overtuigingen, reductionisme versus holisme, intrinsieke versus instrumentele waarde. Bovendien slaagt hij/zij er in deze betekenisvol toe te passen op het eigen vakgebied.",
-                    courseEmail = "senn.robyns@student.uhasselt.be",
+                    courseEmail = "tijl.elens@student.uhasselt.be",
                     profEmail = "prof@uhasselt.be"
                 }
             };
@@ -491,8 +491,20 @@ namespace Server.Api.DataBase
 
                 new Topic {
                     id = 13,
+                    name = "CYK-parsingalgoritme",
+                    courseId = courses[6].id,
+                },
+
+                new Topic {
+                    id = 14,
                     name = "Ervaringswetenschappen",
                     courseId = courses[7].id,
+                },
+
+                new Topic {
+                    id = 15,
+                    name = "2D Multiplayer",
+                    courseId = courses[5].id,
                 },
             };
 
@@ -502,7 +514,7 @@ namespace Server.Api.DataBase
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
                     title = "Question 1, all topics for course",
-                    body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque dui libero, egestas gravida nisl vitae, luctus ornare felis. Donec eget orci vitae mauris ornare tempor ornare eu felis. Donec commodo nec orci eu lobortis. Nam nec feugiat nibh, quis rhoncus quam. Vivamus sit amet lobortis mi. Nulla bibendum orci ac finibus ultrices. Sed pellentesque quam ac metus elementum, sed gravida sem mollis. Proin facilisis id nisl ut varius. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis a ipsum fermentum, feugiat lectus eu, sollicitudin quam.",
+                    body = "Wat zijn agile processen?",
                     time = DateTime.UtcNow.AddDays (-1)
                 },
                 new Question {
@@ -510,15 +522,71 @@ namespace Server.Api.DataBase
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
                     title = "Question 2, single topic",
-                    body = "Etiam erat dui, cursus vel pulvinar ac, accumsan varius diam. Nullam dignissim efficitur eros, eu semper dui viverra in. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer dignissim lectus in convallis aliquam. Aliquam consectetur ligula eget felis ultrices eleifend. Proin eu purus lectus. Phasellus pharetra suscipit tempor. Nullam mollis maximus quam, quis maximus mauris semper tincidunt. Nam venenatis, lorem eu pellentesque posuere, sem elit tempor velit, eu tincidunt felis tellus sed odio. Phasellus tristique maximus sem vitae ultrices. Cras ut pharetra nisl, sed varius tellus.",
+                    body = "Wat moet er allemaal bestudeerd worden van de kopies voor het examen?",
                     time = DateTime.UtcNow.AddMonths (-1)
                 },
                 new Question {
                     id = 3,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    courseId = courses[1].id,
+                    courseId = courses[0].id,
                     title = "Question 3, no topics",
-                    body = "In bibendum dictum mauris, vitae posuere mi fringilla at. Cras dapibus vestibulum risus eu pretium. In varius sed metus id consequat. Suspendisse at interdum leo, eu pharetra nibh. Sed in sollicitudin nunc, a dapibus elit. Phasellus posuere velit a lacinia mattis. Quisque volutpat magna metus, vel dictum dui porttitor id. Cras eu sapien pulvinar, imperdiet leo vel, tincidunt lorem. Nulla facilisi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus quis odio quam. Fusce nec libero eget arcu gravida faucibus. Sed vulputate porttitor ligula, non posuere lectus iaculis eu. Phasellus rhoncus risus laoreet, laoreet felis eu, bibendum ligula.",
+                    body = "Wanneer moet men stoppen met unit testing?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 4,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[1].id,
+                    title = "Question 4, multiple topics",
+                    body = "Wat is intellectuele eigendom?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 5,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[1].id,
+                    title = "Question 5, multiple topics",
+                    body = "Welke hoofdstukken komen aan bod op het examen?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 6,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[2].id,
+                    title = "Question 6, no topics",
+                    body = "Wat zijn de Monte Carlo methoden?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 7,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[2].id,
+                    title = "Question 7, multiple topics",
+                    body = "Wat is een steekproeftheorie?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 8,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[3].id,
+                    title = "Question 8, all topics for course",
+                    body = "Hoe wordt deadlock precies detect?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 9,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[5].id,
+                    title = "Question 9, multiple topics",
+                    body = "What is the best way to deal with network latency in a synchronized multiplayer game? Could you advise me on an algorithm or method to use?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 10,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[7].id,
+                    title = "Question 10, no topics",
+                    body = "Reductionisme versus Holisme?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
 
@@ -536,7 +604,17 @@ namespace Server.Api.DataBase
                             new { questionId = 1, topicId = 1 },
                             new { questionId = 1, topicId = 2 },
                             new { questionId = 1, topicId = 3 },
-                            new { questionId = 2, topicId = 1 }
+                            new { questionId = 2, topicId = 3 },
+                            new { questionId = 4, topicId = 4 },
+                            new { questionId = 4, topicId = 5 },
+                            new { questionId = 5, topicId = 4 },
+                            new { questionId = 5, topicId = 5 },
+                            new { questionId = 5, topicId = 6 },
+                            new { questionId = 7, topicId = 7  },
+                            new { questionId = 7, topicId = 8  },
+                            new { questionId = 8, topicId = 9  },
+                            new { questionId = 9, topicId = 15 },
+                            new { questionId = 9, topicId = 11 }
                         );
                     }
                 );
