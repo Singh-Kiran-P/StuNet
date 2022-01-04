@@ -324,7 +324,7 @@ namespace Server.Api.DataBase
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
                     title = "Question 1, all topics for course",
-                    body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque dui libero, egestas gravida nisl vitae, luctus ornare felis. Donec eget orci vitae mauris ornare tempor ornare eu felis. Donec commodo nec orci eu lobortis. Nam nec feugiat nibh, quis rhoncus quam. Vivamus sit amet lobortis mi. Nulla bibendum orci ac finibus ultrices. Sed pellentesque quam ac metus elementum, sed gravida sem mollis. Proin facilisis id nisl ut varius. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis a ipsum fermentum, feugiat lectus eu, sollicitudin quam.",
+                    body = "Wat zijn agile processen?",
                     time = DateTime.UtcNow.AddDays (-1)
                 },
                 new Question {
@@ -332,15 +332,71 @@ namespace Server.Api.DataBase
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
                     courseId = courses[0].id,
                     title = "Question 2, single topic",
-                    body = "Etiam erat dui, cursus vel pulvinar ac, accumsan varius diam. Nullam dignissim efficitur eros, eu semper dui viverra in. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer dignissim lectus in convallis aliquam. Aliquam consectetur ligula eget felis ultrices eleifend. Proin eu purus lectus. Phasellus pharetra suscipit tempor. Nullam mollis maximus quam, quis maximus mauris semper tincidunt. Nam venenatis, lorem eu pellentesque posuere, sem elit tempor velit, eu tincidunt felis tellus sed odio. Phasellus tristique maximus sem vitae ultrices. Cras ut pharetra nisl, sed varius tellus.",
+                    body = "Wat moet er allemaal bestudeerd worden van de kopies voor het examen?",
                     time = DateTime.UtcNow.AddMonths (-1)
                 },
                 new Question {
                     id = 3,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    courseId = courses[1].id,
+                    courseId = courses[0].id,
                     title = "Question 3, no topics",
+                    body = "Wanneer moet men stoppen met unit testing?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 4,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[1].id,
+                    title = "Question 4, multiple topics",
+                    body = "Wat is intellectuele eigendom?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 5,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[1].id,
+                    title = "Question 5, multiple topics",
+                    body = "Welke hoofdstukken komen aan bod op het examen?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 6,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[3].id,
+                    title = "Question 6, no topics",
+                    body = "Wat zijn de Monte Carlo methoden?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 7,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[4].id,
+                    title = "Question 7, multiple topics",
+                    body = "Hoe wordt deadlock precies detect?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 8,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[4].id,
+                    title = "Question 8, all topics for course",
                     body = "In bibendum dictum mauris, vitae posuere mi fringilla at. Cras dapibus vestibulum risus eu pretium. In varius sed metus id consequat. Suspendisse at interdum leo, eu pharetra nibh. Sed in sollicitudin nunc, a dapibus elit. Phasellus posuere velit a lacinia mattis. Quisque volutpat magna metus, vel dictum dui porttitor id. Cras eu sapien pulvinar, imperdiet leo vel, tincidunt lorem. Nulla facilisi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus quis odio quam. Fusce nec libero eget arcu gravida faucibus. Sed vulputate porttitor ligula, non posuere lectus iaculis eu. Phasellus rhoncus risus laoreet, laoreet felis eu, bibendum ligula.",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 9,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[6].id,
+                    title = "Question 9, multiple topics",
+                    body = "What is the best way to deal with network latency in a synchronized multiplayer game? Could you advise me on an algorithm or method to use?",
+                    time = DateTime.UtcNow.AddYears (-1)
+                },
+                new Question {
+                    id = 10,
+                    userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
+                    courseId = courses[7].id,
+                    title = "Question 10, no topics",
+                    body = "Reductionisme versus Holisme?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
 
