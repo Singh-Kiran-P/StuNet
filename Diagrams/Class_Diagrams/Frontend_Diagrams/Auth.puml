@@ -1,49 +1,77 @@
 @startuml Auth
-skinparam classAttributeIconSize 0
+left to right direction
 
-class Selection {
+class Fields {
 	-name: string
 	-degree: string
-	-year: string
 }
 
-class Picker {}
-class Button {}
-class TextInput {}
-class PasswordInput {}
-class Link {}
+class Picker
+class Button
+class TextInput
+class PasswordInput
+class Link
+class Text 
+enum User {
+	STUDENT,
+	PROFESSOR
+}
 
-class RegisterView {
+class RegisterScreen {
 	-mail: string
+	-fields: Fields
+	-FOS: [string, number, string]
 	-password: string
 	-passwordConfirm: string
-	-selection: Selection
-	+setMail()
-	+setPassword()
-	+setPasswordConfirm()
-	+setSelection()
-	+login()
+	-error: string
+
+	-fetch(): Promise
+	-study(): number
+	-type(): User
+	-valid(): boolean
+	-degrees(): string
+	-RegisterScreen(): void
+
+	-setMail(): void
+	-setPassword(): void
+	-setPasswordConfirm(): void
+	-setFOS(): void
+	-setFields(): void
+	-setError(): void
 }
 
-
-class LoginView {
-	-mail: string
+class Theme
+class LoginScreen {
+	-email: string
 	-password: string
-	+setMail()
-	+setPassword()
-	+register()
+	-error: string
+	-theme: Theme
+
+	-LoginScreen(): void
+	
+	-setToken(): void
+	-setError(): void
+	-setEmail(): void
+	-setPassword(): void
 }
 
-TextInput --* LoginView
-Button --* LoginView
-Link --* LoginView
-PasswordInput --* LoginView
+Text --* LoginScreen
+Text --* RegisterScreen
+
+Theme --* LoginScreen
+
+User --* RegisterScreen
+
+TextInput --* LoginScreen
+Button --* LoginScreen
+Link --* LoginScreen
+PasswordInput --* LoginScreen
 PasswordInput --|> TextInput
 
-TextInput --* RegisterView
-PasswordInput --* RegisterView
-Link --* RegisterView
-Button --* RegisterView
-Selection --* RegisterView
-Picker --* RegisterView
+TextInput --* RegisterScreen
+PasswordInput --* RegisterScreen
+Link --* RegisterScreen
+Button --* RegisterScreen
+Fields --* RegisterScreen: fields
+Picker --* RegisterScreen
 @enduml
