@@ -358,7 +358,16 @@ namespace Server.Api.DataBase
                             new { questionId = 1, topicId = 1 },
                             new { questionId = 1, topicId = 2 },
                             new { questionId = 1, topicId = 3 },
-                            new { questionId = 2, topicId = 1 }
+                            new { questionId = 2, topicId = 4 },
+                            new { questionId = 2, topicId = 5 },
+                            new { questionId = 2, topicId = 6 },
+                            new { questionId = 3, topicId = 7 },
+                            new { questionId = 3, topicId = 8 },
+                            new { questionId = 4, topicId = 9 },
+                            new { questionId = 5, topicId = 10 },
+                            new { questionId = 6, topicId = 11 },
+                            new { questionId = 7, topicId = 12 },
+                            new { questionId = 8, topicId = 13 }
                         );
                     }
                 );
