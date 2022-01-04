@@ -1,0 +1,31 @@
+@startuml
+interface "IRestfulRepository"<T> {
+    GetAsync(id:int) : Task<T>
+    CreateAsync(item:T) : Task
+    UpdateAsync(item:T) : Task
+    DeleteAsync(id:int) : Task
+    GetAllAsync() : Task<IEnumerable<T>>
+}
+
+
+interface IQuestionRepository {
+    GetByCourseIdAsync(courseId:int) : Task<IEnumerable<Question>>
+    GetAskedByUserId(userId:string) : Task<IEnumerable<Question>>
+}
+
+
+class PgQuestionRepository {
+    + PgQuestionRepository(context:IDataContext)
+    + <<async>> GetAllAsync() : Task<IEnumerable<Question>>
+    + <<async>> GetAskedByUserId(userId:string) : Task<IEnumerable<Question>>
+    + <<async>> GetAsync(id:int) : Task<Question>
+    + <<async>> GetByCourseIdAsync(courseId:int) : Task<IEnumerable<Question>>
+    + <<async>> CreateAsync(question:Question) : Task
+    + <<async>> UpdateAsync(question:Question) : Task
+    + <<async>> DeleteAsync(questionId:int) : Task
+}
+
+
+"IRestfulRepository" "<Question>" <|-- IQuestionRepository
+IQuestionRepository <|-- PgQuestionRepository
+@enduml
