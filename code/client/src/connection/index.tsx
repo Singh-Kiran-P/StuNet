@@ -1,6 +1,6 @@
 import notifee, { AndroidImportance, AndroidStyle } from '@notifee/react-native';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Children, Question, Answer } from '@/util';
 import { useToken } from '@/auth';
 import { update } from '@/nav';
@@ -15,11 +15,12 @@ export default ({ children }: Children) => {
     let [connection] = useState(() => {
 		return new HubConnectionBuilder().withUrl(axios.defaults.baseURL + '/chat', {
 			accessTokenFactory: () => token
-		}).build();
+		}).configureLogging(LogLevel.None).build();
 	})
 
 	useEffect(() => {
-		connection.start();
+		const start = (): any => connection.start().catch(() => setTimeout(() => start(), 5000));
+		connection.onclose(() => start());
 
 		connection.on('QuestionNotification', async (question: Question) => {
 			const channelId = await notifee.createChannel({

@@ -81,8 +81,7 @@ namespace Server.Api.Controllers
             if (existing == null) return NotFound();
             TextChannel channel = new() {
                 id = id,
-                name = dto.name,
-                course = await _courseRepository.GetAsync(dto.courseId)
+                name = dto.name
             };
 
             await _channelRepository.UpdateAsync(channel);
