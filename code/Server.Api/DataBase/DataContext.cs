@@ -313,8 +313,20 @@ namespace Server.Api.DataBase
 
                 new Topic {
                     id = 13,
+                    name = "CYK-parsingalgoritme",
+                    courseId = courses[6].id,
+                },
+
+                new Topic {
+                    id = 14,
                     name = "Ervaringswetenschappen",
                     courseId = courses[7].id,
+                },
+
+                new Topic {
+                    id = 15,
+                    name = "2D Multiplayer",
+                    courseId = courses[5].id,
                 },
             };
 
@@ -362,7 +374,7 @@ namespace Server.Api.DataBase
                 new Question {
                     id = 6,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    courseId = courses[3].id,
+                    courseId = courses[2].id,
                     title = "Question 6, no topics",
                     body = "Wat zijn de Monte Carlo methoden?",
                     time = DateTime.UtcNow.AddYears (-1)
@@ -370,23 +382,23 @@ namespace Server.Api.DataBase
                 new Question {
                     id = 7,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    courseId = courses[4].id,
+                    courseId = courses[2].id,
                     title = "Question 7, multiple topics",
-                    body = "Hoe wordt deadlock precies detect?",
+                    body = "Wat is een steekproeftheorie?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
                 new Question {
                     id = 8,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    courseId = courses[4].id,
+                    courseId = courses[3].id,
                     title = "Question 8, all topics for course",
-                    body = "In bibendum dictum mauris, vitae posuere mi fringilla at. Cras dapibus vestibulum risus eu pretium. In varius sed metus id consequat. Suspendisse at interdum leo, eu pharetra nibh. Sed in sollicitudin nunc, a dapibus elit. Phasellus posuere velit a lacinia mattis. Quisque volutpat magna metus, vel dictum dui porttitor id. Cras eu sapien pulvinar, imperdiet leo vel, tincidunt lorem. Nulla facilisi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus quis odio quam. Fusce nec libero eget arcu gravida faucibus. Sed vulputate porttitor ligula, non posuere lectus iaculis eu. Phasellus rhoncus risus laoreet, laoreet felis eu, bibendum ligula.",
+                    body = "Hoe wordt deadlock precies detect?",
                     time = DateTime.UtcNow.AddYears (-1)
                 },
                 new Question {
                     id = 9,
                     userId = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    courseId = courses[6].id,
+                    courseId = courses[5].id,
                     title = "Question 9, multiple topics",
                     body = "What is the best way to deal with network latency in a synchronized multiplayer game? Could you advise me on an algorithm or method to use?",
                     time = DateTime.UtcNow.AddYears (-1)
@@ -414,16 +426,17 @@ namespace Server.Api.DataBase
                             new { questionId = 1, topicId = 1 },
                             new { questionId = 1, topicId = 2 },
                             new { questionId = 1, topicId = 3 },
-                            new { questionId = 2, topicId = 4 },
-                            new { questionId = 2, topicId = 5 },
-                            new { questionId = 2, topicId = 6 },
-                            new { questionId = 3, topicId = 7 },
-                            new { questionId = 3, topicId = 8 },
-                            new { questionId = 4, topicId = 9 },
-                            new { questionId = 5, topicId = 10 },
-                            new { questionId = 6, topicId = 11 },
-                            new { questionId = 7, topicId = 12 },
-                            new { questionId = 8, topicId = 13 }
+                            new { questionId = 2, topicId = 3 },
+                            new { questionId = 4, topicId = 4 },
+                            new { questionId = 4, topicId = 5 },
+                            new { questionId = 5, topicId = 4 },
+                            new { questionId = 5, topicId = 5 },
+                            new { questionId = 5, topicId = 6 },
+                            new { questionId = 7, topicId = 7  },
+                            new { questionId = 7, topicId = 8  },
+                            new { questionId = 8, topicId = 9  },
+                            new { questionId = 9, topicId = 15 },
+                            new { questionId = 9, topicId = 11 }
                         );
                     }
                 );
