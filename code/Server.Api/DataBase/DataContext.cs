@@ -610,11 +610,11 @@ namespace Server.Api.DataBase
                             new { questionId = 5, topicId = 4 },
                             new { questionId = 5, topicId = 5 },
                             new { questionId = 5, topicId = 6 },
-                            new { questionId = 7, topicId = 7  },
-                            new { questionId = 7, topicId = 8  },
-                            new { questionId = 8, topicId = 9  },
-                            new { questionId = 9, topicId = 15 },
-                            new { questionId = 9, topicId = 11 }
+                            new { questionId = 7, topicId = 7 },
+                            new { questionId = 7, topicId = 8 },
+                            new { questionId = 8, topicId = 9 },
+                            new { questionId = 9, topicId = 15},
+                            new { questionId = 9, topicId = 11}
                         );
                     }
                 );
