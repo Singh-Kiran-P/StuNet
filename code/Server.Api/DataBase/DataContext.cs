@@ -62,10 +62,80 @@ namespace Server.Api.DataBase
                     PhoneNumber = null,
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
-                    SecurityStamp = "GSXIEJ7H7DWJTSRP24CU5DWFJV4WNFAI",
                     Id = "c1dae7b7-8094-4e40-b277-82768c5d08d7",
-                    PasswordHash = "AQAAAAEAACcQAAAAEM3NAKXyohZdXCFtacPu/m8XMK+7VbOGSSePxwzsA+RcDlg1m9p/5RWvBSJtrgNrjQ==", //abc123
-                    ConcurrencyStamp = "de4df913-7e5b-4406-b710-ea134f7b4a43"
+                    SecurityStamp = "GSXIEJ7H7DWJTSRP24CU5DWFJV4WNFAI",
+                    ConcurrencyStamp = "de4df913-7e5b-4406-b710-ea134f7b4a43",
+                    PasswordHash = "AQAAAAEAACcQAAAAEM3NAKXyohZdXCFtacPu/m8XMK+7VbOGSSePxwzsA+RcDlg1m9p/5RWvBSJtrgNrjQ==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 7,
+                    Email = "student1@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT1@STUDENT.UHASSELT.BE",
+                    UserName = "student1@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT1@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "310c5066-290f-4735-968f-6a01c4ced67a",
+                    SecurityStamp = "DR74ZA3KM3J2CQLDCRNDKYR6T76PMVYA",
+                    ConcurrencyStamp = "a5ce3a02-0d48-4e24-8ee6-97cc6d67ea9c",
+                    PasswordHash = "AQAAAAEAACcQAAAAEP/I1bTevAWPLRUOYFHsleMGlmTAPiU0z9crCJMaeLfkL1I02Z5Lx5EhNH4fOAWT2Q==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 5,
+                    Email = "student2@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT2@STUDENT.UHASSELT.BE",
+                    UserName = "student2@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT2@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "4f2f5684-cec0-4457-ae2a-7cd73e53c8b9",
+                    SecurityStamp = "JGGQ2VKBERLLNTL2GOK2UQXVK3UPCUYM",
+                    ConcurrencyStamp = "b50c49b7-b8cd-487e-a449-4c7fd2543539",
+                    PasswordHash = "AQAAAAEAACcQAAAAEFf7Xdkdes6TByfOYYmu9sN4K1xx3AX0EITa32PAz5urKobJVVy57xcgO3rvK9GhwA==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 10,
+                    Email = "student3@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT3@STUDENT.UHASSELT.BE",
+                    UserName = "student3@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT3@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "40baaecf-375d-4854-9f78-7b8bc8e6e102",
+                    SecurityStamp = "NZT6UF2IYRYKOXDZZA7H2SODQRGYGG7H",
+                    ConcurrencyStamp = "e50df050-357e-462a-ae57-e2d2115fcf6e",
+                    PasswordHash = "AQAAAAEAACcQAAAAEJXGzWhvGDBZC18L6K3ixYDQVOORk6ts0LUVqgJlJED/SeI13ePtne7oTjTzTdI/Ag==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 1,
+                    Email = "student4@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT4@STUDENT.UHASSELT.BE",
+                    UserName = "student4@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT4@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "ff7a6453-0439-40ec-b30c-e79ce79dc4a6",
+                    SecurityStamp = "WGEGLET3G7O5D3NNKG5TA42MRA2DVY7Z",
+                    ConcurrencyStamp = "8884b0bc-60ec-4cae-be82-6cde78c4eca4",
+                    PasswordHash = "AQAAAAEAACcQAAAAEDi5DCcmyt6OAFh75nVzshU9NEA0Sjd4WUPef2ysxuX41YEuYOMK5Vev91WmjWlhDw==" //abc123
+                },
+                new Student() {
+                    FieldOfStudyId = 4,
+                    Email = "student5@student.uhasselt.be",
+                    NormalizedEmail = "STUDENT5@STUDENT.UHASSELT.BE",
+                    UserName = "student5@student.uhasselt.be",
+                    NormalizedUserName = "STUDENT5@STUDENT.UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "f214016b-90c8-41ed-aa3d-4dbab0df8625",
+                    SecurityStamp = "3WCB6AQGRJWLQSE5RRTBIMYMEZARAPMT",
+                    ConcurrencyStamp = "7dc224fc-69ac-4596-ae55-c04efd844937",
+                    PasswordHash = "AQAAAAEAACcQAAAAEFdCioQAxFtgb7ctja6DGSaUIJE6aOOYhcWYdTVPP+ERRjbx3X2ja5yaWc0ZV98Umg==" //abc123
                 }
             };
 
@@ -79,29 +149,137 @@ namespace Server.Api.DataBase
                     PhoneNumber = null,
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
-                    SecurityStamp = "TZEZOM5SNMCQIPT4UPQPHWDJZVAZDIQ2",
                     Id = "7d2b412e-7de8-4341-90f4-49b741e83466",
-                    PasswordHash = "AQAAAAEAACcQAAAAEJCOeIX31jPsOvnmQsfwN+7lRjUAAGFJ8ALpjqPTTXjIT9AbdDcr5vJkgK2gsVqK7A==", //abc123
-                    ConcurrencyStamp = "83fe0b78-26c9-4c24-a39c-140ec82493b8"
+                    SecurityStamp = "TZEZOM5SNMCQIPT4UPQPHWDJZVAZDIQ2",
+                    ConcurrencyStamp = "83fe0b78-26c9-4c24-a39c-140ec82493b8",
+                    PasswordHash = "AQAAAAEAACcQAAAAEJCOeIX31jPsOvnmQsfwN+7lRjUAAGFJ8ALpjqPTTXjIT9AbdDcr5vJkgK2gsVqK7A==" //abc123
+                },
+                new Professor() {
+                    Email = "prof1@uhasselt.be",
+                    NormalizedEmail = "PROF1@UHASSELT.BE",
+                    UserName = "prof1@uhasselt.be",
+                    NormalizedUserName = "PROF1@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "efdc70a3-7ff1-46a0-8a33-48d83042b259",
+                    SecurityStamp = "FO6ETYXBTGSULYOJL362JGNDCW45AY3A",
+                    ConcurrencyStamp = "a28fd6d2-f4ca-48ae-b063-5de233e57658",
+                    PasswordHash = "AQAAAAEAACcQAAAAELqC8akNOfSKRyC2gXiCwIEimQNxxKWEkFulI6JcTR+dQXwQKJ8kyAon/rqEzsStKg==" //abc123
+                },
+                new Professor() {
+                    Email = "prof2@uhasselt.be",
+                    NormalizedEmail = "PROF2@UHASSELT.BE",
+                    UserName = "prof2@uhasselt.be",
+                    NormalizedUserName = "PROF2@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "eb5b5256-906e-4f97-be88-e47666a857df",
+                    SecurityStamp = "GOLUONBWSONCFHJSQ4OBGKP57Q2NUORX",
+                    ConcurrencyStamp = "03b440d0-cd49-4512-bca1-c33720747a60",
+                    PasswordHash = "AQAAAAEAACcQAAAAEDV3ZynNttjowfQ+/dVaRsxSVVqsmoSOHb5mnHTi7RxOqoJtnS0UiYR83e0QofLOZA==" //abc123
+                },
+                new Professor() {
+                    Email = "prof3@uhasselt.be",
+                    NormalizedEmail = "PROF3@UHASSELT.BE",
+                    UserName = "prof3@uhasselt.be",
+                    NormalizedUserName = "PROF3@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "ff346ff2-e727-4f88-a221-9d9728b7d728",
+                    SecurityStamp = "RFH7FN4KSLJKEC2DL7J32U73KJHXZRAS",
+                    ConcurrencyStamp = "cbc2cc9f-dae0-435a-8796-58e3dd97002f",
+                    PasswordHash = "AQAAAAEAACcQAAAAEIUH779vRE4TVMofmD6SyhnchM4kbqOubtVX9fTiv4mP9/q5HDk8WbP/n7M5v1rg1w==" //abc123
+                },
+                new Professor() {
+                    Email = "prof4@uhasselt.be",
+                    NormalizedEmail = "PROF4@UHASSELT.BE",
+                    UserName = "prof4@uhasselt.be",
+                    NormalizedUserName = "PROF4@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "52afdc0d-0f9a-4b9b-8b66-7bf9b856fdd3",
+                    SecurityStamp = "6YTM4AWVOSVXBXERPGGBW7GFMAJ7CQSW",
+                    ConcurrencyStamp = "3698a6ea-6991-4a51-b9f0-8ede0ca30961",
+                    PasswordHash = "AQAAAAEAACcQAAAAEF8sovgu55Kdi3myaatbhE0gvNjp79a0YU4KMyafbxib3Bpl8E6/D6gpQF2TqPJp2w==" //abc123
+                },
+                new Professor() {
+                    Email = "prof5@uhasselt.be",
+                    NormalizedEmail = "PROF5@UHASSELT.BE",
+                    UserName = "prof5@uhasselt.be",
+                    NormalizedUserName = "PROF5@UHASSELT.BE",
+                    PhoneNumber = null,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    Id = "8f88e953-f111-4dba-be2e-4fb6efa7dd35",
+                    SecurityStamp = "HQ5HJSREDPY6MHUHZRNIFUETSTD6XVNW",
+                    ConcurrencyStamp = "74ddbd9a-940b-478c-9f45-67308271c0a3",
+                    PasswordHash = "AQAAAAEAACcQAAAAEKc7kBxm3Nfaco7nHVDKfHdZUOQIc0FuTHUeTBqkMgqzWrvjMK/0Oa2pi48t9PRBjA==" //abc123
                 }
             };
 
-            var studentRole = new IdentityUserRole<string>()
-            {
-                UserId = students[0].Id,
-                RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+            var studentRoles = new List<IdentityUserRole<string>> {
+                new IdentityUserRole<string>() {
+                    UserId = students[0].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[1].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[2].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[3].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[4].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = students[5].Id,
+                    RoleId = "36c604a2-1f4e-4552-8741-74140540679b"
+                }
             };
-            var profRole = new IdentityUserRole<string>()
-            {
-                UserId = profs[0].Id,
-                RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+
+            var profRoles = new List<IdentityUserRole<string>> {
+                new IdentityUserRole<string>() {
+                    UserId = profs[0].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[1].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[2].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[3].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[4].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                },
+                new IdentityUserRole<string>() {
+                    UserId = profs[5].Id,
+                    RoleId = "0eb56564-4c92-4259-ab6f-6a9912c5c0c3"
+                }
             };
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Professor>().HasData(profs);
             modelBuilder.Entity<Student>().HasData(students);
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(profRole);
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(studentRole);
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(profRoles);
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(studentRoles);
         }
 
         private void CreateFieldOfStudy(ModelBuilder modelBuilder)
