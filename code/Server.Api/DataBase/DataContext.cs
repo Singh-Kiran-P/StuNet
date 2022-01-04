@@ -369,7 +369,7 @@ namespace Server.Api.DataBase
                     id = 3,
                     number = "2941",
                     name = "Kansrekening en statistiek",
-                    description = "Voor het deel kansrekening:\n1. De student is vertrouwd met basisconcepten in de kansrekening.\n2. De student is vertrouwd met kansexperimenten en met het begrip stochastische variabele.\n3. De student kent de basisregels van de kansrekening.\n4. De student kent de basistechnieken van de combinatieleer.\n5. De student kent de belangrijkste discrete en continue verdelingen.\n6. De student is vertrouwd met voorwaardelijke verdelingen (discreet en continu).\n7. De student is vertrouwd met de verwachtingswaarde, het gemiddelde en de variantie, en de moment genererende functie (van discrete en continue verdelingen).\n8. De student kent de wet van de grote aantallen en de centrale limietstelling.\n9. De student kent de basisconcepten van simulaties en Monte Carlo methoden.\n10. De student kent de basisbegrippen van stochastische processen, telprocessen, Markov processen en Markov ketens.\n11. De student kent de basisconcepten van de simulatie van stochastische processen.\n12. De student is vertrouwd met wachtlijnen, single- en multi-server systemen.\n13. De student kent de basisconcepten van de simulatie van wachtlijn-systemen.\n14. De student kan kanstheoretische problemen oplossen en simulaties uitvoeren met een softwarepakket (R)\nVoor het deel statistiek\n1. De student is vertrouwd met basisconcepten in de beschrijvende statistiek.\n2. De student is vertrouwd met de begrippen steekproef en populatie en kent de basis van steekproeftheorie.\n3. De student is vertrouwd met de eigenschappen van schatters voor parameters.\n4. De student kent de basistechnieken van de statistische inferentie: het construeren van betrouwbaarheidsintervallen en het toetsen van hypothesen.\n5. De student kent de basistechnieken van niet-parametrische testen.\n6. De student kan data beschrijven, betrouwbaarheidsintervallen opstellen en hypothesen toetsen met behulp van de statistische software R\n7. De student kan een niet-parametrische test uitvoeren met het statistisch software pakket R",
+                    description = "Voor het deel kansrekening:\n1. De student is vertrouwd met basisconcepten in de kansrekening.\n2. De student is vertrouwd met kansexperimenten en met het begrip stochastische variabele.\n3. De student kent de basisregels van de kansrekening.\n4. De student kent de basistechnieken van de combinatieleer.\n5. De student kent de belangrijkste discrete en continue verdelingen.\n6. De student is vertrouwd met voorwaardelijke verdelingen (discreet en continu).\n7. De student is vertrouwd met de verwachtingswaarde, het gemiddelde en de variantie, en de moment genererende functie (van discrete en continue verdelingen).\n8. De student kent de wet van de grote aantallen en de centrale limietstelling.\n9. De student kent de basisconcepten van simulaties en Monte Carlo methoden.\n10. De student kent de basisbegrippen van stochastische processen, telprocessen, Markov processen en Markov ketens.\n11. De student kent de basisconcepten van de simulatie van stochastische processen.\n12. De student is vertrouwd met wachtlijnen, single- en multi-server systemen.\n13. De student kent de basisconcepten van de simulatie van wachtlijn-systemen.\n14. De student kan kanstheoretische problemen oplossen en simulaties uitvoeren met een softwarepakket (R)\nVoor het deel statistiek\n1. De student is vertrouwd met basisconcepten in de beschrijvende statistiek.\n2. De student is vertrouwd met de begrippen steekproef en populatie en kent de basis van steekproeftheorie.\n3. De student is vertrouwd met de eigenschappen van schatters voor parameters.\n4. De student kent de basistechnieken van de statistische inferentie: het construeren van betrouwbaarheidsintervallen en het toetsen van hypothesen.\n5. De student kent de basistechnieken van niet-parametrische testen.\n6. De student kan data beschrijven, betrouwbaarheidsintervallen opstellen en hypothesen toetsen met behulp van de statistische software (R)\n7. De student kan een niet-parametrische test uitvoeren met het statistisch software pakket R",
                     courseEmail = "senn.robyns@student.uhasselt.be",
                     profEmail = profs[2].Email
                 },
@@ -454,7 +454,7 @@ namespace Server.Api.DataBase
                 },
                 new Topic {
                     id = 8,
-                    name = "Kanstheoretische",
+                    name = "Kanstheoretie",
                     courseId = courses[2].id,
                 },
                 new Topic {
@@ -717,7 +717,7 @@ namespace Server.Api.DataBase
                 },
                 new TextChannel {
                     id = 3,
-                    name = "Voorbereiding Examen",
+                    name = "Voorbereiding examen",
                     courseId = courses[0].id,
                 },
                 new TextChannel {
