@@ -11,11 +11,15 @@ RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
+
 RUN mkdir  -p  Services/Email/Templates/
 COPY ./Services/Email/Templates/ /app/Services/Email/Templates/
 
 RUN mkdir  -p  Downloads
 COPY ./Downloads /app/Downloads/
+
+RUN mkdir  -p  wwwroot
+COPY ./wwwroot /app/wwwroot/
 
 EXPOSE 80
 EXPOSE 5000
