@@ -8,7 +8,8 @@
     "dev-hot": "concurrently \"npm run server-hot\" \"npm run client\"",
     "migrations": "cd Server.Api && dotnet ef database update 0 && dotnet ef migrations remove && dotnet ef migrations add Initial && dotnet ef database update && cd ..",
     "restore": "cd Server.Api && dotnet restore && cd .. && cd Server.UnitTests && dotnet restore",
-    "upgrade": "npm run i && npm run restore && npm run migrations"
+    "upgrade": "npm run i && npm run restore && npm run migrations",
+    "apk": "cd client && npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ && cd android && rm -rf app/src/main/res/drawable-* && gradlew assembleRelease && cp app/build/outputs/apk/release/app-release.apk ../../Server.Api/Downloads/Stunet.apk"
   },
   "dependencies": {
     "concurrently": "^6.3.0"
