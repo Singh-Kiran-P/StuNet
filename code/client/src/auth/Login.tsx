@@ -33,7 +33,7 @@ export default ({ navigation, route: { params } }: Route) => {
             <TextInput label='Email' onChangeText={setEmail}/>
             <PasswordInput margin label='Password' onChangeText={setPassword}/>
             <Text type='error' margin hidden={!error} children={error}/>
-            <Button margin children='Log in' disabled={!login || !password} toggled={error} onPress={login}/>
+            <Button margin children='Log in' disabled={!email || !password} toggled={error} onPress={login}/>
             <Text type='hint' margin>
                 Don't have an account yet?{' '}
                 <Text type='link' size='auto' onPress={() => navigation.navigate('Register')}>
