@@ -18,6 +18,7 @@ export default Screen('AskQuestion', ({ nav, params: { course, selected } }) => 
             () => {
                 update('Questions', { course: { id: course.id } });
                 update('Profile', { email: '' });
+                update('Home');
                 nav.pop();
             },
             show(setError)
