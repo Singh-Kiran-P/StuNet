@@ -2,6 +2,7 @@
 
 https://stunet-2021.herokuapp.com
 
+## Run application
 To test the app you can download the apk from our website or from this repository in `code/Server.Api/Downloads`
 
 You can also build the apk using the command below
@@ -11,7 +12,7 @@ npm run apk
 cd Server.Api/Downloads
 ```
 
-Existing accounts
+## Existing accounts
 ```
 student@student.uhasselt.be
 student1@student.uhasselt.be
