@@ -1,16 +1,10 @@
 # **StuNet**
 
 # Install
-Make sure you have docker, docker compose, java v8 and nodejs installed
+Make sure you have docker, docker compose, java v8, dotnet and nodejs installed
 ```
 cd code
 npm run upgrade
-```
-
-# Start
-```
-cd code
-npm run dev
 ```
 
 # Backend
@@ -18,7 +12,7 @@ npm run dev
 ## Docker
 Start up all the docker containers.
 ```
-sudo docker-compose up # wordt uitgezet op Linux, maar moet blijven runnen; is de database
+sudo docker-compose up
 ```
 
 Show running docker containers.
@@ -56,6 +50,13 @@ Run the frontend.
 ```
 cd code
 npm run client
+```
+
+# Development
+Alternatively you can launch both back- and frontend by running
+```
+cd code
+npm run dev
 ```
 
 ## PgAdmin
