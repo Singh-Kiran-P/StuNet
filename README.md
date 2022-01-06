@@ -1,10 +1,12 @@
 # **StuNet** Production
 
-To test the app you can download the apk for our website OR download it from this github repo -> 'code/Server.Api/downloads'
-You can also build it your self by
+Website = https://stunet-2021.herokuapp.com
+
+To test the app you can download the apk from our website or from this github repo in 'code/Server.Api/downloads'
+
+You can also build the apk using the command below
 ```
-Make sure you hava node.js and npm installed
-cd code/
+cd code
 npm run apk
+cd Server.Api/downloads
 ```
-Website  = https://stunet-2021.herokuapp.com/
