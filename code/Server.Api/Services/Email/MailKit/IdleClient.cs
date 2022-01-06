@@ -144,9 +144,6 @@ namespace Server.Api.Services
 
         void OnMessageReceived(IMessageSummary message)
         {
-            Console.WriteLine("-----------------------------------EMAIL RECIEVED-------------------------------");
-            Console.WriteLine("-----------------------------------EMAIL RECIEVED-------------------------------");
-
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var mailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();

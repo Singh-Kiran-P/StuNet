@@ -40,7 +40,6 @@ namespace Server.Api {
                 options.AddPolicy ("PolicyName", builder => builder.AllowAnyOrigin ().AllowAnyHeader ().AllowAnyMethod ());
             });
             string connectionString = getConnectionString ();
-            Console.WriteLine (connectionString);
             services.AddDbContext<DataContext> (options => options.UseNpgsql (connectionString));
             services.AddTransient<DataContext> ();
 
