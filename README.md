@@ -2,7 +2,7 @@
 
 Website = https://stunet-2021.herokuapp.com
 
-To test the app you can download the apk from our website or from this github repo in 'code/Server.Api/downloads'
+To test the app you can download the apk from our website or from this repository in `code/Server.Api/downloads`
 
 You can also build the apk using the command below
 ```
