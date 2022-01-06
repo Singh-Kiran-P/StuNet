@@ -1,6 +1,6 @@
 # **StuNet** Production
 
-Website = https://stunet-2021.herokuapp.com
+https://stunet-2021.herokuapp.com
 
 To test the app you can download the apk from our website or from this repository in `code/Server.Api/Downloads`
 
