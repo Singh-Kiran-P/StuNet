@@ -15,14 +15,16 @@ namespace Server.Api.Services
 
         public async Task<bool> SendEmail(string to, string subject, EmailTemplate template, object model)
         {
-            var result = await _email.To(to)
-                .Subject(subject)
-                .UsingTemplateFromFile(
-                    $"{Directory.GetCurrentDirectory()}/Services/Email/Templates/{template}.cshtml",
-                    model)
-                .SendAsync();
+            try {
+                var result = await _email.To(to)
+                    .Subject(subject)
+                    .UsingTemplateFromFile(
+                        $"{Directory.GetCurrentDirectory()}/Services/Email/Templates/{template}.cshtml",
+                        model)
+                    .SendAsync();
 
-            return result.Successful;
+                return result.Successful;
+            } catch { return false; }
         }
     }
 }
