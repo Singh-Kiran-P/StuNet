@@ -8,5 +8,5 @@ You can also build the apk using the command below
 ```
 cd code
 npm run apk
-cd Server.Api/Downloads
 ```
+cd Server.Api/Downloads
