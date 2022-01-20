@@ -16,7 +16,8 @@ namespace Server.Api.Services
 
         public async Task<bool> SendEmail(string to, string subject, EmailTemplate template, object model)
         {
-            try {
+            try
+            {
                 var result = await _email.To(to)
                     .Subject(subject)
                     .UsingTemplateFromFile(
@@ -26,7 +27,11 @@ namespace Server.Api.Services
 
                 return result.Successful;
             }
-            catch { return false; }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
         }
     }
 }
